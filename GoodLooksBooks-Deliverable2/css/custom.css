@@ -23,7 +23,7 @@ html, body {
 hr.fancy {
    border: 0;
    height: 0;
-   box-shadow: 0 0 6px 6px black;
+   box-shadow: 0 0 3px 1px black;
 }
 hr.style-five:after {
    content: "\00a0";
