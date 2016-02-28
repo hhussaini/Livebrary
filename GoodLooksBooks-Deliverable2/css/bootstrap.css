@@ -1152,19 +1152,7 @@ hr {
    border: 0;
    border-top: 1px solid #eee;
 }
-hr.fancy {
-    /*height: 12px;
-    border: 0;
-    box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);*/
-   border: 0;
-   height: 0;
-   box-shadow: 0 0 10px 6px black;
-}
-hr.style-five:after {
-   /* Not really supposed to work, but does */
-   content: "\00a0";
-/* Prevent margin collapse */ }
-}
+
 .sr-only {
    position: absolute;
    width: 1px;
@@ -1305,11 +1293,7 @@ h6,
 p {
    margin: 0 0 10px;
 }
-p.center {
-   text-align: center;
-   line-height: 2;
-   font-size: 18px;
-}
+
 .lead {
    margin-bottom: 20px;
    font-size: 16px;
@@ -1603,26 +1587,10 @@ pre code {
    overflow-y: scroll;
 }
 .container {
-   background-color: #F9F9F9;
    padding-right: 15px;
    padding-left: 15px;
    margin-right: auto;
    margin-left: auto;
-}
-.heading-box {
-   line-height: 3;
-   font-size: 24px;
-   font-weight: bold;
-   text-align: center;
-   border: 4px solid #eee;
-   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#feffff+0,d2ebf9+100;Blue+3D+%2312 */
-   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,f6f6f6+47,ededed+100;White+3D+%231 */
-   background: #ffffff; /* Old browsers */
-   background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6-15 */
-   background: -webkit-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10-25,Safari5.1-6 */
-   background: linear-gradient(to bottom,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
-
 }
 @media (min-width: 768px) {
    .container {
