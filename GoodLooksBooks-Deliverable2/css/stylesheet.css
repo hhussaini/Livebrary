@@ -1,5 +1,42 @@
+html, body {
+      background-color: #F9F9F9;
+}
+
+.container {
+
+}
+
 .adminOptionsImage img {
   background-color: blue;
   width: "100";
   height: "100";
+}
+
+.heading-box {
+   line-height: 3;
+   font-size: 24px;
+   font-weight: bold;
+   text-align: center;
+   border: 4px solid #eee;
+   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#feffff+0,d2ebf9+100;Blue+3D+%2312 */
+   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,f6f6f6+47,ededed+100;White+3D+%231 */
+   background: #ffffff; /* Old browsers */
+   background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6-15 */
+   background: -webkit-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10-25,Safari5.1-6 */
+   background: linear-gradient(to bottom,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+}
+
+hr.fancy {
+   border: 0;
+   height: 0;
+   box-shadow: 0 0 3px 1px black;
+}
+hr.style-five:after {
+   content: "\00a0";
+}
+p.center {
+   text-align: center;
+   line-height: 2;
+   font-size: 18px;
 }
