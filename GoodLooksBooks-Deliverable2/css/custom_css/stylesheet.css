@@ -62,3 +62,11 @@ p.center {
   margin-left: auto ;
   margin-right: auto ;
 }
+
+.carousel-inner img {
+  margin: auto;
+}
+
+.carousel-inner{
+  width:100%;
+}
