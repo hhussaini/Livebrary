@@ -47,10 +47,18 @@ p.center {
     bottom: 20px;
     left: 15%;
     z-index: 10;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-bottom: 40px;
     text-align: center;
     text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
     color: #F9F9F9;
     text-shadow: 1px 1px 2px #0060A5, 3px 3px 5px gray;
+}
+
+.boxed {
+  text-align: center;
+  border:  2px solid white;
+  box-shadow: 10px 10px 5px #888888;
+  width: 400px ;
+  margin-left: auto ;
+  margin-right: auto ;
 }
