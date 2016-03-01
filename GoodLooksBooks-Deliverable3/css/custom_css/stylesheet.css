@@ -32,6 +32,7 @@ body {
     padding-left: 15px;*/
     margin-right: auto;
     margin-left: auto;
+    /*padding-bottom: 20px;*/
 }
 @media (min-width: 768px) {
    .glb-page {
@@ -65,13 +66,14 @@ body {
 }
 
 .heading-box {
- line-height: 3;
+ /*line-height: 3;*/
  font-size: 24px;
  font-weight: bold;
  text-align: center;
  border: 4px solid #eee;
  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#feffff+0,d2ebf9+100;Blue+3D+%2312 */
  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,f6f6f6+47,ededed+100;White+3D+%231 */
+
  background: #ffffff; /* Old browsers */
  background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6-15 */
  background: -webkit-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10-25,Safari5.1-6 */
