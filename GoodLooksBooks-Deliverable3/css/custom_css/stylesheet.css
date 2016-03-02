@@ -141,3 +141,7 @@ p.center {
 .carousel-inner{
  width:100%;
 }
+
+.signUpBody {
+	padding:50px;
+}
