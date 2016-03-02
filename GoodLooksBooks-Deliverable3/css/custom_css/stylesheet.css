@@ -18,10 +18,15 @@ body {
 
 }
 
+.thumbnail {
+	margin-bottom:7px;
+}
+
 .container {
   background-color: #F9F9F9;
 }
 .glb-page {
+    background-color: #F9F9F9;
  /*margin-top: 50px;*/
    box-shadow: 0 0 30px black;
    /*padding-right: 20px;*/
