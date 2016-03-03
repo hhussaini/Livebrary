@@ -28,7 +28,7 @@ body {
 .glb-page {
     background-color: #F9F9F9;
  /*margin-top: 50px;*/
-   box-shadow: 0 0 50px black;
+   box-shadow: 0 0 30px black;
    /*padding-right: 20px;*/
    /*padding:0 15px 0 15px;*/
  /*background-color: #F9F9F9;*/
@@ -144,105 +144,4 @@ p.center {
 
 .signUpBody {
 	padding:50px;
-}
-
-
-
-
-
-.panel > .panel-heading {
-    background-image: none;
-    background-color: #78A0BD;;
-    color: white;
-
-}
-
-
-.text-center {
-  padding-top: 20px;
-}
-.col-xs-12 {
-  background-color: #fff;
-}
-#sidebar {
-  height: 100%;
-  padding-right: 0;
-  padding-top: 20px;
-}
-#sidebar .nav {
-  width: 95%;
-}
-#sidebar li {
-  border:0 #f2f2f2 solid;
-  border-bottom-width:1px;
-}
-
-/* collapsed sidebar styles */
-@media screen and (max-width: 767px) {
-  .row-offcanvas {
-    position: relative;
-    -webkit-transition: all 0.25s ease-out;
-    -moz-transition: all 0.25s ease-out;
-    transition: all 0.25s ease-out;
-  }
-  .row-offcanvas-right
-  .sidebar-offcanvas {
-    right: -41.6%;
-  }
-
-  .row-offcanvas-left
-  .sidebar-offcanvas {
-    left: -41.6%;
-  }
-  .row-offcanvas-right.active {
-    right: 41.6%;
-  }
-  .row-offcanvas-left.active {
-    left: 41.6%;
-  }
-  .sidebar-offcanvas {
-    position: absolute;
-    top: 0;
-    width: 41.6%;
-  }
-  #sidebar {
-    padding-top:0;
-  }
-}
-
-
-
-.developer_images {
-   margin-left: 53px;
-   margin-top: 5px;
-   padding:1px;
-   border:2px solid #00000f
-}
-
-.textArea_developer_images{
-  width:900px;
-  height:300px;
-  position:relative;
-  top: 32px;
-  left: 5px;
-  padding:10px;
-  border:10px
-  ridge gray;
-}
-
-p.fontHeader {
-    font-style: oblique;
-    text-align: center;
-    font-weight: bold;
-    font-size: 35px;
-    color: #ffffff;
-}
-
-.bookDescription{
-	padding-left: 10px; 
-}
-
-.bookDescriptionPictures{
-	padding-right: 40px;
-	padding-top: 5px;
 }

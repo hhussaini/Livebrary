@@ -148,6 +148,7 @@ p.center {
 
 
 
+<<<<<<< HEAD
 
 
 .panel > .panel-heading {
@@ -209,9 +210,7 @@ p.center {
     padding-top:0;
   }
 }
-
-
-
+=======
 .developer_images {
    margin-left: 53px;
    margin-top: 5px;
@@ -246,3 +245,4 @@ p.fontHeader {
 	padding-right: 40px;
 	padding-top: 5px;
 }
+>>>>>>> b3f09d33a6bd22eee9f37401ca8159b455348ba6
