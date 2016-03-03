@@ -26,22 +26,25 @@ body {
   background-color: #F9F9F9;
 }
 
-.form-control {
 
+.form {
+  width: auto;
+}
+
+.panel-heading {
+   padding: 6px 10px;
+}
+
+.search-results {
+  background: #F9F9F9;
+  box-shadow: 0 0 0.5px gray;
+  /*padding-right: 50px;*/
 }
 .glb-page {
     background-color: #F9F9F9;
- /*margin-top: 50px;*/
    box-shadow: 0 0 50px black;
-   /*padding-right: 20px;*/
-   /*padding:0 15px 0 15px;*/
- /*background-color: #F9F9F9;*/
- /*box-: 10px 10px 5px #ABCAB0;*/
-    /*padding-right: 15px;
-    padding-left: 15px;*/
     margin-right: auto;
     margin-left: auto;
-    /*padding-bottom: 20px;*/
 }
 @media (min-width: 768px) {
    .glb-page {
@@ -58,7 +61,6 @@ body {
       width: 1170px;
    }
 }
-
 
 .image-respionsive {
  padding: 15px;
