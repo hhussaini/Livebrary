@@ -27,7 +27,7 @@ body {
 }
 
 .form-control {
-  
+
 }
 .glb-page {
     background-color: #F9F9F9;
@@ -150,17 +150,12 @@ p.center {
 	padding:50px;
 }
 
-
-
-
-
 .panel > .panel-heading {
     background-image: none;
     background-color: #78A0BD;;
     color: white;
 
 }
-
 
 .text-center {
   padding-top: 20px;
@@ -213,8 +208,6 @@ p.center {
     padding-top:0;
   }
 }
-
-
 
 .developer_images {
    margin-left: 53px;
