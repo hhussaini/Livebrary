@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
- <title>Your Good Looks Books Account</title>
+ <title>Change Account Settings</title>
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1">
  <link rel="stylesheet" href="css/bootstrap.css">
@@ -24,7 +24,7 @@
                <li><a href="userIndex.html">Home </a></li>
                <li><a href="userAbout.html">About</a></li>
                <li><a href="userFullCatalog.html">Full Catalog</a></li>
-               <li class="active"><a href="#">Account<span class="sr-only">(current)</span></a></li>
+               <li><a href="userAccount.html">Account</a></li>
                <li><a href="userHelp.html">Help</a></li>
            </ul>
            <ul class="nav navbar-nav navbar-right">
@@ -65,17 +65,20 @@
   <div class="container">
       <div class="panel panel-default">
           <div class="panel-heading">
-              <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i>Account Options</h3>
+              <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i>Change Account Settings</h3>
           </div>
           <div class="panel-body">
-              <div class="list-group">
-                  <a href="userAccountSettings.html"><img alt="brand" width = "100" height = "100" src="assets/settings-icon.png"></a>
-                  Change Account Settings (name, address, etc.)
-              </div>
-              <div class="list-group">
-                  <a href="#"><img alt="brand" width = "100" height = "100" src="assets/question-icon.jpg"></a>
-                    Forgot Your Password?
-              </div>
+            <!-- edit form column -->
+    <div class="col-md-9 personal-info">
+      <form class="form-horizontal" role="form">
+        <div class="form-group">
+          <label class="col-lg-3 control-label">First name:</label>
+          <div class="col-lg-8">
+            <input class="form-control" value="Jane" type="text">
+          </div>
+        </div>
+      </form>
+    </div>
           </div>
       </div>
   </div>
