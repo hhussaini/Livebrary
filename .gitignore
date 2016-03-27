@@ -3,3 +3,5 @@
 $*
 *~*
 *.vux
+/GoodLooksBooks/build/
+/GoodLooksBooks/nbproject/private/
