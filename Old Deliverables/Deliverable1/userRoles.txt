@@ -1,0 +1,7 @@
+1.    List of user roles - please include a description for each of the categories of user. The description need only be one or two sentences..
+
+2.    List of use cases (only the title and brief description).
+
+3.    Five complete use cases in text form. You can use the sample use case as a document template
+
+4.    Preliminary Issues document - discuss issues that have come up when your Company developed and analyzed the Requirements Document. This preliminary document will only list the major risk items in your project. Your final issues document will describe your risk assessment and risk reduction plan.

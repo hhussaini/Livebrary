@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Full Catalog for Good Looks Books</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="css/custom_css/stylesheet.css">
+  <link rel="stylesheet" href="css/custom_css/bookPhotoGrid.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="js/bootstrap.js"></script>
+</head>
+
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a href="index.jsp" class="pull-left">
+          <img alt="brand" src="assets/brand-icon.png">
+        </a>
+      </div>
+      <ul class="nav navbar-nav" style="font-weight: bold;">
+        <li><a href="index.jsp">Home</a></li>
+        <li><a href="about.jsp">About</a></li>
+        <li class="active"><a href="#">Full Catalog<span class="sr-only">(current)</span></a></li>
+        <li><a href="help.jsp">Help</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" style="font-weight: bold;">
+        <li><a href="signUp.jsp">Sign Up</a></li>
+        <li><a href="signIn.jsp">Sign In</a></li>
+      </ul>
+    </div>
+  </nav>
+  <br><br><br>
+
+
+  <div class="glb-page">
+    <div class="container">
+      <div id="mycarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+          <div class="item active">
+            <img src="assets/small-header-blur.png" alt="" class="img-responsive">
+            <div class="small-carousel-text">
+              <div class="boxed">
+                <h1> <b>Good Looks Books <br> </b> </h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <div class="container">
+      <div class="row row-offcanvas row-offcanvas-left">
+          <!-- <form class="form" role="search">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Title, Author, Genre, etc..." name="srch-term" id="srch-term">
+              <div class="input-group-btn">
+                <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+              </div>
+            </div>
+          </form> -->
+        <!-- sidebar -->
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+          <div class="panel panel-default">
+            <form class="form" role="search">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Title, Author, Genre, etc..." name="srch-term" id="srch-term">
+                <div class="input-group-btn">
+                  <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                </div>
+              </div>
+            </form>
+            <div class="panel-heading">Active Filters</div> <br>
+            <div class="panel-heading">Literature Medium</div>
+            <div class="panel-body">
+              <div class="form-group">
+                <div class="checkbox-inline">
+                  <label>
+                    <input name="book" type="checkbox">Book</a>
+                  </label>
+                </div> <br>
+                <div class="checkbox-inline">
+                  <label>
+                    <input name="magazine" type="checkbox">Magazine</a>
+                  </label>
+                </div> <br>
+                <div class="checkbox-inline">
+                  <label>
+                    <input name="audio-book" type="checkbox">Audio Books</a>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="panel-heading">Category</div>
+            <div class="panel-body">
+              <div class="form-group">
+                <div class="checkbox-inline">
+                  <label>
+                    <input name="book" type="checkbox">Horror</a>
+                  </label>
+                </div> <br>
+                <div class="checkbox-inline">
+                  <label>
+                    <input name="magazine" type="checkbox">Mystery</a>
+                  </label>
+                </div> <br>
+                <div class="checkbox-inline">
+                  <label>
+                    <input name="audio-book" type="checkbox">War Novel</a>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="panel-heading">Rating</div> <br>
+            <div class="panel-heading">Publish Date</div>
+            <div class="panel-body">
+              <div class="form-group">
+                <div class="checkbox-inline">
+                  <label>
+                    <input name="book" type="checkbox">Ancient Mythology</a>
+                  </label>
+                </div> <br>
+                <div class="checkbox-inline">
+                  <label>
+                    <input name="magazine" type="checkbox">Renaissance Literature</a>
+                  </label>
+                </div> <br>
+                <div class="checkbox-inline">
+                  <label>
+                    <input name="audio-book" type="checkbox">19th Century</a>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- main area -->
+        <br><br><br>
+          <div class="col-xs-12 col-sm-9">
+            <div class="row search-results">
+              <div class="col-xs-6 col-md-3">
+                <a href="#" class="thumbnail">
+                  <img src="https://www.gutenberg.org/cache/epub/32101/pg32101.cover.medium.jpg" alt="...">
+                </a>
+              </div>
+              <div class="col-xs-6 col-md-3">
+                <a href="#" class="thumbnail">
+                  <img src="//placehold.it/200x200" alt="...">
+                </a>
+              </div>
+              <div class="col-xs-6 col-md-3">
+                <a href="#" class="thumbnail">
+                  <img src="//placehold.it/200x200" alt="...">
+                </a>
+              </div>
+              <div class="col-xs-6 col-md-3">
+                <a href="#" class="thumbnail">
+                  <img src="//placehold.it/200x200" alt="...">
+                </a>
+              </div>
+              <div class="col-xs-6 col-md-3">
+                <a href="#" class="thumbnail">
+                  <img src="//placehold.it/200x200" alt="...">
+                </a>
+              </div>
+              <div class="col-xs-6 col-md-3">
+                <a href="#" class="thumbnail">
+                  <img src="//placehold.it/200x200" alt="...">
+                </a>
+              </div>
+              <div class="col-xs-6 col-md-3">
+                <a href="#" class="thumbnail">
+                  <img src="//placehold.it/200x200" alt="...">
+                </a>
+              </div>
+            </div>
+          </div><!-- /.col-xs-12 main -->
+      </div><!--/.row-->
+    </div><!--/.container-->
+  </div>
+</body>
+</html>
