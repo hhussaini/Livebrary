@@ -51,9 +51,15 @@
           <hr class="fancy">
       </div>
       <form name="myForm" id = "signUpForm" class="form-horizontal signUpBody" action="" method="post">
+        <a href="signUp.html" class="btn btn-info">Customer Sign Up</a></li>
         <a href="publisherSignUp.html" class="btn btn-info">Publisher Sign Up</a></li>
-        <a href="librarianSignUp.html" class="btn btn-info">Librarian Sign Up</a></li>
         <input type="hidden" name="target" value="customer">
+        <div class="form-group">
+          <label class = "control-label regLabel" for="accessCode">Librarian Access Code:</label>
+          <div class = "controls regControl">
+              <input type="text" class="form-control" name = "accessCode">
+          </div>
+        </div>
         <div class="form-group">
           <label class = "control-label regLabel" for="username">Username:</label>
           <div class = "controls regControl">
