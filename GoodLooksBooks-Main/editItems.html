@@ -13,31 +13,24 @@
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a href="userIndex.html" class="pull-left">
+        <a href="librarianIndex.html" class="pull-left">
           <img alt="brand" src="assets/brand-icon.png">
         </a>
       </div>
       <ul class="nav navbar-nav" style="font-weight: bold;">
-        <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
-        <li><a href="userAbout.html">About</a></li>
-        <li><a href="userFullCatalog.html">Full Catalog</a></li>
-        <li><a href="userAccount.html">Account</a></li>
-        <li><a href="userHelp.html">Help</a></li>
+        <li><a href="librarianIndex.html">Librarian Home</a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right" style="font-weight: bold;">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Options<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="userOwnedItems.html">My Items</a></li>
-            <li><a href="#">My Wishlist</a></li>
-            <li role="separator" class="divider"></li>
             <li><a href="index.html">Sign Out</a></li>
+            <!-- <li role="separator" class="divider"></li> -->
           </ul>
         </li>
       </ul>
     </div>
   </nav>
-  <br><br><br>
   <div class="glb-page">
     <div class="container">
       <div id="mycarousel" class="carousel slide" data-ride="carousel">
@@ -53,13 +46,25 @@
         </div>
       </div>
     </div>
-    <br>
-    <br>
     <div class="container">
-      <h1> Welcome User!</h1>
-      <div class="col-sm-2"></div>
+      &nbsp;<br>
+    </div>
+    <div class="container">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i>Items to Update</h3>
+        </div>
+        <div class="panel-body">
+          <div class="list-group">
+            <div class="col-xs-6 col-sm-5 bookDescriptionPictures">
+               <img src="https://www.gutenberg.org/cache/epub/32101/pg32101.cover.medium.jpg" class="img-rounded" alt="Andersonville: A Story of Rebel Military Prisons" width="250" height="250">
+               <h5>Andersonville: A Story of Rebel Military Prisons</h5>
+               <button type="button" class="btn btn-primary">Edit</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 </body>
 </html>
