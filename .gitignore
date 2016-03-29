@@ -3,7 +3,7 @@
 $*
 *~*
 *.vux
-*.bak
+*.bak*
 /GoodLooksBooks/build/
 /GoodLooksBooks/nbproject/private/
 *.orig
