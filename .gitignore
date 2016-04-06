@@ -1,9 +1,4 @@
 *.odt
-~$*
-$*
-*~*
 *.vux
 *.bak*
-/GoodLooksBooks/build/
-/GoodLooksBooks/nbproject/private/
 *.orig
