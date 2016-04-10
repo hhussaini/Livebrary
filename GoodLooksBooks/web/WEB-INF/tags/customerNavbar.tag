@@ -29,7 +29,7 @@
             <li><a href="customerOwnedItems.jsp">My Items</a></li>
             <li><a href="#">My Wishlist</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="guestIndex.jsp">Sign Out</a></li>
+            <li><a href="index.jsp">Sign Out</a></li>
           </ul>
         </li>
       </ul>
