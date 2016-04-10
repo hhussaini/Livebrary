@@ -12,12 +12,12 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a href="index.html" class="pull-left">
+        <a href="index.jsp" class="pull-left">
           <img alt="brand" src="assets/brand-icon.png">
         </a>
       </div>
       <ul class="nav navbar-nav" style="font-weight: bold;">
-        <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+        <li><a href="index.jsp">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="fullCatalog.html">Full Catalog</a></li>
       </ul>
