@@ -1,6 +1,6 @@
 <%-- 
-    Document   : signUp
-    Author     : sonor
+    Document   : index
+    Author     : Kevin Young
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -9,39 +9,12 @@
 <html lang="en">
 <head>
   <title>Good Looks Books</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/bootstrap.css">
-  <link rel="stylesheet" href="css/custom_css/stylesheet.css">
-  <link rel="stylesheet" href="css/custom_css/bookPhotoGrid.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-  <script src="js/bootstrap.js"></script>
-
+  <mytags:header/>
 </head>
 <body>
     <mytags:guestNavbar/>
-  <br><br><br>
   <div class="glb-page">
-    <div class="container">
-      <div id="mycarousel" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-          <div class="item active">
-            <img src="assets/jumbo-header-blur.png" alt="" class="img-responsive">
-            <div class="carousel-text">
-              <div class="boxed">
-                <h1> <b>Good Looks Books <br> </b> </h1>
-              </div>
-              <h3>For all of your literary needs!</h3>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      &nbsp;<br>
-      &nbsp;<br>
-      &nbsp;<br>
-    </div>
+    <mytags:logo/>
     <div class="container">
       <div class="row">
         <div class="col-sm-4">

@@ -1,3 +1,8 @@
+<%-- 
+    Document   : customerAccount
+    Author     : Kevin Young
+--%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="mytags" tagdir="/WEB-INF/tags" %>
 <!DOCTYPE html>
@@ -5,25 +10,13 @@
 
 <head>
  <title>Your Good Looks Books Account</title>
- <meta charset="utf-8">
- <meta name="viewport" content="width=device-width, initial-scale=1">
- <link rel="stylesheet" href="css/bootstrap.css">
- <link rel="stylesheet" href="css/custom_css/stylesheet.css">
- <link rel="stylesheet" href="css/custom_css/bookPhotoGrid.css">
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
- <script src="js/bootstrap.js"></script>
+ <mytags:header/>
 </head>
 
 <body>
  <mytags:customerNavbar/>
- <br><br><br>
  <div class="glb-page">
    <mytags:logo/>
-  <div class="container" styl="padding: 100px;">
-   &nbsp;<br>
-   &nbsp;<br>
-   &nbsp;<br>
-  </div>
   <div class="container">
       <div class="panel panel-default">
           <div class="panel-heading">
@@ -37,7 +30,6 @@
           </div>
       </div>
   </div>
-
-  <div>
-  </body>
-  </html>
+ </div>
+</body>
+</html>

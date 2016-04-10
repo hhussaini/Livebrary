@@ -1,7 +1,6 @@
 <%-- 
     Document   : logo
-    Created on : Apr 10, 2016, 2:57:34 PM
-    Author     : sonor
+    Author     : Kevin Young
 --%>
 
 <%@tag description="put the tag description here" pageEncoding="UTF-8"%>
@@ -24,6 +23,8 @@
         </div>
       </div>
     </div>
-<div class="container">
-        &nbsp;<br>
-</div>
+<div class="container" styl="padding: 100px;">
+   &nbsp;<br>
+   &nbsp;<br>
+   &nbsp;<br>
+  </div>

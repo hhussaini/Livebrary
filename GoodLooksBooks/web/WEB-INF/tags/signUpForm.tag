@@ -1,6 +1,6 @@
 <%-- 
     Document   : signUpForm
-    Author     : sonor
+    Author     : Kevin Young
 --%>
 
 <%@tag description="put the tag description here" pageEncoding="UTF-8"%>
