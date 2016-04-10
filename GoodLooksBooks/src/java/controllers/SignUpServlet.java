@@ -47,36 +47,7 @@ public class SignUpServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
-        String street = request.getParameter("street");
-        String city = request.getParameter("city");
-        String state = request.getParameter("state");
-        String zipcode = request.getParameter("zipcode");
-        String phoneNumber = request.getParameter("phoneNumber");
-        String email = request.getParameter("email");        
-        String userType = request.getParameter("userType");
-        User user = new User(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType);
-        
-        HttpSession session = request.getSession();
-        session.setAttribute("user", user);
-        session.setAttribute("userType", userType);
-        
-        String url = "/showUser.jsp";
-        switch (userType) {
-            case "librarian": 
-                url = "/librarianIndex.jsp";
-                break;
-            case "publisher":
-                url = "/publisherIndex.jsp";
-                break;
-        }
-        
-        RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-        dispatcher.forward(request, response);        
+        // processRequest(request, response);       
     }
 
     /**
@@ -90,7 +61,37 @@ public class SignUpServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        // processRequest(request, response);
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String street = request.getParameter("street");
+        String city = request.getParameter("city");
+        String state = request.getParameter("state");
+        String zipcode = request.getParameter("zipcode");
+        String phoneNumber = request.getParameter("phoneNumber");
+        String email = request.getParameter("email");        
+        String userType = request.getParameter("userType");
+        String accessCode = request.getParameter("accessCode");
+        User user = new User(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType, accessCode);
+        
+        HttpSession session = request.getSession();
+        session.setAttribute("user", user);
+        session.setAttribute("userType", userType);
+        
+        String url = "/customerIndex.jsp";
+        switch (userType) {
+            case "librarian": 
+                url = "/librarianIndex.jsp";
+                break;
+            case "publisher":
+                url = "/publisherIndex.jsp";
+                break;
+        }
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher(url);
+        dispatcher.forward(request, response); 
     }
 
     /**
@@ -100,7 +101,7 @@ public class SignUpServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Handles signing up a Customer, Publisher, or Librarian";
     }// </editor-fold>
 
 }

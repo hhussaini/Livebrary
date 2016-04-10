@@ -1,6 +1,5 @@
 <%-- 
     Document   : signUpForm
-    Created on : Apr 10, 2016, 3:04:40 PM
     Author     : sonor
 --%>
 
@@ -10,7 +9,6 @@
 <%@attribute name="message"%>
 
 <%-- any content can be specified here e.g.: --%>
-<input type="hidden" name="target" value="customer">
 <div class="form-group">
   <label class = "control-label regLabel" for="username">Username:</label>
   <div class = "controls regControl">
