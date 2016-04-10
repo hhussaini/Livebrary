@@ -12,32 +12,7 @@
   <script src="js/bootstrap.js"></script>
 </head>
 <body>
-  <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a href="userIndex.html" class="pull-left">
-          <img alt="brand" src="assets/brand-icon.png">
-        </a>
-      </div>
-      <ul class="nav navbar-nav" style="font-weight: bold;">
-        <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
-        <li><a href="userAbout.html">About</a></li>
-        <li><a href="userFullCatalog.html">Full Catalog</a></li>
-        <li><a href="userAccount.html">Account</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Options<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="userOwnedItems.html">My Items</a></li>
-            <li><a href="#">My Wishlist</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="index.html">Sign Out</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </nav>
+    <mytags:customerNavbar/>
   <br><br><br>
   <div class="glb-page">
     <div class="container">

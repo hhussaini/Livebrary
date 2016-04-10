@@ -80,8 +80,11 @@ public class SignUpServlet extends HttpServlet {
         session.setAttribute("user", user);
         session.setAttribute("userType", userType);
         
-        String url = "/customerIndex.jsp";
+        String url = "";
         switch (userType) {
+            case "customer":
+                url = "/customerIndex.jsp";
+                break;
             case "librarian": 
                 url = "/librarianIndex.jsp";
                 break;
