@@ -1,6 +1,5 @@
 package controllers;
 
-import objects.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -14,7 +13,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Kevin Young
  */
-public class SignInServlet extends HttpServlet {
+public class SignOutServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -28,7 +27,7 @@ public class SignInServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -42,7 +41,7 @@ public class SignInServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+       // processRequest(request, response);
     }
 
     /**
@@ -56,44 +55,22 @@ public class SignInServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // processRequest(request, response);
-        UserController userController = UserController.getInstance();
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        
-        // TODO: Prettier error message
-        if (!userController.verifyUser(username, password)) {
+       // processRequest(request, response);
+       HttpSession session = request.getSession(false);
+       // TODO: Prettier error message?
+       if (session == null) {
             PrintWriter out = response.getWriter();  
             response.setContentType("text/html");  
             out.println("<script type=\"text/javascript\">");  
             out.println("alert('This user does not exist');");  
             out.println("</script>");
             return;
-        }
-        
-        User user = userController.getUser(username, password);
-        String userType = user.getType();
-        HttpSession session = request.getSession();
-        session.setAttribute("user", user);
-        session.setAttribute("userType", userType);
-        
-        String url = "";
-        switch (userType) {
-            case "admin":
-                url = "/adminIndex.jsp";
-                break;
-            case "customer":
-                url = "/customerIndex.jsp";
-                break;
-            case "librarian": 
-                url = "/librarianIndex.jsp";
-                break;
-            case "publisher":
-                url = "/publisherIndex.jsp";
-                break;
-        }        
-        RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-        dispatcher.forward(request, response); 
+       }       
+       
+       session.invalidate();
+       String url = "/index.jsp";
+       RequestDispatcher dispatcher = request.getRequestDispatcher(url);
+       dispatcher.forward(request, response); 
     }
 
     /**
@@ -103,7 +80,7 @@ public class SignInServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Handles an admin, customer, libararian, or publisher logging in";
+        return "Signs a user out of the system";
     }// </editor-fold>
 
 }

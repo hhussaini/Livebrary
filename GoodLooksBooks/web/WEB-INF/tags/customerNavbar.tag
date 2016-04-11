@@ -29,7 +29,9 @@
             <li><a href="customerOwnedItems.jsp">My Items</a></li>
             <li><a href="#">My Wishlist</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="index.jsp">Sign Out</a></li>
+            <form name = "signOutForm" action = "SignOutServlet" method = "post">
+            </form>
+            <li onclick="signOutForm.submit();"><a href="#">Sign Out</a></li>
           </ul>
         </li>
       </ul>
