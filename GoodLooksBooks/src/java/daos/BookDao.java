@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLNonTransientConnectionException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class BookDao {
         ResultSet res = null;
         try {
             String dbURL = "jdbc:derby://localhost:1527/elibrary";
-            String usr = "root";
+            String usr = "root"; 
             String pass = "root";
             String driver = "org.apache.derby.jdbc.ClientDriver";
             Class.forName(driver).newInstance();
