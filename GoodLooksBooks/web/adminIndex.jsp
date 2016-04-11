@@ -16,8 +16,8 @@
         </div>
         <div class="panel-body">
           <div class="list-group">
-            <a href="siteStatistics.html"><img alt="brand" width = "100" height = "100" src="assets/statistics-icon.jpg"></a>
-            Site Statistics
+            <a href="#" onclick="siteStatisticsForm.submit();"><img alt="brand" width = "100" height = "100" src="assets/statistics-icon.jpg"></a>
+            Site Statistics          
           </div>
         </div>
       </div>
@@ -25,3 +25,5 @@
   </div>
 </body>
 </html>
+
+<form name = "siteStatisticsForm" action = "SiteStatisticsServlet" method = "post"></form>

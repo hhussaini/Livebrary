@@ -24,6 +24,10 @@
         <servlet-name>AboutServlet</servlet-name>
         <servlet-class>controllers.AboutServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SiteStatisticsServlet</servlet-name>
+        <servlet-class>controllers.SiteStatisticsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -47,6 +51,10 @@
     <servlet-mapping>
         <servlet-name>AboutServlet</servlet-name>
         <url-pattern>/AboutServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SiteStatisticsServlet</servlet-name>
+        <url-pattern>/SiteStatisticsServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
