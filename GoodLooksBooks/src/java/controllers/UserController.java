@@ -22,16 +22,20 @@ public class UserController {
    }
    
     public boolean verifyUser(String username, String password) {
-        if (username.equals("customer") && password.equals("password")) {
-            return true;
+        switch (username) {
+                case "admin":
+                case "customer":
+                case "librarian":
+                case "publisher": return true;
         }
         return false;
     }
     
     public User getUser(String username, String password) {
-        // TODO. Add db implementation to grab user from the db
+        // TODO: Add db implementation to grab user from the db
         // This user is just a test
+        String userType = username;
         return new User("kevinCustomer", "password", "kevin", "young", "Stony Rd", "Stony Brook", "NY", 
-                "11790", "63199999999", "kevin@kevin.com", "customer", "");
+                "11790", "63199999999", "kevin@kevin.com", userType, "");
     }
 }
