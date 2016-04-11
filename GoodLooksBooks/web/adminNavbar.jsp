@@ -3,7 +3,6 @@
     Author     : Kevin Young
 --%>
 
-<%-- any content can be specified here e.g.: --%>
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -13,6 +12,7 @@
       </div>
       <ul class="nav navbar-nav" style="font-weight: bold;">
         <li><a href="adminIndex.jsp">Admin Home</a></li>
+        <li><a href="#" onclick="aboutForm.submit();">About</a></li>
         <li><a href="#" onclick="accountForm.submit();">Account</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" style="font-weight: bold;">
@@ -28,5 +28,4 @@
   </nav>
 <br><br><br>
 
-<form name = "accountForm" action = "AccountServlet" method = "post"></form>
-<form name = "signOutForm" action = "SignOutServlet" method = "post"></form>
+<jsp:include page="/navbarForms.jsp" />

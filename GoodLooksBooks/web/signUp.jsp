@@ -3,13 +3,7 @@
     Author     : Kevin Young
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Good Looks Books</title>
-    <jsp:include page="/header.jsp" />
-</head>
+<jsp:include page="/header.jsp" />
 <body>
   <jsp:include page="/guestNavbar.jsp" />
   <div class="glb-page">

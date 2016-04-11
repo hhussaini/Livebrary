@@ -13,7 +13,7 @@
       </div>
       <ul class="nav navbar-nav" style="font-weight: bold;">
         <li><a href="index.jsp">Home</a></li>
-        <li><a href="about.html">About</a></li>
+        <li><a href="#" onclick="aboutForm.submit();">About</a></li>
         <li><a href="fullCatalog.html">Full Catalog</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" style="font-weight: bold;">
@@ -23,3 +23,5 @@
     </div>
   </nav>
 <br><br><br>
+
+<form name = "aboutForm" action = "AboutServlet" method = "post"></form>

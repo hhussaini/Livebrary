@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Kevin Young
  */
-public class AccountServlet extends HttpServlet {
+public class AboutServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -53,13 +53,16 @@ public class AccountServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // processRequest(request, response);        
+        // processRequest(request, response);
         HttpSession session = request.getSession();
         String userType = (String)session.getAttribute("userType");
+        if (userType == null) {
+            userType = "guest";
+        }
         
         request.getRequestDispatcher("/header.jsp").include(request, response);
         request.getRequestDispatcher(getNavbarUrl(userType)).include(request, response);
-        request.getRequestDispatcher("/account.jsp").include(request, response);
+        request.getRequestDispatcher("/about.jsp").include(request, response);
     }
 
     /**
@@ -69,8 +72,8 @@ public class AccountServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Brings user to their account page";
-    }// </editor-fold>
+        return "Brings the user to the about page";
+    }
     
     private String getNavbarUrl(String userType) {
         return "/" + userType + "Navbar" + ".jsp";

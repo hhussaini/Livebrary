@@ -13,7 +13,7 @@
       </div>
       <ul class="nav navbar-nav" style="font-weight: bold;">
         <li><a href="customerIndex.jsp">Home</a></li>
-        <li><a href="customerAbout.jsp">About</a></li>
+        <li><a href="#" onclick="aboutForm.submit();">About</a></li>
         <li><a href="customerFullCatalog.jsp">Full Catalog</a></li>
         <li><a href="#" onclick="accountForm.submit();">Account</a></li>
       </ul>
@@ -32,5 +32,4 @@
   </nav>
 <br><br><br>
 
-<form name = "accountForm" action = "AccountServlet" method = "post"></form>
-<form name = "signOutForm" action = "SignOutServlet" method = "post"></form>
+<jsp:include page="/navbarForms.jsp" />

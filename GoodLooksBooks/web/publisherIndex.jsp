@@ -3,19 +3,14 @@
     Author     : Kevin Young
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Good Looks Books</title>
-    <jsp:include page="/header.jsp" />
-</head>
+<jsp:include page="/header.jsp" />
 <body>
     <jsp:include page="/publisherNavbar.jsp" />
     <div class="glb-page">
         <jsp:include page="/logo.jsp" />
     <div class="container">
         <div class="panel panel-default">
+            <h1 class = "jumbotron">Welcome ${user.username}!<br></h1>
             <div class="panel-heading">
                 <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i>Publisher Options</h3>
             </div>
