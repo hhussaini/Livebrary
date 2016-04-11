@@ -17,7 +17,7 @@
               <input type="text" class="form-control" name = "accessCode">
           </div>
         </div>
-        <mytags:signUpForm/>
+        <jsp:include page="/signUpForm.jsp" />
       </form>
     </div>
   </div>
