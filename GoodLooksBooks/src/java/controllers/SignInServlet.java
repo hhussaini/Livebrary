@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers;
 
 import objects.User;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,9 +12,9 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Kevin_Setayesh
+ * @author Kevin Young
  */
-public class SignUpServlet extends HttpServlet {
+public class SignInServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,8 +28,7 @@ public class SignUpServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-    }
+    } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -47,7 +42,7 @@ public class SignUpServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // processRequest(request, response);       
+        processRequest(request, response);
     }
 
     /**
@@ -62,26 +57,30 @@ public class SignUpServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // processRequest(request, response);
+        UserController userController = UserController.getInstance();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
-        String street = request.getParameter("street");
-        String city = request.getParameter("city");
-        String state = request.getParameter("state");
-        String zipcode = request.getParameter("zipcode");
-        String phoneNumber = request.getParameter("phoneNumber");
-        String email = request.getParameter("email");        
-        String userType = request.getParameter("userType");
-        String accessCode = request.getParameter("accessCode");
-        User user = new User(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType, accessCode);
         
+        if (!userController.verifyUser(username, password)) {
+            PrintWriter out = response.getWriter();  
+            response.setContentType("text/html");  
+            out.println("<script type=\"text/javascript\">");  
+            out.println("alert('This user does not exist');");  
+            out.println("</script>");
+            return;
+        }
+        
+        User user = userController.getUser(username, password);
+        String userType = user.getType();
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
         session.setAttribute("userType", userType);
         
         String url = "";
         switch (userType) {
+            case "admin":
+                url = "/adminIndex.jsp";
+                break;
             case "customer":
                 url = "/customerIndex.jsp";
                 break;
@@ -103,7 +102,7 @@ public class SignUpServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Handles signing up a Customer, Publisher, or Librarian";
+        return "Handles an admin, customer, libararian, or publisher logging in";
     }// </editor-fold>
 
 }

@@ -4,9 +4,17 @@
         <servlet-name>SignUpServlet</servlet-name>
         <servlet-class>controllers.SignUpServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SignInServlet</servlet-name>
+        <servlet-class>controllers.SignInServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SignInServlet</servlet-name>
+        <url-pattern>/SignInServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
