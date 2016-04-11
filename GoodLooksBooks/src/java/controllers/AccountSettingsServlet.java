@@ -73,7 +73,7 @@ public class AccountSettingsServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Brings user to their edit account settings screen";
     }// </editor-fold>
 
 }

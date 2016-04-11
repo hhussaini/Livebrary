@@ -104,6 +104,6 @@ public class SignInServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Handles an admin, customer, libararian, or publisher logging in";
-    }// </editor-fold>
+    }
 
 }

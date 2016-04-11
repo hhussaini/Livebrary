@@ -3,7 +3,9 @@
     Author     : Kevin Young
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<jsp:include page="/header.jsp" />
+<body>
+  <jsp:include page="/guestNavbar.jsp" />
   <div class="glb-page">
     <jsp:include page="/logo.jsp" />
     <div class="container">
