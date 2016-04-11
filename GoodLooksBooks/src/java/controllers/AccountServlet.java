@@ -30,7 +30,7 @@ public class AccountServlet extends HttpServlet {
         
         request.getRequestDispatcher("/header.jsp").include(request, response);
         request.getRequestDispatcher(getNavbarUrl(userType)).include(request, response);
-        request.getRequestDispatcher("/accountSettings.jsp").include(request, response);
+        request.getRequestDispatcher("/account.jsp").include(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

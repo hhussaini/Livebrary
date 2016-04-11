@@ -5,7 +5,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
  <div class="glb-page">
-   <jsp:include page="/customerNavbar.jsp" />
+   <jsp:include page="/logo.jsp" />
   <div class="container">
       <div class="panel panel-default">
           <div class="panel-heading">
