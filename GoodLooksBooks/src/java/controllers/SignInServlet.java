@@ -1,14 +1,17 @@
 package controllers;
 
+import dao.BookDao;
 import objects.User;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import objects.Book;
 
 /**
  *
@@ -76,6 +79,10 @@ public class SignInServlet extends HttpServlet {
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
         session.setAttribute("userType", userType);
+        
+        BookDao bookDao = new BookDao();
+        List<Book> wishlist = bookDao.getWishlist(user.getUsername());
+        session.setAttribute("customerWishlist", wishlist);
         
         String url = "";
         switch (userType) {
