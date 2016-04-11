@@ -4,17 +4,16 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="mytags" tagdir="/WEB-INF/tags" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <title>Good Looks Books</title>
-  <mytags:header/>
+  <jsp:include page="/header.jsp" />
 </head>
 <body>
-    <mytags:librarianNavbar/>
+    <jsp:include page="/librarianNavbar.jsp" />
   <div class="glb-page">
-      <mytags:logo/>
+      <jsp:include page="/logo.jsp" />
     <div class="container">
       <div class="panel panel-default">
         <div class="panel-heading">

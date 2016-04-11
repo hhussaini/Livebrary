@@ -3,11 +3,7 @@
     Author     : Kevin Young
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
-
-<%-- The list of normal or fragment attributes can be specified here: --%>
-<%@attribute name="message"%>
-
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%-- any content can be specified here e.g.: --%>
 <div class="container">
       <div id="mycarousel" class="carousel slide" data-ride="carousel">

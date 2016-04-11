@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Kevin Young
  */
-public class AccountSettingsServlet extends HttpServlet {
+public class AccountServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -24,7 +24,13 @@ public class AccountSettingsServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        // processRequest(request, response);        
+        HttpSession session = request.getSession();
+        String userType = (String)session.getAttribute("userType");
+        
+        request.getRequestDispatcher("/header.jsp").include(request, response);
+        request.getRequestDispatcher(getNavbarUrl(userType)).include(request, response);
+        request.getRequestDispatcher("/accountSettings.jsp").include(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -39,7 +45,7 @@ public class AccountSettingsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         processRequest(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -53,17 +59,7 @@ public class AccountSettingsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // processRequest(request, response);        
-        HttpSession session = request.getSession();
-        String userType = (String)session.getAttribute("userType");
-        
-        request.getRequestDispatcher("/header.jsp").include(request, response);
-        request.getRequestDispatcher(getNavbarUrl(userType)).include(request, response);
-        request.getRequestDispatcher("/accountSettings.jsp").include(request, response);
-    }
-    
-    private String getNavbarUrl(String userType) {
-        return "/" + userType + "Navbar" + ".jsp";
+        processRequest(request, response);
     }
 
     /**
@@ -75,5 +71,9 @@ public class AccountSettingsServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
+    private String getNavbarUrl(String userType) {
+        return "/" + userType + "Navbar" + ".jsp";
+    }
 
 }

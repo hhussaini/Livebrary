@@ -9,12 +9,12 @@
 <html lang="en">
 <head>
   <title>Good Looks Books</title>
-  <mytags:header/>
+  <jsp:include page="/header.jsp" />
 </head>
 <body>
-    <mytags:guestNavbar/>
+    <jsp:include page="/guestNavbar.jsp" />
   <div class="glb-page">
-    <mytags:logo/>
+    <jsp:include page="/logo.jsp" />
     <div class="container">
       <div class="row">
         <div class="col-sm-4">

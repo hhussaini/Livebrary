@@ -9,16 +9,16 @@
 <html lang="en">
 <head>
   <title>Good Looks Books</title>
-  <mytags:header/>
+  <jsp:include page="/header.jsp" />
 </head>
 <body>
-  <mytags:guestNavbar/>
+  <jsp:include page="/guestNavbar.jsp" />
     <div class="glb-page">
-      <mytags:logo/>
+      <jsp:include page="/logo.jsp" />
       <div class="container">
         <div class="login">
           <h1>Login to Good Looks Books</h1>
-          <mytags:signInForm/>
+          <jsp:include page="/signInForm.jsp" />
         </div>
 <!--        <p class="homework-comment">
           For grading purposes, here are links to different user homepages<br>

@@ -15,7 +15,7 @@
         <li><a href="customerIndex.jsp">Home</a></li>
         <li><a href="customerAbout.jsp">About</a></li>
         <li><a href="customerFullCatalog.jsp">Full Catalog</a></li>
-        <li><a href="customerAccount.jsp">Account</a></li>
+        <li><a href="#" onclick="accountForm.submit();">Account</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
@@ -24,8 +24,6 @@
             <li><a href="customerOwnedItems.jsp">My Items</a></li>
             <li><a href="#">My Wishlist</a></li>
             <li role="separator" class="divider"></li>
-            <form name = "signOutForm" action = "SignOutServlet" method = "post">
-            </form>
             <li onclick="signOutForm.submit();"><a href="#">Sign Out</a></li>
           </ul>
         </li>
@@ -33,3 +31,6 @@
     </div>
   </nav>
 <br><br><br>
+
+<form name = "accountForm" action = "AccountServlet" method = "post"></form>
+<form name = "signOutForm" action = "SignOutServlet" method = "post"></form>

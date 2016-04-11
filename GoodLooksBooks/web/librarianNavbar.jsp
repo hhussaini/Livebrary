@@ -13,14 +13,12 @@
       </div>
       <ul class="nav navbar-nav" style="font-weight: bold;">
         <li><a href="librarianIndex.jsp">Librarian Home</a></li>
-        <li><a href="librarianAccount.jsp">Account</a></li>
+        <li><a href="#" onclick="accountForm.submit();">Account</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" style="font-weight: bold;">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Options<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <form name = "signOutForm" action = "SignOutServlet" method = "post">
-            </form>
             <li onclick="signOutForm.submit();"><a href="#">Sign Out</a></li>
             <!-- <li role="separator" class="divider"></li> -->
           </ul>
@@ -28,3 +26,6 @@
       </ul>
     </div>
   </nav>
+
+<form name = "accountForm" action = "AccountServlet" method = "post"></form>
+<form name = "signOutForm" action = "SignOutServlet" method = "post"></form>

@@ -4,10 +4,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="mytags" tagdir="/WEB-INF/tags" %>
-
  <div class="glb-page">
-   <mytags:logo/>
+   <jsp:include page="/customerNavbar.jsp" />
   <div class="container">
       <div class="panel panel-default">
           <div class="panel-heading">
