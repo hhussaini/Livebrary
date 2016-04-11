@@ -18,6 +18,10 @@ body {
 
 }
 
+th, td {
+    padding: 10px;
+}
+
 .thumbnail {
   margin-bottom:7px;
 }

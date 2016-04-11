@@ -10,13 +10,15 @@
         <jsp:include page="/logo.jsp" />
         <div class="container">
             <h1> ${user.username}'s Wishlist<br></h1>
-            <h2> My Wishlist </h2>
             <table>
                 <c:forEach var="wishlist" items="${customerWishlist}">
                     <tr>
-                        <td><c:out value="${wishlist.name}"/></td>
-                    <td><img src="${wishlist.imageUrl}"/></td>
+                        <td><h3><u>${wishlist.name}</u></h3>
+                            <img src="${wishlist.imageUrl}"/></td>
+                        <td></td>
+                        <td><button id="${wishlist.name}" class="btn btn-danger">Remove</button></td>
                     </tr>
+                    <hr class="fancy">
                 </c:forEach>
             </table>
             <br>
