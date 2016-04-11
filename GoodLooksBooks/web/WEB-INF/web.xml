@@ -12,6 +12,10 @@
         <servlet-name>SignOutServlet</servlet-name>
         <servlet-class>controllers.SignOutServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AccountSettingsServlet</servlet-name>
+        <servlet-class>controllers.AccountSettingsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -23,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>SignOutServlet</servlet-name>
         <url-pattern>/SignOutServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AccountSettingsServlet</servlet-name>
+        <url-pattern>/AccountSettingsServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

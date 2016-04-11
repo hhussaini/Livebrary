@@ -1,20 +1,11 @@
 <%-- 
-    Document   : customerAccount
+    Document   : account
     Author     : Kevin Young
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="mytags" tagdir="/WEB-INF/tags" %>
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
- <title>Your Good Looks Books Account</title>
- <mytags:header/>
-</head>
-
-<body>
- <mytags:customerNavbar/>
  <div class="glb-page">
    <mytags:logo/>
   <div class="container">
@@ -24,7 +15,8 @@
           </div>
           <div class="panel-body">
               <div class="list-group">
-                  <a href="customerAccountSettings.jsp"><img alt="brand" width = "100" height = "100" src="assets/settings-icon.png"></a>
+                  <form name = "accountSettingsForm" action = "AccountSettingsServlet" method = "post">
+                  <a href="#" onclick="accountSettingsForm.submit();"><img alt="brand" width = "100" height = "100" src="assets/settings-icon.png"></a>
                   Change Account Settings (name, address, etc.)
               </div>
           </div>
