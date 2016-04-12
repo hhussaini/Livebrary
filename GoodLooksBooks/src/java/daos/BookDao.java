@@ -1,10 +1,10 @@
 package daos;
 
+import com.mysql.jdbc.PreparedStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLNonTransientConnectionException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,36 +18,38 @@ import objects.Book;
  */
 public class BookDao {
     
-    String dbURL = "jdbc:derby://localhost:1527/elibrary";
-    String usr = "root";
-    String pass = "root";
-    String driver = "org.apache.derby.jdbc.ClientDriver";
+    String dbURL = "jdbc:mysql://mysql2.cs.stonybrook.edu:3306/pmannarino";
+    String usr = "pmannarino";
+    String pass = "108060069";
+    String driver = "com.mysql.jdbc.Driver";
+    
     
     Connection conn = null;
-        Statement stmt = null;
-        ResultSet res = null;
-        
-        
+    Statement stmt = null;
+    ResultSet res = null;
+    
+    
     public List<Book> getWishlist(String userName) {
         List<Book> booksOnWishlist = new ArrayList<Book>();
         
         try {
+            
             Class.forName(driver).newInstance();
-            conn = DriverManager.getConnection(dbURL, usr, pass);
+            conn = (Connection) DriverManager.getConnection(dbURL, usr, pass);
             if (conn != null) {
                 System.out.println("Connected");
             }
-            String sql = "select w.imageurl, w.book from WISHLIST w, CUSTOMERS c where w.USERNAME = c.USERNAME";
+            String sql = "select w.bookImageUrl, w.bookName from WISHLISTS w, CUSTOMERS c where w.USERNAME = c.USERNAME";
             
-            stmt = conn.createStatement();
+            stmt = (Statement) conn.createStatement();
             res = stmt.executeQuery(sql);
             
             
             while (res.next()) {
                 System.out.println("In BookDao");
                 Book book = new Book();
-                String name = res.getString("BOOK");
-                String imageUrl = res.getString("IMAGEURL");
+                String name = res.getString("BOOKNAME");
+                String imageUrl = res.getString("BOOKIMAGEURL");
                 book.setName(name);
                 book.setImageUrl(imageUrl);
                 booksOnWishlist.add(book);
@@ -68,11 +70,25 @@ public class BookDao {
     }
     
     public void removeFromWishlist(String username, String bookName) {
-         String sql = "delete from WISHLIST w where w.book = '"+bookName+"' and w.username = '"+username+"'";
-            
+        String sql = "delete from WISHLISTS where bookname = ? and username = ?";
+        
         try {
-            stmt = conn.createStatement();
+//            stmt = conn.createStatement();
+//            res = stmt.executeQuery(sql);
+            
+            PreparedStatement preparedStmt = (PreparedStatement) conn.prepareStatement(sql);
+            preparedStmt.setString(1, bookName);
+            preparedStmt.setString(2, username);
+            
+            preparedStmt.executeUpdate();
+            
+            
+            sql = "select * from WISHLISTS where bookname = '"+bookName+"'";
+            
+            stmt = (Statement) conn.createStatement();
             res = stmt.executeQuery(sql);
+            
+            
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
