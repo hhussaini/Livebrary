@@ -31,6 +31,11 @@
     <servlet>
         <servlet-name>WishlistServlet</servlet-name>
         <servlet-class>controllers.WishlistServlet</servlet-class>
+        <init-param>
+            <param-name>included-resource</param-name>
+            <param-value>/wishlist.jsp</param-value>
+        </init-param>
+        <load-on-startup>7</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>

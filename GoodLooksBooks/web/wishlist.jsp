@@ -16,7 +16,11 @@
                         <td><h3><u>${wishlist.name}</u></h3>
                             <img src="${wishlist.imageUrl}"/></td>
                         <td></td>
-                        <td><button id="${wishlist.name}" class="btn btn-danger">Remove</button></td>
+                        <td>
+                            <form action="WishlistServlet" method="post">
+                                  <button name="bookName" value="${wishlist.name}" class="btn btn-danger">Remove</button>
+                            </form>
+                        </td>
                     </tr>
                     <hr class="fancy">
                 </c:forEach>
@@ -26,4 +30,3 @@
     </div>
 </body>
 </html>
-<jsp:include page="/WishlistServlet"/> 

@@ -17,17 +17,21 @@ import objects.Book;
  * @author mobile-mann
  */
 public class BookDao {
+    
+    String dbURL = "jdbc:derby://localhost:1527/elibrary";
+    String usr = "root";
+    String pass = "root";
+    String driver = "org.apache.derby.jdbc.ClientDriver";
+    
+    Connection conn = null;
+        Statement stmt = null;
+        ResultSet res = null;
+        
+        
     public List<Book> getWishlist(String userName) {
         List<Book> booksOnWishlist = new ArrayList<Book>();
         
-        Connection conn = null;
-        Statement stmt = null;
-        ResultSet res = null;
         try {
-            String dbURL = "jdbc:derby://localhost:1527/elibrary";
-            String usr = "root"; 
-            String pass = "root";
-            String driver = "org.apache.derby.jdbc.ClientDriver";
             Class.forName(driver).newInstance();
             conn = DriverManager.getConnection(dbURL, usr, pass);
             if (conn != null) {
@@ -37,8 +41,8 @@ public class BookDao {
             
             stmt = conn.createStatement();
             res = stmt.executeQuery(sql);
-           
-
+            
+            
             while (res.next()) {
                 System.out.println("In BookDao");
                 Book book = new Book();
@@ -61,5 +65,16 @@ public class BookDao {
         }
         
         return booksOnWishlist;
+    }
+    
+    public void removeFromWishlist(String username, String bookName) {
+         String sql = "delete from WISHLIST w where w.book = '"+bookName+"' and w.username = '"+username+"'";
+            
+        try {
+            stmt = conn.createStatement();
+            res = stmt.executeQuery(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
