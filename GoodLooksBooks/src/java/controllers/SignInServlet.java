@@ -80,10 +80,6 @@ public class SignInServlet extends HttpServlet {
         session.setAttribute("user", user);
         session.setAttribute("userType", userType);
         
-        BookDao bookDao = new BookDao();
-        List<Book> wishlist = bookDao.getWishlist(user.getUsername());
-        session.setAttribute("customerWishlist", wishlist);
-        
         String url = "";
         switch (userType) {
             case "admin":

@@ -26,3 +26,4 @@
     </div>
 </body>
 </html>
+<jsp:include page="/WishlistServlet"/> 

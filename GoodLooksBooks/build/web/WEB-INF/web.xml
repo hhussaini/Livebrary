@@ -28,6 +28,10 @@
         <servlet-name>SiteStatisticsServlet</servlet-name>
         <servlet-class>controllers.SiteStatisticsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>WishlistServlet</servlet-name>
+        <servlet-class>controllers.WishlistServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -55,6 +59,10 @@
     <servlet-mapping>
         <servlet-name>SiteStatisticsServlet</servlet-name>
         <url-pattern>/SiteStatisticsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>WishlistServlet</servlet-name>
+        <url-pattern>/WishlistServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
