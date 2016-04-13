@@ -36,7 +36,7 @@ public class UserController {
     // This user is just a test
     public User getUser(String username, String password) {
         String userType = username;
-        return new User("kevinCustomer", "password", "kevin", "young", "Stony Rd", "Stony Brook", "NY", 
+        return new User("chestbrah", "password", "kevin", "young", "Stony Rd", "Stony Brook", "NY", 
                 "11790", "63199999999", "kevin@kevin.com", userType, "");
     }
 }

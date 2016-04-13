@@ -91,10 +91,14 @@ public class WishlistServlet extends HttpServlet {
         System.out.println("doPost?");
         String bookName = request.getParameter("bookName");
         System.out.println(bookName);
+        System.out.println(user.getUsername());
         
         bookDao.removeFromWishlist(user.getUsername(), bookName);
         session.setAttribute("customerWishlist", wishlist);
         request.getRequestDispatcher("/wishlist.jsp").include(request, response);
+        
+        request.getRequestDispatcher("/wishlist.jsp").include(request, response);
+        doGet(request, response);
     }
     
     /**

@@ -14,11 +14,11 @@
                 <c:forEach var="wishlist" items="${customerWishlist}">
                     <tr>
                         <td><h3><u>${wishlist.name}</u></h3>
-                            <img src="${wishlist.imageUrl}"/></td>
+                            <img src="${wishlist.imageUrl}" style="width: 250px;"/></td>
                         <td></td>
                         <td>
                             <form action="WishlistServlet" method="post">
-                                  <button name="bookName" value="${wishlist.name}" class="btn btn-danger">Remove</button>
+                                    <button name="bookName" value="${wishlist.name}" class="btn btn-danger">Remove</button>
                             </form>
                         </td>
                     </tr>
