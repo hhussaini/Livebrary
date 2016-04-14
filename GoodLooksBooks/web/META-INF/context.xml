@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <!-- Specify a JDBC datasource -->
+    <Resource name="jdbc/glbdb" 
+              auth="Container"
+              type="javax.sql.DataSource" 
+              username="pmannarino" 
+              password="108060069"
+              driverClassName="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://mysql2.cs.stonybrook.edu:3306/pmannarino"
+              validationQuery="select 1"
+              maxActive="10" 
+              maxIdle="4"/>
+</Context>

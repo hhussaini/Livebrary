@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+
 import objects.Book;
 
 /**
@@ -17,11 +20,12 @@ import objects.Book;
  * @author mobile-mann
  */
 public class BookDao {
-    
-    String dbURL = "jdbc:mysql://mysql2.cs.stonybrook.edu:3306/pmannarino";
-    String usr = "pmannarino";
-    String pass = "108060069";
-    String driver = "com.mysql.jdbc.Driver";
+    @Resource(name="jdbc/glbdb")
+	private DataSource ds;
+//    String dbURL = "jdbc:mysql://mysql2.cs.stonybrook.edu:3306/pmannarino";
+//    String usr = "pmannarino";
+//    String pass = "108060069";
+//    String driver = "com.mysql.jdbc.Driver";
     
     
     Connection conn = null;
@@ -34,8 +38,8 @@ public class BookDao {
         
         try {
             
-            Class.forName(driver).newInstance();
-            conn = (Connection) DriverManager.getConnection(dbURL, usr, pass);
+//            Class.forName(driver).newInstance();
+            conn = ds.getConnection();//Connection) DriverManager.getConnection(dbURL, usr, pass);
             if (conn != null) {
                 System.out.println("Connected");
             }
@@ -56,12 +60,6 @@ public class BookDao {
                 
                 System.out.println(name + ":" + imageUrl);
             }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
