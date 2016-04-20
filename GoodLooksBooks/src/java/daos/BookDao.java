@@ -23,10 +23,17 @@ public class BookDao {
     @Resource(name="jdbc/glbdb")
 	private DataSource ds;
 
+
     String dbURL = "jdbc:mysql://mysql2.cs.stonybrook.edu:3306/pmannarino";
     String usr = "pmannarino";
     String pass = "108060069";
     String driver = "com.mysql.jdbc.Driver";
+
+//    String dbURL = "jdbc:mysql://mysql2.cs.stonybrook.edu:3306/pmannarino";
+//    String usr = "pmannarino";
+//    String pass = "108060069";
+//    String driver = "com.mysql.jdbc.Driver";
+
 
 //    String dbURL = "jdbc:mysql://mysql2.cs.stonybrook.edu:3306/pmannarino";
 //    String usr = "pmannarino";
@@ -48,6 +55,9 @@ public class BookDao {
 
             //Class.forName(driver).newInstance();
             //conn = (Connection) DriverManager.getConnection(dbURL, usr, pass);
+
+//            Class.forName(driver).newInstance();
+
 
 //            Class.forName(driver).newInstance();
 
