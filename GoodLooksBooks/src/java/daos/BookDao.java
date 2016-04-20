@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+
 import objects.Book;
 
 /**
@@ -17,12 +20,13 @@ import objects.Book;
  * @author mobile-mann
  */
 public class BookDao {
-    
+    @Resource(name="jdbc/glbdb")
+	private DataSource ds;
     String dbURL = "jdbc:mysql://mysql2.cs.stonybrook.edu:3306/pmannarino";
     String usr = "pmannarino";
     String pass = "108060069";
     String driver = "com.mysql.jdbc.Driver";
-    String sql;
+    
     
     Connection conn = null;
     Statement stmt = null;
@@ -34,42 +38,40 @@ public class BookDao {
         
         try {
             
-            Class.forName(driver).newInstance();
-            conn = (Connection) DriverManager.getConnection(dbURL, usr, pass);
+            //Class.forName(driver).newInstance();
+            //conn = (Connection) DriverManager.getConnection(dbURL, usr, pass);
+            conn = ds.getConnection();//Connection) DriverManager.getConnection(dbURL, usr, pass);
             if (conn != null) {
                 System.out.println("Connected");
             }
             
-            sql = "select bookImageUrl, bookName from WISHLISTS where USERNAME = ?";
+            String sql = "select bookImageUrl, bookName from WISHLISTS where USERNAME = ?";
             PreparedStatement preparedStmt = (PreparedStatement) conn.prepareStatement(sql);
             preparedStmt.setString(1, username);
             res = preparedStmt.executeQuery();
             
             
-//            stmt = (Statement) conn.createStatement();
-//            res = stmt.executeQuery(sql);
-
-
-while (res.next()) {
-    System.out.println("In BookDao");
-    Book book = new Book();
-    String name = res.getString("BOOKNAME");
-    String imageUrl = res.getString("BOOKIMAGEURL");
-    book.setName(name);
-    book.setImageUrl(imageUrl);
-    booksOnWishlist.add(book);
-    
-    System.out.println(name + ":" + imageUrl);
-}
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+            while (res.next()) {
+                System.out.println("In BookDao");
+                Book book = new Book();
+                String name = res.getString("BOOKNAME");
+                String imageUrl = res.getString("BOOKIMAGEURL");
+                book.setName(name);
+                book.setImageUrl(imageUrl);
+                booksOnWishlist.add(book);
+                
+                System.out.println(name + ":" + imageUrl);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
+//        catch (ClassNotFoundException ex) {
+//            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         
         return booksOnWishlist;
     }

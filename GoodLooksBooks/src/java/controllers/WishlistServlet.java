@@ -95,9 +95,6 @@ public class WishlistServlet extends HttpServlet {
         
         bookDao.removeFromWishlist(user.getUsername(), bookName);
         session.setAttribute("customerWishlist", wishlist);
-        request.getRequestDispatcher("/wishlist.jsp").include(request, response);
-        
-        request.getRequestDispatcher("/wishlist.jsp").include(request, response);
         doGet(request, response);
     }
     

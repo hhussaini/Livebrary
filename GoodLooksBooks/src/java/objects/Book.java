@@ -3,7 +3,6 @@ package objects;
 import java.io.Serializable;
 
 /**
- *
  * @author mobile-mann
  */
 public class Book implements Serializable {
