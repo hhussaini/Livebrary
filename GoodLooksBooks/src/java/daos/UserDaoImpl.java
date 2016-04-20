@@ -18,7 +18,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
     
     @Override
     public int save(User user) {
-        String sql = "insert into USERS values(?,?,?,?,?)";
+        String sql = "insert into USERS values(?,?,?,?,?,?,?,?,?,?,?,?)";
         Connection conToUse = null;
         PreparedStatement ps = null;
         int status = 0;
@@ -30,6 +30,13 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             ps.setString(3, user.getLastName());
             ps.setString(4, user.getEmail());
             ps.setString(5, user.getPassword());
+            ps.setString(6, user.getStreet());
+            ps.setString(7, user.getCity());
+            ps.setString(8, user.getState());
+            ps.setString(9, user.getZipcode());
+            ps.setString(10, user.getPhoneNumber());
+            ps.setString(11, user.getType());
+            ps.setString(12, user.getAccessCode());
             status = ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -39,13 +46,12 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         return status;
     }
 
-    // TODO
     @Override
     public User getUser(String username, String password) {
         String sql = "select U.username, U.password, U.firstname, U.lastname, U.street, U.city, U.state, U.zipcode, U.phoneNumber, U.email, U.type, U.accessCode"
-                        + "   from USER U "
-                        + "   where U.username = " + username
-                        + "   and U.password = " + password;
+                        + "   from USERS U "
+                        + "   where U.username = '" + username + "'"
+                        + "   and U.password = '" + password + "'";
         
         Connection conToUse = null;
         PreparedStatement ps = null;
@@ -68,11 +74,24 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
               String email = res.getString("email");
               String type = res.getString("type");
               String accessCode = res.getString("accessCode");
+              user.setUsername(user_name);
+              user.setPassword(pass_word);
+              user.setFirstName(firstname);
+              user.setLastName(lastname);
+              user.setStreet(street);
+              user.setCity(city);
+              user.setState(state);
+              user.setZipcode(zipcode);
+              user.setPhoneNumber(phoneNumber);
+              user.setEmail(email);
+              user.setType(type);
+              user.setAccessCode(accessCode);
               count++;
             }
             if (count != 1) {
                 return null;
             }
+            return user;
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {

@@ -124,6 +124,11 @@ public class User implements Serializable{
     }
     
     public String getType() {
+        // TODO. Remove this?
+        if (type == null) {
+            return "guest";
+        }
+        
         return type;
     }
 

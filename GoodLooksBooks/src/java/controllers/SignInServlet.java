@@ -69,7 +69,6 @@ public class SignInServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // processRequest(request, response);
-        UserController userController = UserController.getInstance();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import objects.User;
 
 /**
  *
@@ -55,7 +56,8 @@ public class AccountSettingsServlet extends HttpServlet {
             throws ServletException, IOException {
         // processRequest(request, response);        
         HttpSession session = request.getSession();
-        String userType = (String)session.getAttribute("userType");
+        User user = (User)session.getAttribute("user");
+        String userType = user.getType();
         
         request.getRequestDispatcher("/header.jsp").include(request, response);
         request.getRequestDispatcher(getNavbarUrl(userType)).include(request, response);
