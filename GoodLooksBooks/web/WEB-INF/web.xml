@@ -87,6 +87,7 @@
             30
         </session-timeout>
     </session-config>
+<<<<<<< HEAD
     <welcome-file-list>
         <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
@@ -95,5 +96,12 @@
         <res-type>javax.sql.ConnectionPoolDataSource</res-type>
         <res-auth>Container</res-auth>
         <res-sharing-scope>Shareable</res-sharing-scope>
+=======
+    <resource-ref>
+        <description>GoodLooksBooks Database</description>
+        <res-ref-name>jdbc/glbdb</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+>>>>>>> origin/psack-db-setup
     </resource-ref>
 </web-app>
