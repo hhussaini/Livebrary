@@ -1,25 +1,31 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers;
 
 import objects.User;
+import daos.UserDao;
+import factories.ServiceFactory;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import services.UserService;
 
 /**
  *
- * @author Kevin_Setayesh
+ * @author Kevin Young
  */
 public class SignUpServlet extends HttpServlet {
 
+    UserService userService;
+    
+    public void init() {
+        System.out.println(getServletName() + ": initialised" );
+        userService = ServiceFactory.getUserService();
+    }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -71,31 +77,61 @@ public class SignUpServlet extends HttpServlet {
         String state = request.getParameter("state");
         String zipcode = request.getParameter("zipcode");
         String phoneNumber = request.getParameter("phoneNumber");
-        String email = request.getParameter("email");        
+        String email = request.getParameter("email");
         String userType = request.getParameter("userType");
         String accessCode = request.getParameter("accessCode");
+        
+        System.out.println(firstName + " = firstname");
+        
+        RequestDispatcher dispatcher = null;
+        if (isNull(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email) || (!userType.equals("customer") && accessCode == null)) {
+            throw new ServletException("Please fill in all fields.");
+        }
         User user = new User(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType, accessCode);
         
-        HttpSession session = request.getSession();
-        session.setAttribute("user", user);
-        session.setAttribute("userType", userType);
-        
-        String url = "";
-        switch (userType) {
-            case "customer":
-                url = "/customerIndex.jsp";
-                break;
-            case "librarian": 
-                url = "/librarianIndex.jsp";
-                break;
-            case "publisher":
-                url = "/publisherIndex.jsp";
-                break;
-        }        
-        RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-        dispatcher.forward(request, response); 
+        int status = 0;
+        try {
+            status = userService.save(user);
+            if (status == 1) {
+                HttpSession session = request.getSession();
+                session.setAttribute("user", user);
+                String url = "";
+                switch (userType) {
+                    case "customer":
+                        url = "/customerIndex.jsp";
+                        break;
+                    case "librarian": 
+                        url = "/librarianIndex.jsp";
+                        break;
+                    case "publisher":
+                        url = "/publisherIndex.jsp";
+                        break;
+                }        
+                dispatcher = request.getRequestDispatcher(url);
+                dispatcher.forward(request, response);
+            } else {
+                throw new ServletException("SQL Error.");
+            }
+        } catch (Exception e) {
+            throw new ServletException("Exception");
+        }
     }
-
+    
+    /**
+     * Checks if any of the objects in args is null
+     * @param args
+     * @return True if any of the objects in args is null
+     */
+    private boolean isNull(Object... args) {
+        for (Object arg : args) {
+            if (arg == null || ((String)arg).isEmpty()) {
+                System.out.println("ARG = " + arg + " is null or empty");
+                return true;
+            }
+        }
+        return false;
+    }
+    
     /**
      * Returns a short description of the servlet.
      *
@@ -104,6 +140,5 @@ public class SignUpServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Handles signing up a Customer, Publisher, or Librarian";
-    }// </editor-fold>
-
+    } // </editor-fold>
 }

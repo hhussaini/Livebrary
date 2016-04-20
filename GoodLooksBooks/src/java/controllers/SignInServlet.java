@@ -66,12 +66,7 @@ public class SignInServlet extends HttpServlet {
         
         // TODO: Prettier error message
         if (!userController.verifyUser(username, password)) {
-            PrintWriter out = response.getWriter();  
-            response.setContentType("text/html");  
-            out.println("<script type=\"text/javascript\">");  
-            out.println("alert('This user does not exist');");  
-            out.println("</script>");
-            return;
+            throw new ServletException("This user does not exist.");
         }
         
         User user = userController.getUser(username, password);

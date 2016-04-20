@@ -37,6 +37,10 @@
         </init-param>
         <load-on-startup>7</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>ErrorHandler</servlet-name>
+        <servlet-class>controllers.ErrorHandler</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -69,6 +73,22 @@
         <servlet-name>WishlistServlet</servlet-name>
         <url-pattern>/WishlistServlet</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ErrorHandler</servlet-name>
+        <url-pattern>/ErrorHandler</url-pattern>
+    </servlet-mapping>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/ErrorHandler</location>
+    </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/ErrorHandler</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type >
+        <location>/ErrorHandler</location>
+    </error-page>
     <session-config>
         <session-timeout>
             30

@@ -1,6 +1,7 @@
 package controllers;
 
 import daos.BookDao;
+import factories.ServiceFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import objects.Book;
 import objects.User;
+import services.BookService;
 
 /**
  *
@@ -19,14 +21,17 @@ import objects.User;
  */
 public class WishlistServlet extends HttpServlet {
     
-    BookDao bookDao;
+   //BookDao bookDao;
+    BookService bookService;
     List<Book> wishlist;
     User user;
     
     public void init() {
-        System.out.println( getServletName() + ": initialised" );
-        bookDao = new BookDao();
+        System.out.println(getServletName() + ": initialised" );
+        //bookDao = new BookDao();
+        bookService = ServiceFactory.getBookService();
     }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -64,15 +69,11 @@ public class WishlistServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
+            throws ServletException, IOException {        
         HttpSession session = request.getSession();
         user = (User)session.getAttribute("user");
-        
-        
-        wishlist = bookDao.getWishlist(user.getUsername());
-        session.setAttribute("customerWishlist", wishlist);
-        
+        wishlist = bookService.getWishlist(user.getUsername());
+        session.setAttribute("customerWishlist", wishlist);        
         request.getRequestDispatcher("/wishlist.jsp").include(request, response);
     }
     
@@ -92,7 +93,7 @@ public class WishlistServlet extends HttpServlet {
         String bookName = request.getParameter("bookName");
         System.out.println(bookName);
         
-        bookDao.removeFromWishlist(user.getUsername(), bookName);
+        bookService.removeFromWishlist(user.getUsername(), bookName);
         session.setAttribute("customerWishlist", wishlist);
         request.getRequestDispatcher("/wishlist.jsp").include(request, response);
     }
@@ -105,6 +106,5 @@ public class WishlistServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-    
+    } // </editor-fold>    
 }

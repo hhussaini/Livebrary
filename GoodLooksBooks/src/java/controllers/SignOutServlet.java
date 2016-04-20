@@ -56,15 +56,10 @@ public class SignOutServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
        // processRequest(request, response);
-       HttpSession session = request.getSession(false);
+       HttpSession session = request.getSession();
        // TODO: Prettier error message?
        if (session == null) {
-            PrintWriter out = response.getWriter();  
-            response.setContentType("text/html");  
-            out.println("<script type=\"text/javascript\">");  
-            out.println("alert('This user does not exist');");  
-            out.println("</script>");
-            return;
+            throw new ServletException("Error signing out");
        }       
        
        session.invalidate();
@@ -72,7 +67,7 @@ public class SignOutServlet extends HttpServlet {
        RequestDispatcher dispatcher = request.getRequestDispatcher(url);
        dispatcher.forward(request, response); 
     }
-
+    
     /**
      * Returns a short description of the servlet.
      *
@@ -81,6 +76,5 @@ public class SignOutServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Signs a user out of the system";
-    }// </editor-fold>
-
+    } // </editor-fold>
 }
