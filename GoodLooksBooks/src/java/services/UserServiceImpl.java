@@ -43,4 +43,13 @@ public class UserServiceImpl implements UserService {
         System.out.println("Status from UserServiceImppl.save() = " + status);
         return status;
     }
+    
+    // TODO
+    public User getUser(String username, String password) {
+        Connection conToUse = null;
+        java.sql.PreparedStatement ps = null;
+        
+        
+        return null; 
+    }
 }

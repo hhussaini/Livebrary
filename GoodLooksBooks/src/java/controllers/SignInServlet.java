@@ -1,6 +1,7 @@
 package controllers;
 
 import daos.BookDao;
+import factories.ServiceFactory;
 import objects.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,13 +13,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import objects.Book;
+import services.UserService;
 
 /**
  *
  * @author Kevin Young
  */
 public class SignInServlet extends HttpServlet {
-
+    
+    UserService userService;
+    
+    public void init() {
+        System.out.println(getServletName() + ": initialised" );
+        userService = ServiceFactory.getUserService();
+    }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -64,16 +73,14 @@ public class SignInServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         
-        // TODO: Prettier error message
-        if (!userController.verifyUser(username, password)) {
+        User user = userService.getUser(username, password);
+        if (user == null) {
             throw new ServletException("This user does not exist.");
         }
         
-        User user = userController.getUser(username, password);
         String userType = user.getType();
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
-        session.setAttribute("userType", userType);
         
         String url = "";
         switch (userType) {
@@ -103,5 +110,4 @@ public class SignInServlet extends HttpServlet {
     public String getServletInfo() {
         return "Handles an admin, customer, libararian, or publisher logging in";
     }
-
 }
