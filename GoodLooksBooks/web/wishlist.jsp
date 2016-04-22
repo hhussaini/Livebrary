@@ -9,6 +9,7 @@
     <div class="glb-page">
         <jsp:include page="/logo.jsp" />
         <div class="container">
+            
             <h1> ${user.username}'s Wishlist<br></h1>
             <table>
                 <c:forEach var="wishlist" items="${customerWishlist}">

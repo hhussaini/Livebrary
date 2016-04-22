@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Resource;
-import javax.sql.DataSource;
+import static com.glb.helpers.Helpers.*;
 
 import objects.Book;
 import org.apache.commons.dbutils.DbUtils;
@@ -37,7 +36,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
      * @throws ObjectException
      */
     @Override
-    public List<Book> getWishlist(String userName) {
+    public List<Book> getWishlist(String username) {
         List<Book> booksOnWishlist = new ArrayList<Book>();
         
         Connection conToUse = null;
@@ -46,13 +45,14 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             // Class.forName(driver).newInstance();
             //conn = ConnectionUtil.getConnection(); //Connection) DriverManager.getConnection(dbURL, usr, pass);
             conToUse = getConnection();
-            String sql = "select w.bookImageUrl, w.bookName from WISHLISTS w, CUSTOMERS c where w.USERNAME = c.USERNAME";
+            String sql = "select bookImageUrl, bookName from WISHLISTS where USERNAME = ?";
             
-            stmt = (Statement) conToUse.createStatement();
-            res = stmt.executeQuery(sql);            
+            ps = (PreparedStatement) conToUse.prepareStatement(sql);
+            ps.setString(1, username);
+            res = ps.executeQuery();           
             
             while (res.next()) {
-                System.out.println("In BookDao");
+                println("In BookDao");
                 Book book = new Book();
                 String name = res.getString("BOOKNAME");
                 String imageUrl = res.getString("BOOKIMAGEURL");
@@ -73,24 +73,26 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     
     @Override
     public int removeFromWishlist(String username, String bookName) {
+        println("Username: " + username);
         Connection conToUse = null;
         PreparedStatement preparedStmt = null;
         String sql = "delete from WISHLISTS where bookname = ? and username = ?";
         int status = 0;
         try {
             // stmt = conn.createStatement();
-            // res = stmt.executeQuery(sql);            
+            // res = stmt.executeQuery(sql); 
+            conToUse = getConnection();
+            if (conToUse == null)
+                System.out.println("conToUse == null");
             preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
             preparedStmt.setString(1, bookName);
             preparedStmt.setString(2, username);            
-            status = preparedStmt.executeUpdate();            
-            sql = "select * from WISHLISTS where bookname = '"+bookName+"'";            
-            stmt = (Statement) conToUse.createStatement();
-            res = stmt.executeQuery(sql);
+            status = preparedStmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            DbUtils.closeQuietly(preparedStmt);
+        } 
+        finally {
+            //DbUtils.closeQuietly(preparedStmt);
         }
         
         return status;
