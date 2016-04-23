@@ -1,6 +1,6 @@
 package controllers;
 
-import dao.BookDao;
+import daos.BookDao;
 import objects.User;
 import java.io.IOException;
 import java.io.PrintWriter;

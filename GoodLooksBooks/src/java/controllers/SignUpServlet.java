@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import objects.Customer;
 
 /**
  *
@@ -35,8 +36,7 @@ public class SignUpServlet extends HttpServlet {
         
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
+     /**
      * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
@@ -74,7 +74,7 @@ public class SignUpServlet extends HttpServlet {
         String email = request.getParameter("email");        
         String userType = request.getParameter("userType");
         String accessCode = request.getParameter("accessCode");
-        User user = new User(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType, accessCode);
+        User user = new Customer(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType, accessCode);
         
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
