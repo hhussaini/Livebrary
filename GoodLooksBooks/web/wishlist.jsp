@@ -9,7 +9,9 @@
     <div class="glb-page">
         <jsp:include page="/logo.jsp" />
         <div class="container">
-            
+            <form action="WishlistServlet" method="remove">
+                <button class="btn btn-danger">Remove</button>
+            </form>
             <h1> ${user.username}'s Wishlist<br></h1>
             <table>
                 <c:forEach var="wishlist" items="${customerWishlist}">
@@ -19,7 +21,7 @@
                         <td></td>
                         <td>
                             <form action="WishlistServlet" method="post">
-                                  <button name="bookName" value="${wishlist.name}" class="btn btn-danger">Remove</button>
+                                <button name="bookName" value="${wishlist.name}" class="btn btn-danger">Remove</button>
                             </form>
                         </td>
                     </tr>

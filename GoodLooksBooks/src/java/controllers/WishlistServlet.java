@@ -1,10 +1,13 @@
 package controllers;
 
+import static com.glb.helpers.Helpers.*;
 import daos.BookDao;
 import factories.ServiceFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,12 +19,11 @@ import objects.User;
 import services.BookService;
 
 /**
- *
  * @author mobile-mann
  */
 public class WishlistServlet extends HttpServlet {
     
-   //BookDao bookDao;
+    //BookDao bookDao;
     BookService bookService;
     List<Book> wishlist;
     User user;
@@ -30,6 +32,26 @@ public class WishlistServlet extends HttpServlet {
         System.out.println(getServletName() + ": initialised" );
         //bookDao = new BookDao();
         bookService = ServiceFactory.getBookService();
+    }
+    
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, java.io.IOException {
+        println("IN SERVICE");
+        println(req.getMethod().toString());
+        if(req.getMethod().equals("remove")){
+           println("MATHCED METHOD NAME");
+            doRemove(req,resp);
+        }else {
+            println("UNMATHCED METHOD NAME");
+            super.service(req, resp);
+        }
+        
+        
+    }
+    
+    public void doRemove(HttpServletRequest req, HttpServletResponse res) {
+        println("HERE");
     }
     
     /**
@@ -69,11 +91,11 @@ public class WishlistServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {        
+            throws ServletException, IOException {
         HttpSession session = request.getSession();
         user = (User)session.getAttribute("user");
         wishlist = bookService.getWishlist(user.getUsername());
-        session.setAttribute("customerWishlist", wishlist);        
+        session.setAttribute("customerWishlist", wishlist);
         request.getRequestDispatcher("/wishlist.jsp").include(request, response);
     }
     
@@ -106,5 +128,5 @@ public class WishlistServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    } // </editor-fold>    
+    } // </editor-fold>
 }
