@@ -41,6 +41,30 @@
         <servlet-name>ErrorHandler</servlet-name>
         <servlet-class>controllers.ErrorHandler</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ItemReserveServlet</servlet-name>
+        <servlet-class>controllers.ItemReserveServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CustomerFullCatalogServlet</servlet-name>
+        <servlet-class>controllers.CustomerFullCatalogServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserBookDescriptionServlet</servlet-name>
+        <servlet-class>controllers.UserBookDescriptionServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateAverageRatingServlet</servlet-name>
+        <servlet-class>controllers.UpdateAverageRatingServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchForItemServlet</servlet-name>
+        <servlet-class>controllers.SearchForItemServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SubmitItemReviewServlet</servlet-name>
+        <servlet-class>controllers.SubmitItemReviewServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -89,12 +113,36 @@
         <exception-type>java.lang.Throwable</exception-type >
         <location>/ErrorHandler</location>
     </error-page>
+    <servlet-mapping>
+        <servlet-name>ItemReserveServlet</servlet-name>
+        <url-pattern>/ItemReserveServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CustomerFullCatalogServlet</servlet-name>
+        <url-pattern>/CustomerFullCatalogServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserBookDescriptionServlet</servlet-name>
+        <url-pattern>/UserBookDescriptionServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateAverageRatingServlet</servlet-name>
+        <url-pattern>/UpdateAverageRatingServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchForItemServlet</servlet-name>
+        <url-pattern>/SearchForItemServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SubmitItemReviewServlet</servlet-name>
+        <url-pattern>/SubmitItemReviewServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
-<resource-ref>
+    <resource-ref>
         <res-ref-name>jdbc/glbdb</res-ref-name>
         <res-type>javax.sql.ConnectionPoolDataSource</res-type>
         <res-auth>Container</res-auth>

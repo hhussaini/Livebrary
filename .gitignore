@@ -2,3 +2,4 @@
 *.vux
 *.bak*
 *.orig
+/GoodLooksBooks/nbproject/private/
