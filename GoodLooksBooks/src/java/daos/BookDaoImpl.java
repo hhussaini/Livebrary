@@ -72,6 +72,45 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     }
     
     @Override
+    public Book addToWishlist(String username, String isbn) {
+        String title, imageUrl;
+        title = imageUrl = null;
+        Connection conToUse = null;
+        PreparedStatement preparedStmt = null;
+        String sql = null;//"insert into wishlist(username, bookname, imageUrl, isbn) values(?,?,?,?)";
+        try {
+            // stmt = conn.createStatement();
+            // res = stmt.executeQuery(sql); 
+            conToUse = getConnection();
+            if (conToUse == null)
+                System.out.println("conToUse == null");
+            sql = "select imageUrl, title from books where isbn = ?";
+            preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
+            preparedStmt.setString(1, isbn);            
+            res = preparedStmt.executeQuery();
+            while (res.next()) {
+                title = res.getString("title");
+                imageUrl = res.getString("imageUrl");
+                println(title);
+                println(imageUrl);
+            }
+            sql = "insert into wishlist(username, isbn, title, imageUrl) values(?,?,?,?)";
+            preparedStmt.setString(1, username);
+            preparedStmt.setString(2, isbn);
+            preparedStmt.setString(3, title);
+            preparedStmt.setString(4, imageUrl);
+            preparedStmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        finally {
+            //DbUtils.closeQuietly(preparedStmt);
+        }
+        
+        return null;
+    }
+    
+    @Override
     public int removeFromWishlist(String username, String bookName) {
         println("Username: " + username);
         Connection conToUse = null;

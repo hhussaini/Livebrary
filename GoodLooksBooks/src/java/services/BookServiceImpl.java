@@ -21,7 +21,6 @@ public class BookServiceImpl implements BookService {
         // get the connection from util class
         // set the transaction to con & pass con to dao
         try {
-            
             conToUse = ConnectionUtil.getConnection();
             conToUse.setAutoCommit(false);
             BookDao bookDao = DaoFactory.getBookDao();
