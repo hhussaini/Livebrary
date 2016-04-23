@@ -45,7 +45,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             // Class.forName(driver).newInstance();
             //conn = ConnectionUtil.getConnection(); //Connection) DriverManager.getConnection(dbURL, usr, pass);
             conToUse = getConnection();
-            String sql = "select bookImageUrl, bookName from WISHLISTS where USERNAME = ?";
+            String sql = "select imageUrl, title from WISHLISTS where USERNAME = ?";
             
             ps = (PreparedStatement) conToUse.prepareStatement(sql);
             ps.setString(1, username);
@@ -54,8 +54,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             while (res.next()) {
                 println("In BookDao");
                 Book book = new Book();
-                String name = res.getString("BOOKNAME");
-                String imageUrl = res.getString("BOOKIMAGEURL");
+                String name = res.getString("title");
+                String imageUrl = res.getString("imageUrl");
                 book.setName(name);
                 book.setImageUrl(imageUrl);
                 booksOnWishlist.add(book);
