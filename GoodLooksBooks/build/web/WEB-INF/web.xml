@@ -41,6 +41,15 @@
         <servlet-name>ErrorHandler</servlet-name>
         <servlet-class>com.glb.controllers.ErrorHandler</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SearchServlet</servlet-name>
+        <servlet-class>com.glb.controllers.SearchServlet</servlet-class>
+        <init-param>
+            <param-name>included-resource</param-name>
+            <param-value>/customerFullCatalog.jsp</param-value>
+        </init-param>
+        <load-on-startup>7</load-on-startup>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -89,6 +98,10 @@
         <exception-type>java.lang.Throwable</exception-type>
         <location>/ErrorHandler</location>
     </error-page>
+    <servlet-mapping>
+        <servlet-name>SearchServlet</servlet-name>
+        <url-pattern>/search.do</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

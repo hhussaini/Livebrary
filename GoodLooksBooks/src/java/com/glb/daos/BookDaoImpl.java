@@ -1,6 +1,8 @@
 package com.glb.daos;
 
-import com.mysql.jdbc.PreparedStatement;
+import com.glb.controllers.FileController;
+import com.glb.exceptions.ResourceHelperException;
+import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +14,7 @@ import java.util.logging.Logger;
 import static com.glb.helpers.Helpers.*;
 
 import com.glb.objects.Book;
+import com.glb.services.BookServiceImpl;
 import org.apache.commons.dbutils.DbUtils;
 
 /**
@@ -20,14 +23,16 @@ import org.apache.commons.dbutils.DbUtils;
  */
 public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     //@Resource(name="jdbc/glbdb")
-   // private DataSource ds;
+    // private DataSource ds;
 //    String dbURL = "jdbc:mysql://mysql2.cs.stonybrook.edu:3306/pmannarino";
 //    String usr = "pmannarino";
 //    String pass = "108060069";
 //    String driver = "com.mysql.jdbc.Driver";
     
-    Statement stmt = null;
-    ResultSet res = null;
+    private Statement stmt = null;
+    private ResultSet res = null;
+    private int numberOfResults;
+    private int totalBooks;
     
     /**
      *
@@ -41,26 +46,25 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         
         Connection conToUse = null;
         java.sql.PreparedStatement ps = null;
-        try {            
+        try {
             // Class.forName(driver).newInstance();
             //conn = ConnectionUtil.getConnection(); //Connection) DriverManager.getConnection(dbURL, usr, pass);
             conToUse = getConnection();
-            String sql = "select imageUrl, title from WISHLISTS where USERNAME = ?";
+            String sql = "select * from WISHLISTS where USERNAME = ?";
             
             ps = (PreparedStatement) conToUse.prepareStatement(sql);
             ps.setString(1, username);
-            res = ps.executeQuery();           
+            res = ps.executeQuery();
             
             while (res.next()) {
                 println("In BookDao");
                 Book book = new Book();
-                String name = res.getString("title");
-                String imageUrl = res.getString("imageUrl");
-                book.setName(name);
-                book.setImageUrl(imageUrl);
+                book.setIsbn(res.getString("isbn"));
+                book.setTitle(res.getString("title"));
+                book.setImageUrl(res.getString("imageUrl"));
                 booksOnWishlist.add(book);
                 
-                System.out.println(name + ":" + imageUrl);
+                //System.out.println(name + ":" + imageUrl);
             }
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -80,13 +84,13 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         String sql = null;//"insert into wishlist(username, bookname, imageUrl, isbn) values(?,?,?,?)";
         try {
             // stmt = conn.createStatement();
-            // res = stmt.executeQuery(sql); 
+            // res = stmt.executeQuery(sql);
             conToUse = getConnection();
             if (conToUse == null)
                 System.out.println("conToUse == null");
             sql = "select imageUrl, title from books where isbn = ?";
             preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
-            preparedStmt.setString(1, isbn);            
+            preparedStmt.setString(1, isbn);
             res = preparedStmt.executeQuery();
             while (res.next()) {
                 title = res.getString("title");
@@ -102,7 +106,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             preparedStmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
         finally {
             //DbUtils.closeQuietly(preparedStmt);
         }
@@ -111,29 +115,146 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     }
     
     @Override
-    public int removeFromWishlist(String username, String bookName) {
+    public int removeFromWishlist(String username, String isbn) {
         println("Username: " + username);
         Connection conToUse = null;
         PreparedStatement preparedStmt = null;
-        String sql = "delete from WISHLISTS where bookname = ? and username = ?";
+        String sql = "delete from WISHLISTS where isbn = ? and username = ?";
         int status = 0;
         try {
             // stmt = conn.createStatement();
-            // res = stmt.executeQuery(sql); 
+            // res = stmt.executeQuery(sql);
             conToUse = getConnection();
             if (conToUse == null)
                 System.out.println("conToUse == null");
             preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
-            preparedStmt.setString(1, bookName);
-            preparedStmt.setString(2, username);            
+            preparedStmt.setString(1, isbn);
+            preparedStmt.setString(2, username);
             status = preparedStmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
         finally {
             //DbUtils.closeQuietly(preparedStmt);
         }
         
         return status;
+    }
+    
+    @Override
+    public List<Book> searchBooks(String term, int offset, int recordsPerPage) {
+        List<Book> results = new ArrayList<Book>();
+        this.numberOfResults = 0;
+        
+        Connection conn = getConnection();
+        ResultSet rs;
+        term = "%" + term + "%";
+        String query = "select * from books where title is not null and"
+                + " (publisher like ?"
+                + " OR language like ?"
+                + " OR author like ?"
+                + " OR title like ?)";
+        String limit = " limit " + offset + ", " + recordsPerPage;
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, term);
+            pstmt.setString(2, term);
+            pstmt.setString(3, term);
+            pstmt.setString(4, term);
+            rs = pstmt.executeQuery();
+            
+            while (rs.next()) {
+                numberOfResults++;
+            }
+            
+            rs.close();
+            
+            pstmt = conn.prepareStatement(query + limit);
+            pstmt.setString(1, term);
+            pstmt.setString(2, term);
+            pstmt.setString(3, term);
+            pstmt.setString(4, term);
+            rs = pstmt.executeQuery();
+            println(pstmt.toString());
+            while (rs.next()) {
+                Book book = new Book();
+                book.setIsbn(rs.getString("isbn"));
+                book.setTitle(rs.getString("title"));
+                book.setImageUrl(rs.getString("imageUrl"));
+                book.setAuthor(rs.getString("author"));
+                if (book.getImageUrl().toString().length() > 0) {
+                    results.add(book);
+                    numberOfResults++;
+                }
+            }
+            rs.close();
+            
+            Statement stmt = conn.createStatement();
+        } catch (SQLException ex) {
+            Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+//        finally {
+//            try {
+//                if(stmt != null)
+//                    stmt.close();
+//                if(conn != null)
+//                    conn.close();
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+        return results;
+    }
+    
+    @Override
+    public int getNumberOfResults() {
+        return this.numberOfResults;
+    }
+    
+    @Override
+    public int getTotalBooks() {
+        return this.totalBooks;
+    }
+
+    @Override
+    public List<Book> getAllBooks() {
+        List<Book> results = new ArrayList<Book>();
+        this.totalBooks = 0;
+        
+        Connection conn = getConnection();
+        ResultSet rs;
+        String query = "select * from books where title is not null";
+        try {
+            Statement stmt = conn.createStatement();
+         
+            rs = stmt.executeQuery(query);
+            
+            while (rs.next()) {
+                Book book = new Book();
+                book.setIsbn(rs.getString("isbn"));
+                book.setTitle(rs.getString("title"));
+                book.setImageUrl(rs.getString("imageUrl"));
+                book.setAuthor(rs.getString("author"));
+                if (book.getImageUrl().toString().length() > 0) {
+                    results.add(book);
+                    totalBooks++;
+                }
+            }
+            rs.close();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+//        finally {
+//            try {
+//                if(stmt != null)
+//                    stmt.close();
+//                if(conn != null)
+//                    conn.close();
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+        return results;
     }
 }

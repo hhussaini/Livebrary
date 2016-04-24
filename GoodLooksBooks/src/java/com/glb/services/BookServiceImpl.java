@@ -1,5 +1,6 @@
 package com.glb.services;
 
+import com.glb.controllers.FileController;
 import com.glb.daos.BookDao;
 import com.glb.factories.DaoFactory;
 import com.glb.exceptions.ResourceHelperException;
@@ -10,9 +11,14 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.glb.objects.Book;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import org.apache.commons.dbutils.DbUtils;
 
 public class BookServiceImpl implements BookService {
+    
+    private int numberOfResults;
+    private int totalBooks;
     
     @Override
     public List<Book> getWishlist(String userName) {
@@ -39,7 +45,7 @@ public class BookServiceImpl implements BookService {
         
         return booksOnWishlist;
     }
-
+    
     /**
      *
      * @param username
@@ -47,7 +53,7 @@ public class BookServiceImpl implements BookService {
      * @return
      */
     @Override
-    public int removeFromWishlist(String username, String bookName) {
+    public int removeFromWishlist(String username, String isbn) {
         Connection conToUse = null;
         int status = 0;
         // get the connection from util class
@@ -57,7 +63,7 @@ public class BookServiceImpl implements BookService {
             conToUse.setAutoCommit(false);
             BookDao bookDao = DaoFactory.getBookDao();
             bookDao.setConnection(conToUse);
-            status = bookDao.removeFromWishlist(username, bookName);
+            status = bookDao.removeFromWishlist(username, isbn);
             conToUse.commit();
         } catch (ResourceHelperException e) {
             System.out.println("ResourceHelperException");
@@ -73,4 +79,50 @@ public class BookServiceImpl implements BookService {
         System.out.println("Status from BookServiceImpl.removeFromWishlist() = " + status);
         return status;
     }
+    
+    @Override
+    public List<Book> searchBooks(String term, int offset, int recordsPerPage) {
+        List<Book> results = null;
+        Connection conn = null;       
+       
+        try {            
+            conn = ConnectionUtil.getConnection();
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conn);
+            results = bookDao.searchBooks(term, offset, recordsPerPage);
+            this.numberOfResults = bookDao.getNumberOfResults();
+        } catch (ResourceHelperException ex) {
+            Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return results;
+    }
+    
+    @Override
+    public List<Book> getAllBooks() {
+        List<Book> results = null;
+        Connection conn = null;       
+       
+        try {            
+            conn = ConnectionUtil.getConnection();
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conn);
+            results = bookDao.getAllBooks();
+            this.totalBooks = bookDao.getTotalBooks();
+        } catch (ResourceHelperException ex) {
+            Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return results;
+    }
+    
+    @Override
+    public int getNumberOfResults() {
+        return this.numberOfResults;
+    }
+    
+    public int getTotalBooks() {
+        return totalBooks;
+    }
+
 }

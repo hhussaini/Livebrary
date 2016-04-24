@@ -7,10 +7,28 @@ import java.io.Serializable;
  * @author mobile-mann
  */
 public class Book implements Serializable {
+    private String isbn;
+    private String title;
     private String imageUrl;
-    private String name;
+    private String author;
     
     public Book(){}
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getImageUrl() {
         return imageUrl;
@@ -20,11 +38,12 @@ public class Book implements Serializable {
         this.imageUrl = imageUrl;
     }
 
-    public String getName() {
-        return name;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAuthor(String author) {
+        this.author = author;
     }
+   
 }

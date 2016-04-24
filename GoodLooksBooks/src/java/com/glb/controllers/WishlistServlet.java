@@ -1,22 +1,19 @@
 package com.glb.controllers;
 
 import static com.glb.helpers.Helpers.*;
-import com.glb.daos.BookDao;
+import com.glb.services.BookService;
 import com.glb.factories.ServiceFactory;
+import com.glb.objects.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.glb.objects.Book;
-import com.glb.objects.User;
-import com.glb.services.BookService;
+
 
 /**
  * @author mobile-mann
@@ -34,21 +31,21 @@ public class WishlistServlet extends HttpServlet {
         bookService = ServiceFactory.getBookService();
     }
     
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, java.io.IOException {
-        println("IN SERVICE");
-        println(req.getMethod().toString());
-        if(req.getMethod().equals("remove")){
-           println("MATHCED METHOD NAME");
-            doRemove(req,resp);
-        }else {
-            println("UNMATHCED METHOD NAME");
-            super.service(req, resp);
-        }
-        
-        
-    }
+//    @Override
+//    protected void service(HttpServletRequest req, HttpServletResponse resp)
+//            throws ServletException, java.io.IOException {
+//        println("IN SERVICE");
+//        println(req.getMethod().toString());
+//        if(req.getMethod().equals("remove")){
+//           println("MATHCED METHOD NAME");
+//            doRemove(req,resp);
+//        }else {
+//            println("UNMATHCED METHOD NAME");
+//            super.service(req, resp);
+//        }
+//        
+//        
+//    }
     
     public void doRemove(HttpServletRequest req, HttpServletResponse res) {
         println("HERE");
@@ -92,10 +89,13 @@ public class WishlistServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        println(this.getServletName() + " : " + "doGet");
         HttpSession session = request.getSession();
         user = (User)session.getAttribute("user");
         wishlist = bookService.getWishlist(user.getUsername());
+        println("Wishlist: " + wishlist.size());
         session.setAttribute("customerWishlist", wishlist);
+        session.setAttribute("wishlistSize", wishlist.size());
         request.getRequestDispatcher("/wishlist.jsp").include(request, response);
     }
     
@@ -110,14 +110,32 @@ public class WishlistServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        System.out.println("doPost?");
-        String bookName = request.getParameter("bookName");
-        System.out.println(bookName);
+        println(this.getServletName() + " : " + "doPost");
         
-        bookService.removeFromWishlist(user.getUsername(), bookName);
-        session.setAttribute("customerWishlist", wishlist);
-        request.getRequestDispatcher("/wishlist.jsp").include(request, response);
+        
+         println(this.getServletName() + " : " + "doDelete");
+        HttpSession session = request.getSession();
+        String isbn = request.getParameter("isbn");
+        System.out.println(isbn);
+        
+        bookService.removeFromWishlist(user.getUsername(), isbn);
+        doGet(request, response);
+//        session.setAttribute("customerWishlist", wishlist);
+//        request.getRequestDispatcher("/wishlist.jsp").include(request, response);
+    }
+    
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        println(this.getServletName() + " : " + "doDelete");
+        HttpSession session = request.getSession();
+        String isbn = request.getParameter("isbn");
+        System.out.println(isbn);
+        
+        bookService.removeFromWishlist(user.getUsername(), isbn);
+        doGet(request, response);
+//        session.setAttribute("customerWishlist", wishlist);
+//        request.getRequestDispatcher("/wishlist.jsp").include(request, response);
     }
     
     /**
