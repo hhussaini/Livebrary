@@ -67,8 +67,6 @@ public class SearchServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            
-            //processRequest(request, response);
             HttpSession session = request.getSession();
             String term = request.getParameter("searchTerm");
             println("Searched! " + term);
@@ -81,12 +79,10 @@ public class SearchServlet extends HttpServlet {
                 page = Integer.parseInt(request.getParameter("page"));
             
             int offset = (page-1) * recordsPerPage;
-            println(offset);
             
             searchResults = bookService.searchBooks(term, offset, recordsPerPage);
             
             int numOfResults = bookService.getNumberOfResults();
-            println("Num results " + numOfResults);
             int numOfPages = (int) Math.ceil(numOfResults * 1.0 / recordsPerPage);
             session.setAttribute("searchResults", searchResults);
             request.setAttribute("numOfPages", numOfPages - 1);
@@ -94,10 +90,14 @@ public class SearchServlet extends HttpServlet {
             
             int firstPage = (page - 5 < 1) ? 1 : page - 5;
             int lastPage = (page + 5 > numOfPages) ? numOfPages - 1 : page + 5;
+            if (lastPage < 1)
+                lastPage = 1;          
+            
             request.setAttribute("firstPage", firstPage);
             request.setAttribute("lastPage", lastPage);
+            request.setAttribute("lastTermSearched", term);
             session.setAttribute("resultSize", numOfResults);
-            request.getRequestDispatcher("/customerFullCatalog.jsp").forward(request, response);
+            request.getRequestDispatcher("/customerFullCatalog.jsp").include(request, response);
         } catch (Exception ex) {
             println(ex.getClass().toString() + " : " + ex.getMessage());
         }

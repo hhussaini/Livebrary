@@ -21,14 +21,7 @@ import org.apache.commons.dbutils.DbUtils;
  *
  * @author mobile-mann
  */
-public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
-    //@Resource(name="jdbc/glbdb")
-    // private DataSource ds;
-//    String dbURL = "jdbc:mysql://mysql2.cs.stonybrook.edu:3306/pmannarino";
-//    String usr = "pmannarino";
-//    String pass = "108060069";
-//    String driver = "com.mysql.jdbc.Driver";
-    
+public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {    
     private Statement stmt = null;
     private ResultSet res = null;
     private int numberOfResults;
@@ -47,8 +40,6 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         Connection conToUse = null;
         java.sql.PreparedStatement ps = null;
         try {
-            // Class.forName(driver).newInstance();
-            //conn = ConnectionUtil.getConnection(); //Connection) DriverManager.getConnection(dbURL, usr, pass);
             conToUse = getConnection();
             String sql = "select * from WISHLISTS where USERNAME = ?";
             
@@ -57,14 +48,11 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             res = ps.executeQuery();
             
             while (res.next()) {
-                println("In BookDao");
                 Book book = new Book();
                 book.setIsbn(res.getString("isbn"));
                 book.setTitle(res.getString("title"));
                 book.setImageUrl(res.getString("imageUrl"));
                 booksOnWishlist.add(book);
-                
-                //System.out.println(name + ":" + imageUrl);
             }
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -83,11 +71,10 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         PreparedStatement preparedStmt = null;
         String sql = null;//"insert into wishlist(username, bookname, imageUrl, isbn) values(?,?,?,?)";
         try {
-            // stmt = conn.createStatement();
-            // res = stmt.executeQuery(sql);
             conToUse = getConnection();
             if (conToUse == null)
                 System.out.println("conToUse == null");
+            
             sql = "select imageUrl, title from books where isbn = ?";
             preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
             preparedStmt.setString(1, isbn);
@@ -95,8 +82,6 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             while (res.next()) {
                 title = res.getString("title");
                 imageUrl = res.getString("imageUrl");
-                println(title);
-                println(imageUrl);
             }
             sql = "insert into wishlist(username, isbn, title, imageUrl) values(?,?,?,?)";
             preparedStmt.setString(1, username);
@@ -108,7 +93,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-            //DbUtils.closeQuietly(preparedStmt);
+            DbUtils.closeQuietly(preparedStmt);
         }
         
         return null;
@@ -122,8 +107,6 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         String sql = "delete from WISHLISTS where isbn = ? and username = ?";
         int status = 0;
         try {
-            // stmt = conn.createStatement();
-            // res = stmt.executeQuery(sql);
             conToUse = getConnection();
             if (conToUse == null)
                 System.out.println("conToUse == null");
@@ -135,7 +118,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-            //DbUtils.closeQuietly(preparedStmt);
+            DbUtils.closeQuietly(preparedStmt);
         }
         
         return status;
@@ -175,9 +158,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             pstmt.setString(3, term);
             pstmt.setString(4, term);
             rs = pstmt.executeQuery();
-            println(pstmt.toString());
             while (rs.next()) {
-                println("Got it!");
                 Book book = new Book();
                 book.setIsbn(rs.getString("isbn"));
                 book.setTitle(rs.getString("title"));
@@ -193,17 +174,16 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             Statement stmt = conn.createStatement();
         } catch (SQLException ex) {
             Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(stmt != null)
+                    stmt.close();
+                if(conn != null)
+                    conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-//        finally {
-//            try {
-//                if(stmt != null)
-//                    stmt.close();
-//                if(conn != null)
-//                    conn.close();
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
         return results;
     }
     
@@ -245,17 +225,16 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             
         } catch (SQLException ex) {
             Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(stmt != null)
+                    stmt.close();
+                if(conn != null)
+                    conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-//        finally {
-//            try {
-//                if(stmt != null)
-//                    stmt.close();
-//                if(conn != null)
-//                    conn.close();
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
         return results;
     }
 }

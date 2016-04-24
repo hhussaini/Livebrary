@@ -123,7 +123,8 @@
                                                 <td> 
                                                     <a href = "#" id = "${item.isbn}" class="thumbnail" onclick = "selectedBook(this.id)">
                                                         <img src = "${item.imageUrl}" alt="${item.title}" style="width: 200px;">
-                                                        <c:out value="${item.title}"/> 
+                                                        <c:out value="${item.title}"/> <br> <br>
+                                                        <c:out value="by ${item.author}"/>
                                                     </a>
                                                 </td>
                                             </div>
