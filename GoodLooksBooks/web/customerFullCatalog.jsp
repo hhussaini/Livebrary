@@ -3,11 +3,11 @@
     Created on : Apr 11, 2016, 12:58:21 AM
     Author     : Kevin_Setayesh
 --%>
-    
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-    
+
 <html lang="en">
     
     <head>
@@ -134,9 +134,9 @@
                         <table border="1" cellpadding="5" cellspacing="5" align="center">
                             <tr>
                                 <%--For displaying Previous link except for the 1st page --%>
-                                <td><a href="SearchServlet?page=1"><<</a></td>
+                                <td><a href="SearchServlet?page=1&searchTerm=${lastTermSearched}"><<</a></td>
                                 <c:if test="${currentPage != 1}">
-                                    <td><a href="SearchServlet?page=${currentPage - 1}">Previous</a></td>
+                                    <td><a href="SearchServlet?page=${currentPage - 1}&searchTerm=${lastTermSearched}">Previous</a></td>
                                 </c:if>
                                 <c:forEach begin="${firstPage}" end="${lastPage}" var="i">
                                     <c:choose>
@@ -144,17 +144,17 @@
                                             <td>${i}</td>
                                         </c:when>
                                         <c:otherwise>
-                                            <td><a href="SearchServlet?page=${i}">${i}</a>
+                                            <td><a href="SearchServlet?page=${i}&searchTerm=${lastTermSearched}">${i}</a>
                                             </td>
                                         </c:otherwise>
                                     </c:choose>
                                 </c:forEach>
                                 <%--For displaying Next link --%>
                                 <c:if test="${currentPage lt numOfPages}">
-                                    <td><a href="SearchServlet?page=${currentPage + 1}">Next</a>
+                                    <td><a href="SearchServlet?page=${currentPage + 1}&searchTerm=${lastTermSearched}">Next</a>
                                     </td>
                                 </c:if> 
-                                <td><a href="SearchServlet?page=${numOfPages}">>></a></td>
+                                <td><a href="SearchServlet?page=${numOfPages}&searchTerm=${lastTermSearched}">>></a></td>
                             </tr>
                         </table>
                     </div>
