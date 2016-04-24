@@ -2,3 +2,5 @@
 *.vux
 *.bak*
 *.orig
+/BetterLooksBooks/nbproject/private/
+/BetterLooksBooks/build/

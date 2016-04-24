@@ -66,35 +66,40 @@ public class SearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        println("Inside SearchServlet.doGet()");
-        HttpSession session = request.getSession();
-        String term = request.getParameter("searchTerm");
-        term = (term == null) ? "" : term;
-        
-        int page = 1;
-        int recordsPerPage = 20;
-        
-        if(request.getParameter("page") != null)
-            page = Integer.parseInt(request.getParameter("page"));
-        int offset = (page-1) * recordsPerPage;
-        println(offset);
-        
-        searchResults = bookService.searchBooks(term, offset, recordsPerPage);
-        
-        int numOfResults = bookService.getNumberOfResults();
-        println("Num results " + numOfResults);
-        int numOfPages = (int) Math.ceil(numOfResults * 1.0 / recordsPerPage);
-        session.setAttribute("searchResults", searchResults);
-        request.setAttribute("numOfPages", numOfPages - 1);
-        request.setAttribute("currentPage", page);
-        
-        int firstPage = (page - 5 < 1) ? 1 : page - 5;
-        int lastPage = (page + 5 > numOfPages) ? numOfPages - 1 : page + 5;
-        request.setAttribute("firstPage", firstPage);
-        request.setAttribute("lastPage", lastPage);
-        session.setAttribute("resultSize", numOfResults);
-        request.getRequestDispatcher("/customerFullCatalog.jsp").forward(request, response);
+        try {            
+            //processRequest(request, response);
+            HttpSession session = request.getSession();
+            String term = request.getParameter("searchTerm");
+            println("Searched! " + term);
+            term = (term == null) ? "" : term;
+            
+            int page = 1;
+            int recordsPerPage = 18;
+            
+            if(request.getParameter("page") != null)
+                page = Integer.parseInt(request.getParameter("page"));
+            
+            int offset = (page-1) * recordsPerPage;
+            println(offset);
+            
+            searchResults = bookService.searchBooks(term, offset, recordsPerPage);
+            
+            int numOfResults = bookService.getNumberOfResults();
+            println("Num results " + numOfResults);
+            int numOfPages = (int) Math.ceil(numOfResults * 1.0 / recordsPerPage);
+            session.setAttribute("searchResults", searchResults);
+            request.setAttribute("numOfPages", numOfPages - 1);
+            request.setAttribute("currentPage", page);
+            
+            int firstPage = (page - 5 < 1) ? 1 : page - 5;
+            int lastPage = (page + 5 > numOfPages) ? numOfPages - 1 : page + 5;
+            request.setAttribute("firstPage", firstPage);
+            request.setAttribute("lastPage", lastPage);
+            session.setAttribute("resultSize", numOfResults);
+            request.getRequestDispatcher("/customerFullCatalog.jsp").forward(request, response);
+        } catch (Exception ex) {
+            println(ex.getClass().toString() + " : " + ex.getMessage());
+        }
     }
 
     /**
