@@ -20,7 +20,7 @@ function selectedBook(bookID){ // the id of the form is the isbn number of the s
     console.log("selectedBook");
     console.log('bookID = ' + bookID);
     console.log(document.getElementById("itemSelectionForm").name);
-    //document.getElementById("hiddenFormID").value = bookID;
+    document.getElementById("hiddenFormID").value = bookID;
     document.getElementById("itemSelectionForm").submit(); 
 }
 
@@ -70,7 +70,7 @@ function submitReview(){
 }
 
 $(document).on('ready', function(){
-   //  console.log("hey: " + window.location.href);
+    //  console.log("hey: " + window.location.href);
     if(window.location.href === "UserBookDescriptionServlet"){
         updateAverageRating(null);
         $('#input-3').rating({displayOnly: true, step: 0.5});
