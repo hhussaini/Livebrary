@@ -9,4 +9,5 @@ public interface BookService {
     public List<Book> searchBooks(String parameter, int offset, int recordsPerPage);
     public int getNumberOfResults();
     public List<Book> getAllBooks();
+    public Book getBookByIsbn(String isbn);
 }

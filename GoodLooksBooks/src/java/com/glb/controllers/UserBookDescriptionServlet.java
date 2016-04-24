@@ -1,12 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.glb.controllers;
 
-
-import com.glb.objects.Item;
+import com.glb.factories.ServiceFactory;
+import static com.glb.helpers.Helpers.println;
+import com.glb.objects.Book;
+import com.glb.services.BookService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -16,13 +13,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
 /**
  *
  * @author Kevin_Setayesh
  */
 public class UserBookDescriptionServlet extends HttpServlet {
-
+    
+    BookService bookService;
+    
+    public void init() {
+        println(getServletName() + ": initialised" );
+        bookService = ServiceFactory.getBookService();
+    }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,6 +37,7 @@ public class UserBookDescriptionServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        println("Inside UserBookDescriptionServlet.processRequest");
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
@@ -60,6 +64,7 @@ public class UserBookDescriptionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        println("Inside UserBookDescriptionServlet.doGet");
         processRequest(request, response);
     }
 
@@ -74,33 +79,23 @@ public class UserBookDescriptionServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-      //  processRequest(request, response);
-      
+          //  processRequest(request, response);
           // returns the isbn of the book clicked, so we can go to the database and query for that book
+          println("Inside UserBookDescriptionServlet.doPost");
           String isbn = request.getParameter("hiddenFormID"); 
-          Item item = searchDataBaseForItem(isbn);
+          Book book = bookService.getBookByIsbn(isbn);;
           String url = "/userBookDescription.jsp";
           HttpSession session = request.getSession();
-          if(item != null){
-               session.setAttribute("itemClicked", item); 
+          if(book != null){
+               session.setAttribute("itemClicked", book); 
                RequestDispatcher dispatcher = request.getRequestDispatcher(url);
                dispatcher.forward(request, response); 
           }
           else{
-              
+               throw new ServletException("Error getting book with isbn = " + (isbn == null ? "NULL" : isbn));
           }
-         
-        
     }
     
-    // dummy database query
-    private Item searchDataBaseForItem(String isbn) throws IOException{
-        FileController fileController = FileController.getInstance();
-        return fileController.searchForItem(isbn);
-    }
-    
-    
-
     /**
      * Returns a short description of the servlet.
      *
@@ -110,5 +105,4 @@ public class UserBookDescriptionServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

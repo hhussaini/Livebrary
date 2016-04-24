@@ -1,6 +1,5 @@
 package com.glb.services;
 
-import com.glb.controllers.FileController;
 import com.glb.daos.BookDao;
 import com.glb.factories.DaoFactory;
 import com.glb.exceptions.ResourceHelperException;
@@ -11,8 +10,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.glb.objects.Book;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import org.apache.commons.dbutils.DbUtils;
 
 public class BookServiceImpl implements BookService {
@@ -117,6 +114,22 @@ public class BookServiceImpl implements BookService {
     }
     
     @Override
+    public Book getBookByIsbn(String isbn) {
+        Connection conn = null;
+        Book book = null;
+        try {            
+            conn = ConnectionUtil.getConnection();
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conn);
+            book = bookDao.getBookByIsbn(isbn);
+        } catch (ResourceHelperException ex) {
+            Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return book;
+    }
+    
+    @Override
     public int getNumberOfResults() {
         return this.numberOfResults;
     }
@@ -124,5 +137,4 @@ public class BookServiceImpl implements BookService {
     public int getTotalBooks() {
         return totalBooks;
     }
-
 }

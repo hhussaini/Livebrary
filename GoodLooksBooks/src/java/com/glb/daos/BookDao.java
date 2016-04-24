@@ -11,4 +11,5 @@ public interface BookDao extends JdbcDaoSupport {
     public int getNumberOfResults();
     public List<Book> getAllBooks();
     public int getTotalBooks();
+    public Book getBookByIsbn(String isbn);
 }

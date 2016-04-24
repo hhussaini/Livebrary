@@ -33,7 +33,7 @@
   <script src="js/rating/star-rating_locale_<lang>.js"></script>
   
   <!--link to custom javascript page-->
-    <script src="js/userBookDescriptionJS.js" type="text/javascript"></script>
+    <script src="js/userBookDescription.js" type="text/javascript"></script>
   </head>
 
   <body>
@@ -84,10 +84,7 @@
         &nbsp;<br>
         &nbsp;<br>
       </div>
-
-      
       <div class="bookDescription container">
-
         <div class="col-xs-6 col-sm-7" style="border-style: groove;">
           <button type="button" class="btn btn-primary">Share</button>
           <button type="button" class="btn btn-primary">Email</button>
@@ -142,8 +139,6 @@
             }
           }
           </script> -->
-
-
           <br>
           <label for="input-3" class="control-label">Avg. Rating</label>
           <input id="input-3" value="5" class="rating-md" style="font-size: 2.5em">
@@ -156,15 +151,12 @@
 //          });
           </script>
           <br>
-        
           <button type="button" name = "button1" onclick="sampleFunction()" class="btn btn-primary">Sample</button>
           <button type="button" name = "button2" onclick="buyItNowFunction()"class="btn btn-primary">Buy It Now</button> <br>
           <button type="button" name = "button3" onclick="borrowFuntion()"class="btn btn-primary">Borrow</button>
           <button type="button" name = "button4" onclick="reserveFunction()"class="btn btn-primary">Reserve</button> <br>
-       
           <br>
           <button onclick="changeWishlist()" id="wishlist" type="button" class="btn btn-primary">Add to Wishlist</button>
-
           <script>
 //          function changeWishlist() {
 //            var text = document.getElementById("wishlist").innerHTML;
@@ -201,7 +193,6 @@
       </div>
     </form>
       <br><br><br>
-
       <hr class="fancy">
       <br>
       <div class="container" id="review-div" style="width: 75%;">
@@ -223,7 +214,7 @@
 //        }
         </script>
       </div>
-    </div><!-- GLBPage -->
+    </div> <!-- GLBPage -->
   </body>
   </html>
 

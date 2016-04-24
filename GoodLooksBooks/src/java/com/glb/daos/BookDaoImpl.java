@@ -1,7 +1,6 @@
 package com.glb.daos;
 
 import com.glb.controllers.FileController;
-import com.glb.exceptions.ResourceHelperException;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,7 +13,6 @@ import java.util.logging.Logger;
 import static com.glb.helpers.Helpers.*;
 
 import com.glb.objects.Book;
-import com.glb.services.BookServiceImpl;
 import org.apache.commons.dbutils.DbUtils;
 
 /**
@@ -35,8 +33,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
      */
     @Override
     public List<Book> getWishlist(String username) {
-        List<Book> booksOnWishlist = new ArrayList<Book>();
-        
+        List<Book> booksOnWishlist = new ArrayList<Book>();        
         Connection conToUse = null;
         java.sql.PreparedStatement ps = null;
         try {
@@ -127,8 +124,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     @Override
     public List<Book> searchBooks(String term, int offset, int recordsPerPage) {
         List<Book> results = new ArrayList<Book>();
-        this.numberOfResults = 0;
-        
+        this.numberOfResults = 0;        
         Connection conn = getConnection();
         ResultSet rs;
         term = "%" + term + "%";
@@ -200,8 +196,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     @Override
     public List<Book> getAllBooks() {
         List<Book> results = new ArrayList<Book>();
-        this.totalBooks = 0;
-        
+        this.totalBooks = 0;        
         Connection conn = getConnection();
         ResultSet rs;
         String query = "select * from books where title is not null";
@@ -236,5 +231,32 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             }
         }
         return results;
+    }
+
+    @Override
+    public Book getBookByIsbn(String isbn) {
+        Book book = null;        
+        Connection conn = getConnection();
+        ResultSet rs = null;
+        String query = "select * from books where isbn = '" + isbn + "'";        
+        try {
+            Statement stmt = conn.createStatement();         
+            rs = stmt.executeQuery(query);            
+            while (rs.next()) {
+                book = new Book();
+                book.setIsbn(rs.getString("isbn"));
+                book.setTitle(rs.getString("title"));
+                book.setImageUrl(rs.getString("imageUrl"));
+                book.setAuthor(rs.getString("author"));
+            }
+            rs.close();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            DbUtils.closeQuietly(rs);
+        }
+        return book;
     }
 }
