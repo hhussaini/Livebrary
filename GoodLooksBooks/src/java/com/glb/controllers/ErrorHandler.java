@@ -11,12 +11,9 @@ public class ErrorHandler extends HttpServlet {
             throws ServletException, IOException
   {
       // Analyze the servlet exception       
-      Throwable throwable = (Throwable)
-      request.getAttribute("javax.servlet.error.exception");
-      Integer statusCode = (Integer)
-      request.getAttribute("javax.servlet.error.status_code");
-      String servletName = (String)
-      request.getAttribute("javax.servlet.error.servlet_name");
+      Throwable throwable = (Throwable)request.getAttribute("javax.servlet.error.exception");
+      Integer statusCode = (Integer)request.getAttribute("javax.servlet.error.status_code");
+      String servletName = (String)request.getAttribute("javax.servlet.error.servlet_name");
       if (servletName == null){
          servletName = "Unknown";
       }
@@ -48,17 +45,19 @@ public class ErrorHandler extends HttpServlet {
          out.println("<h2>Error information</h2>");
          out.println("Servlet Name : " + servletName + 
                              "</br></br>");
-         out.println("Exception Type : " + 
-                             throwable.getClass( ).getName( ) + 
-                             "</br></br>");
+         if (throwable != null) {
+            out.println("Exception Type : " + 
+                                throwable.getClass().getName() + 
+                                "</br></br>");
+            out.println("The exception message: " + 
+                                 throwable.getMessage());
+         }
          out.println("The request URI: " + requestUri + 
                              "<br><br>");
          if (statusCode != null) {
              out.println("The status code: " + statusCode + 
                              "<br><br>");
          }
-         out.println("The exception message: " + 
-                                 throwable.getMessage( ));
       }
       out.println("</body>");
       out.println("</html>");

@@ -25,6 +25,10 @@
         <servlet-class>com.glb.controllers.AboutServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>UserBookDescriptionServlet</servlet-name>
+        <servlet-class>com.glb.controllers.UserBookDescriptionServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>SiteStatisticsServlet</servlet-name>
         <servlet-class>com.glb.controllers.SiteStatisticsServlet</servlet-class>
     </servlet>
@@ -73,6 +77,10 @@
     <servlet-mapping>
         <servlet-name>AboutServlet</servlet-name>
         <url-pattern>/AboutServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserBookDescriptionServlet</servlet-name>
+        <url-pattern>/UserBookDescriptionServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SiteStatisticsServlet</servlet-name>

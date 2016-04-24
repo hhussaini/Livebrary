@@ -19,14 +19,12 @@
         <link rel="stylesheet" href="css/custom_css/bookPhotoGrid.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script src="js/bootstrap.js"></script>
-        <script src="js/userBookDescriptionJS.js" type="text/javascript"></script>
+        <script src="js/userBookDescription.js" type="text/javascript"></script>
     </head>
-    
     <body>
         <jsp:include page="/customerNavbar.jsp" />
         <div class="glb-page">
             <jsp:include page="/logo.jsp" />
-                
             <br>
             <div class="container">
                 <div class="row row-offcanvas row-offcanvas-left">
@@ -106,7 +104,6 @@
                             </div>
                         </div>
                     </div>
-                    
                     <!-- main area -->
                     <br><br><br>
                     <div class="col-xs-12 col-sm-9">
@@ -123,18 +120,16 @@
                                                 <td> 
                                                     <a href = "#" id = "${item.isbn}" class="thumbnail" onclick = "selectedBook(this.id)">
                                                         <img src = "${item.imageUrl}" alt="${item.title}" style="width: 200px;">
-                                                        <c:out value="${item.title}"/> 
+                                                        <c:out value="${item.title}"/> <br><br> 
+                                                        <c:out value="by ${item.author}"/>
                                                     </a>
                                                 </td>
                                             </div>
-                                        </td> 
-                                        
+                                        </td>
                                     </c:forEach>
                                 </tr>
                             </table>
                         </div>
-                        
-                            
                         <%--For displaying Page numbers. The when condition does not display a link for the current page--%>
                         <table border="1" cellpadding="5" cellspacing="5" align="center">
                             <tr>
@@ -162,15 +157,14 @@
                                 <td><a href="search.do?page=${numOfPages}">>></a></td>
                             </tr>
                         </table>
-                        
-                        
                     </div>
                 </div><!-- /.col-xs-12 main -->
-                
             </div><!--/.row-->
-                
         </div>
     </body>
 </html>
-    
-<jsp:include page="/navbarForms.jsp" />
+
+<!--Form for clicking on an "item" (book)-->
+<form id = "itemSelectionForm" name = "itemSelectionForm" action = "UserBookDescriptionServlet" method = "post">
+    <input type = "hidden" id = "hiddenFormID" name = "hiddenFormID" value = "null">
+</form> 

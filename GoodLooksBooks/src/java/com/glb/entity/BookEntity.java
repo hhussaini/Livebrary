@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Books.findByPublisherName", query = "SELECT b FROM Books b WHERE b.publisherName = :publisherName"),
     @NamedQuery(name = "Books.findByImageUrl", query = "SELECT b FROM Books b WHERE b.imageUrl = :imageUrl"),
     @NamedQuery(name = "Books.findBySummary", query = "SELECT b FROM Books b WHERE b.summary = :summary")})
-public class Book implements Serializable {
+public class BookEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -76,10 +76,10 @@ public class Book implements Serializable {
     @Column(name = "summary")
     private String summary;
 
-    public Book() {
+    public BookEntity() {
     }
 
-    public Book(String isbn) {
+    public BookEntity(String isbn) {
         this.isbn = isbn;
     }
 
@@ -189,10 +189,10 @@ public class Book implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Book)) {
+        if (!(object instanceof BookEntity)) {
             return false;
         }
-        Book other = (Book) object;
+        BookEntity other = (BookEntity) object;
         if ((this.isbn == null && other.isbn != null) || (this.isbn != null && !this.isbn.equals(other.isbn))) {
             return false;
         }

@@ -67,6 +67,7 @@ public class SearchServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
+        println("Inside SearchServlet.doGet()");
         HttpSession session = request.getSession();
         String term = request.getParameter("searchTerm");
         term = (term == null) ? "" : term;
@@ -77,7 +78,7 @@ public class SearchServlet extends HttpServlet {
         if(request.getParameter("page") != null)
             page = Integer.parseInt(request.getParameter("page"));
         int offset = (page-1) * recordsPerPage;
-       println(offset);
+        println(offset);
         
         searchResults = bookService.searchBooks(term, offset, recordsPerPage);
         
