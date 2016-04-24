@@ -139,9 +139,9 @@
                         <table border="1" cellpadding="5" cellspacing="5" align="center">
                             <tr>
                                 <%--For displaying Previous link except for the 1st page --%>
-                                <td><a href="search.do?page=1"><<</a></td>
+                                <td><a href="SearchServlet?page=1"><<</a></td>
                                 <c:if test="${currentPage != 1}">
-                                    <td><a href="search.do?page=${currentPage - 1}">Previous</a></td>
+                                    <td><a href="SearchServlet?page=${currentPage - 1}">Previous</a></td>
                                 </c:if>
                                 <c:forEach begin="${firstPage}" end="${lastPage}" var="i">
                                     <c:choose>
@@ -149,17 +149,17 @@
                                             <td>${i}</td>
                                         </c:when>
                                         <c:otherwise>
-                                            <td><a href="search.do?page=${i}">${i}</a>
+                                            <td><a href="SearchServlet?page=${i}">${i}</a>
                                             </td>
                                         </c:otherwise>
                                     </c:choose>
                                 </c:forEach>
                                 <%--For displaying Next link --%>
                                 <c:if test="${currentPage lt numOfPages}">
-                                    <td><a href="search.do?page=${currentPage + 1}">Next</a>
+                                    <td><a href="SearchServlet?page=${currentPage + 1}">Next</a>
                                     </td>
                                 </c:if> 
-                                <td><a href="search.do?page=${numOfPages}">>></a></td>
+                                <td><a href="SearchServlet?page=${numOfPages}">>></a></td>
                             </tr>
                         </table>
                         

@@ -177,6 +177,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             rs = pstmt.executeQuery();
             println(pstmt.toString());
             while (rs.next()) {
+                println("Got it!");
                 Book book = new Book();
                 book.setIsbn(rs.getString("isbn"));
                 book.setTitle(rs.getString("title"));
