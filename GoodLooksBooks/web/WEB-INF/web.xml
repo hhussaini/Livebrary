@@ -2,35 +2,39 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
         <servlet-name>SignUpServlet</servlet-name>
-        <servlet-class>controllers.SignUpServlet</servlet-class>
+        <servlet-class>com.glb.controllers.SignUpServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>SignInServlet</servlet-name>
-        <servlet-class>controllers.SignInServlet</servlet-class>
+        <servlet-class>com.glb.controllers.SignInServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>SignOutServlet</servlet-name>
-        <servlet-class>controllers.SignOutServlet</servlet-class>
+        <servlet-class>com.glb.controllers.SignOutServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AccountSettingsServlet</servlet-name>
-        <servlet-class>controllers.AccountSettingsServlet</servlet-class>
+        <servlet-class>com.glb.controllers.AccountSettingsServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AccountServlet</servlet-name>
-        <servlet-class>controllers.AccountServlet</servlet-class>
+        <servlet-class>com.glb.controllers.AccountServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AboutServlet</servlet-name>
-        <servlet-class>controllers.AboutServlet</servlet-class>
+        <servlet-class>com.glb.controllers.AboutServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserBookDescriptionServlet</servlet-name>
+        <servlet-class>com.glb.controllers.UserBookDescriptionServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>SiteStatisticsServlet</servlet-name>
-        <servlet-class>controllers.SiteStatisticsServlet</servlet-class>
+        <servlet-class>com.glb.controllers.SiteStatisticsServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>WishlistServlet</servlet-name>
-        <servlet-class>controllers.WishlistServlet</servlet-class>
+        <servlet-class>com.glb.controllers.WishlistServlet</servlet-class>
         <init-param>
             <param-name>included-resource</param-name>
             <param-value>/wishlist.jsp</param-value>
@@ -39,7 +43,16 @@
     </servlet>
     <servlet>
         <servlet-name>ErrorHandler</servlet-name>
-        <servlet-class>controllers.ErrorHandler</servlet-class>
+        <servlet-class>com.glb.controllers.ErrorHandler</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchServlet</servlet-name>
+        <servlet-class>com.glb.controllers.SearchServlet</servlet-class>
+        <init-param>
+            <param-name>included-resource</param-name>
+            <param-value>/customerFullCatalog.jsp</param-value>
+        </init-param>
+        <load-on-startup>7</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
@@ -66,6 +79,10 @@
         <url-pattern>/AboutServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>UserBookDescriptionServlet</servlet-name>
+        <url-pattern>/UserBookDescriptionServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>SiteStatisticsServlet</servlet-name>
         <url-pattern>/SiteStatisticsServlet</url-pattern>
     </servlet-mapping>
@@ -86,15 +103,19 @@
         <location>/ErrorHandler</location>
     </error-page>
     <error-page>
-        <exception-type>java.lang.Throwable</exception-type >
+        <exception-type>java.lang.Throwable</exception-type>
         <location>/ErrorHandler</location>
     </error-page>
+    <servlet-mapping>
+        <servlet-name>SearchServlet</servlet-name>
+        <url-pattern>/SearchServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
-<resource-ref>
+    <resource-ref>
         <res-ref-name>jdbc/glbdb</res-ref-name>
         <res-type>javax.sql.ConnectionPoolDataSource</res-type>
         <res-auth>Container</res-auth>
