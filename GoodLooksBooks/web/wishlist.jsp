@@ -18,12 +18,8 @@
                             
                             <form action="UserBookDescriptionServlet" method = "post">
                                 <input type="image" src="${wishlist.imageUrl}" id="${wishlist.isbn}" style="width: 200px;">
-                                <input type="hidden" name="hiddenFormID" value="${wishlist.isbn}">
+                                <input type="hidden" name="isbn" value="${wishlist.isbn}">
                             </form> 
-                            
-<!--                            <a href = "#" id="${wishlist.isbn}" onclick="selectedBook(this.id)">
-                                <img src = "${wishlist.imageUrl}" alt="${wishlist.title}" style="width: 200px;"> 
-                            </a>-->
                         </td>
                         <td>
                             <form action="WishlistServlet" method="delete">
