@@ -1,8 +1,9 @@
-package com.glb.controllers;
+package com.blb.controllers;
 
-import com.glb.objects.User;
+import com.blb.objects.Item;
+import com.blb.objects.User;
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Kevin Young
  */
-public class SignOutServlet extends HttpServlet {
+public class ConfirmBuyItemServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -27,6 +28,18 @@ public class SignOutServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ConfirmBuyItemServlet</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet ConfirmBuyItemServlet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -41,7 +54,7 @@ public class SignOutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       // processRequest(request, response);
+        // processRequest(request, response);
     }
 
     /**
@@ -55,18 +68,17 @@ public class SignOutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       // processRequest(request, response);
-       HttpSession session = request.getSession();
-       if ((User)session.getAttribute("user") == null) {
-            throw new ServletException("Error signing out");
-       }
-       
-       session.invalidate();
-       String url = "/index.jsp";
-       RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-       dispatcher.forward(request, response); 
+        // processRequest(request, response);
+        HttpSession session = request.getSession();
+        Item item = (Item)session.getAttribute("itemClicked");
+        if (item == null) {
+            throw new ServletException("Error getting the selected item.");
+        }
+        String isbn = item.getIsbn();
+        String url = "http://localhost:8080/GoodLooksBooks/SecondServerResponseServlet?isbn=" + isbn;
+        response.sendRedirect(url);        
     }
-    
+
     /**
      * Returns a short description of the servlet.
      *
@@ -74,6 +86,6 @@ public class SignOutServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Signs a user out of the system";
-    } // </editor-fold>
+        return "Short description";
+    }// </editor-fold>
 }

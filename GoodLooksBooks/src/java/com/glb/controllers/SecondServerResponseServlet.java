@@ -1,19 +1,17 @@
 package com.glb.controllers;
 
-import com.glb.objects.User;
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Kevin Young
  */
-public class SignOutServlet extends HttpServlet {
+public class SecondServerResponseServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -26,7 +24,9 @@ public class SignOutServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        String isbn = request.getParameter("isbn");
+        String url = "http://localhost:8080/GoodLooksBooks/customerIndex.jsp";
+        response.sendRedirect(url);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -41,7 +41,7 @@ public class SignOutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       // processRequest(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -55,18 +55,9 @@ public class SignOutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       // processRequest(request, response);
-       HttpSession session = request.getSession();
-       if ((User)session.getAttribute("user") == null) {
-            throw new ServletException("Error signing out");
-       }
-       
-       session.invalidate();
-       String url = "/index.jsp";
-       RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-       dispatcher.forward(request, response); 
+        processRequest(request, response);
     }
-    
+
     /**
      * Returns a short description of the servlet.
      *
@@ -74,6 +65,6 @@ public class SignOutServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Signs a user out of the system";
-    } // </editor-fold>
+        return "Short description";
+    }// </editor-fold>
 }

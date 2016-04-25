@@ -1,7 +1,7 @@
-package com.glb.controllers;
+package com.blb.controllers;
 
-import com.glb.objects.User;
-import com.glb.factories.ServiceFactory;
+import com.blb.objects.User;
+import com.blb.factories.ServiceFactory;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import com.glb.services.UserService;
+import com.blb.services.UserService;
 
 /**
  *
@@ -83,7 +83,7 @@ public class SignUpServlet extends HttpServlet {
         if (isNull(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email) || (!userType.equals("customer") && accessCode == null)) {
             throw new ServletException("Please fill in all fields.");
         }
-        User user = new User(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType, accessCode);
+        User user = new User(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType);
         
         int status = 0;
         try {
@@ -91,19 +91,7 @@ public class SignUpServlet extends HttpServlet {
             if (status == 1) {
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
-                String url = "";
-                switch (userType) {
-                    case "customer":
-                        url = "/customerIndex.jsp";
-                        break;
-                    case "librarian": 
-                        url = "/librarianIndex.jsp";
-                        break;
-                    case "publisher":
-                        url = "/publisherIndex.jsp";
-                        break;
-                }        
-                dispatcher = request.getRequestDispatcher(url);
+                dispatcher = request.getRequestDispatcher("/bookDescription.jsp");
                 dispatcher.forward(request, response);
             } else {
                 throw new ServletException("SQL Error.");

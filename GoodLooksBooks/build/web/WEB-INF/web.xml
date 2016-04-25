@@ -58,6 +58,10 @@
         </init-param>
         <load-on-startup>7</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>SecondServerResponseServlet</servlet-name>
+        <servlet-class>com.glb.controllers.SecondServerResponseServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -117,6 +121,10 @@
     <servlet-mapping>
         <servlet-name>SecondServerServlet</servlet-name>
         <url-pattern>/SecondServerServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SecondServerResponseServlet</servlet-name>
+        <url-pattern>/SecondServerResponseServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
