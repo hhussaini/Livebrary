@@ -4,13 +4,11 @@ import com.glb.daos.BookDao;
 import com.glb.factories.DaoFactory;
 import com.glb.exceptions.ResourceHelperException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import com.glb.daos.ConnectionUtil;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.glb.objects.Book;
-import org.apache.commons.dbutils.DbUtils;
 
 public class BookServiceImpl implements BookService {
     
