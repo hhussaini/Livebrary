@@ -32,8 +32,7 @@ public class SearchServlet extends HttpServlet {
      */
     
     public void init() {
-        System.out.println(getServletName() + ": initialised" );
-        //bookDao = new BookDao();
+        println(getServletName() + ": initialised" );
         bookService = ServiceFactory.getBookService();
     }
     
@@ -41,7 +40,6 @@ public class SearchServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -69,32 +67,24 @@ public class SearchServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             String term = request.getParameter("searchTerm");
-            println("Searched! " + term);
-            term = (term == null) ? "" : term;
-            
+                   term = (term == null) ? "" : term;
             int page = 1;
-            int recordsPerPage = 18;
-            
-            if(request.getParameter("page") != null)
+            if (request.getParameter("page") != null)
                 page = Integer.parseInt(request.getParameter("page"));
-            
+            int recordsPerPage = 18;
             int offset = (page-1) * recordsPerPage;
             
             searchResults = bookService.searchBooks(term, offset, recordsPerPage);
-            
             int numOfResults = bookService.getNumberOfResults();
             int numOfPages = (int) Math.ceil(numOfResults * 1.0 / recordsPerPage);
+            int firstDisplayPage = (page - 5 < 1) ? 1 : page - 5;
+            int lastDisplayPage = (page + 5 > numOfPages) ? numOfPages : page + 5;
+            
             session.setAttribute("searchResults", searchResults);
-            request.setAttribute("numOfPages", numOfPages - 1);
+            request.setAttribute("numOfPages", numOfPages);
             request.setAttribute("currentPage", page);
-            
-            int firstPage = (page - 5 < 1) ? 1 : page - 5;
-            int lastPage = (page + 5 > numOfPages) ? numOfPages - 1 : page + 5;
-            if (lastPage < 1)
-                lastPage = 1;          
-            
-            request.setAttribute("firstPage", firstPage);
-            request.setAttribute("lastPage", lastPage);
+            request.setAttribute("firstPage", firstDisplayPage);
+            request.setAttribute("lastPage", lastDisplayPage - 1);
             request.setAttribute("lastTermSearched", term);
             session.setAttribute("resultSize", numOfResults);
             request.getRequestDispatcher("/customerFullCatalog.jsp").include(request, response);
@@ -125,6 +115,6 @@ public class SearchServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
     
 }

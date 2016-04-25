@@ -83,10 +83,11 @@ public class UserBookDescriptionServlet extends HttpServlet {
           // returns the isbn of the book clicked, so we can go to the database and query for that book
           println("Inside UserBookDescriptionServlet.doPost");
           String isbn = request.getParameter("hiddenFormID"); 
-          Book book = bookService.getBookByIsbn(isbn);;
+          Book book = bookService.getBookByIsbn(isbn);
           String url = "/userBookDescription.jsp";
           HttpSession session = request.getSession();
           if(book != null){
+              println("Clicked " + isbn);
                session.setAttribute("itemClicked", book); 
                RequestDispatcher dispatcher = request.getRequestDispatcher(url);
                dispatcher.forward(request, response); 

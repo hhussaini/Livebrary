@@ -33,7 +33,7 @@
                         <div class="panel panel-default">
                             <form class="form" name="searchForm" id="searchForm" action="SearchServlet" method = "get" role="search">
                                 <div class="input-group">
-                                    <input name="searchTerm" type="text" class="form-control" placeholder="Title, Author, Genre, etc..." id="srch-term">
+                                    <input name="searchTerm" type="text" class="form-control" value="${lastTermSearched}" placeholder="Title, Author, Genre, etc..." id="srch-term">
                                     <div class="input-group-btn">
                                         <button name="searchbtn" class="btn btn-default" type="submit">search</button>  
                                     </div>

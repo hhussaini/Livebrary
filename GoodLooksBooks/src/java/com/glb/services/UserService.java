@@ -1,8 +1,13 @@
 package com.glb.services;
 
+import com.glb.objects.Book;
 import com.glb.objects.User;
+import java.util.List;
 
 public interface UserService {
     public int save(User user);
     public User getUser(String username, String password);
+     public List<Book> getWishlist(User user);
+    public int removeFromWishlist(User user, String isbn);
+    public int addToWishlist(User user, String isbn);
 }

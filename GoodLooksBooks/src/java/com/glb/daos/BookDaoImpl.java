@@ -1,6 +1,6 @@
 package com.glb.daos;
 
-import com.glb.controllers.FileController;
+//import com.glb.controllers.FileController;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -25,101 +25,6 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     private int numberOfResults;
     private int totalBooks;
     
-    /**
-     *
-     * @param userName
-     * @return
-     * @throws ObjectException
-     */
-    @Override
-    public List<Book> getWishlist(String username) {
-        List<Book> booksOnWishlist = new ArrayList<Book>();        
-        Connection conToUse = null;
-        java.sql.PreparedStatement ps = null;
-        try {
-            conToUse = getConnection();
-            String sql = "select * from WISHLISTS where USERNAME = ?";
-            
-            ps = (PreparedStatement) conToUse.prepareStatement(sql);
-            ps.setString(1, username);
-            res = ps.executeQuery();
-            
-            while (res.next()) {
-                Book book = new Book();
-                book.setIsbn(res.getString("isbn"));
-                book.setTitle(res.getString("title"));
-                book.setImageUrl(res.getString("imageUrl"));
-                booksOnWishlist.add(book);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            DbUtils.closeQuietly(ps);
-        }
-        
-        return booksOnWishlist;
-    }
-    
-    @Override
-    public Book addToWishlist(String username, String isbn) {
-        String title, imageUrl;
-        title = imageUrl = null;
-        Connection conToUse = null;
-        PreparedStatement preparedStmt = null;
-        String sql = null;//"insert into wishlist(username, bookname, imageUrl, isbn) values(?,?,?,?)";
-        try {
-            conToUse = getConnection();
-            if (conToUse == null)
-                System.out.println("conToUse == null");
-            
-            sql = "select imageUrl, title from books where isbn = ?";
-            preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
-            preparedStmt.setString(1, isbn);
-            res = preparedStmt.executeQuery();
-            while (res.next()) {
-                title = res.getString("title");
-                imageUrl = res.getString("imageUrl");
-            }
-            sql = "insert into wishlist(username, isbn, title, imageUrl) values(?,?,?,?)";
-            preparedStmt.setString(1, username);
-            preparedStmt.setString(2, isbn);
-            preparedStmt.setString(3, title);
-            preparedStmt.setString(4, imageUrl);
-            preparedStmt.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally {
-            DbUtils.closeQuietly(preparedStmt);
-        }
-        
-        return null;
-    }
-    
-    @Override
-    public int removeFromWishlist(String username, String isbn) {
-        println("Username: " + username);
-        Connection conToUse = null;
-        PreparedStatement preparedStmt = null;
-        String sql = "delete from WISHLISTS where isbn = ? and username = ?";
-        int status = 0;
-        try {
-            conToUse = getConnection();
-            if (conToUse == null)
-                System.out.println("conToUse == null");
-            preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
-            preparedStmt.setString(1, isbn);
-            preparedStmt.setString(2, username);
-            status = preparedStmt.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally {
-            DbUtils.closeQuietly(preparedStmt);
-        }
-        
-        return status;
-    }
     
     @Override
     public List<Book> searchBooks(String term, int offset, int recordsPerPage) {
@@ -169,7 +74,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             
             Statement stmt = conn.createStatement();
         } catch (SQLException ex) {
-            Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if(stmt != null)
@@ -219,7 +124,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             rs.close();
             
         } catch (SQLException ex) {
-            Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if(stmt != null)
@@ -252,7 +157,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             rs.close();
             
         } catch (SQLException ex) {
-            Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
             DbUtils.closeQuietly(rs);

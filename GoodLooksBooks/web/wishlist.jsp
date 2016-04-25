@@ -15,11 +15,20 @@
                 <c:forEach var="wishlist" items="${customerWishlist}">
                     <tr>
                         <td><h3><u>${wishlist.title}</u></h3>
-                            <img src="${wishlist.imageUrl}"/></td>
-                        <td></td>
+                            
+                            <form action="UserBookDescriptionServlet" method = "post">
+                                <input type="image" src="${wishlist.imageUrl}" id="${wishlist.isbn}" style="width: 200px;">
+                                <input type="hidden" name="hiddenFormID" value="${wishlist.isbn}">
+                            </form> 
+                            
+<!--                            <a href = "#" id="${wishlist.isbn}" onclick="selectedBook(this.id)">
+                                <img src = "${wishlist.imageUrl}" alt="${wishlist.title}" style="width: 200px;"> 
+                            </a>-->
+                        </td>
                         <td>
-                            <form action="WishlistServlet" method="post">
+                            <form action="WishlistServlet" method="delete">
                                 <button name="isbn" value="${wishlist.isbn}" class="btn btn-danger">Remove</button>
+                                <input type="hidden" name="method" value="delete">
                             </form>
                         </td>
                     </tr>
@@ -31,3 +40,4 @@
     </div>
 </body>
 </html>
+

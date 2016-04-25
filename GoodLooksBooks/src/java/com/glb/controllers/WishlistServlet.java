@@ -1,7 +1,7 @@
 package com.glb.controllers;
 
 import static com.glb.helpers.Helpers.*;
-import com.glb.services.BookService;
+import com.glb.services.UserService;
 import com.glb.factories.ServiceFactory;
 import com.glb.objects.User;
 import java.io.IOException;
@@ -20,32 +20,32 @@ import com.glb.objects.Book;
  */
 public class WishlistServlet extends HttpServlet {
     
-    //BookDao bookDao;
-    BookService bookService;
+    UserService userService;
     List<Book> wishlist;
     User user;
     
     public void init() {
         System.out.println(getServletName() + ": initialised" );
-        //bookDao = new BookDao();
-        bookService = ServiceFactory.getBookService();
+        userService = ServiceFactory.getUserService();
     }
     
-//    @Override
-//    protected void service(HttpServletRequest req, HttpServletResponse resp)
-//            throws ServletException, java.io.IOException {
-//        println("IN SERVICE");
-//        println(req.getMethod().toString());
-//        if(req.getMethod().equals("remove")){
-//           println("MATHCED METHOD NAME");
-//            doRemove(req,resp);
-//        }else {
-//            println("UNMATHCED METHOD NAME");
-//            super.service(req, resp);
-//        }
-//        
-//        
-//    }
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, java.io.IOException {
+        println("IN SERVICE");
+        println(req.getMethod().toString());
+        String method = req.getParameter("method");
+        method = (method == null) ? "" : method;
+        if(method.equals("delete")){
+            println("MATHCED METHOD NAME");
+            doDelete(req,resp);
+        }else {
+            println("UNMATHCED METHOD NAME");
+            super.service(req, resp);
+        }
+        
+        
+    }
     
     public void doRemove(HttpServletRequest req, HttpServletResponse res) {
         println("HERE");
@@ -92,7 +92,7 @@ public class WishlistServlet extends HttpServlet {
         println(this.getServletName() + " : " + "doGet");
         HttpSession session = request.getSession();
         user = (User)session.getAttribute("user");
-        wishlist = bookService.getWishlist(user.getUsername());
+        wishlist = userService.getWishlist(user);
         println("Wishlist: " + wishlist.size());
         session.setAttribute("customerWishlist", wishlist);
         session.setAttribute("wishlistSize", wishlist.size());
@@ -111,31 +111,22 @@ public class WishlistServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         println(this.getServletName() + " : " + "doPost");
-        
-        
-         println(this.getServletName() + " : " + "doDelete");
-        HttpSession session = request.getSession();
         String isbn = request.getParameter("isbn");
-        System.out.println(isbn);
-        
-        bookService.removeFromWishlist(user.getUsername(), isbn);
-        doGet(request, response);
-//        session.setAttribute("customerWishlist", wishlist);
-//        request.getRequestDispatcher("/wishlist.jsp").include(request, response);
+        HttpSession session = request.getSession();
+        user = (User)session.getAttribute("user");
+        userService.addToWishlist(user, isbn);
+        request.getRequestDispatcher("/userBookDescription.jsp").include(request, response);
     }
     
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        println(this.getServletName() + " : " + "doDelete");
-        HttpSession session = request.getSession();
+        println(this.getServletName() + " : " + "doDelete, in there");
         String isbn = request.getParameter("isbn");
-        System.out.println(isbn);
-        
-        bookService.removeFromWishlist(user.getUsername(), isbn);
+        HttpSession session = request.getSession();
+        user = (User)session.getAttribute("user");
+        userService.removeFromWishlist(user, isbn);
         doGet(request, response);
-//        session.setAttribute("customerWishlist", wishlist);
-//        request.getRequestDispatcher("/wishlist.jsp").include(request, response);
     }
     
     /**
