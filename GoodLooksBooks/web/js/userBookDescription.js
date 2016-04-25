@@ -2,25 +2,25 @@
     
 } 
  
-function buyItNowFunction(){
-    
+function buyItNowFunction(bookID){
+    console.log("buyItNowFunction");
+    console.log('bookID = ' + bookID);
+    document.getElementById("secondServerForm").submit();
 }
    
 function borrowFunction(){
-     
 }
 
 function reserveFunction(){
     console.log("reserveFunction");
     console.log("isbn: " + document.getElementById("isbn").value);
-    document.getElementById("bookDescriptionForm").submit();
+//    document.getElementById("bookDescriptionForm").submit();
 }
 
 function selectedBook(bookID){ // the id of the form is the isbn number of the selected book
     console.log("selectedBook");
     console.log('bookID = ' + bookID);
-    console.log(document.getElementById("itemSelectionForm").name);
-    document.getElementById("hiddenFormID").value = bookID;
+    document.getElementById("isbn").value = bookID;
     document.getElementById("itemSelectionForm").submit(); 
 }
 
@@ -65,8 +65,7 @@ function setColor(btn, color){
 function submitReview(){
     var text = document.getElementById("reviewdetails").value;
     console.log(text);
-    document.getElementById("submitReviewForm").submit();
-   
+    document.getElementById("submitReviewForm").submit();   
 }
 
 $(document).on('ready', function(){
@@ -77,8 +76,7 @@ $(document).on('ready', function(){
     }
     else{
         console.log("Not on page");
-    }
-     
+    }     
 });
 
 function updateAverageRating(numOfStarsSelected){

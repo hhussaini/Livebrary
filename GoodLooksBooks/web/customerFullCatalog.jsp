@@ -1,15 +1,12 @@
 <%-- 
     Document   : customerFullCatalog
-    Created on : Apr 11, 2016, 12:58:21 AM
     Author     : Kevin_Setayesh
 --%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-
 <html lang="en">
-    
     <head>
         <title>Full Catalog for Good Looks Books</title>
         <meta charset="utf-8">
@@ -166,5 +163,5 @@
 
 <!--Form for clicking on an "item" (book)-->
 <form id = "itemSelectionForm" name = "itemSelectionForm" action = "UserBookDescriptionServlet" method = "post">
-    <input type = "hidden" id = "hiddenFormID" name = "hiddenFormID" value = "null">
-</form> 
+    <input type = "hidden" id = "isbn" name = "isbn" value = "null">
+</form>
