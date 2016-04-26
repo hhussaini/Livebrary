@@ -150,10 +150,4 @@ public class Item implements Serializable{
     private double round(double num){
         return (double)Math.round(num * 100) / 100;
     }
-    
-    
-    
-    
-    
-    
 }

@@ -8,4 +8,6 @@ public interface BookService {
     public int getNumberOfResults();
     public List<Book> getAllBooks();
     public Book getBookByIsbn(String isbn);
+    public int addBookToUserItems(String username, String isbn);
+    public List<Book> getItemsList(String username);
 }

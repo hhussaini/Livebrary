@@ -19,7 +19,6 @@
         <br><br><br>
       </td>
     </tr>
-
     <tr>
       <td>
         <img class="developer_images" src="assets/aboutme_images/KYoung.jpg" height="300" width="250">
@@ -31,7 +30,6 @@
         <br><br><br>
       </td>
     </tr>
-
     <tr>
       <td>
         <img class="developer_images" src="assets/aboutme_images/KSetayesh.jpg" height="300" width="250">
@@ -43,7 +41,6 @@
         <br><br><br>
       </td>
     </tr>
-
     <tr>
       <td>
         <img class="developer_images" src="assets/aboutme_images/Paul.jpg" height="300" width="250">
@@ -55,7 +52,6 @@
         <br><br><br>
       </td>
     </tr>
-
   </table>
 </body>
 </html>

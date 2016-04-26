@@ -1,4 +1,4 @@
- function sampleFunction(){
+function sampleFunction(){
     
 } 
  
@@ -14,7 +14,7 @@ function borrowFunction(){
 function reserveFunction(){
     console.log("reserveFunction");
     console.log("isbn: " + document.getElementById("isbn").value);
-//    document.getElementById("bookDescriptionForm").submit();
+    document.getElementById("bookDescriptionForm").submit();
 }
 
 function selectedBook(bookID){ // the id of the form is the isbn number of the selected book
@@ -92,14 +92,10 @@ function updateAverageRating(numOfStarsSelected){
         url: url,
         data: itemObject,
         dataType: 'json',
-        success: function(result) { 
-            //              console.log("Success!");
-            //              console.log(result.isbn);
-            //              console.log(result.numOfStars);
+        success: function(result) {  
               console.log(result.avgNumOfStars);
               document.getElementById("input-3").value = result.avgNumOfStars;
-              console.log("Average Rating: " + document.getElementById("input-3").value);
-            //  $('#input-3').rating({displayOnly: true, step: 0.5});
+              console.log("Average Rating: " + document.getElementById("input-3").value); 
              
         },
         error: function(result){

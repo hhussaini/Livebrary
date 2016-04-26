@@ -1,4 +1,3 @@
-// ResourceHelperException is application specific exception
 package com.glb.exceptions;
 
 public class ResourceHelperException extends Exception {

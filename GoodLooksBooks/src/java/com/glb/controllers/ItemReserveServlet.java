@@ -1,22 +1,37 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.glb.controllers;
-
+ 
+import com.glb.constants.UserTypes;
 import com.glb.factories.ServiceFactory;
 import static com.glb.helpers.Helpers.println;
+import com.glb.objects.Book; 
+import com.glb.objects.Item;
 import com.glb.objects.User;
 import com.glb.services.BookService;
+import com.glb.services.UserService;
 import java.io.IOException;
+import java.io.PrintWriter; 
+import java.util.List;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+//import objects.Customer; 
+//import objects.Item;
+//import objects.User;
 
 /**
  *
- * @author Kevin Young
+ * @author Kevin_Setayesh
  */
-public class SecondServerResponseServlet extends HttpServlet {
-    
+public class ItemReserveServlet extends HttpServlet {
+ 
     BookService bookService;
     
     public void init() {
@@ -35,25 +50,10 @@ public class SecondServerResponseServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String isbn = request.getParameter("isbn");
-        int status = 0;        
-        try {
-            HttpSession session = request.getSession();
-            User user = (User)session.getAttribute("user");
-            String username = user.getUsername();
-            status = bookService.addBookToUserItems(username, isbn);
-            if (status == 1) {
-                String url = "http://localhost:8080/GoodLooksBooks/customerIndex.jsp";
-                response.sendRedirect(url);
-            } else {
-                throw new ServletException("SQL Error.");
-            }
-        } catch (Exception e) {
-            throw new ServletException(e.getMessage());
-        }
+        response.setContentType("text/html;charset=UTF-8");
+       
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -65,8 +65,36 @@ public class SecondServerResponseServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+       // processRequest(request, response);
+        HttpSession session = request.getSession();
+        User user = (User)session.getAttribute("user");
+        if(user != null && user.getType().equalsIgnoreCase(UserTypes.CUSTOMER.toString())){     
+            String isbn = request.getParameter("isbn");
+             bookService.addBookToUserItems(user.getUsername(), isbn); 
+        }    
+        else{ 
+             throw new ServletException("This user does not exist.");
+        }
+        String url = "/customerFullCatalog.jsp";
+        RequestDispatcher dispatcher = request.getRequestDispatcher(url);
+        dispatcher.forward(request, response); 
     }
+    
+    private void printToPage(HttpServletRequest request, HttpServletResponse response, User user)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            if(user==null){
+                out.println("Hey: user is null"); 
+            }
+            else{
+                  out.println("Hey: user is NOT null"); 
+            }
+        }
+    }
+    
+    
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -91,4 +119,5 @@ public class SecondServerResponseServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }

@@ -16,18 +16,6 @@ public class ConnectionUtil {
     @Resource(name="jdbc/glbdb")
     private static DataSource ds;
     
-    // load the db-config db details file
-    //    private static Properties properties = new Properties();
-    //    static {
-    //        try {
-    //            properties.load(ConnectionUtil.class.getClassLoader()
-    //                    .getResourceAsStream("db-config.properties"));
-    //        } catch (IOException e) {
-    //            System.out.println("%%%% db-config.properties file load error%%%%%"
-    //                    + e);
-    //        }
-    //    }
-    
     // Get the connection
     public static Connection getConnection() throws ResourceHelperException {
         System.out.println("Inside ConnectionUtil.getConnection");
@@ -50,23 +38,6 @@ public class ConnectionUtil {
         }
         
         return conn;
-        //        Connection connection = null;
-        //        try {
-        //            Class.forName(properties.getProperty("driverClass"));
-        //            try {
-        //                connection = DriverManager.getConnection(properties
-        //                        .getProperty("url"),
-        //                        properties.getProperty("userName"), properties
-        //                                .getProperty("password"));
-        //            } catch (SQLException e) {
-        //                // System.err.println("%%% SQLException %%%" + e.getMessage());
-        //                throw new ResourceHelperException(e.getMessage());
-        //            }
-        //        } catch (ClassNotFoundException e) {
-        //            // System.err.println("%%% Driver Class Not found %%%" + e);
-        //            throw new ResourceHelperException(e.getMessage());
-        //        }
-        //        return connection;
     }
 
     // this method closes the connection

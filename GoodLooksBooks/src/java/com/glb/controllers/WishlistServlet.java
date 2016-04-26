@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.glb.objects.Book;
 
-
 /**
  * @author mobile-mann
  */
@@ -42,9 +41,7 @@ public class WishlistServlet extends HttpServlet {
         }else {
             println("UNMATHCED METHOD NAME");
             super.service(req, resp);
-        }
-        
-        
+        } 
     }
     
     public void doRemove(HttpServletRequest req, HttpServletResponse res) {

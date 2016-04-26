@@ -7,8 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.glb.objects.Book;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 
 /**
@@ -19,8 +20,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     private Statement stmt = null;
     private ResultSet res = null;
     private int numberOfResults;
-    private int totalBooks;
-    
+    private int totalBooks;    
     
     @Override
     public List<Book> searchBooks(String term, int offset, int recordsPerPage) {
@@ -41,14 +41,11 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             pstmt.setString(2, term);
             pstmt.setString(3, term);
             pstmt.setString(4, term);
-            rs = pstmt.executeQuery();
-            
+            rs = pstmt.executeQuery();            
             while (rs.next()) {
                 numberOfResults++;
-            }
-            
-            rs.close();
-            
+            }            
+            rs.close();            
             pstmt = conn.prepareStatement(query + limit);
             pstmt.setString(1, term);
             pstmt.setString(2, term);
@@ -66,11 +63,10 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                     numberOfResults++;
                 }
             }
-            rs.close();
-            
+            rs.close();            
             Statement stmt = conn.createStatement();
         } catch (SQLException ex) {
-            //Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+           Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if(stmt != null)
@@ -102,10 +98,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         ResultSet rs;
         String query = "select * from books where title is not null";
         try {
-            Statement stmt = conn.createStatement();
-         
-            rs = stmt.executeQuery(query);
-            
+            Statement stmt = conn.createStatement();         
+            rs = stmt.executeQuery(query);            
             while (rs.next()) {
                 Book book = new Book();
                 book.setIsbn(rs.getString("isbn"));
@@ -117,10 +111,9 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                     totalBooks++;
                 }
             }
-            rs.close();
-            
+            rs.close();            
         } catch (SQLException ex) {
-            //Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if(stmt != null)
@@ -149,15 +142,43 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 book.setTitle(rs.getString("title"));
                 book.setImageUrl(rs.getString("imageUrl"));
                 book.setAuthor(rs.getString("author"));
+                book.setDescription(rs.getString("description"));
+                book.setDate(rs.getString("published"));
+                book.setLanguage(rs.getString("language"));
             }
             rs.close();
             
         } catch (SQLException ex) {
-            //Logger.getLogger(BookDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
             DbUtils.closeQuietly(rs);
         }
         return book;
+    }
+
+    @Override
+    public int addBookToUserItems(String username, String isbn) {
+        Connection conToUse = null;
+        PreparedStatement preparedStmt = null;
+        String sql = null;
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            if (conToUse == null)
+                System.out.println("conToUse == null");
+            
+            sql = "INSERT into RESERVED(username, isbn) values(?,?)";
+            preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
+            preparedStmt.setString(1, username);
+            preparedStmt.setString(2, isbn);    
+            status = preparedStmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            DbUtils.closeQuietly(preparedStmt);
+        }
+        return status;
     }
 }

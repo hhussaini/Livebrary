@@ -59,8 +59,7 @@ public class SignOutServlet extends HttpServlet {
        HttpSession session = request.getSession();
        if ((User)session.getAttribute("user") == null) {
             throw new ServletException("Error signing out");
-       }
-       
+       } 
        session.invalidate();
        String url = "/index.jsp";
        RequestDispatcher dispatcher = request.getRequestDispatcher(url);

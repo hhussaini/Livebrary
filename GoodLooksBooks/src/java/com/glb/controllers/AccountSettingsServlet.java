@@ -1,5 +1,6 @@
 package com.glb.controllers;
 
+import static com.glb.helpers.Helpers.getNavbarUrl;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -62,10 +63,6 @@ public class AccountSettingsServlet extends HttpServlet {
         request.getRequestDispatcher("/header.jsp").include(request, response);
         request.getRequestDispatcher(getNavbarUrl(userType)).include(request, response);
         request.getRequestDispatcher("/accountSettings.jsp").include(request, response);
-    }
-    
-    private String getNavbarUrl(String userType) {
-        return "/" + userType + "Navbar" + ".jsp";
     }
 
     /**
