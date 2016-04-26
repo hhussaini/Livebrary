@@ -66,7 +66,7 @@
             </form> 
         </div>
       </div> <!-- bookDescription-->
-<!--        <hr class="fancy">
+        <!--        <hr class="fancy">
         <br>
         <form id="submitReviewForm" action="SubmitItemReviewServlet" method="post"> 
             <div class="container" style="width: 75%;">

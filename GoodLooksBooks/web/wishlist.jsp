@@ -17,8 +17,8 @@
                         <td><h3><u>${wishlist.title}</u></h3> 
                             <form action="UserBookDescriptionServlet" method = "post">
                                 <input type="image" src="${wishlist.imageUrl}" id="${wishlist.isbn}" style="width: 200px;">
-                                <input type="hidden" name="hiddenFormID" value="${wishlist.isbn}">
-                            </form>
+                                <input type="hidden" name="isbn" value="${wishlist.isbn}">
+                            </form> 
                         </td>
                         <td>
                             <form action="WishlistServlet" method="delete">
