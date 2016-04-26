@@ -43,6 +43,7 @@ public class BuyItemServlet extends HttpServlet {
         item.setLanguage(language);
         HttpSession session = request.getSession();
         session.setAttribute("itemClicked", item);
+        session.setAttribute("user", null);
         response.sendRedirect("http://localhost:29462/BetterLooksBooks/bookDescription.jsp");
     }
 

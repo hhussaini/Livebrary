@@ -70,6 +70,10 @@ public class ConfirmBuyItemServlet extends HttpServlet {
             throws ServletException, IOException {
         // processRequest(request, response);
         HttpSession session = request.getSession();
+        User user = (User)session.getAttribute("user");
+        if (user == null) {
+            throw new ServletException("You must be logged in first to buy an item.");
+        }
         Item item = (Item)session.getAttribute("itemClicked");
         if (item == null) {
             throw new ServletException("Error getting the selected item.");

@@ -1,4 +1,4 @@
-package com.glb.controllers;
+package com.blb.controllers;
 
 import java.io.*;
 import javax.servlet.*;
@@ -42,7 +42,7 @@ public class ErrorHandler extends HttpServlet {
         if (throwable == null && statusCode == null){
             out.println("<h2>Error information is missing</h2>");
             out.println("Please return to the <a href=\"" +
-                    response.encodeURL("http://localhost:29462/") +
+                    response.encodeURL("http://localhost:8080/") +
                     "\">Home Page</a>.");
         } else{
             out.println("<h2>Error information</h2>");
