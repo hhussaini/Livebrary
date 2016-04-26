@@ -19,8 +19,7 @@
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet"/>
     <link href="css/rating/star-rating.css" media="all" rel="stylesheet" type="text/css" />            
     <!-- optionally if you need to use a theme, then include the theme file as mentioned below -->
-    <link href="css/rating/theme-krajee-svg.css" media="all" rel="stylesheet" type="text/css" />            
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.js"></script>
+    <link href="css/rating/theme-krajee-svg.css" media="all" rel="stylesheet" type="text/css" />
     <script src="js/rating/star-rating.js" type="text/javascript"></script>            
     <!-- optionally if you need translation for your language then include locale file as mentioned below -->
     <script src="js/rating/star-rating_locale_<lang>.js"></script>            
@@ -28,12 +27,12 @@
     <script src="js/userBookDescription.js" type="text/javascript"></script>
 </head>    
 <body>
-     <jsp:include page="/customerNavbar.jsp" />
-     <jsp:include page="/logo.jsp" />
-      <div class="bookDescription container">
+    <jsp:include page="/customerNavbar.jsp" />
+    <jsp:include page="/logo.jsp" />
+    <div class="bookDescription container">
         <div class="col-xs-6 col-sm-7" style="border-style: groove;">
           <button type="button" class="btn btn-primary">Share</button>
-          <button type="button" class="btn btn-primary">Email</button>
+          <button id="emailButton" type="button" class="btn btn-primary">Email</button>
           <form id="bookDescriptionForm" action="ItemReserveServlet" method="get"> 
                 <h5 id="bookTitleID">Book Title:  ${itemClicked.title}</h5>
                 <br> <h5 id="bookAuthorID">Book Author: ${itemClicked.author}</h5>
@@ -65,7 +64,7 @@
                 <input type="hidden" name="isbn" value="${itemClicked.isbn}">
             </form> 
         </div>
-      </div> <!-- bookDescription-->
+    </div> <!-- bookDescription-->
         <!--        <hr class="fancy">
         <br>
         <form id="submitReviewForm" action="SubmitItemReviewServlet" method="post"> 
@@ -99,6 +98,27 @@
                 //        }
             </script>
         </div>-->
+    <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModal" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+              <h4 class="modal-title" id="emailModal">Email Item</h4>
+            </div>
+            <form id="emailForm" name="emailForm" action="EmailItemServlet" method="post">  
+              <div class="modal-body">    
+                <p>Your email: ${user.email}</p>
+                <input type="text" class="form-control" placeholder="Email to Address" name="emailTo" required autofocus />
+                <input type="password" class="form-control" placeholder="Your Email Password" name="emailFromPassword" required autofocus />
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Send</button>
+              </div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </form>
+          </div>
+        </div>
+    </div>
 </body>
 </html>
     
