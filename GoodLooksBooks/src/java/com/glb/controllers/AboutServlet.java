@@ -57,7 +57,13 @@ public class AboutServlet extends HttpServlet {
         // processRequest(request, response);
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
-        String userType = user.getType();
+        String userType = "";
+        if (user == null) {
+            userType = "guest";
+        }
+        else {
+            userType = user.getType();
+        }
         
         request.getRequestDispatcher("/header.jsp").include(request, response);
         request.getRequestDispatcher(getNavbarUrl(userType)).include(request, response);

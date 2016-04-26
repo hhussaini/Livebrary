@@ -71,16 +71,19 @@ public class ConfirmBuyItemServlet extends HttpServlet {
         // processRequest(request, response);
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
+        String url= "";
         if (user == null) {
-            throw new ServletException("You must be logged in first to buy an item.");
+            url = "http://localhost:29462/BetterLooksBooks/signIn.jsp";
         }
-        Item item = (Item)session.getAttribute("itemClicked");
-        if (item == null) {
-            throw new ServletException("Error getting the selected item.");
+        else {
+            Item item = (Item)session.getAttribute("itemClicked");
+            if (item == null) {
+                throw new ServletException("Error getting the selected item.");
+            }
+            String isbn = item.getIsbn();
+            url = "http://localhost:8080/GoodLooksBooks/SecondServerResponseServlet?isbn=" + isbn;
         }
-        String isbn = item.getIsbn();
-        String url = "http://localhost:8080/GoodLooksBooks/SecondServerResponseServlet?isbn=" + isbn;
-        response.sendRedirect(url);        
+        response.sendRedirect(url);
     }
 
     /**
