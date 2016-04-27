@@ -2,7 +2,7 @@
     Document   : customerFullCatalog
     Author     : Kevin_Setayesh
 --%>
-
+    
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -107,6 +107,7 @@
                         <div class="row search-results">                
                             <table>
                                 <tr>
+                                    <c:set var="count" value="0" scope="page" />
                                     <c:forEach var="item" items="${searchResults}" varStatus="status">
                                         <c:if test="${status.index != 0 && status.index % 3 == 0}">
                                         </tr>
@@ -115,18 +116,23 @@
                                         <td>
                                             <div class="col-xs-6 col-md-3"> 
                                                 <td> 
+                                                    
                                                     <a href = "#" id = "${item.isbn}" class="thumbnail" onclick = "selectedBook(this.id)">
-                                                        <img src = "${item.imageUrl}" alt="${item.title}" style="width: 200px;">
+                                                        <img name="bookImage" class="bookImage" src = "${item.imageUrl}" alt="${item.title}" style="width: 200px;">
                                                         <c:out value="${item.title}"/> <br> <br>
                                                         <c:out value="by ${item.author}"/>
                                                     </a>
                                                 </td>
                                             </div>
                                         </td>
+                                        <c:set var="count" value="${count + 1}" scope="page"/>
                                     </c:forEach>
                                 </tr>
                             </table>
                         </div>
+                        <script>
+                            window.onload=validateImgUrl();
+                        </script>
                         <%--For displaying Page numbers. The when condition does not display a link for the current page--%>
                         <table border="1" cellpadding="5" cellspacing="5" align="center">
                             <tr>
@@ -160,7 +166,7 @@
         </div>
     </body>
 </html>
-
+    
 <!--Form for clicking on an "item" (book)-->
 <form id = "itemSelectionForm" name = "itemSelectionForm" action = "UserBookDescriptionServlet" method = "post">
     <input type = "hidden" id = "isbn" name = "isbn" value = "null">

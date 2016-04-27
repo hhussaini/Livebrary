@@ -1,7 +1,7 @@
 $(document).ready(function(){
     $("#emailButton").click(function(){
         console.log("email button clicked");
-//        $("#emailTo").val($(this).attr('data-id')); 
+        //        $("#emailTo").val($(this).attr('data-id')); 
         $('#emailModal').modal('show');
     });
 });
@@ -9,13 +9,13 @@ $(document).ready(function(){
 function sampleFunction(){
     
 } 
- 
+
 function buyItNowFunction(bookID){
     console.log("buyItNowFunction");
     console.log('bookID = ' + bookID);
     document.getElementById("secondServerForm").submit();
 }
-   
+
 function borrowFunction(){
 }
 
@@ -34,15 +34,15 @@ function selectedBook(bookID){ // the id of the form is the isbn number of the s
 
 function showSubmit() {
     var element = document.getElementById('reviewBtn'),
-    style = window.getComputedStyle(element),
-    display = style.getPropertyValue('display');
+            style = window.getComputedStyle(element),
+            display = style.getPropertyValue('display');
     if (display === "none") {
         document.getElementById("reviewBtn").style.display = "block";
     } else {
         document.getElementById("reviewBtn").style.display = "none";
     }
 }
-         
+
 function resetReview() {
     var d = document.getElementById("review-div");
     var t = document.getElementById("reviewdetails2");
@@ -95,16 +95,16 @@ function updateAverageRating(numOfStarsSelected){
         numOfStars : numOfStarsSelected, 
         isbn : isbn
     };
-   $.ajax({ 
+    $.ajax({ 
         type: type,
         url: url,
         data: itemObject,
         dataType: 'json',
         success: function(result) {  
-              console.log(result.avgNumOfStars);
-              document.getElementById("input-3").value = result.avgNumOfStars;
-              console.log("Average Rating: " + document.getElementById("input-3").value); 
-             
+            console.log(result.avgNumOfStars);
+            document.getElementById("input-3").value = result.avgNumOfStars;
+            console.log("Average Rating: " + document.getElementById("input-3").value); 
+            
         },
         error: function(result){
             console.log("Error!");
@@ -113,3 +113,23 @@ function updateAverageRating(numOfStarsSelected){
     });
 }
 
+function validateImgUrl() {
+    var books = document.getElementsByName("bookImage");
+    for (i = 0; i < books.length; i++) {
+        try {
+            var img = document.createElement("img");
+            img.src = document.getElementsByName("bookImage")[i].src;
+            
+        } catch(err) {
+            //
+        } 
+        
+        if(img.height > 0) {
+            console.log("image exists");
+            //image exists
+        } else {
+            console.log("image does not exists");
+            document.getElementsByName("bookImage")[i].src = "assets/no-media.png";
+        }
+    }
+}
