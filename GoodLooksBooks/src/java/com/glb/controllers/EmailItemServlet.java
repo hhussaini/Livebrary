@@ -1,22 +1,36 @@
 package com.glb.controllers;
 
+import com.glb.objects.Item;
 import com.glb.objects.User;
 import java.io.IOException;
-import javax.mail.*;
-import javax.mail.internet.*;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import javax.servlet.ServletContext;
 
 /**
  *
  * @author Kevin Young
  */
 public class EmailItemServlet extends HttpServlet {
-
+    
+    private String host;
+    private String port;
+    private String userEmail;
+    private String pass;
+ 
+    public void init() {
+        // reads SMTP server setting from web.xml file
+        ServletContext context = getServletContext();
+        host = context.getInitParameter("host");
+        port = context.getInitParameter("port");
+        userEmail = context.getInitParameter("userEmail");
+        pass = context.getInitParameter("pass");
+    }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -28,42 +42,7 @@ public class EmailItemServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        User user = (User)session.getAttribute("user");
-        if (user == null) {
-            throw new ServletException("Session error.");
-        }
-        final String EMAIL_FROM = "sonor922@gmail.com";
-        // final String emailFromPassword = request.getParameter("emailFromPassword");
-        final String EMAIL_FROM_PW = "tYlefIle(2";
-        String emailTo = request.getParameter("emailTo");
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class",
-                "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "465");
-  
-        Session mailSession = Session.getInstance(props,
-            new javax.mail.Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(EMAIL_FROM,EMAIL_FROM_PW);
-                }
-            });
-        try {  
-            Message message = new MimeMessage(mailSession);
-            message.setFrom(new InternetAddress("my_GMail@gmail.com"));
-            message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(emailTo));
-            message.setSubject("Testing Subject");
-            message.setText("Hello this is not spam," +
-                    "\n\n This is a JavaMail test...!");
-            Transport.send(message);
-  
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -78,7 +57,7 @@ public class EmailItemServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        // processRequest(request, response);
     }
 
     /**
@@ -92,7 +71,46 @@ public class EmailItemServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        // processRequest(request, response); 
+        HttpSession session = request.getSession();
+        User user = (User)session.getAttribute("user");
+        if (user == null) {
+            throw new ServletException("Session error.");
+        }
+        Item item = (Item)session.getAttribute("itemClicked");
+        if (item == null) {
+            throw new ServletException("Error getting the selected item.");
+        }
+        String from = request.getParameter("from");
+        String subject = request.getParameter("subject");
+        String message = "GoodLooksBooks user,\n\n";
+        message += from + " thought you might be interested in the following "
+                + "downloadable title available now at GoodLooksBooks ";
+        message += "http://localhost:8080/GoodLooksBooks/" +"\n\n";
+        message += item.getTitle() + "\n";
+        message += "by " + item.getAuthor() + "\n\n";
+        message += "To find out more details about this title, simply click on "
+                + "the link below or copy and paste it into your browser:\n";
+        message += "http://localhost:8080/GoodLooksBooks/UserBookDescriptionServlet?isbn=" 
+                + item.getIsbn();
+        message += "\n\nHere's a special message to you from your friend " + from + ":\n\n";
+        message += "'" + request.getParameter("message") + "'";
+        String recipient = request.getParameter("recipient");
+        try {
+            EmailUtility.sendEmail(host, port, userEmail, pass, recipient, subject,
+                    message);
+            response.setContentType("text/html;charset=UTF-8");
+            try (PrintWriter out = response.getWriter()) {
+                out.println("<!DOCTYPE html>");
+                out.println("<html>");
+                out.println("<body>");
+                out.println("<p>Your email has been sent.</p>");
+                out.println("</body>");
+                out.println("</html>");
+            }
+        } catch (Exception ex) {
+            throw new ServletException(ex.getMessage());
+        }
     }
 
     /**
@@ -104,5 +122,4 @@ public class EmailItemServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

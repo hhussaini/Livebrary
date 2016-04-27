@@ -4,8 +4,6 @@ import com.glb.helpers.Helpers;
 import static com.glb.helpers.Helpers.println;
 import com.glb.objects.Item;
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

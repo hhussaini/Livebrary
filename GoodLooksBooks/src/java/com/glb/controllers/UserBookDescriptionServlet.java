@@ -38,18 +38,19 @@ public class UserBookDescriptionServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         println("Inside UserBookDescriptionServlet.processRequest");
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet UserBookDescriptionServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet UserBookDescriptionServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        // returns the isbn of the book clicked, so we can go to the database and query for that book
+        String isbn = request.getParameter("isbn"); 
+        Book book = bookService.getBookByIsbn(isbn);
+        String url = "/userBookDescription.jsp";
+        HttpSession session = request.getSession();
+        if(book != null){
+             println("Clicked " + isbn);
+             session.setAttribute("itemClicked", book); 
+             RequestDispatcher dispatcher = request.getRequestDispatcher(url);
+             dispatcher.forward(request, response); 
+        }
+        else{
+             throw new ServletException("Error getting book with isbn = " + (isbn == null ? "NULL" : isbn));
         }
     }
 
@@ -79,22 +80,7 @@ public class UserBookDescriptionServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-          //  processRequest(request, response);
-          // returns the isbn of the book clicked, so we can go to the database and query for that book
-          println("Inside UserBookDescriptionServlet.doPost");
-          String isbn = request.getParameter("isbn"); 
-          Book book = bookService.getBookByIsbn(isbn);
-          String url = "/userBookDescription.jsp";
-          HttpSession session = request.getSession();
-          if(book != null){
-               println("Clicked " + isbn);
-               session.setAttribute("itemClicked", book); 
-               RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-               dispatcher.forward(request, response); 
-          }
-          else{
-               throw new ServletException("Error getting book with isbn = " + (isbn == null ? "NULL" : isbn));
-          }
+          processRequest(request, response);
     }
     
     /**

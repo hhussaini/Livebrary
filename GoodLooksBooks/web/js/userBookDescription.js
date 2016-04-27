@@ -1,7 +1,6 @@
 $(document).ready(function(){
     $("#emailButton").click(function(){
         console.log("email button clicked");
-        //        $("#emailTo").val($(this).attr('data-id')); 
         $('#emailModal').modal('show');
     });
 });

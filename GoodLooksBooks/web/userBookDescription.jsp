@@ -106,10 +106,12 @@
               <h4 class="modal-title" id="emailModal">Email Item</h4>
             </div>
             <form id="emailForm" name="emailForm" action="EmailItemServlet" method="post">  
-              <div class="modal-body">    
-                <p>Your email: ${user.email}</p>
-                <input type="text" class="form-control" placeholder="Email to Address" name="emailTo" required autofocus />
-                <input type="password" class="form-control" placeholder="Your Email Password" name="emailFromPassword" required autofocus />
+              <div class="modal-body">
+                <input type="text" class="form-control" placeholder="To" name="recipient" required autofocus /><br>
+                <input type="text" class="form-control" placeholder="From" name="from" required autofocus /><br>
+                <p>Subject: Check out this downloadable title at GoodLooksBooks</p><br>
+                <input type="text" class="form-control" placeholder="Message" name="message" autofocus />
+                <input type="hidden" name="subject" value="Check out this downloadable title at GoodLooksBooks">
               </div>
               <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Send</button>
