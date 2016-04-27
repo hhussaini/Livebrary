@@ -74,6 +74,10 @@
         <servlet-name>EmailItemServlet</servlet-name>
         <servlet-class>com.glb.controllers.EmailItemServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TestServlet</servlet-name>
+        <servlet-class>com.glb.controllers.TestServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -149,6 +153,10 @@
     <servlet-mapping>
         <servlet-name>EmailItemServlet</servlet-name>
         <url-pattern>/EmailItemServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TestServlet</servlet-name>
+        <url-pattern>/TestServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -1,5 +1,7 @@
 package com.glb.daos;
 
+import com.glb.constants.CategoryMap;
+import static com.glb.helpers.Helpers.*;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,57 +18,89 @@ import org.apache.commons.dbutils.DbUtils;
  *
  * @author mobile-mann
  */
-public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {    
+public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     private Statement stmt = null;
     private ResultSet res = null;
+    private static CategoryMap categoryMap = new CategoryMap();
     private int numberOfResults;
-    private int totalBooks;    
+    private int totalBooks;
     
     @Override
-    public List<Book> searchBooks(String term, int offset, int recordsPerPage) {
+    public List<Book> searchBooks(String term, String[] categories, int offset, int recordsPerPage) {
+        String limit = " limit " + offset + ", " + recordsPerPage;
         List<Book> results = new ArrayList<Book>();
-        this.numberOfResults = 0;        
+        this.numberOfResults = 0;
         Connection conn = getConnection();
         ResultSet rs;
+        
+        // Category Query
+        String catQuery = "";
+        for (int i = 0; i < categories.length; i++) {
+            if (i == 0)
+                catQuery += " (";
+            catQuery += "category rlike ?";
+            if (i == categories.length - 1) {
+                catQuery += ") ";
+            } else {
+                catQuery += " or ";
+            }
+        }
+        // Search term query
         term = "%" + term + "%";
-        String query = "select * from books where title is not null and"
-                + " (publisher like ?"
-                + " OR language like ?"
-                + " OR author like ?"
-                + " OR title like ?)";
-        String limit = " limit " + offset + ", " + recordsPerPage;
+        String query = "create view results1 as"
+                + " select b.isbn, b.title, b.author, b.imageUrl, c.category from books b, categories c"
+                + " where b.isbn = c.isbn and"
+                + " (b.publisher like ?"
+                + " OR b.language like ?"
+                + " OR b.author like ?"
+                + " OR b.title like ?)";
         try {
+            stmt = conn.createStatement();
+            stmt.executeUpdate("drop view if exists results1");
             PreparedStatement pstmt = conn.prepareStatement(query);
             pstmt.setString(1, term);
             pstmt.setString(2, term);
             pstmt.setString(3, term);
             pstmt.setString(4, term);
-            rs = pstmt.executeQuery();            
+            pstmt.executeUpdate();
+            
+            stmt.executeUpdate("drop view if exists results2");
+            query =  "create view results2 as"
+                    + " select isbn, title, author, imageUrl from results1 where"
+                    + catQuery;
+            pstmt = conn.prepareStatement(query);
+            for (int i = 0; i < categories.length; i++) {
+                if (categories[i].equals(""))
+                    pstmt.setString(i+1, ".*");
+                else {
+                    String category = categoryMap.get(categories[i]).toString();
+                    pstmt.setString(i+1, category);
+                }
+            }
+            pstmt.executeUpdate();
+            
+            query = "select count(distinct isbn) from results2";
+            rs = stmt.executeQuery(query);
             while (rs.next()) {
-                numberOfResults++;
-            }            
-            rs.close();            
-            pstmt = conn.prepareStatement(query + limit);
-            pstmt.setString(1, term);
-            pstmt.setString(2, term);
-            pstmt.setString(3, term);
-            pstmt.setString(4, term);
-            rs = pstmt.executeQuery();
+                numberOfResults = rs.getInt(1);
+            }
+            
+            query = "select * from results2"
+                    + " group by isbn";
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query + limit);
+            
             while (rs.next()) {
                 Book book = new Book();
                 book.setIsbn(rs.getString("isbn"));
                 book.setTitle(rs.getString("title"));
                 book.setImageUrl(rs.getString("imageUrl"));
                 book.setAuthor(rs.getString("author"));
-                if (book.getImageUrl().toString().length() > 0) {
-                    results.add(book);
-                    numberOfResults++;
-                }
+                results.add(book);
             }
-            rs.close();            
-            Statement stmt = conn.createStatement();
+            rs.close();
         } catch (SQLException ex) {
-           Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if(stmt != null)
@@ -89,29 +123,27 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     public int getTotalBooks() {
         return this.totalBooks;
     }
-
+    
     @Override
     public List<Book> getAllBooks() {
         List<Book> results = new ArrayList<Book>();
-        this.totalBooks = 0;        
+        this.totalBooks = 0;
         Connection conn = getConnection();
         ResultSet rs;
         String query = "select * from books where title is not null";
         try {
-            Statement stmt = conn.createStatement();         
-            rs = stmt.executeQuery(query);            
+            Statement stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
             while (rs.next()) {
                 Book book = new Book();
                 book.setIsbn(rs.getString("isbn"));
                 book.setTitle(rs.getString("title"));
                 book.setImageUrl(rs.getString("imageUrl"));
                 book.setAuthor(rs.getString("author"));
-                if (book.getImageUrl().toString().length() > 0) {
-                    results.add(book);
-                    totalBooks++;
-                }
+                results.add(book);
+                totalBooks++;
             }
-            rs.close();            
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -126,16 +158,16 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         }
         return results;
     }
-
+    
     @Override
     public Book getBookByIsbn(String isbn) {
-        Book book = null;        
+        Book book = null;
         Connection conn = getConnection();
         ResultSet rs = null;
-        String query = "select * from books where isbn = '" + isbn + "'";        
+        String query = "select * from books where isbn = '" + isbn + "'";
         try {
-            Statement stmt = conn.createStatement();         
-            rs = stmt.executeQuery(query);            
+            Statement stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
             while (rs.next()) {
                 book = new Book();
                 book.setIsbn(rs.getString("isbn"));
@@ -156,7 +188,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         }
         return book;
     }
-
+    
     @Override
     public int addBookToUserItems(String username, String isbn) {
         Connection conToUse = null;
@@ -171,7 +203,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             sql = "INSERT into RESERVED(username, isbn) values(?,?)";
             preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
             preparedStmt.setString(1, username);
-            preparedStmt.setString(2, isbn);    
+            preparedStmt.setString(2, isbn);
             status = preparedStmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);

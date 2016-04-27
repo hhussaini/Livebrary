@@ -2,7 +2,7 @@
     Document   : customerFullCatalog
     Author     : Kevin_Setayesh & Paul M.
 --%>
-    
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -118,7 +118,7 @@
                                                 <td> 
                                                     
                                                     <a href = "#" id = "${item.isbn}" class="thumbnail" onclick = "selectedBook(this.id)">
-                                                        <img name="bookImage" class="bookImage" src = "${item.imageUrl}" alt="${item.title}" style="width: 200px;">
+                                                        <img onload="validateImgUrl(this.id)" name="bookImage" id="book${count} class="bookImage" src="${item.imageUrl}" alt="${item.title}" style="width: 200px;">
                                                         <c:out value="${item.title}"/> <br> <br>
                                                         <c:out value="by ${item.author}"/>
                                                     </a>
@@ -130,9 +130,6 @@
                                 </tr>
                             </table>
                         </div>
-                        <script>
-                            window.onload=validateImgUrl();
-                        </script>
                         <%--For displaying Page numbers. The when condition does not display a link for the current page--%>
                         <table border="1" cellpadding="5" cellspacing="5" align="center">
                             <tr>
@@ -167,6 +164,10 @@
     </body>
 </html>
     
+<!--<script>
+    window.onload=validateImgUrl();
+</script>
+                            -->
 <!--Form for clicking on an "item" (book)-->
 <form id = "itemSelectionForm" name = "itemSelectionForm" action = "UserBookDescriptionServlet" method = "post">
     <input type = "hidden" id = "isbn" name = "isbn" value = "null">

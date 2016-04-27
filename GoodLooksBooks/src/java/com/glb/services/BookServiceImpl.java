@@ -6,6 +6,7 @@ import com.glb.exceptions.ResourceHelperException;
 import java.sql.Connection;
 import com.glb.daos.ConnectionUtil;
 import static com.glb.daos.ConnectionUtil.getConnection;
+import static com.glb.helpers.Helpers.*;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +24,7 @@ public class BookServiceImpl implements BookService {
     private ResultSet res = null;
     
     @Override
-    public List<Book> searchBooks(String term, int offset, int recordsPerPage) {
+    public List<Book> searchBooks(String term, String[] categories, int offset, int recordsPerPage) {
         List<Book> results = null;
         Connection conn = null;       
        
@@ -31,12 +32,11 @@ public class BookServiceImpl implements BookService {
             conn = ConnectionUtil.getConnection();
             BookDao bookDao = DaoFactory.getBookDao();
             bookDao.setConnection(conn);
-            results = bookDao.searchBooks(term, offset, recordsPerPage);
+            results = bookDao.searchBooks(term, categories, offset, recordsPerPage);
             this.numberOfResults = bookDao.getNumberOfResults();
         } catch (ResourceHelperException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         return results;
     }
     

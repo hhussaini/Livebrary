@@ -113,23 +113,19 @@ function updateAverageRating(numOfStarsSelected){
     });
 }
 
-function validateImgUrl() {
-    var books = document.getElementsByName("bookImage");
-    for (i = 0; i < books.length; i++) {
+function validateImgUrl(id) {
+    var book = document.getElementById(id);
         try {
             var img = document.createElement("img");
-            img.src = document.getElementsByName("bookImage")[i].src;
-            
+            img.src = book.src;
         } catch(err) {
             //
-        } 
-        
-        if(img.height > 0) {
+        }
+        if(img.height > 0 && img.width > 0) {
             console.log("image exists");
             //image exists
         } else {
             console.log("image does not exists");
-            document.getElementsByName("bookImage")[i].src = "assets/no-media.png";
+            book.src = "assets/no-media.png";
         }
-    }
 }

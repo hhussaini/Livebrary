@@ -67,13 +67,15 @@ public class SearchServlet extends HttpServlet {
             HttpSession session = request.getSession();
             String term = request.getParameter("searchTerm");
                    term = (term == null) ? "" : term;
+            String[] categories = request.getParameterValues("category");
+            categories = (categories == null) ? new String[]{""} : categories;
             int page = 1;
             if (request.getParameter("page") != null)
                 page = Integer.parseInt(request.getParameter("page"));
             int recordsPerPage = 18;
             int offset = (page-1) * recordsPerPage;
             
-            searchResults = bookService.searchBooks(term, offset, recordsPerPage);
+            searchResults = bookService.searchBooks(term, categories, offset, recordsPerPage);
             int numOfResults = bookService.getNumberOfResults();
             int numOfPages = (int) Math.ceil(numOfResults * 1.0 / recordsPerPage);
             int firstDisplayPage = (page - 5 < 1) ? 1 : page - 5;
