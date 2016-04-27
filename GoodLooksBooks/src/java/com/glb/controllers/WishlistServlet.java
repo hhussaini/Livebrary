@@ -31,21 +31,14 @@ public class WishlistServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, java.io.IOException {
-        println("IN SERVICE");
         println(req.getMethod().toString());
         String method = req.getParameter("method");
         method = (method == null) ? "" : method;
         if(method.equals("delete")){
-            println("MATHCED METHOD NAME");
             doDelete(req,resp);
         }else {
-            println("UNMATHCED METHOD NAME");
             super.service(req, resp);
         } 
-    }
-    
-    public void doRemove(HttpServletRequest req, HttpServletResponse res) {
-        println("HERE");
     }
     
     /**
@@ -74,7 +67,6 @@ public class WishlistServlet extends HttpServlet {
         }
     }
     
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -90,7 +82,6 @@ public class WishlistServlet extends HttpServlet {
         HttpSession session = request.getSession();
         user = (User)session.getAttribute("user");
         wishlist = userService.getWishlist(user);
-        println("Wishlist: " + wishlist.size());
         session.setAttribute("customerWishlist", wishlist);
         session.setAttribute("wishlistSize", wishlist.size());
         request.getRequestDispatcher("/wishlist.jsp").include(request, response);
@@ -118,7 +109,7 @@ public class WishlistServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        println(this.getServletName() + " : " + "doDelete, in there");
+        println(this.getServletName() + " : " + "doDelete");
         String isbn = request.getParameter("isbn");
         HttpSession session = request.getSession();
         user = (User)session.getAttribute("user");
@@ -134,5 +125,5 @@ public class WishlistServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    } // </editor-fold>
+    }
 }

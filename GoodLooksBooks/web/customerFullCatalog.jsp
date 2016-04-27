@@ -1,6 +1,6 @@
 <%-- 
     Document   : customerFullCatalog
-    Author     : Kevin_Setayesh
+    Author     : Kevin_Setayesh & Paul M.
 --%>
     
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -17,7 +17,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script src="js/bootstrap.js"></script>
         <script src="js/userBookDescription.js" type="text/javascript"></script>
-        <script src="js/validate.js" type="text/javascript"></script>
     </head>
     <body>
         <jsp:include page="/customerNavbar.jsp" />
