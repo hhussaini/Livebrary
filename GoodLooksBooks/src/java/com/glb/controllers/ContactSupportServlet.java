@@ -1,7 +1,5 @@
 package com.glb.controllers;
 
-import static com.glb.helpers.Helpers.goToSignIn;
-import com.glb.objects.Item;
 import com.glb.objects.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,13 +14,14 @@ import javax.servlet.ServletContext;
  *
  * @author Kevin Young
  */
-public class EmailItemServlet extends HttpServlet {
+public class ContactSupportServlet extends HttpServlet {
     
     private String host;
     private String port;
     private String doNotReplyEmail;
     private String doNotReplyPass;
- 
+    private String supportEmail;
+    
     public void init() {
         // reads SMTP server setting from web.xml file
         ServletContext context = getServletContext();
@@ -30,6 +29,7 @@ public class EmailItemServlet extends HttpServlet {
         port = context.getInitParameter("port");
         doNotReplyEmail = context.getInitParameter("doNotReplyEmail");
         doNotReplyPass = context.getInitParameter("doNotReplyPass");
+        supportEmail = context.getInitParameter("supportEmail");
     }
     
     /**
@@ -75,38 +75,26 @@ public class EmailItemServlet extends HttpServlet {
         // processRequest(request, response); 
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
+        String from = "";
         if (user == null) {
-            goToSignIn(request, response);
-            return;
+            from = request.getParameter("from");
+        } else {
+            from = user.getEmail();
         }
-        Item item = (Item)session.getAttribute("itemClicked");
-        if (item == null) {
-            throw new ServletException("Error getting the selected item.");
-        }
-        String from = request.getParameter("from");
-        String subject = request.getParameter("subject");
+        String subject = from + " Requests Support";
         String message = "GoodLooksBooks user,\n\n";
-        message += from + " thought you might be interested in the following "
-                + "downloadable title available now at GoodLooksBooks ";
-        message += "http://localhost:8080/GoodLooksBooks/" +"\n\n";
-        message += item.getTitle() + "\n";
-        message += "by " + item.getAuthor() + "\n\n";
-        message += "To find out more details about this title, simply click on "
-                + "the link below or copy and paste it into your browser:\n";
-        message += "http://localhost:8080/GoodLooksBooks/BookDescriptionServlet?isbn=" 
-                + item.getIsbn();
-        message += "\n\nHere's a special message to you from your friend " + from + ":\n\n";
+        message += from + " requests support with the following message:\n\n";
         message += "'" + request.getParameter("message") + "'";
-        String recipient = request.getParameter("recipient");
         try {
-            EmailUtility.sendEmail(host, port, doNotReplyEmail, doNotReplyPass, recipient, subject,
+            EmailUtility.sendEmail(host, port, doNotReplyEmail, doNotReplyPass, supportEmail, subject,
                     message);
             response.setContentType("text/html;charset=UTF-8");
             try (PrintWriter out = response.getWriter()) {
                 out.println("<!DOCTYPE html>");
                 out.println("<html>");
                 out.println("<body>");
-                out.println("<p>Your email has been sent.</p>");
+                out.println("<p>Your message has been sent. Contact will send you "
+                        + "an email soon.</p>");
                 out.println("</body>");
                 out.println("</html>");
             }
