@@ -1,11 +1,11 @@
 <%-- 
-    Document   : userBookDescription
+    Document   : bookDescription
     Author     : Kevin_Setayesh
 --%>
-    
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">  
 <head>
     <title>Full Catalog for Good Looks Books</title>
     <meta charset="utf-8">
@@ -24,10 +24,17 @@
     <!-- optionally if you need translation for your language then include locale file as mentioned below -->
     <script src="js/rating/star-rating_locale_<lang>.js"></script>            
     <!--link to custom javascript page-->
-    <script src="js/userBookDescription.js" type="text/javascript"></script>
-</head>    
+    <script src="js/bookDescription.js" type="text/javascript"></script>
+</head>
 <body>
-    <jsp:include page="/customerNavbar.jsp" />
+    <c:choose>
+        <c:when test="${empty user}">
+            <jsp:include page="/guestNavbar.jsp" />
+        </c:when>
+        <c:otherwise>
+            <jsp:include page="/customerNavbar.jsp" />
+        </c:otherwise>
+    </c:choose>
     <jsp:include page="/logo.jsp" />
     <div class="bookDescription container">
         <div class="col-xs-6 col-sm-7" style="border-style: groove;">

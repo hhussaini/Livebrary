@@ -1,5 +1,6 @@
 package com.glb.controllers;
 
+import static com.glb.helpers.Helpers.goToSignIn;
 import com.glb.objects.Item;
 import com.glb.objects.User;
 import java.io.IOException;
@@ -75,7 +76,8 @@ public class EmailItemServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
         if (user == null) {
-            throw new ServletException("Session error.");
+            goToSignIn(request, response);
+            return;
         }
         Item item = (Item)session.getAttribute("itemClicked");
         if (item == null) {
@@ -91,7 +93,7 @@ public class EmailItemServlet extends HttpServlet {
         message += "by " + item.getAuthor() + "\n\n";
         message += "To find out more details about this title, simply click on "
                 + "the link below or copy and paste it into your browser:\n";
-        message += "http://localhost:8080/GoodLooksBooks/UserBookDescriptionServlet?isbn=" 
+        message += "http://localhost:8080/GoodLooksBooks/BookDescriptionServlet?isbn=" 
                 + item.getIsbn();
         message += "\n\nHere's a special message to you from your friend " + from + ":\n\n";
         message += "'" + request.getParameter("message") + "'";

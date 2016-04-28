@@ -81,6 +81,10 @@ public class WishlistServlet extends HttpServlet {
         println(this.getServletName() + " : " + "doGet");
         HttpSession session = request.getSession();
         user = (User)session.getAttribute("user");
+        if (user == null) {
+            goToSignIn(request, response);
+            return;
+        }
         wishlist = userService.getWishlist(user);
         session.setAttribute("customerWishlist", wishlist);
         session.setAttribute("wishlistSize", wishlist.size());
@@ -102,8 +106,12 @@ public class WishlistServlet extends HttpServlet {
         String isbn = request.getParameter("isbn");
         HttpSession session = request.getSession();
         user = (User)session.getAttribute("user");
+        if (user == null) {
+            goToSignIn(request, response);
+            return;
+        }
         userService.addToWishlist(user, isbn);
-        request.getRequestDispatcher("/userBookDescription.jsp").include(request, response);
+        request.getRequestDispatcher("/bookDescription.jsp").include(request, response);
     }
     
     @Override
@@ -113,6 +121,10 @@ public class WishlistServlet extends HttpServlet {
         String isbn = request.getParameter("isbn");
         HttpSession session = request.getSession();
         user = (User)session.getAttribute("user");
+        if (user == null) {
+            goToSignIn(request, response);
+            return;
+        }
         userService.removeFromWishlist(user, isbn);
         doGet(request, response);
     }

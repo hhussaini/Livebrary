@@ -77,7 +77,7 @@ function submitReview(){
 
 $(document).on('ready', function(){
     //  console.log("hey: " + window.location.href);
-    if(window.location.href === "UserBookDescriptionServlet"){
+    if(window.location.href === "BookDescriptionServlet"){
         updateAverageRating(null);
         $('#input-3').rating({displayOnly: true, step: 0.5});
     }

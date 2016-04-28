@@ -16,10 +16,17 @@
         <link rel="stylesheet" href="css/custom_css/bookPhotoGrid.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script src="js/bootstrap.js"></script>
-        <script src="js/userBookDescription.js" type="text/javascript"></script>
+        <script src="js/bookDescription.js" type="text/javascript"></script>
     </head>
     <body>
-        <jsp:include page="/customerNavbar.jsp" />
+        <c:choose>
+            <c:when test="${empty user}">
+                <jsp:include page="/guestNavbar.jsp" />
+            </c:when>
+            <c:otherwise>
+                <jsp:include page="/customerNavbar.jsp" />
+            </c:otherwise>
+        </c:choose>
         <div class="glb-page">
             <jsp:include page="/logo.jsp" />
             <br>
@@ -169,6 +176,6 @@
 </script>
                             -->
 <!--Form for clicking on an "item" (book)-->
-<form id = "itemSelectionForm" name = "itemSelectionForm" action = "UserBookDescriptionServlet" method = "post">
+<form id = "itemSelectionForm" name = "itemSelectionForm" action = "BookDescriptionServlet" method = "post">
     <input type = "hidden" id = "isbn" name = "isbn" value = "null">
 </form>

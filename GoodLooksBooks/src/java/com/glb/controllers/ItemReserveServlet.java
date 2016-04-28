@@ -7,24 +7,18 @@ package com.glb.controllers;
  
 import com.glb.constants.UserTypes;
 import com.glb.factories.ServiceFactory;
+import static com.glb.helpers.Helpers.goToSignIn;
 import static com.glb.helpers.Helpers.println;
-import com.glb.objects.Book; 
-import com.glb.objects.Item;
 import com.glb.objects.User;
 import com.glb.services.BookService;
-import com.glb.services.UserService;
 import java.io.IOException;
 import java.io.PrintWriter; 
-import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-//import objects.Customer; 
-//import objects.Item;
-//import objects.User;
 
 /**
  *
@@ -68,12 +62,13 @@ public class ItemReserveServlet extends HttpServlet {
        // processRequest(request, response);
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
-        if(user != null && user.getType().equalsIgnoreCase(UserTypes.CUSTOMER.toString())){     
+        if (user == null) {
+            goToSignIn(request, response);
+            return;
+        }
+        if(user.getType().equalsIgnoreCase(UserTypes.CUSTOMER.toString())){     
             String isbn = request.getParameter("isbn");
-             bookService.addBookToUserItems(user.getUsername(), isbn); 
-        }    
-        else{ 
-             throw new ServletException("This user does not exist.");
+            bookService.addBookToUserItems(user.getUsername(), isbn); 
         }
         String url = "/customerFullCatalog.jsp";
         RequestDispatcher dispatcher = request.getRequestDispatcher(url);

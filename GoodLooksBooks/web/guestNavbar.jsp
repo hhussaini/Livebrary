@@ -14,7 +14,7 @@
       <ul class="nav navbar-nav" style="font-weight: bold;">
         <li><a href="index.jsp">Home</a></li>
         <li><a href="#" onclick="aboutForm.submit();">About</a></li>
-        <li><a href="fullCatalog.html">Full Catalog</a></li>
+        <li><a href="SearchServlet">Full Catalog</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" style="font-weight: bold;">
         <li><a href="signUp.jsp">Sign Up</a></li>

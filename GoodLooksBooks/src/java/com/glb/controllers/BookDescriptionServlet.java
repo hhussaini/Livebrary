@@ -12,12 +12,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import static com.glb.helpers.Helpers.println;
 
 /**
  *
  * @author Kevin_Setayesh
  */
-public class UserBookDescriptionServlet extends HttpServlet {
+public class BookDescriptionServlet extends HttpServlet {
     
     BookService bookService;
     
@@ -37,11 +38,11 @@ public class UserBookDescriptionServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        println("Inside UserBookDescriptionServlet.processRequest");
+        println("Inside BookDescriptionServlet.processRequest");
         // returns the isbn of the book clicked, so we can go to the database and query for that book
         String isbn = request.getParameter("isbn"); 
         Book book = bookService.getBookByIsbn(isbn);
-        String url = "/userBookDescription.jsp";
+        String url = "/bookDescription.jsp";
         HttpSession session = request.getSession();
         if(book != null){
              println("Clicked " + isbn);
@@ -65,7 +66,7 @@ public class UserBookDescriptionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        println("Inside UserBookDescriptionServlet.doGet");
+        println("Inside BookDescriptionServlet.doGet");
         processRequest(request, response);
     }
 
