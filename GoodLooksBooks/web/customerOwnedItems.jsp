@@ -11,7 +11,9 @@ prefix="c" %>
 
 <!DOCTYPE html>
 <html lang="en">
-<jsp:include page="/header.jsp" />
+<head>
+    <jsp:include page="/header.jsp" />
+</head>
 <body>
   <jsp:include page="/customerNavbar.jsp" />
    <div class="glb-page">

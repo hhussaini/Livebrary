@@ -31,9 +31,9 @@
         <c:when test="${empty user}">
             <jsp:include page="/guestNavbar.jsp" />
         </c:when>
-        <c:otherwise>
+        <c:when test="${user.type == 'customer'}">
             <jsp:include page="/customerNavbar.jsp" />
-        </c:otherwise>
+        </c:when>
     </c:choose>
     <jsp:include page="/logo.jsp" />
     <div class="bookDescription container">

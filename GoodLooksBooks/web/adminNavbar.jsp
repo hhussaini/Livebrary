@@ -12,8 +12,8 @@
       </div>
       <ul class="nav navbar-nav" style="font-weight: bold;">
         <li><a href="adminIndex.jsp">Admin Home</a></li>
-        <li><a href="#" onclick="aboutForm.submit();">About</a></li>
-        <li><a href="#" onclick="accountForm.submit();">Account</a></li>
+        <li><a href="about.jsp">About</a></li>
+        <li><a href="account.jsp">Account</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" style="font-weight: bold;">
         <li class="dropdown">

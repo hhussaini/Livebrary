@@ -30,18 +30,6 @@
         <servlet-class>com.glb.controllers.SignOutServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AccountSettingsServlet</servlet-name>
-        <servlet-class>com.glb.controllers.AccountSettingsServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>AccountServlet</servlet-name>
-        <servlet-class>com.glb.controllers.AccountServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>AboutServlet</servlet-name>
-        <servlet-class>com.glb.controllers.AboutServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>BookDescriptionServlet</servlet-name>
         <servlet-class>com.glb.controllers.BookDescriptionServlet</servlet-class>
     </servlet>
@@ -106,18 +94,6 @@
     <servlet-mapping>
         <servlet-name>SignOutServlet</servlet-name>
         <url-pattern>/SignOutServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AccountSettingsServlet</servlet-name>
-        <url-pattern>/AccountSettingsServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AccountServlet</servlet-name>
-        <url-pattern>/AccountServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AboutServlet</servlet-name>
-        <url-pattern>/AboutServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BookDescriptionServlet</servlet-name>
