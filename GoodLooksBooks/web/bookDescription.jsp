@@ -38,7 +38,9 @@
     <jsp:include page="/logo.jsp" />
     <div class="bookDescription container">
         <div class="col-xs-6 col-sm-7" style="border-style: groove;">
-          <button type="button" class="btn btn-primary">Share</button>
+          <button type="button" class="btn btn-primary" 
+                  onclick="fbShare('http://openisbn.com/${itemClicked.isbn}', 520, 350)">
+              Share</button>
           <button id="emailButton" type="button" class="btn btn-primary">Email</button>
           <form id="bookDescriptionForm" action="ItemReserveServlet" method="get"> 
                 <h5 id="bookTitleID">Book Title:  ${itemClicked.title}</h5>
@@ -132,4 +134,5 @@
 </html>
     
 <!--Form for communicating with the second server -->
-<form id = "secondServerForm" name = "secondServerForm" action = "SecondServerServlet" method = "post"></form> 
+<form id = "secondServerForm" name = "secondServerForm" action = "SecondServerServlet" method = "post"></form>
+<form id = "facebookShareForm" name = "facebookShareForm" action = "SecondServerServlet" method = "post"></form> 
