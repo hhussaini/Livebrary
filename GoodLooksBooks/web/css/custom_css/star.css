@@ -1,0 +1,17 @@
+.container {
+  position: relative;
+}
+#clip {
+  position: absolute;
+  clip: rect(0, 36px, 200px, 0);
+ } 
+  
+  /* 36 is a full star
+   18 is half a star */
+  
+  
+  
+ /* clip: rect(0, 100px, 200px, 0); */
+  /* clip: shape(top, right, bottom, left); NB 'rect' is the only available option */
+
+  

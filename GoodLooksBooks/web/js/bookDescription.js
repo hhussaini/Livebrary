@@ -3,8 +3,24 @@ $(document).ready(function(){
         console.log("email button clicked");
         $('#emailModal').modal('show');
     });
+   var avgStarRating = document.getElementById("avgStarID").getAttribute("value");
+   var theDiv = document.getElementById("avgStarID");
+   for(var i = 1; i < avgStarRating; i++){ 
+       theDiv.appendChild(createYellowStar(i));  
+   }
+   var decimal = avgStarRating - Math.floor(avgStarRating);
+   var widthOfImage = 36 * decimal;
+   console.log(widthOfImage); 
+   document.getElementById("clip").style.clip =  "rect(0px " + widthOfImage + "px 200px 0px)"; 
+   theDiv.appendChild(document.getElementById("clip")); 
 });
 
+function createYellowStar(i){
+    var img = document.createElement("img");
+    img.src = "assets/yellowStar.png";
+    img.id = 'avgStar' + i.toString();
+    return img;
+}
 function sampleFunction(){
     
 } 
@@ -134,3 +150,42 @@ function fbShare(url,winWidth, winHeight) {
         var winLeft = (screen.width / 2) - (winWidth / 2);
         window.open('http://www.facebook.com/sharer.php?s=100&p[url]=' + url, 'sharer','top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width='+winWidth+',height='+winHeight);
 }
+
+
+function starRating(num){ 
+    var path = "";
+    var flag = getStarColor(num); // means white star 
+    for (var i = 1; i <= 5; i++){
+        if(flag){
+            if(i <= num){
+                path = "assets/yellowStar.png";
+                document.getElementById('star' + i.toString()).setAttribute("value", "1");
+            }
+            else{
+                path = "assets/star.png";
+                document.getElementById('star' + i.toString()).setAttribute("value", "0");
+            } 
+        }
+        else{
+            if(i >= num){
+                path = "assets/star.png";
+                document.getElementById('star' + i.toString()).setAttribute("value", "0");
+            }
+            else{
+                path = "assets/yellowStar.png";
+                document.getElementById('star' + i.toString()).setAttribute("value", "1");
+            }
+        }
+         var id = 'star' + i.toString();
+         document.getElementById(id).src = path;     
+    } 
+}
+
+
+function getStarColor(num){
+    // returns true if star is white
+    return document.getElementById('star' + num.toString()).getAttribute("value") === "0";  
+}
+    
+
+    

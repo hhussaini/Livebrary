@@ -17,7 +17,8 @@
     <script src="js/bootstrap.js"></script>            
     <!-- star rating-->
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet"/>
-    <link href="css/rating/star-rating.css" media="all" rel="stylesheet" type="text/css" />            
+    <link href="css/rating/star-rating.css" media="all" rel="stylesheet" type="text/css" />  
+    <link href="css/custom_css/star.css" media="all" rel="stylesheet" type="text/css" />
     <!-- optionally if you need to use a theme, then include the theme file as mentioned below -->
     <link href="css/rating/theme-krajee-svg.css" media="all" rel="stylesheet" type="text/css" />
     <script src="js/rating/star-rating.js" type="text/javascript"></script>            
@@ -56,13 +57,20 @@
         <div class="col-xs-6 col-sm-5 bookDescriptionPictures">
             <img src = ${itemClicked.imageUrl} class="img-rounded" alt="Andersonville: A Story of Rebel Military Prisons" width="250" height="250">
             <button type="submit" id="fav" onclick="setColor('fav','#FF0000');" class="btn-fav"><span class="glyphicon glyphicon-heart"></span> Fav!</button>
-            <br>
-            <label for="input-3" class="control-label">Avg. Rating</label>
-            <input id="input-3" value="5" class="rating-md" style="font-size: 2.5em">
-            <br> 
-            <label for="input-2" class="control-label">Your Rating</label>
-            <input id="input-2" class="rating rating-loading" value="4" data-min="0" data-max="5" data-step="1">
-            <br>
+            <div> 
+                <label for="input-3" class="control-label">Avg. Rating</label><br>
+                <div id="avgStarID" value="0.5">
+                    <img id="clip" src="assets/yellowStar.png" />
+                 </div>
+                <br><br>
+                <label for="input-2" class="control-label">Your Rating</label><br>
+                <img onclick="starRating(1)" value = "0" id="star1" src="assets/star.png" /> 
+                <img onclick="starRating(2)" value = "0" id="star2" src="assets/star.png" /> 
+                <img onclick="starRating(3)" value = "0" id="star3" src="assets/star.png" /> 
+                <img onclick="starRating(4)" value = "0" id="star4" src="assets/star.png" /> 
+                <img onclick="starRating(5)" value = "0" id="star5" src="assets/star.png" /> 
+                <br>
+            </div>
             <button type="button" name = "button1" onclick="sampleFunction()" class="btn btn-primary">Sample</button>
             <button type="button" name = "button2" onclick="buyItNowFunction(${itemClicked.isbn})"class="btn btn-primary">Buy It Now</button> <br>
             <button type="button" name = "button3" onclick="borrowFuntion()"class="btn btn-primary">Borrow</button>
@@ -72,6 +80,7 @@
                 <button onclick="changeWishlist()" type="submit" class="btn btn-primary">Add to Wishlist</button>
                 <input type="hidden" name="isbn" value="${itemClicked.isbn}">
             </form> 
+           
         </div>
     </div> <!-- bookDescription-->
         <!--        <hr class="fancy">
