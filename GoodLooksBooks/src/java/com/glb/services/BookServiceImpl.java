@@ -4,17 +4,17 @@ import com.glb.daos.BookDao;
 import com.glb.factories.DaoFactory;
 import com.glb.exceptions.ResourceHelperException;
 import java.sql.Connection;
-import com.glb.daos.ConnectionUtil;
-import static com.glb.daos.ConnectionUtil.getConnection;
-import static com.glb.helpers.Helpers.*;
+import com.glb.daos.ConnectionUtil; 
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.glb.objects.Book;
-import java.sql.PreparedStatement;
+import com.glb.objects.Review; 
+import com.glb.objects.User;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.sql.SQLException; 
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.commons.dbutils.DbUtils;
 
 public class BookServiceImpl implements BookService {
@@ -110,30 +110,54 @@ public class BookServiceImpl implements BookService {
         return status;
     }
 
- @Override
-    public List<Book> getItemsList(String userName) {
-        List<Book> itemsList = new ArrayList<>();        
-        Connection conToUse = null;
-        java.sql.PreparedStatement ps = null;
-        try {
-            conToUse = getConnection();
-            String sql = "SELECT isbn from RESERVED WHERE username = ?";
-            
-            ps = (PreparedStatement) conToUse.prepareStatement(sql);
-            ps.setString(1, userName);
-            res = ps.executeQuery();
-            
-            while (res.next()) {
-                  itemsList.add(this.getBookByIsbn(res.getString("isbn"))); 
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+
+
+    @Override
+     public Map<String, Review> getAllReviewsForBook(String isbn){
+        Connection conn = null;
+        Map<String, Review>reviewsMap = new HashMap<>();
+        try {            
+            conn = ConnectionUtil.getConnection();
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conn);
+            reviewsMap = bookDao.getAllReviewsForBook(isbn);
         } catch (ResourceHelperException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            DbUtils.closeQuietly(ps);
         }
         
-        return itemsList;
+        return reviewsMap;
+    }
+
+    @Override
+    public List<Book> getItemsList(String username) {
+        Connection conn = null;
+       List<Book>listOfBooks = null;
+        try {            
+            conn = ConnectionUtil.getConnection();
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conn);
+            listOfBooks = bookDao.getItemsList(username);
+        } catch (ResourceHelperException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return listOfBooks;
+    }
+
+    @Override
+    public Book addReview(Review review, Book book, User user){
+
+        Connection conn = null;
+        int status = 0;
+        try {            
+            conn = ConnectionUtil.getConnection();
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conn);
+            return bookDao.addReview(review, book, user);
+        } catch (ResourceHelperException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
     }
 }

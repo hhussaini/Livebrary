@@ -36,11 +36,24 @@
               <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i>Help</h3>
             </div>
             <div class="panel-body">
-              <div class="list-group">
-                <a href="#" onclick="showContactModal()">
-                    <img alt="brand" width = "100" height = "100" src="assets/support-icon.jpg">
-                </a>
-                Contact Support
+                <div class="list-group">
+                  <a href="#" onclick="showContactModal()">
+                      <img alt="brand" width = "100" height = "100" src="assets/support-icon.jpg">
+                  </a>
+                  Contact Support
+                </div>
+                <div class="list-group">
+                    <a href="lendingPolicies.jsp">
+                        <img alt="brand" width = "100" height = "100" src="assets/book.png">
+                    </a>
+                    Lending Policies
+                </div>
+                <div class="list-group">
+                    <a href="navigationHelp.jsp">
+                        <img alt="brand" width = "100" height = "100" src="assets/question-icon.jpg">
+                    </a>
+                    Navigation Help
+                </div>
               </div>
             </div>
           </div>

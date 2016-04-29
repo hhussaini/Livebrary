@@ -45,4 +45,8 @@ public class Helpers {
         RequestDispatcher dispatcher = request.getRequestDispatcher(url);
         dispatcher.forward(request, response); 
     }
+    
+    public static double round(double num){
+        return (double)Math.round(num * 100) / 100;
+    }
 }

@@ -6,5 +6,6 @@ package com.glb.constants;
  */
 public enum UserTypes {
     GUEST,
-    CUSTOMER
+    CUSTOMER,
+    ADMIN
 }

@@ -3,6 +3,9 @@ package com.glb.objects;
 import java.io.Serializable; 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import static com.glb.helpers.Helpers.round;
+import java.util.HashMap;
 
 /**
  *
@@ -21,13 +24,18 @@ public class Item implements Serializable{
     private String imageUrl;
     private List<String> genres;
     private int numOfDownloads;
+    private Map<String, Review>reviews;
     
     public Item(){
-        this.imageUrl = "yolo";
+        this.reviews = new HashMap<>();
+        this.genres = new ArrayList<>();
+       
     }
 
     public Item(String isbn, String title, String description, double avgRating, String downloadLink, 
             String author, String date, String language, String imageUrl, int numOfDownloads) {
+        this.reviews = new HashMap<>();
+        this.genres = new ArrayList<>();
         this.isbn = isbn;
         this.title = title;
         this.description = description;
@@ -138,6 +146,31 @@ public class Item implements Serializable{
     public void setNumOfDownloads(String numOfDownloads) {
         this.numOfDownloads = Integer.parseInt(numOfDownloads);
     }
+
+    public Map<String, Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Map<String, Review> reviews) {
+        this.reviews = reviews;
+    }
+    
+    public boolean addReview(User user, Review review){
+        if(this.reviews.get(user.getUsername()) == null){
+            this.reviews.put(user.getUsername(), review);
+            if(review.getRating()>-1){
+                this.setAvgRating(review.getRating());
+            }
+            return true;
+        }
+        return false;
+    }
+     
+    public void editReview(User user, Review review){
+        this.reviews.remove(user.getEmail());
+        this.reviews.put(user.getEmail(), review);
+    }
+    
     
     @Override
     public String toString(){
@@ -146,8 +179,5 @@ public class Item implements Serializable{
                 "\nImageUrl: " + this.imageUrl + "\n";
                 
     }
-    
-    private double round(double num){
-        return (double)Math.round(num * 100) / 100;
-    }
+     
 }
