@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import static com.glb.helpers.Helpers.println;
+import com.glb.objects.Review;
+import java.util.Map;
 
 /**
  *
@@ -45,8 +47,10 @@ public class BookDescriptionServlet extends HttpServlet {
         String url = "/bookDescription.jsp";
         HttpSession session = request.getSession();
         if(book != null){
-             println("Clicked " + isbn);
-             session.setAttribute("itemClicked", book); 
+             println("Clicked " + isbn); 
+             Map<String, Review> reviewsMap = bookService.getAllReviewsForBook(isbn);
+             book.setReviews(reviewsMap);
+             session.setAttribute("itemClicked", book);   
              RequestDispatcher dispatcher = request.getRequestDispatcher(url);
              dispatcher.forward(request, response); 
         }

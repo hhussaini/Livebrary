@@ -4,15 +4,7 @@ $(document).ready(function(){
         $('#emailModal').modal('show');
     });
    var avgStarRating = document.getElementById("avgStarID").getAttribute("value");
-   var theDiv = document.getElementById("avgStarID");
-   for(var i = 1; i < avgStarRating; i++){ 
-       theDiv.appendChild(createYellowStar(i));  
-   }
-   var decimal = avgStarRating - Math.floor(avgStarRating);
-   var widthOfImage = 36 * decimal;
-   console.log(widthOfImage); 
-   document.getElementById("clip").style.clip =  "rect(0px " + widthOfImage + "px 200px 0px)"; 
-   theDiv.appendChild(document.getElementById("clip")); 
+   updateAverageStarRating(avgStarRating);
 });
 
 function createYellowStar(i){
@@ -94,7 +86,7 @@ function submitReview(){
 $(document).on('ready', function(){
     //  console.log("hey: " + window.location.href);
     if(window.location.href === "BookDescriptionServlet"){
-        updateAverageRating(null);
+        updateAverageRatingAjax(null);
         $('#input-3').rating({displayOnly: true, step: 0.5});
     }
     else{
@@ -102,24 +94,37 @@ $(document).on('ready', function(){
     }     
 });
 
-function updateAverageRating(numOfStarsSelected){
+function updateAverageStarRating(avgStarRating){
+    var theDiv = document.getElementById("avgStarID");
+   for(var i = 1; i < avgStarRating; i++){ 
+       theDiv.appendChild(createYellowStar(i));  
+   }
+   var decimal = avgStarRating - Math.floor(avgStarRating);
+   var widthOfImage = 36 * decimal;
+   console.log(widthOfImage); 
+   document.getElementById("clip").style.clip =  "rect(0px " + widthOfImage + "px 200px 0px)"; 
+   theDiv.appendChild(document.getElementById("clip")); 
+}
+
+function updateAverageStarRatingAjax(numOfStarsSelected){
     var type = 'POST';
-    var url = 'UpdateAverageRatingServlet';
-    var isbn = document.getElementById("isbn").value.toString() + "";
+    var url = 'ItemReviewServlet';
+    var isbn = document.getElementById("isbn").value.toString();
+   
     var itemObject = {
-        numOfStars : numOfStarsSelected, 
+        numOfStars : numOfStarsSelected.toString(), 
         isbn : isbn
     };
+    
     $.ajax({ 
         type: type,
-        url: url,
+        url:  url,
         data: itemObject,
         dataType: 'json',
-        success: function(result) {  
-            console.log(result.avgNumOfStars);
-            document.getElementById("input-3").value = result.avgNumOfStars;
-            console.log("Average Rating: " + document.getElementById("input-3").value); 
-            
+        success: function(result){  
+            console.log("Success!"); 
+            updateAverageStarRating(result.avgRating);
+       
         },
         error: function(result){
             console.log("Error!");
@@ -179,13 +184,19 @@ function starRating(num){
          var id = 'star' + i.toString();
          document.getElementById(id).src = path;     
     } 
+    
+    
+    updateAverageStarRatingAjax(num);
 }
 
+ 
 
 function getStarColor(num){
     // returns true if star is white
     return document.getElementById('star' + num.toString()).getAttribute("value") === "0";  
 }
+
+
     
 
     

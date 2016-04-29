@@ -1,6 +1,8 @@
 package com.glb.daos;
 
 import com.glb.constants.CategoryMap;
+import static com.glb.daos.ConnectionUtil.getConnection;
+import com.glb.exceptions.ResourceHelperException;
 import static com.glb.helpers.Helpers.*;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
@@ -10,6 +12,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import com.glb.objects.Book;
+import com.glb.objects.Review;
+import com.glb.objects.User;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
@@ -213,4 +219,84 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         }
         return status;
     }
+    
+    public Map<String, Review> getAllReviewsForBook(String isbn){
+        Map<String, Review>reviewsMap = new HashMap<>();
+        Connection conn = getConnection();
+        ResultSet rs = null;
+        String query = "SELECT * FROM reviews WHERE isbn = '" + isbn + "'"; 
+        try {
+            Statement stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+            while (rs.next()) { 
+                Review review = new Review(); 
+                review.setRating(rs.getInt("rating")); 
+                review.setReviewText(rs.getString("reviewText")); 
+                String userName = rs.getString("username");
+                reviewsMap.put(userName, review);
+            }
+            rs.close();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            DbUtils.closeQuietly(rs);
+        }
+        return reviewsMap;
+    }
+    
+    @Override
+    public List<Book> getItemsList(String userName) {
+        List<Book> itemsList = new ArrayList<>();        
+        Connection conToUse = null;
+        java.sql.PreparedStatement ps = null;
+        try {
+            conToUse = getConnection();
+            String sql = "SELECT isbn from RESERVED WHERE username = ?";
+            
+            ps = (PreparedStatement) conToUse.prepareStatement(sql);
+            ps.setString(1, userName);
+            res = ps.executeQuery();
+            
+            while (res.next()) { 
+                  itemsList.add(this.getBookByIsbn(res.getString("isbn"))); 
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(ps);
+        }
+        
+        return itemsList;
+    }
+
+    @Override 
+    public Book addReview(Review review, Book book, User user) {
+        Connection conToUse = null;
+        PreparedStatement preparedStmt = null;
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            if (conToUse == null)
+                System.out.println("conToUse == null");
+             
+           
+            String sql = "INSERT INTO reviews(isbn, username, rating, reviewText) VALUES(?,?,?,?)";
+            preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
+            preparedStmt.setString(1, book.getIsbn());
+            preparedStmt.setString(2, user.getUsername());
+            preparedStmt.setInt(3, review.getRating());
+            preparedStmt.setString(4, review.getReviewText());
+            status = preparedStmt.executeUpdate(); 
+            book.addReview(user, review);
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            DbUtils.closeQuietly(preparedStmt);
+        }
+        return book;
+    }
+      
 }

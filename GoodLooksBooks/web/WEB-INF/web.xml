@@ -91,6 +91,10 @@
         <servlet-name>ContactSupportServlet</servlet-name>
         <servlet-class>com.glb.controllers.ContactSupportServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ItemReviewServlet</servlet-name>
+        <servlet-class>com.glb.controllers.ItemReviewServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -162,6 +166,10 @@
     <servlet-mapping>
         <servlet-name>ContactSupportServlet</servlet-name>
         <url-pattern>/ContactSupportServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ItemReviewServlet</servlet-name>
+        <url-pattern>/ItemReviewServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
