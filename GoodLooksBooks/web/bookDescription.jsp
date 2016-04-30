@@ -83,10 +83,13 @@
                 <button onclick="changeWishlist()" type="submit" class="btn btn-primary">Add to Wishlist</button>
                 <input type="hidden" name="isbn" value="${itemClicked.isbn}">
             </form> 
-           
+    
         </div>
-    </div> <!-- bookDescription-->
-        <!--        <hr class="fancy">
+             
+            <!--Review an item-->
+            
+            <div><font color="white" size="1">.</font>  <!--Some random filler-->
+                <hr class="fancy">
         <br>
         <form id="submitReviewForm" action="SubmitItemReviewServlet" method="post"> 
             <div class="container" style="width: 75%;">
@@ -99,26 +102,30 @@
         </form>
         <br><br><br>
         <hr class="fancy">
-        <br>
-        <div class="container" id="review-div" style="width: 75%;">
-            <p class="homework-comment">For grading purposes, here is an example of RemoveItemReview GUI representation</p>
-            <br><br>
-            <textarea class="review" id="reviewdetails2" name="review2">This book was awesome! I really really liked it and would totally recommend! 1 star reduction for such an ugly cover, though.
-            </textarea>
-            <br>
+        <br> 
+         </div>
+            
+          <!--Item Reviews-->
+          <div class="col-xs-12 col-sm-12" style="border-style: groove;">
             <button type="button" id="edit-review-btn" class="btn btn-info">Resubmit/edit review</button>
-            <br>
+            &nbsp;&nbsp;
             <button class="btn btn-danger" onClick="resetReview()" id="remove-review">Remove review</button>
-            <script>
-                //        function resetReview() {
-                //          var d = document.getElementById("review-div");
-                //          var t = document.getElementById("reviewdetails2");
-                //          d.removeChild(t);
-                //          document.getElementById("edit-review-btn").style.display = "none";
-                //          document.getElementById("remove-review").style.display = "none";
-                //        }
-            </script>
-        </div>-->
+            <br><br>
+          <input id="input-3" value="3" class="rating-md" style="font-size: 1.0em">
+          <label for="input-3" class="control-label"> It was OK </label>
+            <h4>By: Bob Mcbobson</h4>
+            <h5>This book was ok but jk it really sucked.</h5>
+            <br>
+            </div>  
+    </div> 
+            
+  
+            
+            
+            
+            
+        
+        
     <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModal" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
