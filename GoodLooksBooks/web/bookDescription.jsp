@@ -108,11 +108,23 @@
             </div>
             </c:if>
 <!--        </form>-->
-        <br><br><br>
+        <br><br><br> 
+        </div>
         <hr class="fancy">
-        <br> 
-         </div>
-          
+        <br>
+        
+        
+        <div class="col-xs-12 col-sm-12" style="border-style: groove;">
+            <button type="button" id="edit-review-btn" class="btn btn-info">Resubmit/edit review</button>
+            &nbsp;&nbsp;
+            <button class="btn btn-danger" onClick="resetReview()" id="remove-review">Remove review</button>
+            <br><br>
+          <input id="input-3" value="3" class="rating-md" style="font-size: 1.0em">
+          <label for="input-3" class="control-label"> It was OK </label>
+          <h4>By: </h4><h4 id="usernameTextID"></h4>
+            <h5 id="userReviewTextID"></h5>
+            <br> 
+        </div>
 
           <!--Item Reviews-->
           <c:forEach var="entry" items="${itemClicked.reviews}">
@@ -123,7 +135,7 @@
             <br><br>
           <input id="input-3" value="3" class="rating-md" style="font-size: 1.0em">
           <label for="input-3" class="control-label"> It was OK </label>
-            <h4>By: Bob Mcbobson</h4>
+            <h4>By: ${user.username}</h4>
             <h5><c:out value="${entry.value.reviewText}"/></h5>
             <br>  
             </div> 

@@ -96,7 +96,7 @@ public class ItemReviewServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
    
-        response.setContentType("application/json");
+      //  response.setContentType("application/json");
         String isbn = request.getParameter("isbn"); 
         String text = request.getParameter("text");
         int numOfStars = Integer.parseInt(request.getParameter("numOfStars"));
@@ -105,22 +105,35 @@ public class ItemReviewServlet extends HttpServlet {
         User user = (User)session.getAttribute("user");
         Review review = new Review(numOfStars, text); 
         Book book = bookService.getBookByIsbn(isbn);  
+        Map<String,Review>reviews = bookService.getAllReviewsForBook(isbn);
         book = bookService.addReview(review, book, user);
+        
         session.setAttribute("itemClicked", book);
+         
+        String str = "";
+        for(String username : book.getReviews().keySet()){
+            str = str + username + ":   " + book.getReviews().get(username).toString() + "\n";
+        }
+        throw new ServletException(str);
+      //  printData(request, response, book.getReviews());
+      //  review = book.getReviews().get(user.getUsername());
         
-        try {
-           response.getWriter().print(JsonHandler.createJSONObj(book));
-        } catch (JSONException ex) {
-            Logger.getLogger(ItemReviewServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-        
-
-
-
-
-
-
-    }     
+//        try {
+//           response.getWriter().print(JsonHandler.createJSONObj(user, book));
+//        } catch (JSONException ex) {
+//            Logger.getLogger(ItemReviewServlet.class.getName()).log(Level.SEVERE, null, ex);
+//        }  
+         
+    }  
+    
+    public static void printData(HttpServletRequest request, HttpServletResponse response, Map<String, Review>map) throws IOException{
+        try (PrintWriter out = response.getWriter()) {
+            out.println("In the print statement");
+            for(String username : map.keySet()){
+                out.println(username + ": " + map.get(username));
+           }
+        }
+    }
  
     /**
      * Returns a short description of the servlet.

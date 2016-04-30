@@ -40,7 +40,8 @@ public class Review {
     
     @Override
     public String toString(){
-        return this.rating + "";
+        return "Rating: " + this.rating + "\n" +
+               "Review: " + this.reviewText + "\n";
     }
     
     

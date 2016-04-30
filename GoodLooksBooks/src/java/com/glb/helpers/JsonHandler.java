@@ -7,6 +7,7 @@ package com.glb.helpers;
 
 import com.glb.objects.Book;
 import com.glb.objects.Review; 
+import com.glb.objects.User;
 import java.util.List;
 import java.util.Map;   
 import org.json.JSONArray;
@@ -20,10 +21,18 @@ import org.json.JSONObject;
 public class JsonHandler {
     
     protected JsonHandler(){}
+    
+    public static JSONObject createJSONObj(Review review) throws JSONException{
+        JSONObject jso = new JSONObject();
+        jso.put("rating", review.getRating());
+        jso.put("reviewText", review.getReviewText());
+        return jso;
+    }
   
     
-    public static JSONObject createJSONObj(Book book) throws JSONException{
+    public static JSONObject createJSONObj(User user, Book book) throws JSONException{
         JSONObject jso = new JSONObject();
+        jso.put("currentUser", user.getUsername());
         jso.put("isbn", book.getIsbn());
         jso.put("title", book.getTitle());
         jso.put("description", book.getDescription());
@@ -39,14 +48,21 @@ public class JsonHandler {
         return jso;
     }
     
-    public static JSONArray createJSONArray(Map<String, Review> map){
+    public static JSONArray createJSONArray(Map<String, Review> reviews) throws JSONException{
         JSONArray jsonArray = new JSONArray();
-        for (String key : map.keySet()) {
-            jsonArray.put(map.get(key));
+        for (String key : reviews.keySet()) {
+            Review review = reviews.get(key); 
+            JSONObject jso = new JSONObject();
+            jso.put("rating", review.getRating());
+            jso.put("reviewText", review.getReviewText());
+            jso.put("userReview", key);
+            jsonArray.put(jso);
         }
         return jsonArray;
     }
     
+      
+    // Have to Edit this later
     public static JSONArray createJSONArray(List<String>genres){
         JSONArray jsonArray = new JSONArray();
         for(String genre : genres){

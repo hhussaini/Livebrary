@@ -4,6 +4,9 @@ $(document).ready(function(){
   console.log("isbn: " + document.getElementById("isbn").value);
    var avgStarRating = document.getElementById("avgStarID").getAttribute("value");
    updateAverageStarRating(avgStarRating);
+   
+   
+   
     $("#emailButton").click(function(){
         console.log("email button clicked");
         $('#emailModal').modal('show');
@@ -115,6 +118,31 @@ function updateReviewsAjax(text){
         dataType: 'json',
         success: function(result){  
             console.log("Success!"); 
+            console.log(JSON.stringify(result.reviews));
+            var currentUser = result.currentUser;
+            
+            var jsonArray = result.reviews;
+            console.log("Length of jsoArray: " + jsonArray.length);
+            for (var i=0; i<jsonArray.length; i++){
+                for (var jso in jsonArray[i]) {
+                  //  var name = jso.userReview;
+                    console.log(jso);
+                    if(name === currentUser){
+                        
+                    }
+                }
+            }
+
+            
+            
+            
+           // var userName = document.getElementById("usernameTextID");
+           
+           var text = result.reviews[result.currentUser].reviewText;
+        //   console.log("Review text: " + text);
+           document.getElementById("userReviewTextID").innerHTML = text;
+            
+           updateAverageStarRating(result.avgRating);
            // updateAverageStarRating(result.avgRating);
        
         },
@@ -137,6 +165,7 @@ $(document).on('ready', function(){
 });
 
 function updateAverageStarRating(avgStarRating){
+   avgStarRating = Math.round(avgStarRating * 10)/10;
    console.log("Avg rating: " + avgStarRating);
    var theDiv = document.getElementById("avgStarID");
    for(var i = 1; i <= avgStarRating; i++){ 
