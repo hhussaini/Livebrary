@@ -158,7 +158,7 @@ public class Item implements Serializable{
             this.numberOfRatings++;
         }
         
-        this.avgRating = (this.numberOfRatings > 0) ? ((double)total / this.numberOfRatings) : 0;
+        this.avgRating = (this.numberOfRatings > 0) ? (round((double)total / this.numberOfRatings)) : 0;
         this.reviews = reviews;
     } 
     

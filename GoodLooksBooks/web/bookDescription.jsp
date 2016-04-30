@@ -58,10 +58,10 @@
             <img src = ${itemClicked.imageUrl} class="img-rounded" alt="Andersonville: A Story of Rebel Military Prisons" width="250" height="250">
             <button type="submit" id="fav" onclick="setColor('fav','#FF0000');" class="btn-fav"><span class="glyphicon glyphicon-heart"></span> Fav!</button>
             <div> 
-                <label for="input-3" class="control-label">Avg. Rating:&nbsp;&nbsp;&nbsp; ${itemClicked.avgRating}/5</label>
+                Avg. Rating:&nbsp;&nbsp;&nbsp; <label id="avgRatingText" for="input-3" class="control-label"><c:out value="${itemClicked.avgRating}"/>/5</label>
                 <br>
                 <div id="avgStarID" value="${itemClicked.avgRating}">
-                    <img id="clip" src="assets/yellowStar.png" />
+<!--                    <img id="clip" src="assets/yellowStar.png" />--> 
                 </div>
                 <br><br>
              

@@ -132,6 +132,7 @@ function updateReviewsAjax(text){
                     console.log("In if statment: " + text);
                     document.getElementById("usernameTextID").innerHTML = username;
                     document.getElementById("userReviewTextID").innerHTML = reviewText;
+                    document.getElementById("avgRatingText").innerHTML = result.avgRating;
                     break;
                 } 
             }
@@ -161,14 +162,20 @@ $(document).on('ready', function(){
 function updateAverageStarRating(avgStarRating){
    avgStarRating = Math.round(avgStarRating * 10)/10;
    console.log("Avg rating: " + avgStarRating);
-   var theDiv = document.getElementById("avgStarID");
-   for(var i = 1; i <= avgStarRating; i++){ 
+   var theDiv = document.getElementById("avgStarID"); 
+   while (theDiv.hasChildNodes()) {
+        theDiv.removeChild(theDiv.lastChild);
+   } 
+    for(var i = 1; i <= avgStarRating; i++){ 
        theDiv.appendChild(createYellowStar(i));  
    }
    var decimal = avgStarRating - Math.floor(avgStarRating);
-   var widthOfImage = 36 * decimal;  
-   document.getElementById("clip").style.clip =  "rect(0px " + widthOfImage + "px 200px 0px)"; 
-   theDiv.appendChild(document.getElementById("clip")); 
+   var widthOfImage = 36 * decimal;   
+   var imgElement = document.createElement("img");
+   imgElement.setAttribute("id", "clip");
+   imgElement.setAttribute("src", "assets/yellowStar.png");
+   theDiv.appendChild(imgElement); 
+   document.getElementById("clip").style.clip =  "rect(0px " + widthOfImage + "px 200px 0px)";  
 }
 
 //function updateAverageStarRatingAjax(numOfStarsSelected){
