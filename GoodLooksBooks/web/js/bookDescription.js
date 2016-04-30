@@ -1,10 +1,11 @@
 $(document).ready(function(){
+   var avgStarRating = document.getElementById("avgStarID").getAttribute("value");
+   updateAverageStarRating(avgStarRating);
     $("#emailButton").click(function(){
         console.log("email button clicked");
         $('#emailModal').modal('show');
     });
-   var avgStarRating = document.getElementById("avgStarID").getAttribute("value");
-   updateAverageStarRating(avgStarRating);
+
 });
 
 function createYellowStar(i){
@@ -91,17 +92,17 @@ $(document).on('ready', function(){
     }
     else{
         console.log("Not on page");
-    }     
+    }      
 });
 
 function updateAverageStarRating(avgStarRating){
-    var theDiv = document.getElementById("avgStarID");
-   for(var i = 1; i < avgStarRating; i++){ 
+   console.log("Avg rating: " + avgStarRating);
+   var theDiv = document.getElementById("avgStarID");
+   for(var i = 1; i <= avgStarRating; i++){ 
        theDiv.appendChild(createYellowStar(i));  
    }
    var decimal = avgStarRating - Math.floor(avgStarRating);
-   var widthOfImage = 36 * decimal;
-   console.log(widthOfImage); 
+   var widthOfImage = 36 * decimal;  
    document.getElementById("clip").style.clip =  "rect(0px " + widthOfImage + "px 200px 0px)"; 
    theDiv.appendChild(document.getElementById("clip")); 
 }

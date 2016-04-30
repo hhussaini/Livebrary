@@ -115,7 +115,7 @@ public class BookServiceImpl implements BookService {
     @Override
      public Map<String, Review> getAllReviewsForBook(String isbn){
         Connection conn = null;
-        Map<String, Review>reviewsMap = new HashMap<>();
+        Map<String, Review>reviewsMap = null;
         try {            
             conn = ConnectionUtil.getConnection();
             BookDao bookDao = DaoFactory.getBookDao();

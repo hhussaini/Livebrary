@@ -77,10 +77,8 @@ public class Item implements Serializable{
         return avgRating;
     }
 
-    public void setAvgRating(int rating) {
-        double total = ((this.avgRating * this.numberOfRatings) + (rating));
-        this.numberOfRatings++; 
-        this.avgRating = round(total / this.numberOfRatings); 
+    public void setAvgRating(int avgRating) {
+        this.avgRating = avgRating;
     }
 
     public int getNumberOfRatings() {
@@ -152,6 +150,15 @@ public class Item implements Serializable{
     }
 
     public void setReviews(Map<String, Review> reviews) {
+        this.numberOfRatings = 0;
+        int total = 0;
+        for(String username : reviews.keySet()){
+            Review review = reviews.get(username);
+            total = total + review.getRating();
+            this.numberOfRatings++;
+        }
+        
+        this.avgRating = (double)total / this.numberOfRatings;
         this.reviews = reviews;
     }
     
@@ -159,11 +166,17 @@ public class Item implements Serializable{
         if(this.reviews.get(user.getUsername()) == null){
             this.reviews.put(user.getUsername(), review);
             if(review.getRating()>-1){
-                this.setAvgRating(review.getRating());
+                this.updateAvgRating(review.getRating());
             }
             return true;
         }
         return false;
+    }
+    
+    public void updateAvgRating(int rating){
+        double total = ((this.avgRating * this.numberOfRatings) + (rating));
+        this.numberOfRatings++; 
+        this.avgRating = round(total / this.numberOfRatings); 
     }
      
     public void editReview(User user, Review review){

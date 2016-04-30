@@ -46,11 +46,13 @@ public class BookDescriptionServlet extends HttpServlet {
         Book book = bookService.getBookByIsbn(isbn);
         String url = "/bookDescription.jsp";
         HttpSession session = request.getSession();
-        if(book != null){
+        if(book != null){ 
              println("Clicked " + isbn); 
              Map<String, Review> reviewsMap = bookService.getAllReviewsForBook(isbn);
              book.setReviews(reviewsMap);
              session.setAttribute("itemClicked", book);   
+          //   printData(request, response, reviewsMap);
+            
              RequestDispatcher dispatcher = request.getRequestDispatcher(url);
              dispatcher.forward(request, response); 
         }
@@ -86,6 +88,15 @@ public class BookDescriptionServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
           processRequest(request, response);
+    }
+    
+    public static void printData(HttpServletRequest request, HttpServletResponse response, Map<String, Review>map) throws IOException{
+         try (PrintWriter out = response.getWriter()) {
+           out.println("In the print statement");
+           for(String username : map.keySet()){
+                out.println(username + ": " + map.get(username));
+           }
+         }
     }
     
     /**

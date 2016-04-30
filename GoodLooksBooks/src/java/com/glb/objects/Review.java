@@ -38,5 +38,10 @@ public class Review {
         this.reviewText = reviewText;
     }
     
+    @Override
+    public String toString(){
+        return this.rating + "";
+    }
+    
     
 }

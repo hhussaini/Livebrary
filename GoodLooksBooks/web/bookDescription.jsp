@@ -59,7 +59,7 @@
             <button type="submit" id="fav" onclick="setColor('fav','#FF0000');" class="btn-fav"><span class="glyphicon glyphicon-heart"></span> Fav!</button>
             <div> 
                 <label for="input-3" class="control-label">Avg. Rating</label><br>
-                <div id="avgStarID" value="0.5">
+                <div id="avgStarID" value="${itemClicked.avgRating}">
                     <img id="clip" src="assets/yellowStar.png" />
                  </div>
                 <br><br>
