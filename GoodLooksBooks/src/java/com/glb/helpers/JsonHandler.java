@@ -55,7 +55,7 @@ public class JsonHandler {
             JSONObject jso = new JSONObject();
             jso.put("rating", review.getRating());
             jso.put("reviewText", review.getReviewText());
-            jso.put("userReview", key);
+            jso.put("username", key);
             jsonArray.put(jso);
         }
         return jsonArray;

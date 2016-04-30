@@ -135,7 +135,7 @@
             <br><br>
           <input id="input-3" value="3" class="rating-md" style="font-size: 1.0em">
           <label for="input-3" class="control-label"> It was OK </label>
-            <h4>By: ${user.username}</h4>
+            <h4>By: ${entry.key}</h4>
             <h5><c:out value="${entry.value.reviewText}"/></h5>
             <br>  
             </div> 

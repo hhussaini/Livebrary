@@ -107,6 +107,7 @@ public class ItemReviewServlet extends HttpServlet {
         Book book = bookService.getBookByIsbn(isbn);  
         Map<String,Review>reviews = bookService.getAllReviewsForBook(isbn);
         bookService.addReview(review, book, user);  //returns an int (status)
+        reviews.put(user.getUsername(), review);
         book.setReviews(reviews);
         session.setAttribute("itemClicked", book);
          

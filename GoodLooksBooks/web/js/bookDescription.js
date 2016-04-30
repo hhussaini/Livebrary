@@ -118,29 +118,23 @@ function updateReviewsAjax(text){
         dataType: 'json',
         success: function(result){  
             console.log("Success!"); 
-            console.log(JSON.stringify(result.reviews));
+            //console.log(JSON.stringify(result.reviews));
             var currentUser = result.currentUser;
-            
+             var text = "";
             var jsonArray = result.reviews;
             console.log("Length of jsoArray: " + jsonArray.length);
             for (var i=0; i<jsonArray.length; i++){
-                for (var jso in jsonArray[i]) {
-                  //  var name = jso.userReview;
-                    console.log(jso);
-                    if(name === currentUser){
-                        
-                    }
-                }
+                var starRating = jsonArray[i].rating;
+                var username = jsonArray[i].username;
+                var reviewText = jsonArray[i].reviewText;
+                console.log();
+                if(currentUser === username){
+                    console.log("In if statment: " + text);
+                    document.getElementById("usernameTextID").innerHTML = username;
+                    document.getElementById("userReviewTextID").innerHTML = reviewText;
+                    break;
+                } 
             }
-
-            
-            
-            
-           // var userName = document.getElementById("usernameTextID");
-           
-           var text = result.reviews[result.currentUser].reviewText;
-        //   console.log("Review text: " + text);
-           document.getElementById("userReviewTextID").innerHTML = text;
             
            updateAverageStarRating(result.avgRating);
            // updateAverageStarRating(result.avgRating);
