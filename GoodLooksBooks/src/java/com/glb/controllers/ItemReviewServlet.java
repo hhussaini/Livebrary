@@ -80,7 +80,8 @@ public class ItemReviewServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-      //  processRequest(request, response);
+ 
+      
     }
 
     /**
@@ -94,37 +95,31 @@ public class ItemReviewServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    //    processRequest(request, response);
+   
         response.setContentType("application/json");
-        int numOfStars = Integer.parseInt(request.getParameter("numOfStars"));
         String isbn = request.getParameter("isbn"); 
+        String text = request.getParameter("text");
+        int numOfStars = Integer.parseInt(request.getParameter("numOfStars"));
+ 
         HttpSession session = request.getSession();
-       
         User user = (User)session.getAttribute("user");
-        Review review = new Review();
-        review.setRating(numOfStars);  
+        Review review = new Review(numOfStars, text); 
         Book book = bookService.getBookByIsbn(isbn);  
         book = bookService.addReview(review, book, user);
+        session.setAttribute("itemClicked", book);
         
         try {
            response.getWriter().print(JsonHandler.createJSONObj(book));
         } catch (JSONException ex) {
             Logger.getLogger(ItemReviewServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
         
-//        JSONArray jsonArray = new JSONArray();
-//        JSONObject jsonobj = new JSONObject(); 
-//        try {
-//            jsonobj.put("isbn", book.getIsbn());
-//            jsonobj.put("title", book.getTitle());
-//            jsonArray.put(jsonobj);
-//            
-//            // response.getWriter().print(jso.);
-//        } catch (JSONException ex) {
-//            Logger.getLogger(ItemReviewServlet.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//          response.getWriter().print(jsonArray);
-         
+
+
+
+
+
+
     }     
  
     /**

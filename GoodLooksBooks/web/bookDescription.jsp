@@ -64,14 +64,7 @@
                     <img id="clip" src="assets/yellowStar.png" />
                 </div>
                 <br><br>
-                <c:if test="${user.type == 'customer'}">
-                <label for="input-2" class="control-label">Your Rating</label><br>
-                <img onclick="starRating(1)" value = "0" id="star1" src="assets/star.png" /> 
-                <img onclick="starRating(2)" value = "0" id="star2" src="assets/star.png" /> 
-                <img onclick="starRating(3)" value = "0" id="star3" src="assets/star.png" /> 
-                <img onclick="starRating(4)" value = "0" id="star4" src="assets/star.png" /> 
-                <img onclick="starRating(5)" value = "0" id="star5" src="assets/star.png" /> 
-                </c:if>
+             
                 <br> 
             </div>
             <button type="button" name = "button1" onclick="sampleFunction()" class="btn btn-primary">Sample</button>
@@ -88,24 +81,41 @@
              
             <!--Review an item-->
             
-            <div><font color="white" size="1">.</font>  <!--Some random filler-->
+            <div><font color="white" size="100">.</font>  <!--Some random filler-->
                 <hr class="fancy">
         <br>
-        <form id="submitReviewForm" action="SubmitItemReviewServlet" method="post"> 
-            <div class="container" style="width: 75%;">
+<!--        <form id="submitReviewForm" action="SubmitItemReviewServlet" method="post"> -->
+             
+            <c:if test="${user.type == 'customer' && itemClicked.reviews[user.username] == null}" >
+            <div id="submittingReviewID" class="container" style = "width: 75%;">
+                <div id="userRatingID" style="display: none;">
+                <label for="input-2" class="control-label">Your Rating</label><br>
+                <label>
+                <img onclick="starRating(1)" value = "0" id="star1" src="assets/star.png" /> 
+                <img onclick="starRating(2)" value = "0" id="star2" src="assets/star.png" /> 
+                <img onclick="starRating(3)" value = "0" id="star3" src="assets/star.png" /> 
+                <img onclick="starRating(4)" value = "0" id="star4" src="assets/star.png" /> 
+                <img onclick="starRating(5)" value = "0" id="star5" src="assets/star.png" /> 
+                &nbsp;&nbsp;&nbsp;
+                <font size ="4" id="starDescriptionID" style="float:right;"></font>
+                </label>
+                </div>
                 <textarea class="review collapse" id="reviewdetails" name="review" placeholder="Describe your review...">
                 </textarea>
                 <button class="btn btn-success" id="reviewBtn" onClick = "submitReview()" style="display: none;">Submit</button>
                 <br>
                 <button type="button" onClick="showSubmit()" class="btn btn-info" data-toggle="collapse" data-target="#reviewdetails">Review this item</button>
             </div>
-        </form>
+            </c:if>
+<!--        </form>-->
         <br><br><br>
         <hr class="fancy">
         <br> 
          </div>
-            
+          
+
           <!--Item Reviews-->
+          <c:forEach var="entry" items="${itemClicked.reviews}">
           <div class="col-xs-12 col-sm-12" style="border-style: groove;">
             <button type="button" id="edit-review-btn" class="btn btn-info">Resubmit/edit review</button>
             &nbsp;&nbsp;
@@ -114,9 +124,11 @@
           <input id="input-3" value="3" class="rating-md" style="font-size: 1.0em">
           <label for="input-3" class="control-label"> It was OK </label>
             <h4>By: Bob Mcbobson</h4>
-            <h5>This book was ok but jk it really sucked.</h5>
-            <br>
-            </div>  
+            <h5><c:out value="${entry.value.reviewText}"/></h5>
+            <br>  
+            </div> 
+          <br>
+          </c:forEach>
     </div> 
             
   

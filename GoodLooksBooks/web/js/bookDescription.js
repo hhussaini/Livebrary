@@ -1,3 +1,5 @@
+var starsSelected;
+
 $(document).ready(function(){
   console.log("isbn: " + document.getElementById("isbn").value);
    var avgStarRating = document.getElementById("avgStarID").getAttribute("value");
@@ -45,10 +47,17 @@ function showSubmit() {
     var element = document.getElementById('reviewBtn'),
             style = window.getComputedStyle(element),
             display = style.getPropertyValue('display');
+    
+    var elementStar = document.getElementById('userRatingID'),
+        styleStar = window.getComputedStyle(element),
+        displayStr = style.getPropertyValue('display');
+    
     if (display === "none") {
         document.getElementById("reviewBtn").style.display = "block";
+        document.getElementById("userRatingID").style.display = "block";
     } else {
         document.getElementById("reviewBtn").style.display = "none";
+        document.getElementById("userRatingID").style.display = "none";
     }
 }
 
@@ -82,7 +91,38 @@ function setColor(btn, color){
 function submitReview(){
     var text = document.getElementById("reviewdetails").value;
     console.log(text);
-    document.getElementById("submitReviewForm").submit();   
+    updateReviewsAjax(text);
+    document.getElementById("submittingReviewID").style.display = 'none';
+   
+  //  document.getElementById("submitReviewForm").submit();   
+}
+
+function updateReviewsAjax(text){
+    var type = 'POST';
+    var url = 'ItemReviewServlet';
+    var isbn = document.getElementById("isbn").value.toString();
+   
+    var itemObject = {
+        numOfStars : starsSelected,
+        text : text,
+        isbn : isbn
+    };
+    
+    $.ajax({ 
+        type: type,
+        url:  url,
+        data: itemObject,
+        dataType: 'json',
+        success: function(result){  
+            console.log("Success!"); 
+           // updateAverageStarRating(result.avgRating);
+       
+        },
+        error: function(result){
+            console.log("Error!");
+            console.log(result);
+        }
+    });
 }
 
 $(document).on('ready', function(){
@@ -108,32 +148,32 @@ function updateAverageStarRating(avgStarRating){
    theDiv.appendChild(document.getElementById("clip")); 
 }
 
-function updateAverageStarRatingAjax(numOfStarsSelected){
-    var type = 'POST';
-    var url = 'ItemReviewServlet';
-    var isbn = document.getElementById("isbn").value.toString();
-   
-    var itemObject = {
-        numOfStars : numOfStarsSelected.toString(), 
-        isbn : isbn
-    };
-    
-    $.ajax({ 
-        type: type,
-        url:  url,
-        data: itemObject,
-        dataType: 'json',
-        success: function(result){  
-            console.log("Success!"); 
-            updateAverageStarRating(result.avgRating);
-       
-        },
-        error: function(result){
-            console.log("Error!");
-            console.log(result);
-        }
-    });
-}
+//function updateAverageStarRatingAjax(numOfStarsSelected){
+//    var type = 'POST';
+//    var url = 'ItemReviewServlet';
+//    var isbn = document.getElementById("isbn").value.toString();
+//   
+//    var itemObject = {
+//        numOfStars : numOfStarsSelected.toString(), 
+//        isbn : isbn
+//    };
+//    
+//    $.ajax({ 
+//        type: type,
+//        url:  url,
+//        data: itemObject,
+//        dataType: 'json',
+//        success: function(result){  
+//            console.log("Success!"); 
+//            updateAverageStarRating(result.avgRating);
+//       
+//        },
+//        error: function(result){
+//            console.log("Error!");
+//            console.log(result);
+//        }
+//    });
+//}
 
 function validateImgUrl(id) {
     var book = document.getElementById(id);
@@ -185,10 +225,22 @@ function starRating(num){
         }
          var id = 'star' + i.toString();
          document.getElementById(id).src = path;     
-    } 
+    }
+    
+    var comment = "";
+    switch(num){ 
+        case 1 : comment = "I hate it";              break;
+        case 2 : comment = "I don't really like it"; break;
+        case 3 : comment = "It's not bad";           break;
+        case 4 : comment = "I like it";              break;
+        case 5 : comment = "I love it";              break;
+    }
+    
+    starsSelected = num;
+    var element = document.getElementById("starDescriptionID").innerHTML = comment;
     
     
-    updateAverageStarRatingAjax(num);
+   // updateAverageStarRatingAjax(num);
 }
 
  
