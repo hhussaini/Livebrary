@@ -221,6 +221,31 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     }
     
     @Override
+    public List<Book> getItemsList(String userName) {
+        List<Book> itemsList = new ArrayList<>();        
+        Connection conToUse = null;
+        java.sql.PreparedStatement ps = null;
+        try {
+            conToUse = getConnection();
+            String sql = "SELECT isbn from RESERVED WHERE username = ?";
+            
+            ps = (PreparedStatement) conToUse.prepareStatement(sql);
+            ps.setString(1, userName);
+            res = ps.executeQuery();
+            
+            while (res.next()) { 
+                  itemsList.add(this.getBookByIsbn(res.getString("isbn"))); 
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(ps);
+        }
+        
+        return itemsList;
+    }
+    
+     @Override
     public Map<String, Review> getAllReviewsForBook(String isbn){
         Map<String, Review>reviewsMap = new HashMap<>();
         Connection conn = getConnection();
@@ -246,34 +271,9 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         }
         return reviewsMap;
     }
-    
-    @Override
-    public List<Book> getItemsList(String userName) {
-        List<Book> itemsList = new ArrayList<>();        
-        Connection conToUse = null;
-        java.sql.PreparedStatement ps = null;
-        try {
-            conToUse = getConnection();
-            String sql = "SELECT isbn from RESERVED WHERE username = ?";
-            
-            ps = (PreparedStatement) conToUse.prepareStatement(sql);
-            ps.setString(1, userName);
-            res = ps.executeQuery();
-            
-            while (res.next()) { 
-                  itemsList.add(this.getBookByIsbn(res.getString("isbn"))); 
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            DbUtils.closeQuietly(ps);
-        }
-        
-        return itemsList;
-    }
 
     @Override 
-    public Book addReview(Review review, Book book, User user) {
+    public int addReview(Review review, Book book, User user) {
         Connection conToUse = null;
         PreparedStatement preparedStmt = null;
         int status = 0;
@@ -291,14 +291,14 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             preparedStmt.setString(4, review.getReviewText());
             status = preparedStmt.executeUpdate(); 
             
-            book.addReview(user, review);
+           // book.addReview(user, review);
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
             DbUtils.closeQuietly(preparedStmt);
         }
-        return book;
+        return status;
     }
       
 }

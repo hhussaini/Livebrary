@@ -145,7 +145,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book addReview(Review review, Book book, User user){
+    public int addReview(Review review, Book book, User user){
 
         Connection conn = null;
         int status = 0;
@@ -153,11 +153,11 @@ public class BookServiceImpl implements BookService {
             conn = ConnectionUtil.getConnection();
             BookDao bookDao = DaoFactory.getBookDao();
             bookDao.setConnection(conn);
-            return bookDao.addReview(review, book, user);
+            status = bookDao.addReview(review, book, user);
         } catch (ResourceHelperException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return null;
+        return status;
     }
 }

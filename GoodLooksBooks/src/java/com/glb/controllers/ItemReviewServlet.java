@@ -106,23 +106,23 @@ public class ItemReviewServlet extends HttpServlet {
         Review review = new Review(numOfStars, text); 
         Book book = bookService.getBookByIsbn(isbn);  
         Map<String,Review>reviews = bookService.getAllReviewsForBook(isbn);
-        book = bookService.addReview(review, book, user);
-        
+        bookService.addReview(review, book, user);  //returns an int (status)
+        book.setReviews(reviews);
         session.setAttribute("itemClicked", book);
          
-        String str = "";
-        for(String username : book.getReviews().keySet()){
-            str = str + username + ":   " + book.getReviews().get(username).toString() + "\n";
-        }
-        throw new ServletException(str);
+//        String str = "";
+//        for(String username : book.getReviews().keySet()){
+//            str = str + username + ":   " + book.getReviews().get(username).toString() + "\n";
+//        }
+//        throw new ServletException(str);
       //  printData(request, response, book.getReviews());
       //  review = book.getReviews().get(user.getUsername());
         
-//        try {
-//           response.getWriter().print(JsonHandler.createJSONObj(user, book));
-//        } catch (JSONException ex) {
-//            Logger.getLogger(ItemReviewServlet.class.getName()).log(Level.SEVERE, null, ex);
-//        }  
+        try {
+           response.getWriter().print(JsonHandler.createJSONObj(user, book));
+        } catch (JSONException ex) {
+            Logger.getLogger(ItemReviewServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }  
          
     }  
     

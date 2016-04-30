@@ -14,5 +14,5 @@ public interface BookService {
     public int addBookToUserItems(String username, String isbn);
     public List<Book> getItemsList(String username);
     public Map<String, Review> getAllReviewsForBook(String isbn);
-    public Book addReview(Review review, Book book, User user);
-} 
+    public int addReview(Review review, Book book, User user);
+}  
