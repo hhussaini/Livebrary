@@ -14,9 +14,9 @@
         <a href="librarianSignUp.jsp" class="btn btn-info">Librarian Sign Up</a></li>
         <input type="hidden" name="userType" value="publisher">
         <div class="form-group">
-          <label class = "control-label regLabel" for="accessCode">Publisher Access Code:</label>
+          <label class = "control-label regLabel" for="company">Publisher Name:</label>
           <div class = "controls regControl">
-              <input type="text" class="form-control" name = "accessCode">
+              <input type="text" class="form-control" name = "company">
           </div>
         </div>
         <jsp:include page="/signUpForm.jsp" />

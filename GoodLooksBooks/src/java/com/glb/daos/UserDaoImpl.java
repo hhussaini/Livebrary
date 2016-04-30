@@ -41,7 +41,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             ps.setString(9, user.getZipcode());
             ps.setString(10, user.getPhoneNumber());
             ps.setString(11, user.getType());
-            ps.setString(12, user.getAccessCode());
+            ps.setString(12, user.getCompany());
             status = ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -53,7 +53,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
 
     @Override
     public User getUser(String username, String password) {
-        String sql = "select U.username, U.password, U.firstname, U.lastname, U.street, U.city, U.state, U.zipcode, U.phoneNumber, U.email, U.type, U.accessCode"
+        String sql = "select U.username, U.password, U.firstname, U.lastname, U.street, U.city, U.state, U.zipcode, U.phoneNumber, U.email, U.type, U.company"
                         + "   from USERS U "
                         + "   where U.username = '" + username + "'"
                         + "   and U.password = '" + password + "'";
@@ -78,7 +78,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
               String phoneNumber = res.getString("phoneNumber"); 
               String email = res.getString("email");
               String type = res.getString("type");
-              String accessCode = res.getString("accessCode");
+              String company = res.getString("company");
               user.setUsername(user_name);
               user.setPassword(pass_word);
               user.setFirstName(firstname);
@@ -90,7 +90,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
               user.setPhoneNumber(phoneNumber);
               user.setEmail(email);
               user.setType(type);
-              user.setAccessCode(accessCode);
+              user.setCompany(company);
               count++;
             }
             if (count != 1) {

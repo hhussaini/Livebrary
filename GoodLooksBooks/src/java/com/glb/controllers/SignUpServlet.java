@@ -77,13 +77,13 @@ public class SignUpServlet extends HttpServlet {
         String phoneNumber = request.getParameter("phoneNumber");
         String email = request.getParameter("email");
         String userType = request.getParameter("userType");
-        String accessCode = request.getParameter("accessCode");
+        String company = request.getParameter("company");
         
         RequestDispatcher dispatcher = null;
-        if (isNull(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email) || (!userType.equals("customer") && accessCode == null)) {
+        if (isNull(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email) || (!userType.equals("customer") && company == null)) {
             throw new ServletException("Please fill in all fields.");
         }
-        User user = new User(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType, accessCode);
+        User user = new User(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType, company);
         
         int status = 0;
         try {

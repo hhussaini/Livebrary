@@ -25,12 +25,10 @@
             <li><a href="UserMyItemsServlet">My Items</a></li>
             <li><a href="WishlistServlet">My Wishlist</a></li>
             <li role="separator" class="divider"></li>
-            <li onclick="signOutForm.submit();"><a href="#">Sign Out</a></li>
+            <li><a href="SignOutServlet">Sign Out</a></li>
           </ul>
         </li>
       </ul>
     </div>
   </nav>
 <br><br><br>
-
-<jsp:include page="/navbarForms.jsp" />

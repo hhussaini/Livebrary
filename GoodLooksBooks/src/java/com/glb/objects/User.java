@@ -23,12 +23,12 @@ public class User implements Serializable{
     private String phoneNumber;
     private String email;
     private String type;
-    private String accessCode;
+    private String company;
     
     public User(){}
 
     public User(String username, String password, String firstName, String lastName, String street, 
-            String city, String state, String zipcode, String phoneNumber, String email, String type, String accessCode) {
+            String city, String state, String zipcode, String phoneNumber, String email, String type, String company) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -40,7 +40,7 @@ public class User implements Serializable{
         this.phoneNumber = phoneNumber;
         this.email = email;    
         this.type = type;
-        this.accessCode = accessCode;
+        this.company = company;
     }
 
     public String getUsername() {
@@ -135,11 +135,11 @@ public class User implements Serializable{
         this.type = type;
     }
 
-    public String getAccessCode() {
-        return accessCode;
+    public String getCompany() {
+        return company;
     }
 
-    public void setAccessCode(String accessCode) {
-        this.accessCode = accessCode;
+    public void setCompany(String company) {
+        this.company = company;
     }
 }

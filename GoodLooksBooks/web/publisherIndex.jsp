@@ -16,7 +16,7 @@
             </div>
             <div class="panel-body">
                 <div class="list-group">
-                    <a href="editItems.html"><img alt="brand" width = "100" height = "100" src="assets/edit-books-icon.jpg"></a>
+                    <a href="editItems.jsp"><img alt="brand" width = "100" height = "100" src="assets/edit-books-icon.jpg"></a>
                     Edit Item Data
                 </div>
             </div>
