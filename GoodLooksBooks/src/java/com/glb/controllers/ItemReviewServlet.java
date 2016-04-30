@@ -6,7 +6,6 @@
 package com.glb.controllers;
 
 import com.glb.factories.ServiceFactory;
-import static com.glb.helpers.Helpers.println;
 import com.glb.helpers.JsonHandler;
 import com.glb.objects.Book;
 import com.glb.objects.Review;
@@ -23,12 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession; 
 import static com.glb.helpers.Helpers.println;
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
- 
- 
-
 
 /**
  *

@@ -1,11 +1,9 @@
 var starsSelected;
 
 $(document).ready(function(){
-  console.log("isbn: " + document.getElementById("isbn").value);
+   console.log("isbn: " + document.getElementById("isbn").value);
    var avgStarRating = document.getElementById("avgStarID").getAttribute("value");
    updateAverageStarRating(avgStarRating);
-   
-   
    
     $("#emailButton").click(function(){
         console.log("email button clicked");
@@ -272,8 +270,6 @@ function starRating(num){
     
    // updateAverageStarRatingAjax(num);
 }
-
- 
 
 function getStarColor(num){
     // returns true if star is white
