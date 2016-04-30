@@ -290,6 +290,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             preparedStmt.setInt(3, review.getRating());
             preparedStmt.setString(4, review.getReviewText());
             status = preparedStmt.executeUpdate(); 
+            
             book.addReview(user, review);
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);

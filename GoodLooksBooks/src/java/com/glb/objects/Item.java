@@ -158,9 +158,9 @@ public class Item implements Serializable{
             this.numberOfRatings++;
         }
         
-        this.avgRating = (double)total / this.numberOfRatings;
+        this.avgRating = (this.numberOfRatings > 0) ? ((double)total / this.numberOfRatings) : 0;
         this.reviews = reviews;
-    }
+    } 
     
     public boolean addReview(User user, Review review){
         if(this.reviews.get(user.getUsername()) == null){
@@ -169,7 +169,7 @@ public class Item implements Serializable{
                 this.updateAvgRating(review.getRating());
             }
             return true;
-        }
+        } 
         return false;
     }
     

@@ -1,4 +1,5 @@
 $(document).ready(function(){
+  console.log("isbn: " + document.getElementById("isbn").value);
    var avgStarRating = document.getElementById("avgStarID").getAttribute("value");
    updateAverageStarRating(avgStarRating);
     $("#emailButton").click(function(){

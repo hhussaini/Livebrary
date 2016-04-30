@@ -127,8 +127,7 @@ public class User implements Serializable{
         // TODO. Remove this?
         if (type == null) {
             return "guest";
-        }
-        
+        } 
         return type;
     }
 

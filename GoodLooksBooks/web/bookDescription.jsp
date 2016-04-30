@@ -58,18 +58,21 @@
             <img src = ${itemClicked.imageUrl} class="img-rounded" alt="Andersonville: A Story of Rebel Military Prisons" width="250" height="250">
             <button type="submit" id="fav" onclick="setColor('fav','#FF0000');" class="btn-fav"><span class="glyphicon glyphicon-heart"></span> Fav!</button>
             <div> 
-                <label for="input-3" class="control-label">Avg. Rating</label><br>
+                <label for="input-3" class="control-label">Avg. Rating:&nbsp;&nbsp;&nbsp; ${itemClicked.avgRating}/5</label>
+                <br>
                 <div id="avgStarID" value="${itemClicked.avgRating}">
                     <img id="clip" src="assets/yellowStar.png" />
-                 </div>
+                </div>
                 <br><br>
+                <c:if test="${user.type == 'customer'}">
                 <label for="input-2" class="control-label">Your Rating</label><br>
                 <img onclick="starRating(1)" value = "0" id="star1" src="assets/star.png" /> 
                 <img onclick="starRating(2)" value = "0" id="star2" src="assets/star.png" /> 
                 <img onclick="starRating(3)" value = "0" id="star3" src="assets/star.png" /> 
                 <img onclick="starRating(4)" value = "0" id="star4" src="assets/star.png" /> 
                 <img onclick="starRating(5)" value = "0" id="star5" src="assets/star.png" /> 
-                <br>
+                </c:if>
+                <br> 
             </div>
             <button type="button" name = "button1" onclick="sampleFunction()" class="btn btn-primary">Sample</button>
             <button type="button" name = "button2" onclick="buyItNowFunction(${itemClicked.isbn})"class="btn btn-primary">Buy It Now</button> <br>

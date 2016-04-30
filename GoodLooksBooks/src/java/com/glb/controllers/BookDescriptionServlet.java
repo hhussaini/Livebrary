@@ -50,9 +50,7 @@ public class BookDescriptionServlet extends HttpServlet {
              println("Clicked " + isbn); 
              Map<String, Review> reviewsMap = bookService.getAllReviewsForBook(isbn);
              book.setReviews(reviewsMap);
-             session.setAttribute("itemClicked", book);   
-          //   printData(request, response, reviewsMap);
-            
+             session.setAttribute("itemClicked", book);    
              RequestDispatcher dispatcher = request.getRequestDispatcher(url);
              dispatcher.forward(request, response); 
         }
