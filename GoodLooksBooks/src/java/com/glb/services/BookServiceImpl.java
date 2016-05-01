@@ -13,7 +13,6 @@ import com.glb.objects.Review;
 import com.glb.objects.User;
 import java.sql.ResultSet;
 import java.sql.SQLException; 
-import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.dbutils.DbUtils;
 
@@ -159,5 +158,10 @@ public class BookServiceImpl implements BookService {
         }
         
         return status;
+    }
+
+    @Override
+    public int submitEditRequest(String isbn) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

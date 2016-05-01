@@ -12,6 +12,7 @@ public interface BookService {
     public List<Book> getAllBooks();
     public Book getBookByIsbn(String isbn);
     public int addBookToUserItems(String username, String isbn);
+    public int submitEditRequest(String isbn);
     public List<Book> getItemsList(String username);
     public Map<String, Review> getAllReviewsForBook(String isbn);
     public int addReview(Review review, Book book, User user);
