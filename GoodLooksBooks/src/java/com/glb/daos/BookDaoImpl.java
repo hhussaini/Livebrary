@@ -1,9 +1,6 @@
 package com.glb.daos;
  
 import com.glb.constants.CategoryMap;
-import static com.glb.daos.ConnectionUtil.getConnection;
-import com.glb.exceptions.ResourceHelperException;
-import static com.glb.helpers.Helpers.*;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -13,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.glb.objects.Book;
 import com.glb.objects.Review;
+import com.glb.objects.Ticket;
 import com.glb.objects.User;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +23,8 @@ import org.apache.commons.dbutils.DbUtils;
  * @author mobile-mann
  */
 public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
+    
     private Statement stmt = null;
-    private ResultSet res = null;
     private static CategoryMap categoryMap = new CategoryMap();
     private int numberOfResults;
     private int totalBooks;
@@ -224,7 +222,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     public List<Book> getItemsList(String userName) {
         List<Book> itemsList = new ArrayList<>();        
         Connection conToUse = null;
-        java.sql.PreparedStatement ps = null;
+        PreparedStatement ps = null;
+        ResultSet res = null;
         try {
             conToUse = getConnection();
             String sql = "SELECT isbn from RESERVED WHERE username = ?";
@@ -303,7 +302,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
 
     @Override
     public int submitEditRequest(String oldIsbn, String newIsbn, String title, String author, String description) {
-        String sql = "insert into ITEMREQUESTS values(?,?)";
+        String sql = "insert into TICKETS values(?,?)";
         Connection conToUse = null;
         PreparedStatement ps = null;
         String type = "edit";
@@ -322,6 +321,31 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         }
         return status;
     }
+
+    @Override
+    public List<Ticket> getAllTickets() {
+        List<Ticket> tickets = new ArrayList<>();       
+        String sql = "select * from TICKETS";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conToUse = getConnection();
+            Statement stmt = conToUse.createStatement();
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) { 
+                Ticket ticket = new Ticket(); 
+                ticket.setType(rs.getString("type"));
+                ticket.setXmlStr(rs.getString("xmlStr"));
+                tickets.add(ticket);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
+            DbUtils.closeQuietly(ps);
+        }
+        return tickets;
+    }
     
     private String createXmlString(String type, String oldIsbn, String newIsbn, String title, String author, String description) {
         String xmlStr = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"+
@@ -333,7 +357,6 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 "<description>" + description + "</description>"
                 + "</Type>";
         return xmlStr;
-    }
-      
+    }      
 }
  

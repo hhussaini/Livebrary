@@ -3,6 +3,7 @@ package com.glb.services;
 import java.util.List;
 import com.glb.objects.Book;
 import com.glb.objects.Review;
+import com.glb.objects.Ticket;
 import com.glb.objects.User;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ public interface BookService {
     public List<Book> searchBooks(String parameter, String[] categories, int offset, int recordsPerPage);
     public int getNumberOfResults();
     public List<Book> getAllBooks();
+    public List<Ticket> getAllTickets();
     public Book getBookByIsbn(String isbn);
     public int addBookToUserItems(String username, String isbn);
     public int submitEditRequest(String oldIsbn, String newIsbn, String title, String author, String description);

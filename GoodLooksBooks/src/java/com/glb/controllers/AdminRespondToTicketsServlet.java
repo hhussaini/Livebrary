@@ -2,33 +2,30 @@ package com.glb.controllers;
 
 import com.glb.factories.ServiceFactory;
 import static com.glb.helpers.Helpers.println;
-import com.glb.objects.Book;
-import com.glb.objects.User;
+import com.glb.objects.Ticket;
 import com.glb.services.BookService;
 import com.glb.services.UserService;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.PrintWriter;
 
 /**
  *
  * @author Kevin Young
  */
-public class PublisherEditItemsServlet extends HttpServlet {
+public class AdminRespondToTicketsServlet extends HttpServlet {
     
     UserService userService;
-    List<Book> publisherItems;
-    User publisher;
+    List<Ticket> publisherTickets;
     BookService bookService;
     
     public void init() {
         System.out.println(getServletName() + ": initialised" );
-        userService = ServiceFactory.getUserService();
         bookService = ServiceFactory.getBookService();        
     }
     
@@ -38,8 +35,8 @@ public class PublisherEditItemsServlet extends HttpServlet {
         println(request.getMethod().toString());
         String method = request.getParameter("method");
         method = (method == null) ? "" : method;
-        if (method.equals("doEdit")){
-            doEdit(request, response);
+        if (method.equals("viewTicket")){
+            viewTicket(request, response);
         } else {
             super.service(request, response);
         } 
@@ -73,11 +70,10 @@ public class PublisherEditItemsServlet extends HttpServlet {
             throws ServletException, IOException {
         println(this.getServletName() + " : " + "doGet");
         HttpSession session = request.getSession();
-        publisher = (User)session.getAttribute("user");
-        publisherItems = userService.getPublisherItems(publisher);
-        session.setAttribute("publisherItems", publisherItems);
-        session.setAttribute("publisherItemsSize", publisherItems.size());
-        request.getRequestDispatcher("/publisherEditItems.jsp").include(request, response);
+        publisherTickets = bookService.getAllTickets();
+        session.setAttribute("publisherTickets", publisherTickets);
+        session.setAttribute("publisherTicketsSize", publisherTickets.size());
+        request.getRequestDispatcher("/respondToTickets.jsp").include(request, response);
     }
 
     /**
@@ -91,33 +87,17 @@ public class PublisherEditItemsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        println(this.getServletName() + " : " + "doPost");
-        String isbn = request.getParameter("isbn");
-        HttpSession session = request.getSession();
-        Book book = bookService.getBookByIsbn(isbn);
-        session.setAttribute("itemClicked", book);
-        request.getRequestDispatcher("/editItem.jsp").include(request, response);
+        // processRequest(request, response);
     }
     
-    protected void doEdit(HttpServletRequest request, HttpServletResponse response)
+    protected void viewTicket(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        println(this.getServletName() + " : " + "doEdit");
-        String oldIsbn = request.getParameter("oldIsbn");
-        String newIsbn = request.getParameter("newIsbn");
-        String title = request.getParameter("title"); 
-        String author = request.getParameter("author");
-        String description = request.getParameter("description");
-        bookService.submitEditRequest(oldIsbn, newIsbn, title, author, description);
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<body>");
-            out.println("<p>Your ticket has been sent. The site admin "
-                    + "will respond to your ticket soon.</p>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        // TODO Auto-generated method stub
+        PrintWriter out = response.getWriter();
+        out.println("<html><body>");
+        out.println(publisherTickets.get(Integer.parseInt(request.getParameter("ticketIndex"))).getXmlStr());
+        out.println("</body></html>");
+        response.sendRedirect("pageB.jsp");
     }
 
     /**

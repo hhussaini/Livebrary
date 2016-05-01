@@ -11,7 +11,7 @@
         <jsp:include page="/logo.jsp" />
         <div class="container">
             <h1> Editing "${itemClicked.title}"</h1>
-            <form name = "customerForm" action = "SignInServlet" method = "post" class="form-horizontal signUpBody">
+            <form action = "PublisherEditItemsServlet" method = "doEdit" class="form-horizontal signUpBody">
                 <div class="form-group">
                   <label class = "control-label regLabel" for="isbn">ISBN: ${itemClicked.isbn}</label>
                   <div class = "controls regControl">
@@ -37,6 +37,7 @@
                   </div>
                 </div>
                 <input type="hidden" name="oldIsbn" value="${itemClicked.isbn}">
+                <input type="hidden" name="method" value="doEdit">
                 <input id="editItemButton" class="btn btn-info" type="submit" value="Submit">
             </form>
         </div>
