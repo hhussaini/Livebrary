@@ -300,6 +300,40 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         }
         return status;
     }
+
+    @Override
+    public int submitEditRequest(String oldIsbn, String newIsbn, String title, String author, String description) {
+        String sql = "insert into ITEMREQUESTS values(?,?)";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        String type = "edit";
+        String xmlStr = createXmlString(type, oldIsbn, newIsbn, title, author, description);
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            ps = conToUse.prepareStatement(sql);
+            ps.setString(1, type);
+            ps.setString(2, xmlStr);
+            status = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
+            DbUtils.closeQuietly(ps);
+        }
+        return status;
+    }
+    
+    private String createXmlString(String type, String oldIsbn, String newIsbn, String title, String author, String description) {
+        String xmlStr = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"+
+                "<Type id=\"" + type + "\">" +
+                "<oldIsbn>" + oldIsbn + "</oldIsbn>" +
+                "<newIsbn>" + newIsbn + "</newIsbn>" +
+                "<title>" + title + "</title>" + 
+                "<author>" + author + "</author>" + 
+                "<description>" + description + "</description>"
+                + "</Type>";
+        return xmlStr;
+    }
       
 }
  

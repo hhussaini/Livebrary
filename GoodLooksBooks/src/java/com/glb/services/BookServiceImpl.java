@@ -109,8 +109,6 @@ public class BookServiceImpl implements BookService {
         return status;
     }
 
-
-
     @Override
      public Map<String, Review> getAllReviewsForBook(String isbn){
         Connection conn = null;
@@ -145,7 +143,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public int addReview(Review review, Book book, User user){
-
         Connection conn = null;
         int status = 0;
         try {            
@@ -161,7 +158,30 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public int submitEditRequest(String isbn) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int submitEditRequest(String oldIsbn, String newIsbn, String title, String author, String description) {
+        Connection conToUse = null;
+        int status = 0;
+        // get the connection from util class
+        // set the transaction to con & pass con to dao
+        try {
+            conToUse = ConnectionUtil.getConnection();
+            conToUse.setAutoCommit(false);
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conToUse);;
+            status = bookDao.submitEditRequest(oldIsbn, newIsbn, title, author, description);
+            conToUse.commit();
+        } catch (ResourceHelperException e) {
+            // TODO Auto-generated catch block
+            System.out.println("ResourceHelperException");
+            DbUtils.rollbackAndCloseQuietly(conToUse);
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, e);
+        } catch (SQLException ex) {
+            System.out.println("SQLException");
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(conToUse);
+        }
+    
+        return status;
     }
 }

@@ -15,7 +15,7 @@
                 <div class="form-group">
                   <label class = "control-label regLabel" for="isbn">ISBN: ${itemClicked.isbn}</label>
                   <div class = "controls regControl">
-                      <input type="text" class="form-control" name="username">
+                      <input type="text" class="form-control" name="newIsbn">
                   </div>
                 </div>
                 <div class="form-group">
@@ -36,6 +36,7 @@
                       <input type="text" class="form-control" name="description">
                   </div>
                 </div>
+                <input type="hidden" name="oldIsbn" value="${itemClicked.isbn}">
                 <input id="editItemButton" class="btn btn-info" type="submit" value="Submit">
             </form>
         </div>

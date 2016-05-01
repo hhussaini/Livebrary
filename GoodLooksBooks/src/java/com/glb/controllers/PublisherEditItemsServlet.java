@@ -1,7 +1,6 @@
 package com.glb.controllers;
 
 import com.glb.factories.ServiceFactory;
-import static com.glb.helpers.Helpers.goToSignIn;
 import static com.glb.helpers.Helpers.println;
 import com.glb.objects.Book;
 import com.glb.objects.User;
@@ -102,12 +101,13 @@ public class PublisherEditItemsServlet extends HttpServlet {
     protected void doEdit(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         println(this.getServletName() + " : " + "doEdit");
-        String isbn = request.getParameter("isbn");
+        String oldIsbn = request.getParameter("oldIsbn");
+        String newIsbn = request.getParameter("newIsbn");
         String title = request.getParameter("title"); 
         String author = request.getParameter("author");
         String description = request.getParameter("description");
-        bookService.submitEditRequest(isbn);
-        doGet(request, response);
+        bookService.submitEditRequest(oldIsbn, newIsbn, title, author, description);
+        //doGet(request, response);
     }
 
     /**
