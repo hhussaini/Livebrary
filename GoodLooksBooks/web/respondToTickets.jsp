@@ -13,24 +13,24 @@
         <div class="container">
             <h1> Tickets: ${publisherTicketsSize} tickets</h1>
             <table>
-                <c:forEach var="ticket" items="${publisherTickets}" varStatus="loop">
+                <c:forEach var="ticket" items="${publisherTickets}">
                     <tr>
                         <td><h3><u>${ticket.type} request</u></h3>
                         </td>
                         <td>
                             <form action="AdminRespondToTicketsServlet" method="viewTicket">
                                 <button name="viewTicket" class="btn btn-danger">View</button>
-                                <input type="hidden" name="ticketIndex" value="${loop.index}">
+                                <input type="hidden" name="ticketId" value="${ticket.id}">
                                 <input type="hidden" name="method" value="viewTicket">
                             </form>
                             <form action="AdminRespondToTicketsServlet" method="acceptTicket">
                                 <button name="acceptTicket" class="btn btn-danger">Accept</button>
-                                <input type="hidden" name="ticketIndex" value="${loop.index}">
+                                <input type="hidden" name="ticketId" value="${ticket.id}">
                                 <input type="hidden" name="method" value="acceptTicket">
                             </form>
                             <form action="AdminRespondToTicketsServlet" method="denyTicket">
                                 <button name="denyTicket" class="btn btn-danger">Deny</button>
-                                <input type="hidden" name="ticketIndex" value="${loop.index}">
+                                <input type="hidden" name="ticketId" value="${ticket.id}">
                                 <input type="hidden" name="method" value="denyTicket">
                             </form>
                         </td>

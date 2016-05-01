@@ -8,6 +8,15 @@ public class Ticket {
     
     private String xmlStr;
     private String type;
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getXmlStr() {
         return xmlStr;
