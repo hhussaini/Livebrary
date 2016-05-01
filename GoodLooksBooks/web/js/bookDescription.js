@@ -3,14 +3,30 @@ var starsSelected;
 $(document).ready(function(){
    console.log("isbn: " + document.getElementById("isbn").value);
    var avgStarRating = document.getElementById("avgStarID").getAttribute("value");
-   updateAverageStarRating(avgStarRating);
-   
+   updateAverageStarRating(avgStarRating, "avgStarID");   
+   updateEachRatingStars();
     $("#emailButton").click(function(){
         console.log("email button clicked");
         $('#emailModal').modal('show');
     });
-
+    
 });
+
+function updateEachRatingStars(){
+    var i  = 0;
+ 
+    while(document.getElementById("eachRatingID_" + i) !== null){
+        var numOfStars = document.getElementById("eachRatingID_" + i).value;
+        var star = document.getElementById("eachRatingID_" + i).outerHTML;
+        var index = star.indexOf("value=") + "value=".length + 1;
+        star = star.substring(index, index + 1); 
+        updateAverageStarRating(parseInt(star) - 1, "eachRatingID_" + i);
+        console.log("Star: " + parseInt(star));
+        i++;
+    }
+    
+ 
+}
 
 function createYellowStar(i){
     var img = document.createElement("img");
@@ -157,10 +173,10 @@ $(document).on('ready', function(){
     }      
 });
 
-function updateAverageStarRating(avgStarRating){
+function updateAverageStarRating(avgStarRating, avgStarID){
    avgStarRating = Math.round(avgStarRating * 10)/10;
    console.log("Avg rating: " + avgStarRating);
-   var theDiv = document.getElementById("avgStarID"); 
+   var theDiv = document.getElementById(avgStarID); 
    while (theDiv.hasChildNodes()) {
         theDiv.removeChild(theDiv.lastChild);
    } 
@@ -176,32 +192,6 @@ function updateAverageStarRating(avgStarRating){
    document.getElementById("clip").style.clip =  "rect(0px " + widthOfImage + "px 200px 0px)";  
 }
 
-//function updateAverageStarRatingAjax(numOfStarsSelected){
-//    var type = 'POST';
-//    var url = 'ItemReviewServlet';
-//    var isbn = document.getElementById("isbn").value.toString();
-//   
-//    var itemObject = {
-//        numOfStars : numOfStarsSelected.toString(), 
-//        isbn : isbn
-//    };
-//    
-//    $.ajax({ 
-//        type: type,
-//        url:  url,
-//        data: itemObject,
-//        dataType: 'json',
-//        success: function(result){  
-//            console.log("Success!"); 
-//            updateAverageStarRating(result.avgRating);
-//       
-//        },
-//        error: function(result){
-//            console.log("Error!");
-//            console.log(result);
-//        }
-//    });
-//}
 
 function validateImgUrl(id) {
     var book = document.getElementById(id);
