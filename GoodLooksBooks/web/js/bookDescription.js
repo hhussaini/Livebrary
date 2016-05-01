@@ -16,11 +16,13 @@ $(document).ready(function(){
 });
 
 function updateEachRatingStars(id){
-    if(id === "loggedInRatingID"){
-       var star = document.getElementById(id).outerHTML;
+    if(id !== ""){
+       if(document.getElementById(id) !== null){
+            var star = document.getElementById(id).outerHTML;
             var index = star.indexOf("value=") + "value=".length + 1;
             star = star.substring(index, index + 1); 
             updateAverageStarRating(parseInt(star), id, false);
+        }
     }
     else{
         var i  = 0; 
@@ -33,7 +35,7 @@ function updateEachRatingStars(id){
             if(parseInt(star)>-1){
                 updateAverageStarRating(parseInt(star), "eachRatingID_" + i, false);
             }
-            console.log("Star: " + parseInt(star));
+//            console.log("Star: " + parseInt(star));
    
         i++;
         }
@@ -119,7 +121,7 @@ function setColor(btn, color){
 
 function submitReview(){
     var text = document.getElementById("reviewdetails").value;
-    console.log(text);
+  //  console.log(text);
     updateReviewsAjax(text);
     document.getElementById("submittingReviewID").style.display = 'none';
    
@@ -146,25 +148,34 @@ function updateReviewsAjax(text){
             console.log("Success!"); 
             //console.log(JSON.stringify(result.reviews));
             var currentUser = result.currentUser;
-             var text = "";
+            var text = "";
             var jsonArray = result.reviews;
-            console.log("Length of jsoArray: " + jsonArray.length);
+         //   console.log("Length of jsoArray: " + jsonArray.length);
             for (var i=0; i<jsonArray.length; i++){
                 var starRating = jsonArray[i].rating;
                 var username = jsonArray[i].username;
                 var reviewText = jsonArray[i].reviewText;
-                console.log();
+            //    console.log();
                 if(currentUser === username){
                     console.log("In if statment: " + text);
-                    document.getElementById("usernameTextID").innerHTML = username;
-                    document.getElementById("userReviewTextID").innerHTML = reviewText;
-                    document.getElementById("avgRatingText").innerHTML = result.avgRating;
+                    $("#newReviewID").show();
+                    console.log("Username: " + username);
+                    console.log("Star Rating: " + starRating);
+                    console.log("Review Text: " + reviewText);
+                    document.getElementById("newReviewUsernameTextID").innerHTML = username;
+                    document.getElementById("newReviewUserReviewTextID").innerHTML = reviewText;
+ 
+                     document.getElementById("newReviewIDStars").value = starRating;
+//                    updateEachRatingStars("newReviewIDStars");   newReviewIDStars
+                    updateAverageStarRating(starRating, "newReviewIDStars", false);
                     break;
                 } 
             }
             
-           updateAverageStarRating(result.avgRating);
-           // updateAverageStarRating(result.avgRating);
+            console.log("Result.avgRating: " + result.avgRating);
+           //  updateAverageStarRating(avgStarRating, "avgStarID", true);   
+           updateAverageStarRating(result.avgRating, "avgStarID", true);   
+          
        
         },
         error: function(result){
@@ -203,9 +214,10 @@ function updateAverageStarRating(avgStarRating, avgStarID, flag){
         imgElement.setAttribute("src", "assets/yellowStar.png");
         theDiv.appendChild(imgElement); 
         document.getElementById("clip").style.clip =  "rect(0px " + widthOfImage + "px 200px 0px)";  
+        document.getElementById("avgRatingText").innerHTML = avgStarRating;
     }
 }
-
+ 
 
 function validateImgUrl(id) {
     var book = document.getElementById(id);
@@ -280,6 +292,8 @@ function getStarColor(num){
     return document.getElementById('star' + num.toString()).getAttribute("value") === "0";  
 }
 
+
+ 
 
     
 

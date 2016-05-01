@@ -112,6 +112,23 @@
         </div>
         <hr class="fancy">
         <br>
+         
+        
+        <div id = "newReviewID" style="display:none;">
+          <div class="col-xs-12 col-sm-12" style="border-style: groove;"> 
+            <button type="button" id="edit-review-btn" class="btn btn-info">Resubmit/edit review</button>
+            &nbsp;&nbsp;
+            <button class="btn btn-danger" onClick="resetReview()" id="remove-review">Remove review</button>
+            <br><br>
+            <div id="newReviewIDStars" value = ""> 
+            </div> 
+          <label for="input-3" class="control-label"> It was OK </label> 
+          <h4>By: </h4><h4 id="newReviewUsernameTextID"></h4>
+          <h5><c:out value=""/></h5><h5 id="newReviewUserReviewTextID"></h5>
+          <br> 
+          </div>
+        </div>
+        
         
         <c:forEach var="entry" items="${itemClicked.reviews}" varStatus="i">
           <c:if test="${entry.key == user.username}"> 
