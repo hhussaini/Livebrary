@@ -92,12 +92,12 @@ public class AdminRespondToTicketsServlet extends HttpServlet {
     
     protected void viewTicket(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        // TODO Auto-generated method stub
+        int ticketIndex = Integer.parseInt(request.getParameter("ticketIndex"));
+        String ticketXmlStr = publisherTickets.get(ticketIndex).getXmlStr();
+        response.setContentType("text/xml;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        out.println("<html><body>");
-        out.println(publisherTickets.get(Integer.parseInt(request.getParameter("ticketIndex"))).getXmlStr());
-        out.println("</body></html>");
-        response.sendRedirect("pageB.jsp");
+        out.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        out.append(ticketXmlStr);
     }
 
     /**

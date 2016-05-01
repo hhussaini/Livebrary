@@ -302,7 +302,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
 
     @Override
     public int submitEditRequest(String oldIsbn, String newIsbn, String title, String author, String description) {
-        String sql = "insert into TICKETS values(?,?)";
+        String sql = "insert into TICKETS (type, xmlStr) values(?,?)";
         Connection conToUse = null;
         PreparedStatement ps = null;
         String type = "edit";
@@ -348,8 +348,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     }
     
     private String createXmlString(String type, String oldIsbn, String newIsbn, String title, String author, String description) {
-        String xmlStr = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"+
-                "<Type id=\"" + type + "\">" +
+        String xmlStr = "<Type id=\"" + type + "\">" +
                 "<oldIsbn>" + oldIsbn + "</oldIsbn>" +
                 "<newIsbn>" + newIsbn + "</newIsbn>" +
                 "<title>" + title + "</title>" + 

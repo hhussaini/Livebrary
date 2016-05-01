@@ -107,7 +107,11 @@ public class PublisherEditItemsServlet extends HttpServlet {
         String title = request.getParameter("title"); 
         String author = request.getParameter("author");
         String description = request.getParameter("description");
-        bookService.submitEditRequest(oldIsbn, newIsbn, title, author, description);
+        int status = 0;
+        status = bookService.submitEditRequest(oldIsbn, newIsbn, title, author, description);
+        if (status != 1) {
+            throw new ServletException("SQL Error");
+        }
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             out.println("<!DOCTYPE html>");

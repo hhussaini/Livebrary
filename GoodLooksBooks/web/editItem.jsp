@@ -21,7 +21,7 @@
                 <div class="form-group">
                   <label class = "control-label regLabel" for="title">Title: ${itemClicked.title}</label>
                   <div class = "controls regControl">
-                      <input type="text" class="form-control" name="password">
+                      <input type="text" class="form-control" name="title">
                   </div>
                 </div>
                 <div class="form-group">
