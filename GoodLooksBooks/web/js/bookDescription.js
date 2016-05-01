@@ -3,8 +3,11 @@ var starsSelected;
 $(document).ready(function(){
    console.log("isbn: " + document.getElementById("isbn").value);
    var avgStarRating = document.getElementById("avgStarID").getAttribute("value");
-   updateAverageStarRating(avgStarRating, "avgStarID");   
-   updateEachRatingStars();
+   
+    updateAverageStarRating(avgStarRating, "avgStarID", true);   
+    updateEachRatingStars("loggedInRatingID");
+    updateEachRatingStars("");
+  
     $("#emailButton").click(function(){
         console.log("email button clicked");
         $('#emailModal').modal('show');
@@ -12,20 +15,31 @@ $(document).ready(function(){
     
 });
 
-function updateEachRatingStars(){
-    var i  = 0;
- 
-    while(document.getElementById("eachRatingID_" + i) !== null){
-        var numOfStars = document.getElementById("eachRatingID_" + i).value;
-        var star = document.getElementById("eachRatingID_" + i).outerHTML;
-        var index = star.indexOf("value=") + "value=".length + 1;
-        star = star.substring(index, index + 1); 
-        updateAverageStarRating(parseInt(star) - 1, "eachRatingID_" + i);
-        console.log("Star: " + parseInt(star));
-        i++;
+function updateEachRatingStars(id){
+    if(id !== ""){
+       if(document.getElementById(id) !== null){
+            var star = document.getElementById(id).outerHTML;
+            var index = star.indexOf("value=") + "value=".length + 1;
+            star = star.substring(index, index + 1); 
+            updateAverageStarRating(parseInt(star), id, false);
+        }
     }
-    
- 
+    else{
+        var i  = 0; 
+        while(document.getElementById("eachRatingID_" + i) !== null){
+            var numOfStars = document.getElementById("eachRatingID_" + i).value;
+      
+            var star = document.getElementById("eachRatingID_" + i).outerHTML;
+            var index = star.indexOf("value=") + "value=".length + 1;
+            star = star.substring(index, index + 1); 
+            if(parseInt(star)>-1){
+                updateAverageStarRating(parseInt(star), "eachRatingID_" + i, false);
+            }
+//            console.log("Star: " + parseInt(star));
+   
+        i++;
+        }
+    } 
 }
 
 function createYellowStar(i){
@@ -107,7 +121,7 @@ function setColor(btn, color){
 
 function submitReview(){
     var text = document.getElementById("reviewdetails").value;
-    console.log(text);
+  //  console.log(text);
     updateReviewsAjax(text);
     document.getElementById("submittingReviewID").style.display = 'none';
    
@@ -134,25 +148,34 @@ function updateReviewsAjax(text){
             console.log("Success!"); 
             //console.log(JSON.stringify(result.reviews));
             var currentUser = result.currentUser;
-             var text = "";
+            var text = "";
             var jsonArray = result.reviews;
-            console.log("Length of jsoArray: " + jsonArray.length);
+         //   console.log("Length of jsoArray: " + jsonArray.length);
             for (var i=0; i<jsonArray.length; i++){
                 var starRating = jsonArray[i].rating;
                 var username = jsonArray[i].username;
                 var reviewText = jsonArray[i].reviewText;
-                console.log();
+            //    console.log();
                 if(currentUser === username){
                     console.log("In if statment: " + text);
-                    document.getElementById("usernameTextID").innerHTML = username;
-                    document.getElementById("userReviewTextID").innerHTML = reviewText;
-                    document.getElementById("avgRatingText").innerHTML = result.avgRating;
+                    $("#newReviewID").show();
+                    console.log("Username: " + username);
+                    console.log("Star Rating: " + starRating);
+                    console.log("Review Text: " + reviewText);
+                    document.getElementById("newReviewUsernameTextID").innerHTML = username;
+                    document.getElementById("newReviewUserReviewTextID").innerHTML = reviewText;
+ 
+                     document.getElementById("newReviewIDStars").value = starRating;
+//                    updateEachRatingStars("newReviewIDStars");   newReviewIDStars
+                    updateAverageStarRating(starRating, "newReviewIDStars", false);
                     break;
                 } 
             }
             
-           updateAverageStarRating(result.avgRating);
-           // updateAverageStarRating(result.avgRating);
+            console.log("Result.avgRating: " + result.avgRating);
+           //  updateAverageStarRating(avgStarRating, "avgStarID", true);   
+           updateAverageStarRating(result.avgRating, "avgStarID", true);   
+          
        
         },
         error: function(result){
@@ -173,25 +196,28 @@ $(document).on('ready', function(){
     }      
 });
 
-function updateAverageStarRating(avgStarRating, avgStarID){
-   avgStarRating = Math.round(avgStarRating * 10)/10;
-   console.log("Avg rating: " + avgStarRating);
-   var theDiv = document.getElementById(avgStarID); 
-   while (theDiv.hasChildNodes()) {
+function updateAverageStarRating(avgStarRating, avgStarID, flag){
+    avgStarRating = Math.round(avgStarRating * 10)/10;
+    console.log("Avg rating: " + avgStarRating);
+    var theDiv = document.getElementById(avgStarID); 
+    while (theDiv.hasChildNodes()) {
         theDiv.removeChild(theDiv.lastChild);
-   } 
+    } 
     for(var i = 1; i <= avgStarRating; i++){ 
        theDiv.appendChild(createYellowStar(i));  
-   }
-   var decimal = avgStarRating - Math.floor(avgStarRating);
-   var widthOfImage = 36 * decimal;   
-   var imgElement = document.createElement("img");
-   imgElement.setAttribute("id", "clip");
-   imgElement.setAttribute("src", "assets/yellowStar.png");
-   theDiv.appendChild(imgElement); 
-   document.getElementById("clip").style.clip =  "rect(0px " + widthOfImage + "px 200px 0px)";  
+    }
+    if(flag){
+        var decimal = avgStarRating - Math.floor(avgStarRating);
+        var widthOfImage = 36 * decimal;   
+        var imgElement = document.createElement("img");
+        imgElement.setAttribute("id", "clip");
+        imgElement.setAttribute("src", "assets/yellowStar.png");
+        theDiv.appendChild(imgElement); 
+        document.getElementById("clip").style.clip =  "rect(0px " + widthOfImage + "px 200px 0px)";  
+        document.getElementById("avgRatingText").innerHTML = avgStarRating;
+    }
 }
-
+ 
 
 function validateImgUrl(id) {
     var book = document.getElementById(id);
@@ -266,6 +292,8 @@ function getStarColor(num){
     return document.getElementById('star' + num.toString()).getAttribute("value") === "0";  
 }
 
+
+ 
 
     
 
