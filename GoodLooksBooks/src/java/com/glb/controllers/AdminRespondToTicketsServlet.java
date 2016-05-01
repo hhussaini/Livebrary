@@ -92,12 +92,26 @@ public class AdminRespondToTicketsServlet extends HttpServlet {
     
     protected void viewTicket(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        // TODO Auto-generated method stub
+        int ticketId = Integer.parseInt(request.getParameter("ticketId"));
+        Ticket ticket = getTicketById(ticketId);
+        if (ticket == null) {
+            throw new ServletException("Error getting this ticket.");
+        }
+        response.setContentType("text/xml;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        out.println("<html><body>");
-        out.println(publisherTickets.get(Integer.parseInt(request.getParameter("ticketIndex"))).getXmlStr());
-        out.println("</body></html>");
-        response.sendRedirect("pageB.jsp");
+        out.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        out.append("<Ticket id=\"" + ticket.getId() + "\">");
+        out.append(ticket.getXmlStr());
+        out.append("</Ticket>");
+    }
+    
+    private Ticket getTicketById(int ticketId) {
+        for (Ticket ticket: publisherTickets) {
+            if (ticket.getId() == ticketId) {
+                return ticket;
+            }
+        }
+        return null;
     }
 
     /**

@@ -27,10 +27,11 @@ public class SignOutServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
        HttpSession session = request.getSession();
-       if ((User)session.getAttribute("user") == null) {
-            throw new ServletException("Error signing out");
-       } 
-       session.invalidate();
+       try { 
+           session.invalidate();
+       } catch (IllegalStateException e) {
+           throw new ServletException(e.getMessage());
+       }
        String url = "/index.jsp";
        RequestDispatcher dispatcher = request.getRequestDispatcher(url);
        dispatcher.forward(request, response);

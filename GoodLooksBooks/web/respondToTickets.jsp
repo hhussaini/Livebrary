@@ -18,10 +18,20 @@
                         <td><h3><u>${ticket.type} request</u></h3>
                         </td>
                         <td>
-                            <form action="AdminRespondToTciektsServlet" method="post">
-                                <button name="view" class="btn btn-danger">View</button>
-                                <button name="accept" class="btn btn-danger">Accept</button>
-                                <button name="deny" class="btn btn-danger">Deny</button>
+                            <form action="AdminRespondToTicketsServlet" method="viewTicket">
+                                <button name="viewTicket" class="btn btn-danger">View</button>
+                                <input type="hidden" name="ticketId" value="${ticket.id}">
+                                <input type="hidden" name="method" value="viewTicket">
+                            </form>
+                            <form action="AdminRespondToTicketsServlet" method="acceptTicket">
+                                <button name="acceptTicket" class="btn btn-danger">Accept</button>
+                                <input type="hidden" name="ticketId" value="${ticket.id}">
+                                <input type="hidden" name="method" value="acceptTicket">
+                            </form>
+                            <form action="AdminRespondToTicketsServlet" method="denyTicket">
+                                <button name="denyTicket" class="btn btn-danger">Deny</button>
+                                <input type="hidden" name="ticketId" value="${ticket.id}">
+                                <input type="hidden" name="method" value="denyTicket">
                             </form>
                         </td>
                     </tr>
