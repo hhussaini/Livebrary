@@ -113,52 +113,44 @@
         <hr class="fancy">
         <br>
         
-        
+        <c:forEach var="entry" items="${itemClicked.reviews}" varStatus="i">
+          <c:if test="${entry.key == user.username}"> 
         <div class="col-xs-12 col-sm-12" style="border-style: groove;">
-            <!--<c:if test="${user.type == 'customer' && itemClicked.reviews[user.username] == null}" >-->
+          <!--took this line out-->
             <button type="button" id="edit-review-btn" class="btn btn-info">Resubmit/edit review</button>
             &nbsp;&nbsp;
             <button class="btn btn-danger" onClick="resetReview()" id="remove-review">Remove review</button>
             <br><br>
-          <input id="input-3" value="3" class="rating-md" style="font-size: 1.0em">
-          <label for="input-3" class="control-label"> It was OK </label>
-          <!-- </c:if> -->
-          <h4>By: </h4><h4 id="usernameTextID"></h4>
-            <h5 id="userReviewTextID"></h5>
-            <br> 
-        </div>
-
-          <!--Item Reviews-->
-          <c:forEach var="entry" items="${itemClicked.reviews}" varStatus="i">
-          <div class="col-xs-12 col-sm-12" style="border-style: groove;">
-            <c:if test="${entry.key == user.username}"> 
-            <button type="button" id="edit-review-btn" class="btn btn-info">Resubmit/edit review</button>
-            &nbsp;&nbsp;
-            <button class="btn btn-danger" onClick="resetReview()" id="remove-review">Remove review</button>
-            <br><br>
-            </c:if>
-            <div id="eachRatingID_${i.index}" value = "${itemClicked.reviews[entry.key].rating}">
+            <div id="loggedInRatingID" value = "${itemClicked.reviews[entry.key].rating}"> 
             </div>
-             
 <!--          <input id="input-3" value="3" class="rating-md" style="font-size: 1.0em">-->
           <label for="input-3" class="control-label"> It was OK </label>
-            <h4>By: ${entry.key}</h4>
-            <h5><c:out value="${entry.value.reviewText}"/></h5>
-            <br>  
+           <!--took end of this if statement out-->
+          <h4>By: ${entry.key}</h4><h4 id="usernameTextID"></h4>
+          <h5><c:out value="${entry.value.reviewText}"/></h5><h5 id="userReviewTextID"></h5>
+          <br> 
+        </div>
+        </c:if>
+        </c:forEach>
+        
+        <!--Item Reviews-->
+          <c:forEach var="entry" items="${itemClicked.reviews}" varStatus="i">
+          <div class="col-xs-12 col-sm-12" style="${(entry.key != user.username) ? 'border-style: groove;' : ''}">
+    <!-- took this line out-->
+            <div id="eachRatingID_${i.index}" value = "${(entry.key != user.username) ? itemClicked.reviews[entry.key].rating : -1}"> 
+            </div>
+<!--            <input id="input-3" value="3" class="rating-md" style="font-size: 1.0em"> -->
+                <c:if test= "${entry.key != user.username}">
+                    <label for="input-3" class="control-label"> It was OK </label>
+                    <h4>By: ${entry.key}</h4>
+                    <h5><c:out value="${entry.value.reviewText}"/></h5>
+                    <br>  
+                </c:if>
             </div> 
           <br>
           </c:forEach>
-          
-          
-          
     </div> 
-            
-  
-              
-            
-            
-        
-        
+   
     <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModal" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">

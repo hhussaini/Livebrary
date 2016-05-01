@@ -3,8 +3,11 @@ var starsSelected;
 $(document).ready(function(){
    console.log("isbn: " + document.getElementById("isbn").value);
    var avgStarRating = document.getElementById("avgStarID").getAttribute("value");
-   updateAverageStarRating(avgStarRating, "avgStarID");   
-   updateEachRatingStars();
+   
+    updateAverageStarRating(avgStarRating, "avgStarID", true);   
+    updateEachRatingStars("loggedInRatingID");
+    updateEachRatingStars("");
+  
     $("#emailButton").click(function(){
         console.log("email button clicked");
         $('#emailModal').modal('show');
@@ -12,20 +15,29 @@ $(document).ready(function(){
     
 });
 
-function updateEachRatingStars(){
-    var i  = 0;
- 
-    while(document.getElementById("eachRatingID_" + i) !== null){
-        var numOfStars = document.getElementById("eachRatingID_" + i).value;
-        var star = document.getElementById("eachRatingID_" + i).outerHTML;
-        var index = star.indexOf("value=") + "value=".length + 1;
-        star = star.substring(index, index + 1); 
-        updateAverageStarRating(parseInt(star) - 1, "eachRatingID_" + i);
-        console.log("Star: " + parseInt(star));
-        i++;
+function updateEachRatingStars(id){
+    if(id === "loggedInRatingID"){
+       var star = document.getElementById(id).outerHTML;
+            var index = star.indexOf("value=") + "value=".length + 1;
+            star = star.substring(index, index + 1); 
+            updateAverageStarRating(parseInt(star), id, false);
     }
-    
- 
+    else{
+        var i  = 0; 
+        while(document.getElementById("eachRatingID_" + i) !== null){
+            var numOfStars = document.getElementById("eachRatingID_" + i).value;
+      
+            var star = document.getElementById("eachRatingID_" + i).outerHTML;
+            var index = star.indexOf("value=") + "value=".length + 1;
+            star = star.substring(index, index + 1); 
+            if(parseInt(star)>-1){
+                updateAverageStarRating(parseInt(star), "eachRatingID_" + i, false);
+            }
+            console.log("Star: " + parseInt(star));
+   
+        i++;
+        }
+    } 
 }
 
 function createYellowStar(i){
@@ -173,23 +185,25 @@ $(document).on('ready', function(){
     }      
 });
 
-function updateAverageStarRating(avgStarRating, avgStarID){
-   avgStarRating = Math.round(avgStarRating * 10)/10;
-   console.log("Avg rating: " + avgStarRating);
-   var theDiv = document.getElementById(avgStarID); 
-   while (theDiv.hasChildNodes()) {
+function updateAverageStarRating(avgStarRating, avgStarID, flag){
+    avgStarRating = Math.round(avgStarRating * 10)/10;
+    console.log("Avg rating: " + avgStarRating);
+    var theDiv = document.getElementById(avgStarID); 
+    while (theDiv.hasChildNodes()) {
         theDiv.removeChild(theDiv.lastChild);
-   } 
+    } 
     for(var i = 1; i <= avgStarRating; i++){ 
        theDiv.appendChild(createYellowStar(i));  
-   }
-   var decimal = avgStarRating - Math.floor(avgStarRating);
-   var widthOfImage = 36 * decimal;   
-   var imgElement = document.createElement("img");
-   imgElement.setAttribute("id", "clip");
-   imgElement.setAttribute("src", "assets/yellowStar.png");
-   theDiv.appendChild(imgElement); 
-   document.getElementById("clip").style.clip =  "rect(0px " + widthOfImage + "px 200px 0px)";  
+    }
+    if(flag){
+        var decimal = avgStarRating - Math.floor(avgStarRating);
+        var widthOfImage = 36 * decimal;   
+        var imgElement = document.createElement("img");
+        imgElement.setAttribute("id", "clip");
+        imgElement.setAttribute("src", "assets/yellowStar.png");
+        theDiv.appendChild(imgElement); 
+        document.getElementById("clip").style.clip =  "rect(0px " + widthOfImage + "px 200px 0px)";  
+    }
 }
 
 
