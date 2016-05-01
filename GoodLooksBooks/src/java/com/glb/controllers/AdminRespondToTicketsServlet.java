@@ -1,6 +1,7 @@
 package com.glb.controllers;
 
 import com.glb.factories.ServiceFactory;
+import static com.glb.helpers.Helpers.outputToHtml;
 import static com.glb.helpers.Helpers.println;
 import com.glb.objects.Ticket;
 import com.glb.services.BookService;
@@ -37,6 +38,8 @@ public class AdminRespondToTicketsServlet extends HttpServlet {
         method = (method == null) ? "" : method;
         if (method.equals("viewTicket")){
             viewTicket(request, response);
+        } else if (method.equals("acceptTicket")){
+            acceptTicket(request, response);
         } else {
             super.service(request, response);
         } 
@@ -70,7 +73,7 @@ public class AdminRespondToTicketsServlet extends HttpServlet {
             throws ServletException, IOException {
         println(this.getServletName() + " : " + "doGet");
         HttpSession session = request.getSession();
-        publisherTickets = bookService.getAllTickets();
+        publisherTickets = bookService.getTickets("n");
         session.setAttribute("publisherTickets", publisherTickets);
         session.setAttribute("publisherTicketsSize", publisherTickets.size());
         request.getRequestDispatcher("/respondToTickets.jsp").include(request, response);
@@ -103,6 +106,21 @@ public class AdminRespondToTicketsServlet extends HttpServlet {
         out.append("<Ticket id=\"" + ticket.getId() + "\">");
         out.append(ticket.getXmlStr());
         out.append("</Ticket>");
+    }
+    
+    protected void acceptTicket(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        int ticketId = Integer.parseInt(request.getParameter("ticketId"));
+        Ticket ticket = getTicketById(ticketId);
+        if (ticket == null) {
+            throw new ServletException("Error getting this ticket.");
+        }
+        int status = 0;
+        status = bookService.acceptTicket(ticketId);
+        if (status != 1) {
+            throw new ServletException("SQL Error");
+        }
+        outputToHtml(response, "This ticket has been accepted");
     }
     
     private Ticket getTicketById(int ticketId) {

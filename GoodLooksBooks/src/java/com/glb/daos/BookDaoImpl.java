@@ -1,6 +1,7 @@
 package com.glb.daos;
  
 import com.glb.constants.CategoryMap;
+import static com.glb.helpers.Helpers.getTagFromXmlStr;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -323,9 +324,9 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     }
 
     @Override
-    public List<Ticket> getAllTickets() {
+    public List<Ticket> getTickets(String resolved) {
         List<Ticket> tickets = new ArrayList<>();       
-        String sql = "select * from TICKETS";
+        String sql = "select * from TICKETS where resolved = \'" + resolved + "\'";
         Connection conToUse = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -348,6 +349,77 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         return tickets;
     }
     
+    @Override
+    public int acceptTicket(int ticketId) {
+        String sql = "select type, xmlStr from TICKETS where id = " + "'" + ticketId + "'";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            Statement stmt = conToUse.createStatement();
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) { 
+                String xmlStr = rs.getString("xmlStr");
+                String oldIsbn = getTagFromXmlStr(xmlStr, "oldIsbn");
+                String newIsbn = getTagFromXmlStr(xmlStr, "newIsbn");
+                String title = getTagFromXmlStr(xmlStr, "title");
+                String author = getTagFromXmlStr(xmlStr, "author");
+                String description = getTagFromXmlStr(xmlStr, "description");
+                status = updateBook(oldIsbn, newIsbn, title, author, description);
+                if (status == 1) {
+                    status = resolveTicket(ticketId, "y");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
+            DbUtils.closeQuietly(ps);
+        }
+        return status;
+    }
+    
+    @Override
+    public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description) {
+        String sql = "update BOOKS set isbn = " + (newIsbn.isEmpty() ? "isbn" : "'" + newIsbn + "'")
+                    + ",title = " + (title.isEmpty() ? "title" : "'" + title + "'")
+                    + ",author = " + (author.isEmpty() ? "author" : "'" + author + "'")
+                    + ",description = " + (description.isEmpty() ? "description" : "'" + description + "'")
+                    + " where isbn = " + "'" + oldIsbn + "'";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            ps = conToUse.prepareStatement(sql);
+            status = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(ps);
+        }
+        return status;
+    }
+    
+    private int resolveTicket(int ticketId, String accepted) {
+        String sql = "update TICKETS set resolved = \'y\', accepted = \'" + accepted + "\' "
+                + "where ticketId = \'" + ticketId + "\'";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            ps = conToUse.prepareStatement(sql);
+            status = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
+            DbUtils.closeQuietly(ps);
+        }
+        return status;
+    }
+    
     private String createXmlString(String type, String oldIsbn, String newIsbn, String title, String author, String description) {
         String xmlStr = "<type>" + type + "</type>" +
                 "<oldIsbn>" + oldIsbn + "</oldIsbn>" +
@@ -356,6 +428,6 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 "<author>" + author + "</author>" + 
                 "<description>" + description + "</description>";
         return xmlStr;
-    }      
+    }
 }
  

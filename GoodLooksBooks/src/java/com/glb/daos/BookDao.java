@@ -11,7 +11,8 @@ public interface BookDao extends JdbcDaoSupport {
     public List<Book> searchBooks(String term, String[] categories, int offset, int recordsPerPage);
     public int getNumberOfResults();
     public List<Book> getAllBooks();
-    public List<Ticket> getAllTickets();
+    public List<Ticket> getTickets(String resolved);
+    public int acceptTicket(int ticketId);
     public int getTotalBooks();
     public Book getBookByIsbn(String isbn);
     public int addBookToUserItems(String username, String isbn);
@@ -19,4 +20,5 @@ public interface BookDao extends JdbcDaoSupport {
     public List<Book> getItemsList(String userName);
     public Map<String, Review> getAllReviewsForBook(String isbn);
     public int addReview(Review review, Book book, User user);
+    public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description);
 }

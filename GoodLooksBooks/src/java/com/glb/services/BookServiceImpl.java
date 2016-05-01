@@ -172,7 +172,6 @@ public class BookServiceImpl implements BookService {
             status = bookDao.submitEditRequest(oldIsbn, newIsbn, title, author, description);
             conToUse.commit();
         } catch (ResourceHelperException e) {
-            // TODO Auto-generated catch block
             System.out.println("ResourceHelperException");
             DbUtils.rollbackAndCloseQuietly(conToUse);
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, e);
@@ -187,7 +186,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Ticket> getAllTickets() {
+    public List<Ticket> getTickets(String resolved) {
         Connection conToUse = null;
         List<Ticket> tickets = null;
         // get the connection from util class
@@ -197,10 +196,9 @@ public class BookServiceImpl implements BookService {
             conToUse.setAutoCommit(false);
             BookDao bookDao = DaoFactory.getBookDao();
             bookDao.setConnection(conToUse);;
-            tickets = bookDao.getAllTickets();
+            tickets = bookDao.getTickets(resolved);
             conToUse.commit();
         } catch (ResourceHelperException e) {
-            // TODO Auto-generated catch block
             System.out.println("ResourceHelperException");
             DbUtils.rollbackAndCloseQuietly(conToUse);
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, e);
@@ -213,4 +211,58 @@ public class BookServiceImpl implements BookService {
     
         return tickets;
     }
+
+    @Override
+    public int acceptTicket(int ticketId) {
+        Connection conToUse = null;
+        int status = 0;
+        // get the connection from util class
+        // set the transaction to con & pass con to dao
+        try {
+            conToUse = ConnectionUtil.getConnection();
+            conToUse.setAutoCommit(false);
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conToUse);;
+            status = bookDao.acceptTicket(ticketId);
+            conToUse.commit();
+        } catch (ResourceHelperException e) {
+            System.out.println("ResourceHelperException");
+            DbUtils.rollbackAndCloseQuietly(conToUse);
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, e);
+        } catch (SQLException ex) {
+            System.out.println("SQLException");
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(conToUse);
+        }
+    
+        return status;
+    }
+
+//    @Override
+//    public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description) {
+//        Connection conToUse = null;
+//        int status = 0;
+//        // get the connection from util class
+//        // set the transaction to con & pass con to dao
+//        try {
+//            conToUse = ConnectionUtil.getConnection();
+//            conToUse.setAutoCommit(false);
+//            BookDao bookDao = DaoFactory.getBookDao();
+//            bookDao.setConnection(conToUse);;
+//            status = bookDao.updateBook(oldIsbn, newIsbn, title, author, description);
+//            conToUse.commit();
+//        } catch (ResourceHelperException e) {
+//            System.out.println("ResourceHelperException");
+//            DbUtils.rollbackAndCloseQuietly(conToUse);
+//            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, e);
+//        } catch (SQLException ex) {
+//            System.out.println("SQLException");
+//            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+//        } finally {
+//            DbUtils.closeQuietly(conToUse);
+//        }
+//    
+//        return status;
+//    }
 }

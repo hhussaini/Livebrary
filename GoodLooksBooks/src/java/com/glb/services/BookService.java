@@ -11,11 +11,13 @@ public interface BookService {
     public List<Book> searchBooks(String parameter, String[] categories, int offset, int recordsPerPage);
     public int getNumberOfResults();
     public List<Book> getAllBooks();
-    public List<Ticket> getAllTickets();
+    public List<Ticket> getTickets(String resolved);
+    public int acceptTicket(int ticketId);
     public Book getBookByIsbn(String isbn);
     public int addBookToUserItems(String username, String isbn);
     public int submitEditRequest(String oldIsbn, String newIsbn, String title, String author, String description);
     public List<Book> getItemsList(String username);
     public Map<String, Review> getAllReviewsForBook(String isbn);
     public int addReview(Review review, Book book, User user);
+    // public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description);
 }  

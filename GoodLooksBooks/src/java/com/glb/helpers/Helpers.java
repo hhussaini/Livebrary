@@ -1,6 +1,7 @@
 package com.glb.helpers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -48,5 +49,22 @@ public class Helpers {
     
     public static double round(double num){
         return (double)Math.round(num * 100) / 100;
+    }
+    
+    public static void outputToHtml(HttpServletResponse response, String text) throws IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<body>");
+            out.println("<p>" + text + "</p>");
+            out.println("</body>");
+            out.println("</html>");
+        }
+    }
+    
+    public static String getTagFromXmlStr(String xmlStr, String tag) {
+        String result = xmlStr.substring(xmlStr.indexOf("<" + tag + ">") + tag.length() + 2, xmlStr.indexOf("</" + tag + ">"));
+        return result;
     }
 }
