@@ -90,37 +90,48 @@ public class ItemReviewServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
    
-      //  response.setContentType("application/json");
+        response.setContentType("application/json");
+        String method = request.getParameter("method");
         String isbn = request.getParameter("isbn"); 
-        String text = request.getParameter("text");
-        int numOfStars = Integer.parseInt(request.getParameter("numOfStars"));
- 
         HttpSession session = request.getSession();
+        if(method.equals("add")){
+            addReview(request, response, session, isbn);
+        }
+        else if(method.equals("delete")){ 
+            deleteReview(request, response, session, isbn);
+        }
+           
+       
+         
+    }  
+    
+    private void addReview(HttpServletRequest request, HttpServletResponse response,  HttpSession session, String isbn) throws IOException{
         User user = (User)session.getAttribute("user");
+        String text = request.getParameter("text"); 
+        int numOfStars = Integer.parseInt(request.getParameter("numOfStars")); 
         Review review = new Review(numOfStars, text); 
         Book book = bookService.getBookByIsbn(isbn);  
         Map<String,Review>reviews = bookService.getAllReviewsForBook(isbn);
         bookService.addReview(review, book, user);  //returns an int (status)
         reviews.put(user.getUsername(), review);
         book.setReviews(reviews);
-        session.setAttribute("itemClicked", book);
-         
-//        String str = "";
-//        for(String username : book.getReviews().keySet()){
-//            str = str + username + ":   " + book.getReviews().get(username).toString() + "\n";
-//        }
-//        throw new ServletException(str);
-      //  printData(request, response, book.getReviews());
-      //  review = book.getReviews().get(user.getUsername());
+        session.setAttribute("itemClicked", book); 
         
         try {
            response.getWriter().print(JsonHandler.createJSONObj(user, book));
         } catch (JSONException ex) {
             Logger.getLogger(ItemReviewServlet.class.getName()).log(Level.SEVERE, null, ex);
         }  
-         
-    }  
+    }
     
+    private void deleteReview(HttpServletRequest request, HttpServletResponse response, HttpSession session, String isbn) throws IOException{
+        User user = (User)session.getAttribute("user");
+        bookService.deleteReview(isbn, user.getUsername());
+        double newAvgRating = bookService.getBookByIsbn(isbn).getAvgRating();
+        response.getWriter().print(newAvgRating);
+        
+    }
+     
     public static void printData(HttpServletRequest request, HttpServletResponse response, Map<String, Review>map) throws IOException{
         try (PrintWriter out = response.getWriter()) {
             out.println("In the print statement");

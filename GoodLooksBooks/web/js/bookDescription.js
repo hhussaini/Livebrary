@@ -95,9 +95,48 @@ function showSubmit() {
 function resetReview() {
     var d = document.getElementById("review-div");
     var t = document.getElementById("reviewdetails2");
-    d.removeChild(t);
+   // d.removeChild(t);
     document.getElementById("edit-review-btn").style.display = "none";
     document.getElementById("remove-review").style.display = "none";
+}
+
+function removeReview(id){
+    if(id === "remove-review1"){
+        deleteReviewAjax("topReviewContainerID_1");
+        
+    }
+    else{
+        deleteReviewAjax("topReviewContainerID_2");
+      
+    } 
+}
+
+function deleteReviewAjax(id){
+    var type = 'POST';
+    var url = 'ItemReviewServlet';
+    var isbn = document.getElementById("isbn").value.toString();
+    console.log("In deleteReviewAjax: " + isbn);
+    
+    var itemObject = { 
+        isbn : isbn,
+        method : "delete"
+    };
+    
+    $.ajax({ 
+        type: type,
+        url:  url,
+        data: itemObject,
+        dataType: 'json',
+        success: function(result){  
+            console.log(result);
+            $('#' + id).html(''); 
+            updateAverageStarRating(result, "avgStarID", true);   
+        },
+        error: function(result){
+            console.log("Error!");
+            console.log(result);
+        }
+    });
 }
 
 function changeWishlist() {
@@ -118,17 +157,17 @@ function setColor(btn, color){
         property.style.backgroundColor = "#E1E1E1";
     }
 }
-
+ 
 function submitReview(){
     var text = document.getElementById("reviewdetails").value;
   //  console.log(text);
-    updateReviewsAjax(text);
+    addReviewAjax(text);
     document.getElementById("submittingReviewID").style.display = 'none';
    
   //  document.getElementById("submitReviewForm").submit();   
 }
 
-function updateReviewsAjax(text){
+function addReviewAjax(text){
     var type = 'POST';
     var url = 'ItemReviewServlet';
     var isbn = document.getElementById("isbn").value.toString();
@@ -136,7 +175,8 @@ function updateReviewsAjax(text){
     var itemObject = {
         numOfStars : starsSelected,
         text : text,
-        isbn : isbn
+        isbn : isbn,
+        method : "add"
     };
     
     $.ajax({ 
@@ -145,38 +185,8 @@ function updateReviewsAjax(text){
         data: itemObject,
         dataType: 'json',
         success: function(result){  
-            console.log("Success!"); 
-            //console.log(JSON.stringify(result.reviews));
-            var currentUser = result.currentUser;
-            var text = "";
-            var jsonArray = result.reviews;
-         //   console.log("Length of jsoArray: " + jsonArray.length);
-            for (var i=0; i<jsonArray.length; i++){
-                var starRating = jsonArray[i].rating;
-                var username = jsonArray[i].username;
-                var reviewText = jsonArray[i].reviewText;
-            //    console.log();
-                if(currentUser === username){
-                    console.log("In if statment: " + text);
-                    $("#newReviewID").show();
-                    console.log("Username: " + username);
-                    console.log("Star Rating: " + starRating);
-                    console.log("Review Text: " + reviewText);
-                    document.getElementById("newReviewUsernameTextID").innerHTML = username;
-                    document.getElementById("newReviewUserReviewTextID").innerHTML = reviewText;
- 
-                     document.getElementById("newReviewIDStars").value = starRating;
-//                    updateEachRatingStars("newReviewIDStars");   newReviewIDStars
-                    updateAverageStarRating(starRating, "newReviewIDStars", false);
-                    break;
-                } 
-            }
-            
-            console.log("Result.avgRating: " + result.avgRating);
-           //  updateAverageStarRating(avgStarRating, "avgStarID", true);   
-           updateAverageStarRating(result.avgRating, "avgStarID", true);   
-          
-       
+            console.log("Success!");  
+            successCallFromAjax(result); 
         },
         error: function(result){
             console.log("Error!");
@@ -185,8 +195,33 @@ function updateReviewsAjax(text){
     });
 }
 
-$(document).on('ready', function(){
-    //  console.log("hey: " + window.location.href);
+function successCallFromAjax(result){
+    var currentUser = result.currentUser;
+            var text = "";
+            var jsonArray = result.reviews; 
+            for (var i=0; i<jsonArray.length; i++){
+                var starRating = jsonArray[i].rating;
+                var username = jsonArray[i].username;
+                var reviewText = jsonArray[i].reviewText; 
+                if(currentUser === username){
+                    console.log("In if statment: " + text);
+                    $("#newReviewID").show();
+                    console.log("Username: " + username);
+                    console.log("Star Rating: " + starRating);
+                    console.log("Review Text: " + reviewText);
+                    document.getElementById("newReviewUsernameTextID").innerHTML = username;
+                    document.getElementById("newReviewUserReviewTextID").innerHTML = reviewText;
+                    document.getElementById("newReviewIDStars").value = starRating; 
+                    updateAverageStarRating(starRating, "newReviewIDStars", false);
+                    break;
+                } 
+            }
+            
+            console.log("Result.avgRating: " + result.avgRating);   
+            updateAverageStarRating(result.avgRating, "avgStarID", true);   
+}
+
+$(document).on('ready', function(){ 
     if(window.location.href === "BookDescriptionServlet"){
         updateAverageRatingAjax(null);
         $('#input-3').rating({displayOnly: true, step: 0.5});
@@ -209,7 +244,7 @@ function updateAverageStarRating(avgStarRating, avgStarID, flag){
     if(flag){
         var decimal = avgStarRating - Math.floor(avgStarRating);
         var widthOfImage = 36 * decimal;   
-        var imgElement = document.createElement("img");
+        var imgElement = document.createElement("img"); 
         imgElement.setAttribute("id", "clip");
         imgElement.setAttribute("src", "assets/yellowStar.png");
         theDiv.appendChild(imgElement); 

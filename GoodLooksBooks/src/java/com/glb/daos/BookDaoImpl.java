@@ -182,6 +182,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 book.setDescription(rs.getString("description"));
                 book.setDate(rs.getString("published"));
                 book.setLanguage(rs.getString("language"));
+                Map<String, Review> reviews = getAllReviewsForBook(isbn);
+                book.setReviews(reviews);
             }
             rs.close();
             
@@ -428,6 +430,34 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 "<author>" + author + "</author>" + 
                 "<description>" + description + "</description>";
         return xmlStr;
+    }
+
+    @Override
+    public int deleteReview(String isbn, String username) {
+        Connection conToUse = null;
+        PreparedStatement preparedStmt = null;
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            if (conToUse == null)
+                System.out.println("conToUse == null");
+             
+           
+            String sql = "DELETE FROM reviews WHERE isbn = ? AND username = ?";
+            preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
+            preparedStmt.setString(1, isbn);
+            preparedStmt.setString(2, username);
+            
+            status = preparedStmt.executeUpdate(); 
+            
+           // book.addReview(user, review);
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            DbUtils.closeQuietly(preparedStmt);
+        }
+        return status;
     }
 }
  
