@@ -2,8 +2,7 @@
 
 $(document).ready(function(){
    console.log("isbn: " + document.getElementById("isbn").value);
-  
-  
+   
     $("#emailButton").click(function(){
         console.log("email button clicked");
         $('#emailModal').modal('show');
@@ -63,7 +62,7 @@ function setColor(btn, color){
 
 $(document).on('ready', function(){ 
     if(window.location.href === "BookDescriptionServlet"){
-        updateAverageRatingAjax(null);
+        
         $('#input-3').rating({displayOnly: true, step: 0.5});
     }
     else{
