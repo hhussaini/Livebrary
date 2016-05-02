@@ -1,5 +1,5 @@
 package com.glb.daos;
- 
+
 import com.glb.constants.CategoryMap;
 import static com.glb.helpers.Helpers.getTagFromXmlStr;
 import java.sql.PreparedStatement;
@@ -32,65 +32,79 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     
     @Override
     public List<Book> searchBooks(String term, String[] categories, int offset, int recordsPerPage) {
+        String finalView = "";
         String limit = " limit " + offset + ", " + recordsPerPage;
         List<Book> results = new ArrayList<Book>();
         this.numberOfResults = 0;
         Connection conn = getConnection();
         ResultSet rs;
         
-        // Category Query
-        String catQuery = "";
-        for (int i = 0; i < categories.length; i++) {
-            if (i == 0)
-                catQuery += " (";
-            catQuery += "category rlike ?";
-            if (i == categories.length - 1) {
-                catQuery += ") ";
-            } else {
-                catQuery += " or ";
-            }
-        }
         // Search term query
         term = "%" + term + "%";
-        String query = "create view results1 as"
-                + " select b.isbn, b.title, b.author, b.imageUrl, c.category from books b, categories c"
-                + " where b.isbn = c.isbn and"
+        String query = "create view searchTermView as"
+                + " select b.isbn, b.title, b.author, b.imageUrl from books b"
+                + " where"
                 + " (b.publisher like ?"
                 + " OR b.language like ?"
                 + " OR b.author like ?"
                 + " OR b.title like ?)";
         try {
             stmt = conn.createStatement();
-            stmt.executeUpdate("drop view if exists results1");
+            stmt.executeUpdate("drop view if exists searchTermView");
             PreparedStatement pstmt = conn.prepareStatement(query);
+            finalView = "searchTermView";
+            
             pstmt.setString(1, term);
             pstmt.setString(2, term);
             pstmt.setString(3, term);
             pstmt.setString(4, term);
             pstmt.executeUpdate();
             
-            stmt.executeUpdate("drop view if exists results2");
-            query =  "create view results2 as"
-                    + " select isbn, title, author, imageUrl from results1 where"
-                    + catQuery;
-            pstmt = conn.prepareStatement(query);
-            for (int i = 0; i < categories.length; i++) {
-                if (categories[i].equals(""))
-                    pstmt.setString(i+1, ".*");
-                else {
-                    String category = categoryMap.get(categories[i]).toString();
-                    pstmt.setString(i+1, category);
+            // Category Query
+            String catQuery = (categories[0].equals("")) ? null : "";
+            if (!categories[0].equals("")) {
+                for (int i = 0; i < categories.length; i++) {
+                    if (i == 0)
+                        catQuery += " (";
+                    catQuery += "c.category rlike ?";
+                    if (i == categories.length - 1) {
+                        catQuery += ") ";
+                    } else {
+                        catQuery += " or ";
+                    }
                 }
+                
+                stmt = conn.createStatement();
+                stmt.executeUpdate("drop view if exists categoryView");
+                query =  "create view categoryView as"
+                        + " select b.isbn, b.title, b.author, b.imageUrl, c.category from books b, category c, "
+                        + " searchTermView r where b.isbn = r.isbn or c.isbn = r.isbn and "
+                        + catQuery;
+                pstmt = conn.prepareStatement(query);
+                for (int i = 0; i < categories.length; i++) {
+                    if (categories[i].equals(""))
+                        pstmt.setString(i+1, ".*");
+                    else {
+                        String category = categoryMap.get(categories[i]).toString();
+                        pstmt.setString(i+1, category);
+                    }
+                }
+                pstmt.executeUpdate();
+                finalView += " categoryView";
             }
-            pstmt.executeUpdate();
             
-            query = "select count(distinct isbn) from results2";
+            stmt = conn.createStatement();
+            stmt.executeUpdate("drop view if exists finalView");
+            query =  "create view finalView as"
+                    + " select b.isbn, b.title, b.author, b.imageUrl"
+                    + " from books b ";
+            query = "select count(distinct isbn) from categoryView";
             rs = stmt.executeQuery(query);
             while (rs.next()) {
                 numberOfResults = rs.getInt(1);
             }
             
-            query = "select * from results2"
+            query = "select * from "+ finalView
                     + " group by isbn";
             stmt = conn.createStatement();
             rs = stmt.executeQuery(query + limit);
@@ -223,7 +237,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     
     @Override
     public List<Book> getItemsList(String userName) {
-        List<Book> itemsList = new ArrayList<>();        
+        List<Book> itemsList = new ArrayList<>();
         Connection conToUse = null;
         PreparedStatement ps = null;
         ResultSet res = null;
@@ -235,8 +249,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             ps.setString(1, userName);
             res = ps.executeQuery();
             
-            while (res.next()) { 
-                  itemsList.add(this.getBookByIsbn(res.getString("isbn"))); 
+            while (res.next()) {
+                itemsList.add(this.getBookByIsbn(res.getString("isbn")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -247,19 +261,19 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         return itemsList;
     }
     
-     @Override
+    @Override
     public Map<String, Review> getAllReviewsForBook(String isbn){
         Map<String, Review>reviewsMap = new HashMap<>();
         Connection conn = getConnection();
         ResultSet rs = null;
-        String query = "SELECT * FROM reviews WHERE isbn = '" + isbn + "'"; 
+        String query = "SELECT * FROM reviews WHERE isbn = '" + isbn + "'";
         try {
             Statement stmt = conn.createStatement();
             rs = stmt.executeQuery(query);
-            while (rs.next()) { 
-                Review review = new Review(); 
-                review.setRating(rs.getInt("rating")); 
-                review.setReviewText(rs.getString("reviewText")); 
+            while (rs.next()) {
+                Review review = new Review();
+                review.setRating(rs.getInt("rating"));
+                review.setReviewText(rs.getString("reviewText"));
                 String userName = rs.getString("username");
                 reviewsMap.put(userName, review);
             }
@@ -273,8 +287,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         }
         return reviewsMap;
     }
-
-    @Override 
+    
+    @Override
     public int addReview(Review review, Book book, User user) {
         Connection conToUse = null;
         PreparedStatement preparedStmt = null;
@@ -283,17 +297,17 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             conToUse = getConnection();
             if (conToUse == null)
                 System.out.println("conToUse == null");
-             
-           
+            
+            
             String sql = "INSERT INTO reviews(isbn, username, rating, reviewText) VALUES(?,?,?,?)";
             preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
             preparedStmt.setString(1, book.getIsbn());
             preparedStmt.setString(2, user.getUsername());
             preparedStmt.setInt(3, review.getRating());
             preparedStmt.setString(4, review.getReviewText());
-            status = preparedStmt.executeUpdate(); 
+            status = preparedStmt.executeUpdate();
             
-           // book.addReview(user, review);
+            // book.addReview(user, review);
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -302,7 +316,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         }
         return status;
     }
-
+    
     @Override
     public int submitEditRequest(String oldIsbn, String newIsbn, String title, String author, String description) {
         String sql = "insert into TICKETS (type, xmlStr) values(?,?)";
@@ -324,10 +338,10 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         }
         return status;
     }
-
+    
     @Override
     public List<Ticket> getTickets(String resolved) {
-        List<Ticket> tickets = new ArrayList<>();       
+        List<Ticket> tickets = new ArrayList<>();
         String sql = "select * from TICKETS where resolved = \'" + resolved + "\'";
         Connection conToUse = null;
         PreparedStatement ps = null;
@@ -336,8 +350,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             conToUse = getConnection();
             Statement stmt = conToUse.createStatement();
             rs = stmt.executeQuery(sql);
-            while (rs.next()) { 
-                Ticket ticket = new Ticket(); 
+            while (rs.next()) {
+                Ticket ticket = new Ticket();
                 ticket.setId(rs.getInt("id"));
                 ticket.setType(rs.getString("type"));
                 ticket.setXmlStr(rs.getString("xmlStr"));
@@ -373,8 +387,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         String language = getTagFromXmlStr(xmlStr, "language");
         double listPrice = Double.parseDouble(getTagFromXmlStr(xmlStr, "listPrice"));
         String currency = getTagFromXmlStr(xmlStr, "currency");
-        return addBook(isbn, isbn10, title, author, description, 
-            binding, imageUrl, pages, language, listPrice, currency, publisher);
+        return addBook(isbn, isbn10, title, author, description,
+                binding, imageUrl, pages, language, listPrice, currency, publisher);
     }
     
     @Override
@@ -409,8 +423,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     }
     
     @Override
-    public int addBook(String isbn, String isbn10, String title, String author, String description, 
-            String binding, String imageUrl, int pages, String language, double listPrice, 
+    public int addBook(String isbn, String isbn10, String title, String author, String description,
+            String binding, String imageUrl, int pages, String language, double listPrice,
             String currency, String publisher) {
         String sql = "insert into BOOKS values (isbn, isbn10, title, author, description, "
                 + "binding, imageUrl, pages, language, listPrice, currency, publisher "
@@ -444,11 +458,11 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     
     @Override
     public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description) {
-        String sql = "update BOOKS set isbn = ?" 
-                    + ",title = ?"
-                    + ",author = ?"
-                    + ",description = ?"
-                    + " where isbn = ?";
+        String sql = "update BOOKS set isbn = ?"
+                + ",title = ?"
+                + ",author = ?"
+                + ",description = ?"
+                + " where isbn = ?";
         Connection conToUse = null;
         PreparedStatement ps = null;
         Book book = null;
@@ -492,15 +506,15 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         }
         return status;
     }
-
+    
     @Override
-    public int submitAddRequest(String isbn, String isbn10, String title, String author, String description, 
+    public int submitAddRequest(String isbn, String isbn10, String title, String author, String description,
             String binding, String imageUrl, int pages, String language, double listPrice, String currency, String publisher) {
         String sql = "insert into TICKETS (type, xmlStr) values(?,?)";
         Connection conToUse = null;
         PreparedStatement ps = null;
         String type = "add";
-        String xmlStr = createAddXmlString(isbn, isbn10, title, author, description, 
+        String xmlStr = createAddXmlString(isbn, isbn10, title, author, description,
                 binding, imageUrl, pages, language, listPrice, currency, publisher);
         int status = 0;
         try {
@@ -516,7 +530,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         }
         return status;
     }
-
+    
     @Override
     public int deleteReview(String isbn, String username) {
         Connection conToUse = null;
@@ -526,16 +540,16 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             conToUse = getConnection();
             if (conToUse == null)
                 System.out.println("conToUse == null");
-             
-           
+            
+            
             String sql = "DELETE FROM reviews WHERE isbn = ? AND username = ?";
             preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
             preparedStmt.setString(1, isbn);
             preparedStmt.setString(2, username);
             
-            status = preparedStmt.executeUpdate(); 
+            status = preparedStmt.executeUpdate();
             
-           // book.addReview(user, review);
+            // book.addReview(user, review);
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -545,33 +559,33 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         return status;
     }
     
-    private String createAddXmlString(String isbn, String isbn10, String title, String author, String description, 
+    private String createAddXmlString(String isbn, String isbn10, String title, String author, String description,
             String binding, String imageUrl, int pages, String language, double listPrice, String currency, String publisher) {
         String xmlStr = "<type>add</type>" +
                 "<isbn>" + isbn + "</isbn>" +
                 "<isbn10>" + isbn10 + "</isbn10>" +
-                "<title>" + title + "</title>" + 
-                "<author>" + author + "</author>" + 
+                "<title>" + title + "</title>" +
+                "<author>" + author + "</author>" +
                 "<description>" + description + "</description>" +
-                "<binding>" + binding + "</binding>" + 
-                "<imageUrl>" + imageUrl + "</imageUrl>" + 
-                "<pages>" + pages + "</pages>" + 
-                "<language>" + language + "</language>" + 
+                "<binding>" + binding + "</binding>" +
+                "<imageUrl>" + imageUrl + "</imageUrl>" +
+                "<pages>" + pages + "</pages>" +
+                "<language>" + language + "</language>" +
                 "<listPrice>" + listPrice + "</listPrice>" +
                 "<currency>" + currency + "</currency>" +
                 "<publisher>" + publisher + "</publisher>";
         return xmlStr;
     }
     
-    private String createEditXmlString(String oldIsbn, String newIsbn, String title, 
+    private String createEditXmlString(String oldIsbn, String newIsbn, String title,
             String author, String description) {
         String xmlStr = "<type>edit</type>" +
                 "<oldIsbn>" + oldIsbn + "</oldIsbn>" +
                 "<newIsbn>" + newIsbn + "</newIsbn>" +
-                "<title>" + title + "</title>" + 
-                "<author>" + author + "</author>" + 
+                "<title>" + title + "</title>" +
+                "<author>" + author + "</author>" +
                 "<description>" + description + "</description>";
         return xmlStr;
     }
 }
- 
+
