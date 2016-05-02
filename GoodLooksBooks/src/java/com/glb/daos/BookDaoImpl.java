@@ -2,6 +2,7 @@ package com.glb.daos;
 
 import com.glb.constants.CategoryMap;
 import static com.glb.helpers.Helpers.getTagFromXmlStr;
+import static com.glb.helpers.Helpers.*;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -77,7 +78,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 stmt = conn.createStatement();
                 stmt.executeUpdate("drop view if exists categoryView");
                 query =  "create view categoryView as"
-                        + " select b.isbn, b.title, b.author, b.imageUrl, c.category from books b, category c, "
+                        + " select b.isbn, b.title, b.author, b.imageUrl from books b, category c, "
                         + " searchTermView r where b.isbn = r.isbn or c.isbn = r.isbn and "
                         + catQuery;
                 pstmt = conn.prepareStatement(query);
@@ -93,15 +94,14 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 finalView += " categoryView";
             }
             
-            stmt = conn.createStatement();
-            stmt.executeUpdate("drop view if exists finalView");
-            query =  "create view finalView as"
-                    + " select b.isbn, b.title, b.author, b.imageUrl"
-                    + " from books b ";
-            query = "select count(distinct isbn) from categoryView";
-            rs = stmt.executeQuery(query);
-            while (rs.next()) {
-                numberOfResults = rs.getInt(1);
+            if (catQuery != null) {
+                stmt = conn.createStatement();
+                stmt.executeUpdate("drop view if exists finalView");
+                query =  "create view finalView as"
+                        + " select isbn, title, author, imageUrl"
+                        + " from books inner join categories"
+                        + " on books.isbn = categories.isbn";
+                finalView = "finalView";
             }
             
             query = "select * from "+ finalView
@@ -118,6 +118,18 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 results.add(book);
             }
             rs.close();
+            
+            query = "select count(distinct isbn) from " + finalView;
+            rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                numberOfResults = rs.getInt(1);
+            }
+            
+            if (numberOfResults == 0) {
+                println("No results");
+            }
+            
+          
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
