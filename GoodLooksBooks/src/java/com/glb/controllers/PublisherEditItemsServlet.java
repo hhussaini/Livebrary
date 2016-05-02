@@ -145,9 +145,10 @@ public class PublisherEditItemsServlet extends HttpServlet {
         String language = request.getParameter("language");
         double listPrice = Double.parseDouble(request.getParameter("listPrice"));
         String currency = request.getParameter("currency");
+        String category = request.getParameter("category");
         int status = 0;
         status = bookService.submitAddRequest(isbn, isbn10, title, author, description, 
-                binding, imageUrl, pages, language, listPrice, currency, publisherName);
+                binding, imageUrl, pages, language, listPrice, currency, publisherName, category);
         if (status != 1) {
             throw new ServletException("SQL Error");
         }

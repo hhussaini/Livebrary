@@ -13,6 +13,8 @@ import com.glb.objects.Book;
 import com.glb.objects.Review;
 import com.glb.objects.Ticket;
 import com.glb.objects.User;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -351,32 +353,6 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         return tickets;
     }
     
-    private int doEditTicket(String xmlStr) {
-        String oldIsbn = getTagFromXmlStr(xmlStr, "oldIsbn");
-        String newIsbn = getTagFromXmlStr(xmlStr, "newIsbn");
-        String title = getTagFromXmlStr(xmlStr, "title");
-        String author = getTagFromXmlStr(xmlStr, "author");
-        String description = getTagFromXmlStr(xmlStr, "description");
-        return updateBook(oldIsbn, newIsbn, title, author, description);
-    }
-    
-    private int doAddTicket(String xmlStr) {
-        String isbn = getTagFromXmlStr(xmlStr, "isbn");
-        String title = getTagFromXmlStr(xmlStr, "title");
-        String author = getTagFromXmlStr(xmlStr, "author");
-        String publisher = getTagFromXmlStr(xmlStr, "publisher");
-        String description = getTagFromXmlStr(xmlStr, "description");
-        String isbn10 = getTagFromXmlStr(xmlStr, "isbn10");
-        String binding = getTagFromXmlStr(xmlStr, "binding");
-        String imageUrl = getTagFromXmlStr(xmlStr, "imageUrl");
-        int pages = Integer.parseInt(getTagFromXmlStr(xmlStr, "pages"));
-        String language = getTagFromXmlStr(xmlStr, "language");
-        double listPrice = Double.parseDouble(getTagFromXmlStr(xmlStr, "listPrice"));
-        String currency = getTagFromXmlStr(xmlStr, "currency");
-        return addBook(isbn, isbn10, title, author, description, 
-            binding, imageUrl, pages, language, listPrice, currency, publisher);
-    }
-    
     @Override
     public int acceptTicket(int ticketId) {
         String sql = "select type, xmlStr from TICKETS where id = " + "'" + ticketId + "'";
@@ -411,10 +387,10 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     @Override
     public int addBook(String isbn, String isbn10, String title, String author, String description, 
             String binding, String imageUrl, int pages, String language, double listPrice, 
-            String currency, String publisher) {
-        String sql = "insert into BOOKS values (isbn, isbn10, title, author, description, "
-                + "binding, imageUrl, pages, language, listPrice, currency, publisher "
-                + "(?,?,?,?,?,?,?,?,?,?,?,?)";
+            String currency, String publisher, String category) {
+        String sql = "insert into BOOKS (isbn, isbn10, title, author, description, "
+                + "binding, imageUrl, pages, language, listPrice, currency, publisher, published) "
+                + "values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         Connection conToUse = null;
         PreparedStatement ps = null;
         int status = 0;
@@ -433,7 +409,17 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             ps.setDouble(10, listPrice);
             ps.setString(11, currency);
             ps.setString(12, publisher);
+            Date todaysDate = new Date();
+            String todaysDateStr = new SimpleDateFormat("MM-dd-yyyy").format(todaysDate);
+            ps.setString(13, todaysDateStr);
             status = ps.executeUpdate();
+            if (status == 1) {
+                sql = "insert into CATEGORIES (isbn, category) "
+                    + "values (?,?)";
+                ps.setString(1, isbn);
+                ps.setString(2, category);
+                status = ps.executeUpdate();
+            }
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -494,14 +480,14 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     }
 
     @Override
-    public int submitAddRequest(String isbn, String isbn10, String title, String author, String description, 
-            String binding, String imageUrl, int pages, String language, double listPrice, String currency, String publisher) {
+    public int submitAddRequest(String isbn, String isbn10, String title, String author, String description, String binding, 
+            String imageUrl, int pages, String language, double listPrice, String currency, String publisher, String category) {
         String sql = "insert into TICKETS (type, xmlStr) values(?,?)";
         Connection conToUse = null;
         PreparedStatement ps = null;
         String type = "add";
         String xmlStr = createAddXmlString(isbn, isbn10, title, author, description, 
-                binding, imageUrl, pages, language, listPrice, currency, publisher);
+                binding, imageUrl, pages, language, listPrice, currency, publisher, category);
         int status = 0;
         try {
             conToUse = getConnection();
@@ -545,8 +531,35 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         return status;
     }
     
-    private String createAddXmlString(String isbn, String isbn10, String title, String author, String description, 
-            String binding, String imageUrl, int pages, String language, double listPrice, String currency, String publisher) {
+    private int doEditTicket(String xmlStr) {
+        String oldIsbn = getTagFromXmlStr(xmlStr, "oldIsbn");
+        String newIsbn = getTagFromXmlStr(xmlStr, "newIsbn");
+        String title = getTagFromXmlStr(xmlStr, "title");
+        String author = getTagFromXmlStr(xmlStr, "author");
+        String description = getTagFromXmlStr(xmlStr, "description");
+        return updateBook(oldIsbn, newIsbn, title, author, description);
+    }
+    
+    private int doAddTicket(String xmlStr) {
+        String isbn = getTagFromXmlStr(xmlStr, "isbn");
+        String title = getTagFromXmlStr(xmlStr, "title");
+        String author = getTagFromXmlStr(xmlStr, "author");
+        String publisher = getTagFromXmlStr(xmlStr, "publisher");
+        String description = getTagFromXmlStr(xmlStr, "description");
+        String isbn10 = getTagFromXmlStr(xmlStr, "isbn10");
+        String binding = getTagFromXmlStr(xmlStr, "binding");
+        String imageUrl = getTagFromXmlStr(xmlStr, "imageUrl");
+        int pages = Integer.parseInt(getTagFromXmlStr(xmlStr, "pages"));
+        String language = getTagFromXmlStr(xmlStr, "language");
+        double listPrice = Double.parseDouble(getTagFromXmlStr(xmlStr, "listPrice"));
+        String currency = getTagFromXmlStr(xmlStr, "currency");
+        String category = getTagFromXmlStr(xmlStr, "category");
+        return addBook(isbn, isbn10, title, author, description, binding, 
+                imageUrl, pages, language, listPrice, currency, publisher, category);
+    }
+    
+    private String createAddXmlString(String isbn, String isbn10, String title, String author, String description, String binding, 
+            String imageUrl, int pages, String language, double listPrice, String currency, String publisher, String category) {
         String xmlStr = "<type>add</type>" +
                 "<isbn>" + isbn + "</isbn>" +
                 "<isbn10>" + isbn10 + "</isbn10>" +
@@ -559,6 +572,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 "<language>" + language + "</language>" + 
                 "<listPrice>" + listPrice + "</listPrice>" +
                 "<currency>" + currency + "</currency>" +
+                "<category>" + category + "</category>" +
                 "<publisher>" + publisher + "</publisher>";
         return xmlStr;
     }

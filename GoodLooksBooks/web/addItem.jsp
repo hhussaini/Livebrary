@@ -45,6 +45,12 @@ currency
                   </div>
                 </div>
                 <div class="form-group">
+                  <label class = "control-label regLabel" for="category">Category:</label>
+                  <div class = "controls regControl">
+                      <input type="text" class="form-control" name="category" required autofocus>
+                  </div>
+                </div>
+                <div class="form-group">
                   <label class = "control-label regLabel" for="title">Binding:</label>
                   <div class = "controls regControl">
                       <input type="text" class="form-control" name="binding" required autofocus>

@@ -267,8 +267,8 @@ public class BookServiceImpl implements BookService {
     }
     
     @Override
-    public int submitAddRequest(String isbn, String isbn10, String title, String author, String description, 
-            String binding, String imageUrl, int pages, String language, double listPrice, String currency, String publisher) {
+    public int submitAddRequest(String isbn, String isbn10, String title, String author, String description, String binding, 
+            String imageUrl, int pages, String language, double listPrice, String currency, String publisher, String category) {
         Connection conToUse = null;
         int status = 0;
         // get the connection from util class
@@ -279,7 +279,7 @@ public class BookServiceImpl implements BookService {
             BookDao bookDao = DaoFactory.getBookDao();
             bookDao.setConnection(conToUse);;
             status = bookDao.submitAddRequest(isbn, isbn10, title, author,description, 
-                    binding, imageUrl, pages, language, listPrice, currency, publisher);
+                    binding, imageUrl, pages, language, listPrice, currency, publisher, category);
             conToUse.commit();
         } catch (ResourceHelperException e) {
             System.out.println("ResourceHelperException");
