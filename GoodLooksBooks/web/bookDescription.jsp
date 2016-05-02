@@ -23,9 +23,10 @@
     <link href="css/rating/theme-krajee-svg.css" media="all" rel="stylesheet" type="text/css" />
     <script src="js/rating/star-rating.js" type="text/javascript"></script>            
     <!-- optionally if you need translation for your language then include locale file as mentioned below -->
-    <script src="js/rating/star-rating_locale_<lang>.js"></script>            
+           
     <!--link to custom javascript page-->
     <script src="js/bookDescription.js" type="text/javascript"></script>
+    <script src="js/reviews.js" type="text/javascript"></script>
 </head>
 <body>
     <c:choose>
@@ -83,10 +84,11 @@
             
             <div><font color="white" size="100">.</font>  <!--Some random filler-->
                 <hr class="fancy">
-        <br> 
-             
-            <c:if test="${user.type == 'customer' && itemClicked.reviews[user.username] == null}" >
+            <br> 
+            
+            <!--Review Item--> 
             <div id="submittingReviewID" class="container" style = "width: 75%;">
+                <div id="submittingReviewInnerID"  style="display: ${user.type == 'customer' && itemClicked.reviews[user.username] == null ? 'block;' : 'none;'}">
                 <div id="userRatingID" style="display: none;">
                 <label for="input-2" class="control-label">Your Rating</label><br>
                 <label>
@@ -101,73 +103,70 @@
                 </div>
                 <textarea class="review collapse" id="reviewdetails" name="review" placeholder="Describe your review...">
                 </textarea>
-                <button class="btn btn-success" id="reviewBtn" onClick = "submitReview()" style="display: none;">Submit</button>
+                <button class="btn btn-success" id="reviewBtn" onClick = "addReview()" style="display: none;">Submit</button>
                 <br>
-                <button type="button" onClick="showSubmit()" class="btn btn-info" data-toggle="collapse" data-target="#reviewdetails">Review this item</button>
-            </div>
-            </c:if>
+                <button type="button" onClick="showSubmit()" class="btn btn-info" data-toggle="collapse" data-target="#reviewdetails, #userRatingID">Review this item</button>
+                </div>
+                </div>
+      
 <!--        </form>-->
         <br><br><br> 
         </div>
         <hr class="fancy">
         <br>
          
-        <div id="topReviewContainerID_1">    
-        <div id = "newReviewID" style="display:none;">
-          <div class="col-xs-12 col-sm-12" style="border-style: groove;"> 
-            <button type="button" id="edit-review-btn1" onClick="resetReview(this.id)" class="btn btn-info">Resubmit/edit review</button>
+        
+        
+        <!--All review-->
+        <div id="allReviews">
+        
+        <!--current user logged in review-->
+        <div id= "reviewContainer_0" class="col-xs-12 col-sm-12" style="border-style: groove; display: none;">
+            <button type="button" id="edit-review-btn" onClick="editReview(this.id)" class="btn btn-info">Resubmit/edit review</button>
             &nbsp;&nbsp;
-            <button class="btn btn-danger"  id="remove-review1" onClick="removeReview(this.id)">Remove review</button>
-            <br><br>
-            <div id="newReviewIDStars" value = ""> 
-            </div> 
-          <label for="input-3" class="control-label"> It was OK </label> 
-          <h4>By: </h4><h4 id="newReviewUsernameTextID"></h4>
-          <h5><c:out value=""/></h5><h5 id="newReviewUserReviewTextID"></h5>
-          <br> 
-          </div>
-        </div>
-        </div>
-        
-        
-        <c:forEach var="entry" items="${itemClicked.reviews}" varStatus="i">
-          <c:if test="${entry.key == user.username}"> 
-          <div id="topReviewContainerID_2">    
-        <div id="firstReviewID" class="col-xs-12 col-sm-12" style="border-style: groove;">
-          <!--took this line out-->
-            <button type="button" id="edit-review-btn2" onClick="resetReview(this.id)" class="btn btn-info">Resubmit/edit review</button>
-            &nbsp;&nbsp;
-            <button class="btn btn-danger" id="remove-review2" onClick="removeReview(this.id)">Remove review</button>
-            <br><br>
-            <div id="loggedInRatingID" value = "${itemClicked.reviews[entry.key].rating}"> 
-            </div> 
-          <label for="input-3" class="control-label"> It was OK </label>
-           <!--took end of this if statement out-->
-          <h4>By: ${entry.key}</h4><h4 id="usernameTextID"></h4>
-          <h5><c:out value="${entry.value.reviewText}"/></h5><h5 id="userReviewTextID"></h5>
-          <br> 
-        </div>
-          </div>
-        </c:if>
-        </c:forEach>
-        
-        <!--Item Reviews-->
-          <c:forEach var="entry" items="${itemClicked.reviews}" varStatus="i">
-          <div class="col-xs-12 col-sm-12" style="${(entry.key != user.username) ? 'border-style: groove;' : ''}">
-    <!-- took this line out-->
-            <div id="eachRatingID_${i.index}" value = "${(entry.key != user.username) ? itemClicked.reviews[entry.key].rating : -1}"> 
+            <button class="btn btn-danger" id="remove-review" onClick="removeReview(this.id)">Remove review</button>
+            <br><br>                
+            <div id="topReviewContainerID_0">   
+            <div id="loggedInRatingID_0" value = "">              
             </div>
-<!--            <input id="input-3" value="3" class="rating-md" style="font-size: 1.0em"> -->
-                <c:if test= "${entry.key != user.username}">
-                    <label for="input-3" class="control-label"> It was OK </label>
-                    <h4>By: ${entry.key}</h4>
-                    <h5><c:out value="${entry.value.reviewText}"/></h5>
-                    <br>  
-                </c:if>
-            </div> 
-          <br>
-          </c:forEach>
-    </div> 
+            <br> 
+            </div>  
+            <br> 
+            <label for="input-3" class="control-label"> It was OK </label>	
+            <br>
+            <h4 id="userReviewName_0">By: </h4>
+            <h5 id="reviewText_0"></h5>
+            <br>
+        </div> 
+       
+         <!--All review besides current users review-->
+            <c:set var="flag" scope="session" value="false"/>
+            <c:forEach var="entry" items="${itemClicked.reviews}" varStatus="i">
+                <c:choose>
+                    <c:when test="${entry.key == user.username}"> 
+                        <p id="hiddenElement1" value="${entry.key}"></p>
+                        <p id="hiddenElement2" value="${itemClicked.reviews[entry.key].rating}"></p>
+                        <p id="hiddenElement3" value="${entry.value.reviewText}"></p>
+                        <c:set var="flag" scope="session" value="true"/>
+                    </c:when>
+                <c:otherwise>  
+                    <div id= "reviewContainer_${flag? i.index : i.index + 1}" class="col-xs-12 col-sm-12" style="border-style: groove; display: initial;">
+                    <div id="topReviewContainerID_${flag? i.index : i.index + 1}">   
+                        <div id="loggedInRatingID_${flag? i.index : i.index + 1}" value = "${itemClicked.reviews[entry.key].rating}">              
+                        </div>
+                        <br> 
+                    </div>  
+                    <br> 
+                    <label for="input-3" class="control-label"> It was OK </label>	
+                    <br>
+                    <h4 id="userReviewName_${flag? i.index : i.index + 1}">By: ${entry.key}</h4>
+                    <h5 id="reviewText_${flag? i.index : i.index + 1}">${entry.value.reviewText}</h5>
+                    <br>
+                    </div> 
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+        </div>
    
     <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModal" aria-hidden="true">
         <div class="modal-dialog">

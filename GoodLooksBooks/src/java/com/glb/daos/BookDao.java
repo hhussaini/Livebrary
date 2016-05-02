@@ -27,4 +27,5 @@ public interface BookDao extends JdbcDaoSupport {
     public int addReview(Review review, Book book, User user);
     public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description);
     public int deleteReview(String isbn, String username);
+    public Book editReview(Review review, String isbn, String username);
 }
