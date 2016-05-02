@@ -418,6 +418,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             if (status == 1) {
                 sql = "insert into CATEGORIES (isbn, category) "
                     + "values (?,?)";
+                ps = conToUse.prepareStatement(sql);
                 ps.setString(1, isbn);
                 ps.setString(2, category);
                 status = ps.executeUpdate();
