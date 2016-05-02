@@ -12,7 +12,6 @@ import java.util.List;
 import com.glb.objects.Book;
 import com.glb.objects.Review;
 import com.glb.objects.Ticket;
-import com.glb.objects.User;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -373,6 +372,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                     status = doEditTicket(xmlStr);
                 } else if (type.equals("add")) {
                     status = doAddTicket(xmlStr);
+                } else if (type.equals("delete")) {
+                    status = doDeleteTicket(xmlStr);
                 }
                 if (status == 1) {
                     status = resolveTicket(ticketId, "y");
@@ -452,6 +453,32 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             ps.setString(4, description.isEmpty() ? book.getDescription() : description);
             ps.setString(5, oldIsbn);
             status = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(ps);
+        }
+        return status;
+    }
+    
+    @Override
+    public int deleteBook(String isbn) {
+        // TODO. Maybe need to handle if a user owns this book?
+        String sql = "delete from BOOKS where isbn = ?";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            ps = conToUse.prepareStatement(sql);
+            ps.setString(1, isbn);
+            status = ps.executeUpdate();
+            if (status == 1) {
+                sql = "delete from CATEGORIES where isbn = ?";
+                ps = conToUse.prepareStatement(sql);
+                ps.setString(1, isbn);
+                status = ps.executeUpdate();
+            }
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -564,6 +591,11 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 imageUrl, pages, language, listPrice, currency, publisher, category);
     }
     
+    private int doDeleteTicket(String xmlStr) {
+        String isbn = getTagFromXmlStr(xmlStr, "isbn");
+        return deleteBook(isbn);
+    }
+    
     private String createAddXmlString(String isbn, String isbn10, String title, String author, String description, String binding, 
             String imageUrl, int pages, String language, double listPrice, String currency, String publisher, String category) {
         String xmlStr = "<type>add</type>" +
@@ -593,6 +625,12 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 "<description>" + description + "</description>";
         return xmlStr;
     }
+    
+    private String createDeleteXmlString(String isbn) {
+        String xmlStr = "<type>delete</type>" +
+                "<isbn>" + isbn + "</isbn>";
+        return xmlStr;
+    }
 
     @Override
     public Book editReview(Review review, String isbn, String username) {
@@ -619,6 +657,28 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             DbUtils.closeQuietly(ps);
         }
         return book;
+    }
+
+    @Override
+    public int submitDeleteRequest(String isbn) {
+        String sql = "insert into TICKETS (type, xmlStr) values(?,?)";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        String type = "delete";
+        String xmlStr = createDeleteXmlString(isbn);
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            ps = conToUse.prepareStatement(sql);
+            ps.setString(1, type);
+            ps.setString(2, xmlStr);
+            status = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
+            DbUtils.closeQuietly(ps);
+        }
+        return status;
     }
 }
  

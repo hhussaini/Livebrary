@@ -43,6 +43,8 @@ public class PublisherEditItemsServlet extends HttpServlet {
             doEdit(request, response);
         } else if (method.equals("doAdd")) {
             doAdd(request, response);
+        } else if (method.equals("doDelete")) {
+            doDelete(request, response);
         } else {
             super.service(request, response);
         } 
@@ -149,6 +151,19 @@ public class PublisherEditItemsServlet extends HttpServlet {
         int status = 0;
         status = bookService.submitAddRequest(isbn, isbn10, title, author, description, 
                 binding, imageUrl, pages, language, listPrice, currency, publisherName, category);
+        if (status != 1) {
+            throw new ServletException("SQL Error");
+        }
+        outputToHtml(response, "Your ticket has been sent. The site admin "
+                    + "will respond to your ticket soon.");
+    }
+    
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        println(this.getServletName() + " : " + "doDelete");
+        String isbn = request.getParameter("isbn");
+        int status = 0;
+        status = bookService.submitDeleteRequest(isbn);
         if (status != 1) {
             throw new ServletException("SQL Error");
         }

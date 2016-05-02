@@ -22,6 +22,10 @@
                             <form action="PublisherEditItemsServlet" method="post">
                                 <button name="isbn" value="${item.isbn}" class="btn btn-danger">Edit</button>
                             </form>
+                            <form action="PublisherEditItemsServlet" method="doDelete">
+                                <button name="isbn" value="${item.isbn}" class="btn btn-danger">Delete</button>
+                                <input type="hidden" name="method" value="doDelete">
+                            </form>
                         </td>
                     </tr>
                     <hr class="fancy">

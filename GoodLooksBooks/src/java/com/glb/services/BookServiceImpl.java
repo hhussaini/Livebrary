@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 import com.glb.objects.Book;
 import com.glb.objects.Review; 
 import com.glb.objects.Ticket;
-import com.glb.objects.User;
 import java.sql.ResultSet;
 import java.sql.SQLException; 
 import java.util.Map;
@@ -325,5 +324,32 @@ public class BookServiceImpl implements BookService {
         }
         
         return book;
+    }
+
+    @Override
+    public int submitDeleteRequest(String isbn) {
+        Connection conToUse = null;
+        int status = 0;
+        // get the connection from util class
+        // set the transaction to con & pass con to dao
+        try {
+            conToUse = ConnectionUtil.getConnection();
+            conToUse.setAutoCommit(false);
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conToUse);;
+            status = bookDao.submitDeleteRequest(isbn);
+            conToUse.commit();
+        } catch (ResourceHelperException e) {
+            System.out.println("ResourceHelperException");
+            DbUtils.rollbackAndCloseQuietly(conToUse);
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, e);
+        } catch (SQLException ex) {
+            System.out.println("SQLException");
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(conToUse);
+        }
+    
+        return status;
     }
 }
