@@ -95,6 +95,14 @@
         <servlet-name>ItemReviewServlet</servlet-name>
         <servlet-class>com.glb.controllers.ItemReviewServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PublisherEditItemsServlet</servlet-name>
+        <servlet-class>com.glb.controllers.PublisherEditItemsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminRespondToTicketsServlet</servlet-name>
+        <servlet-class>com.glb.controllers.AdminRespondToTicketsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -170,6 +178,14 @@
     <servlet-mapping>
         <servlet-name>ItemReviewServlet</servlet-name>
         <url-pattern>/ItemReviewServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PublisherEditItemsServlet</servlet-name>
+        <url-pattern>/PublisherEditItemsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminRespondToTicketsServlet</servlet-name>
+        <url-pattern>/AdminRespondToTicketsServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

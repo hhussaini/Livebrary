@@ -24,12 +24,11 @@ public class Item implements Serializable{
     private String imageUrl;
     private List<String> genres;
     private int numOfDownloads;
-    private Map<String, Review>reviews;
+    private Map<String, Review> reviews;
     
     public Item(){
         this.reviews = new HashMap<>();
-        this.genres = new ArrayList<>();
-       
+        this.genres = new ArrayList<>();       
     }
 
     public Item(String isbn, String title, String description, double avgRating, String downloadLink, 
@@ -182,8 +181,7 @@ public class Item implements Serializable{
     public void editReview(User user, Review review){
         this.reviews.remove(user.getEmail());
         this.reviews.put(user.getEmail(), review);
-    }
-    
+    }    
     
     @Override
     public String toString(){

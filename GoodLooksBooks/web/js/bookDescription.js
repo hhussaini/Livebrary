@@ -3,14 +3,44 @@ var starsSelected;
 $(document).ready(function(){
    console.log("isbn: " + document.getElementById("isbn").value);
    var avgStarRating = document.getElementById("avgStarID").getAttribute("value");
-   updateAverageStarRating(avgStarRating);
    
+    updateAverageStarRating(avgStarRating, "avgStarID", true);   
+    updateEachRatingStars("loggedInRatingID");
+    updateEachRatingStars("");
+  
     $("#emailButton").click(function(){
         console.log("email button clicked");
         $('#emailModal').modal('show');
     });
-
+    
 });
+
+function updateEachRatingStars(id){
+    if(id !== ""){
+       if(document.getElementById(id) !== null){
+            var star = document.getElementById(id).outerHTML;
+            var index = star.indexOf("value=") + "value=".length + 1;
+            star = star.substring(index, index + 1); 
+            updateAverageStarRating(parseInt(star), id, false);
+        }
+    }
+    else{
+        var i  = 0; 
+        while(document.getElementById("eachRatingID_" + i) !== null){
+            var numOfStars = document.getElementById("eachRatingID_" + i).value;
+      
+            var star = document.getElementById("eachRatingID_" + i).outerHTML;
+            var index = star.indexOf("value=") + "value=".length + 1;
+            star = star.substring(index, index + 1); 
+            if(parseInt(star)>-1){
+                updateAverageStarRating(parseInt(star), "eachRatingID_" + i, false);
+            }
+//            console.log("Star: " + parseInt(star));
+   
+        i++;
+        }
+    } 
+}
 
 function createYellowStar(i){
     var img = document.createElement("img");
@@ -65,9 +95,48 @@ function showSubmit() {
 function resetReview() {
     var d = document.getElementById("review-div");
     var t = document.getElementById("reviewdetails2");
-    d.removeChild(t);
+   // d.removeChild(t);
     document.getElementById("edit-review-btn").style.display = "none";
     document.getElementById("remove-review").style.display = "none";
+}
+
+function removeReview(id){
+    if(id === "remove-review1"){
+        deleteReviewAjax("topReviewContainerID_1");
+        
+    }
+    else{
+        deleteReviewAjax("topReviewContainerID_2");
+      
+    } 
+}
+
+function deleteReviewAjax(id){
+    var type = 'POST';
+    var url = 'ItemReviewServlet';
+    var isbn = document.getElementById("isbn").value.toString();
+    console.log("In deleteReviewAjax: " + isbn);
+    
+    var itemObject = { 
+        isbn : isbn,
+        method : "delete"
+    };
+    
+    $.ajax({ 
+        type: type,
+        url:  url,
+        data: itemObject,
+        dataType: 'json',
+        success: function(result){  
+            console.log(result);
+            $('#' + id).html(''); 
+            updateAverageStarRating(result, "avgStarID", true);   
+        },
+        error: function(result){
+            console.log("Error!");
+            console.log(result);
+        }
+    });
 }
 
 function changeWishlist() {
@@ -88,17 +157,17 @@ function setColor(btn, color){
         property.style.backgroundColor = "#E1E1E1";
     }
 }
-
+ 
 function submitReview(){
     var text = document.getElementById("reviewdetails").value;
-    console.log(text);
-    updateReviewsAjax(text);
+  //  console.log(text);
+    addReviewAjax(text);
     document.getElementById("submittingReviewID").style.display = 'none';
    
   //  document.getElementById("submitReviewForm").submit();   
 }
 
-function updateReviewsAjax(text){
+function addReviewAjax(text){
     var type = 'POST';
     var url = 'ItemReviewServlet';
     var isbn = document.getElementById("isbn").value.toString();
@@ -106,7 +175,8 @@ function updateReviewsAjax(text){
     var itemObject = {
         numOfStars : starsSelected,
         text : text,
-        isbn : isbn
+        isbn : isbn,
+        method : "add"
     };
     
     $.ajax({ 
@@ -115,29 +185,8 @@ function updateReviewsAjax(text){
         data: itemObject,
         dataType: 'json',
         success: function(result){  
-            console.log("Success!"); 
-            //console.log(JSON.stringify(result.reviews));
-            var currentUser = result.currentUser;
-             var text = "";
-            var jsonArray = result.reviews;
-            console.log("Length of jsoArray: " + jsonArray.length);
-            for (var i=0; i<jsonArray.length; i++){
-                var starRating = jsonArray[i].rating;
-                var username = jsonArray[i].username;
-                var reviewText = jsonArray[i].reviewText;
-                console.log();
-                if(currentUser === username){
-                    console.log("In if statment: " + text);
-                    document.getElementById("usernameTextID").innerHTML = username;
-                    document.getElementById("userReviewTextID").innerHTML = reviewText;
-                    document.getElementById("avgRatingText").innerHTML = result.avgRating;
-                    break;
-                } 
-            }
-            
-           updateAverageStarRating(result.avgRating);
-           // updateAverageStarRating(result.avgRating);
-       
+            console.log("Success!");  
+            successCallFromAjax(result); 
         },
         error: function(result){
             console.log("Error!");
@@ -146,8 +195,33 @@ function updateReviewsAjax(text){
     });
 }
 
-$(document).on('ready', function(){
-    //  console.log("hey: " + window.location.href);
+function successCallFromAjax(result){
+    var currentUser = result.currentUser;
+            var text = "";
+            var jsonArray = result.reviews; 
+            for (var i=0; i<jsonArray.length; i++){
+                var starRating = jsonArray[i].rating;
+                var username = jsonArray[i].username;
+                var reviewText = jsonArray[i].reviewText; 
+                if(currentUser === username){
+                    console.log("In if statment: " + text);
+                    $("#newReviewID").show();
+                    console.log("Username: " + username);
+                    console.log("Star Rating: " + starRating);
+                    console.log("Review Text: " + reviewText);
+                    document.getElementById("newReviewUsernameTextID").innerHTML = username;
+                    document.getElementById("newReviewUserReviewTextID").innerHTML = reviewText;
+                    document.getElementById("newReviewIDStars").value = starRating; 
+                    updateAverageStarRating(starRating, "newReviewIDStars", false);
+                    break;
+                } 
+            }
+            
+            console.log("Result.avgRating: " + result.avgRating);   
+            updateAverageStarRating(result.avgRating, "avgStarID", true);   
+}
+
+$(document).on('ready', function(){ 
     if(window.location.href === "BookDescriptionServlet"){
         updateAverageRatingAjax(null);
         $('#input-3').rating({displayOnly: true, step: 0.5});
@@ -157,51 +231,28 @@ $(document).on('ready', function(){
     }      
 });
 
-function updateAverageStarRating(avgStarRating){
-   avgStarRating = Math.round(avgStarRating * 10)/10;
-   console.log("Avg rating: " + avgStarRating);
-   var theDiv = document.getElementById("avgStarID"); 
-   while (theDiv.hasChildNodes()) {
+function updateAverageStarRating(avgStarRating, avgStarID, flag){
+    avgStarRating = Math.round(avgStarRating * 10)/10;
+    console.log("Avg rating: " + avgStarRating);
+    var theDiv = document.getElementById(avgStarID); 
+    while (theDiv.hasChildNodes()) {
         theDiv.removeChild(theDiv.lastChild);
-   } 
+    } 
     for(var i = 1; i <= avgStarRating; i++){ 
        theDiv.appendChild(createYellowStar(i));  
-   }
-   var decimal = avgStarRating - Math.floor(avgStarRating);
-   var widthOfImage = 36 * decimal;   
-   var imgElement = document.createElement("img");
-   imgElement.setAttribute("id", "clip");
-   imgElement.setAttribute("src", "assets/yellowStar.png");
-   theDiv.appendChild(imgElement); 
-   document.getElementById("clip").style.clip =  "rect(0px " + widthOfImage + "px 200px 0px)";  
+    }
+    if(flag){
+        var decimal = avgStarRating - Math.floor(avgStarRating);
+        var widthOfImage = 36 * decimal;   
+        var imgElement = document.createElement("img"); 
+        imgElement.setAttribute("id", "clip");
+        imgElement.setAttribute("src", "assets/yellowStar.png");
+        theDiv.appendChild(imgElement); 
+        document.getElementById("clip").style.clip =  "rect(0px " + widthOfImage + "px 200px 0px)";  
+        document.getElementById("avgRatingText").innerHTML = avgStarRating;
+    }
 }
-
-//function updateAverageStarRatingAjax(numOfStarsSelected){
-//    var type = 'POST';
-//    var url = 'ItemReviewServlet';
-//    var isbn = document.getElementById("isbn").value.toString();
-//   
-//    var itemObject = {
-//        numOfStars : numOfStarsSelected.toString(), 
-//        isbn : isbn
-//    };
-//    
-//    $.ajax({ 
-//        type: type,
-//        url:  url,
-//        data: itemObject,
-//        dataType: 'json',
-//        success: function(result){  
-//            console.log("Success!"); 
-//            updateAverageStarRating(result.avgRating);
-//       
-//        },
-//        error: function(result){
-//            console.log("Error!");
-//            console.log(result);
-//        }
-//    });
-//}
+ 
 
 function validateImgUrl(id) {
     var book = document.getElementById(id);
@@ -276,6 +327,8 @@ function getStarColor(num){
     return document.getElementById('star' + num.toString()).getAttribute("value") === "0";  
 }
 
+
+ 
 
     
 

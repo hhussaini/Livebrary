@@ -1,9 +1,7 @@
 package com.glb.daos;
  
 import com.glb.constants.CategoryMap;
-import static com.glb.daos.ConnectionUtil.getConnection;
-import com.glb.exceptions.ResourceHelperException;
-import static com.glb.helpers.Helpers.*;
+import static com.glb.helpers.Helpers.getTagFromXmlStr;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -13,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.glb.objects.Book;
 import com.glb.objects.Review;
+import com.glb.objects.Ticket;
 import com.glb.objects.User;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +24,8 @@ import org.apache.commons.dbutils.DbUtils;
  * @author mobile-mann
  */
 public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
+    
     private Statement stmt = null;
-    private ResultSet res = null;
     private static CategoryMap categoryMap = new CategoryMap();
     private int numberOfResults;
     private int totalBooks;
@@ -183,6 +182,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 book.setDescription(rs.getString("description"));
                 book.setDate(rs.getString("published"));
                 book.setLanguage(rs.getString("language"));
+                Map<String, Review> reviews = getAllReviewsForBook(isbn);
+                book.setReviews(reviews);
             }
             rs.close();
             
@@ -224,7 +225,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     public List<Book> getItemsList(String userName) {
         List<Book> itemsList = new ArrayList<>();        
         Connection conToUse = null;
-        java.sql.PreparedStatement ps = null;
+        PreparedStatement ps = null;
+        ResultSet res = null;
         try {
             conToUse = getConnection();
             String sql = "SELECT isbn from RESERVED WHERE username = ?";
@@ -300,6 +302,276 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         }
         return status;
     }
-      
+
+    @Override
+    public int submitEditRequest(String oldIsbn, String newIsbn, String title, String author, String description) {
+        String sql = "insert into TICKETS (type, xmlStr) values(?,?)";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        String type = "edit";
+        String xmlStr = createEditXmlString(oldIsbn, newIsbn, title, author, description);
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            ps = conToUse.prepareStatement(sql);
+            ps.setString(1, type);
+            ps.setString(2, xmlStr);
+            status = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
+            DbUtils.closeQuietly(ps);
+        }
+        return status;
+    }
+
+    @Override
+    public List<Ticket> getTickets(String resolved) {
+        List<Ticket> tickets = new ArrayList<>();       
+        String sql = "select * from TICKETS where resolved = \'" + resolved + "\'";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conToUse = getConnection();
+            Statement stmt = conToUse.createStatement();
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) { 
+                Ticket ticket = new Ticket(); 
+                ticket.setId(rs.getInt("id"));
+                ticket.setType(rs.getString("type"));
+                ticket.setXmlStr(rs.getString("xmlStr"));
+                tickets.add(ticket);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
+            DbUtils.closeQuietly(ps);
+        }
+        return tickets;
+    }
+    
+    private int doEditTicket(String xmlStr) {
+        String oldIsbn = getTagFromXmlStr(xmlStr, "oldIsbn");
+        String newIsbn = getTagFromXmlStr(xmlStr, "newIsbn");
+        String title = getTagFromXmlStr(xmlStr, "title");
+        String author = getTagFromXmlStr(xmlStr, "author");
+        String description = getTagFromXmlStr(xmlStr, "description");
+        return updateBook(oldIsbn, newIsbn, title, author, description);
+    }
+    
+    private int doAddTicket(String xmlStr) {
+        String isbn = getTagFromXmlStr(xmlStr, "isbn");
+        String title = getTagFromXmlStr(xmlStr, "title");
+        String author = getTagFromXmlStr(xmlStr, "author");
+        String publisher = getTagFromXmlStr(xmlStr, "publisher");
+        String description = getTagFromXmlStr(xmlStr, "description");
+        String isbn10 = getTagFromXmlStr(xmlStr, "isbn10");
+        String binding = getTagFromXmlStr(xmlStr, "binding");
+        String imageUrl = getTagFromXmlStr(xmlStr, "imageUrl");
+        int pages = Integer.parseInt(getTagFromXmlStr(xmlStr, "pages"));
+        String language = getTagFromXmlStr(xmlStr, "language");
+        double listPrice = Double.parseDouble(getTagFromXmlStr(xmlStr, "listPrice"));
+        String currency = getTagFromXmlStr(xmlStr, "currency");
+        return addBook(isbn, isbn10, title, author, description, 
+            binding, imageUrl, pages, language, listPrice, currency, publisher);
+    }
+    
+    @Override
+    public int acceptTicket(int ticketId) {
+        String sql = "select type, xmlStr from TICKETS where id = " + "'" + ticketId + "'";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            Statement stmt = conToUse.createStatement();
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                String type = rs.getString("type");
+                String xmlStr = rs.getString("xmlStr");
+                if (type.equals("edit")) {
+                    status = doEditTicket(xmlStr);
+                } else if (type.equals("add")) {
+                    status = doAddTicket(xmlStr);
+                }
+                if (status == 1) {
+                    status = resolveTicket(ticketId, "y");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
+            DbUtils.closeQuietly(ps);
+        }
+        return status;
+    }
+    
+    @Override
+    public int addBook(String isbn, String isbn10, String title, String author, String description, 
+            String binding, String imageUrl, int pages, String language, double listPrice, 
+            String currency, String publisher) {
+        String sql = "insert into BOOKS values (isbn, isbn10, title, author, description, "
+                + "binding, imageUrl, pages, language, listPrice, currency, publisher "
+                + "(?,?,?,?,?,?,?,?,?,?,?,?)";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            ps = conToUse.prepareStatement(sql);
+            ps.setString(1, isbn);
+            ps.setString(2, isbn10);
+            ps.setString(3, title);
+            ps.setString(4, author);
+            ps.setString(5, description);
+            ps.setString(6, binding);
+            ps.setString(7, imageUrl);
+            ps.setInt(8, pages);
+            ps.setString(9, language);
+            ps.setDouble(10, listPrice);
+            ps.setString(11, currency);
+            ps.setString(12, publisher);
+            status = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(ps);
+        }
+        return status;
+    }
+    
+    @Override
+    public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description) {
+        String sql = "update BOOKS set isbn = ?" 
+                    + ",title = ?"
+                    + ",author = ?"
+                    + ",description = ?"
+                    + " where isbn = ?";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        Book book = null;
+        int status = 0;
+        try {
+            book = getBookByIsbn(oldIsbn);
+            conToUse = getConnection();
+            ps = conToUse.prepareStatement(sql);
+            ps.setString(1, newIsbn.isEmpty() ? book.getIsbn() : newIsbn);
+            ps.setString(2, title.isEmpty() ? book.getTitle() : title);
+            ps.setString(3, author.isEmpty() ? book.getAuthor() : author);
+            ps.setString(4, description.isEmpty() ? book.getDescription() : description);
+            ps.setString(5, oldIsbn);
+            status = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(ps);
+        }
+        return status;
+    }
+    
+    @Override
+    public int resolveTicket(int ticketId, String accepted) {
+        String sql = "update TICKETS set resolved = ?, accepted = ? "
+                + "where id = ?";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            ps = conToUse.prepareStatement(sql);
+            ps.setString(1, "y");
+            ps.setString(2, accepted);
+            ps.setInt(3, ticketId);
+            status = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
+            DbUtils.closeQuietly(ps);
+        }
+        return status;
+    }
+
+    @Override
+    public int submitAddRequest(String isbn, String isbn10, String title, String author, String description, 
+            String binding, String imageUrl, int pages, String language, double listPrice, String currency, String publisher) {
+        String sql = "insert into TICKETS (type, xmlStr) values(?,?)";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        String type = "add";
+        String xmlStr = createAddXmlString(isbn, isbn10, title, author, description, 
+                binding, imageUrl, pages, language, listPrice, currency, publisher);
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            ps = conToUse.prepareStatement(sql);
+            ps.setString(1, type);
+            ps.setString(2, xmlStr);
+            status = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
+            DbUtils.closeQuietly(ps);
+        }
+        return status;
+    }
+
+    @Override
+    public int deleteReview(String isbn, String username) {
+        Connection conToUse = null;
+        PreparedStatement preparedStmt = null;
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            if (conToUse == null)
+                System.out.println("conToUse == null");
+             
+           
+            String sql = "DELETE FROM reviews WHERE isbn = ? AND username = ?";
+            preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
+            preparedStmt.setString(1, isbn);
+            preparedStmt.setString(2, username);
+            
+            status = preparedStmt.executeUpdate(); 
+            
+           // book.addReview(user, review);
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            DbUtils.closeQuietly(preparedStmt);
+        }
+        return status;
+    }
+    
+    private String createAddXmlString(String isbn, String isbn10, String title, String author, String description, 
+            String binding, String imageUrl, int pages, String language, double listPrice, String currency, String publisher) {
+        String xmlStr = "<type>add</type>" +
+                "<isbn>" + isbn + "</isbn>" +
+                "<isbn10>" + isbn10 + "</isbn10>" +
+                "<title>" + title + "</title>" + 
+                "<author>" + author + "</author>" + 
+                "<description>" + description + "</description>" +
+                "<binding>" + binding + "</binding>" + 
+                "<imageUrl>" + imageUrl + "</imageUrl>" + 
+                "<pages>" + pages + "</pages>" + 
+                "<language>" + language + "</language>" + 
+                "<listPrice>" + listPrice + "</listPrice>" +
+                "<currency>" + currency + "</currency>" +
+                "<publisher>" + publisher + "</publisher>";
+        return xmlStr;
+    }
+    
+    private String createEditXmlString(String oldIsbn, String newIsbn, String title, 
+            String author, String description) {
+        String xmlStr = "<type>edit</type>" +
+                "<oldIsbn>" + oldIsbn + "</oldIsbn>" +
+                "<newIsbn>" + newIsbn + "</newIsbn>" +
+                "<title>" + title + "</title>" + 
+                "<author>" + author + "</author>" + 
+                "<description>" + description + "</description>";
+        return xmlStr;
+    }
 }
  

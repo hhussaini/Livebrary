@@ -19,7 +19,6 @@ import org.apache.commons.dbutils.DbUtils;
 public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
     
     private Statement stmt = null;
-    private ResultSet res = null;
     
     @Override
     public int save(User user) {
@@ -60,6 +59,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         
         Connection conToUse = null;
         PreparedStatement ps = null;
+        ResultSet res = null;
         try {
             conToUse = getConnection();
             stmt = (Statement) conToUse.createStatement();
@@ -117,6 +117,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         List<Book> booksOnWishlist = new ArrayList<Book>();        
         Connection conToUse = null;
         java.sql.PreparedStatement ps = null;
+        ResultSet res = null;
         try {
             String username = user.getUsername();
             conToUse = getConnection();
@@ -149,6 +150,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         Connection conToUse = null;
         PreparedStatement preparedStmt = null;
         String sql;
+        ResultSet res = null;
         int status = 0;
         try {
             String username = user.getUsername();
@@ -208,6 +210,36 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         }
         
         return status;
+    }
+
+    @Override
+    public List<Book> getPublisherItems(User publisher) {
+        List<Book> publisherItems = new ArrayList<Book>();        
+        Connection conToUse = null;
+        java.sql.PreparedStatement ps = null;
+        ResultSet res = null;
+        try {
+            String company = publisher.getCompany();
+            conToUse = getConnection();
+            String sql = "select * from BOOKS where publisher = ? and title is not null";
+            
+            ps = (PreparedStatement) conToUse.prepareStatement(sql);
+            ps.setString(1, company);
+            res = ps.executeQuery();
+            while (res.next()) {
+                Book book = new Book();
+                book.setIsbn(res.getString("isbn"));
+                book.setTitle(res.getString("title"));
+                book.setImageUrl(res.getString("imageUrl"));
+                publisherItems.add(book);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(ps);
+        }
+        
+        return publisherItems;
     }
     
 }
