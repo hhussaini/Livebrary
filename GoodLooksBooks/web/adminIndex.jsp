@@ -20,7 +20,7 @@
             Site Statistics          
           </div>
           <div class="list-group">
-            <a href="AdminRespondToTicketsServlet"><img alt="brand" width = "100" height = "100" src="assets/statistics-icon.jpg"></a>
+            <a href="AdminRespondToTicketsServlet"><img alt="brand" width = "100" height = "100" src="assets/service-request-icon.jpeg"></a>
             Respond to Tickets         
           </div>
         </div>

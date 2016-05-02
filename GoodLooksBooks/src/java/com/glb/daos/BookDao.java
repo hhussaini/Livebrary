@@ -13,6 +13,7 @@ public interface BookDao extends JdbcDaoSupport {
     public List<Book> getAllBooks();
     public List<Ticket> getTickets(String resolved);
     public int acceptTicket(int ticketId);
+    public int resolveTicket(int ticketId, String accepted);
     public int getTotalBooks();
     public Book getBookByIsbn(String isbn);
     public int addBookToUserItems(String username, String isbn);

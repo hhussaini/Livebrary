@@ -13,6 +13,7 @@ public interface BookService {
     public List<Book> getAllBooks();
     public List<Ticket> getTickets(String resolved);
     public int acceptTicket(int ticketId);
+    public int resolveTicket(int ticketId, String accepted);
     public Book getBookByIsbn(String isbn);
     public int addBookToUserItems(String username, String isbn);
     public int submitEditRequest(String oldIsbn, String newIsbn, String title, String author, String description);
