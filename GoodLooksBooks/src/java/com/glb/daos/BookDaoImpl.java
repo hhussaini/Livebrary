@@ -565,7 +565,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 "<publisher>" + publisher + "</publisher>";
         return xmlStr;
     }
-    
+     
     private String createEditXmlString(String oldIsbn, String newIsbn, String title, 
             String author, String description) {
         String xmlStr = "<type>edit</type>" +
