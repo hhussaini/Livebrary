@@ -22,7 +22,7 @@ public interface BookService {
             String imageUrl, int pages, String language, double listPrice, String currency, String publisher, String category);
     public List<Book> getItemsList(String username);
     public Map<String, Review> getAllReviewsForBook(String isbn);
-    public int addReview(Review review, Book book, User user);
+    public int addReview(Review review, String isbn, String username);
     public int deleteReview(String isbn, String username);
     public Book editReview(Review review, String isbn, String username);
     // public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description);

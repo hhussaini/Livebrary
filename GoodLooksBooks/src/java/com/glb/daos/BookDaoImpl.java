@@ -279,7 +279,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     }
 
     @Override 
-    public int addReview(Review review, Book book, User user) {
+    public int addReview(Review review, String isbn, String username) {
         Connection conToUse = null;
         PreparedStatement preparedStmt = null;
         int status = 0;
@@ -291,8 +291,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
            
             String sql = "INSERT INTO reviews(isbn, username, rating, reviewText) VALUES(?,?,?,?)";
             preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
-            preparedStmt.setString(1, book.getIsbn());
-            preparedStmt.setString(2, user.getUsername());
+            preparedStmt.setString(1, isbn);
+            preparedStmt.setString(2, username);
             preparedStmt.setInt(3, review.getRating());
             preparedStmt.setString(4, review.getReviewText());
             status = preparedStmt.executeUpdate(); 

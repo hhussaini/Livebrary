@@ -97,20 +97,19 @@ public class ItemReviewServlet extends HttpServlet {
         User user = (User)session.getAttribute("user");
         switch(method){
             case "add"    :  addReview(request, response, user, isbn, session);     break;
-            case "delete" :  deleteReview(request, response, user, isbn);           break;
+            case "delete" :  deleteReview(response, user, isbn);           break;
             case "edit"   :  editReview(request, response, user, isbn, session);      
         } 
          
     }  
     
     private void addReview(HttpServletRequest request, HttpServletResponse response, User user, String isbn, HttpSession session) throws IOException{
-       
         String text = request.getParameter("text"); 
         int numOfStars = Integer.parseInt(request.getParameter("numOfStars")); 
         Review review = new Review(numOfStars, text); 
         Book book = bookService.getBookByIsbn(isbn);  
         Map<String,Review>reviewsMap = bookService.getAllReviewsForBook(isbn);
-        bookService.addReview(review, book, user);  //returns an int (status)
+        bookService.addReview(review, book.getIsbn(), user.getUsername());  //returns an int (status)
         reviewsMap.put(user.getUsername(), review);
         book.setReviews(reviewsMap);
         book.updateOrderOfReviews(user.getUsername());
@@ -122,7 +121,7 @@ public class ItemReviewServlet extends HttpServlet {
         }  
     }
     
-    private void deleteReview(HttpServletRequest request, HttpServletResponse response, User user, String isbn) throws IOException{
+    private void deleteReview(HttpServletResponse response, User user, String isbn) throws IOException{
         bookService.deleteReview(isbn, user.getUsername());
         double newAvgRating = bookService.getBookByIsbn(isbn).getAvgRating();
         response.getWriter().print(newAvgRating);
