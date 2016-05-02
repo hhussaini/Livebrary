@@ -382,17 +382,24 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     
     @Override
     public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description) {
-        String sql = "update BOOKS set isbn = " + (newIsbn.isEmpty() ? "isbn" : "'" + newIsbn + "'")
-                    + ",title = " + (title.isEmpty() ? "title" : "'" + title + "'")
-                    + ",author = " + (author.isEmpty() ? "author" : "'" + author + "'")
-                    + ",description = " + (description.isEmpty() ? "description" : "'" + description + "'")
-                    + " where isbn = " + "'" + oldIsbn + "'";
+        String sql = "update BOOKS set isbn = ?" 
+                    + ",title = ?"
+                    + ",author = ?"
+                    + ",description = ?"
+                    + " where isbn = ?";
         Connection conToUse = null;
         PreparedStatement ps = null;
+        Book book = null;
         int status = 0;
         try {
+            book = getBookByIsbn(oldIsbn);
             conToUse = getConnection();
             ps = conToUse.prepareStatement(sql);
+            ps.setString(1, newIsbn.isEmpty() ? book.getIsbn() : newIsbn);
+            ps.setString(2, title.isEmpty() ? book.getTitle() : title);
+            ps.setString(3, author.isEmpty() ? book.getAuthor() : author);
+            ps.setString(4, description.isEmpty() ? book.getDescription() : description);
+            ps.setString(5, oldIsbn);
             status = ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -402,15 +409,19 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         return status;
     }
     
-    private int resolveTicket(int ticketId, String accepted) {
-        String sql = "update TICKETS set resolved = \'y\', accepted = \'" + accepted + "\' "
-                + "where ticketId = \'" + ticketId + "\'";
+    @Override
+    public int resolveTicket(int ticketId, String accepted) {
+        String sql = "update TICKETS set resolved = ?, accepted = ? "
+                + "where id = ?";
         Connection conToUse = null;
         PreparedStatement ps = null;
         int status = 0;
         try {
             conToUse = getConnection();
             ps = conToUse.prepareStatement(sql);
+            ps.setString(1, "y");
+            ps.setString(2, accepted);
+            ps.setInt(3, ticketId);
             status = ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);

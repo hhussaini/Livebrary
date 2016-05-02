@@ -40,6 +40,8 @@ public class AdminRespondToTicketsServlet extends HttpServlet {
             viewTicket(request, response);
         } else if (method.equals("acceptTicket")){
             acceptTicket(request, response);
+        } else if (method.equals("denyTicket")){
+            denyTicket(request, response);
         } else {
             super.service(request, response);
         } 
@@ -120,7 +122,22 @@ public class AdminRespondToTicketsServlet extends HttpServlet {
         if (status != 1) {
             throw new ServletException("SQL Error");
         }
-        outputToHtml(response, "This ticket has been accepted");
+        outputToHtml(response, "This ticket has been accepted.");
+    }
+    
+    protected void denyTicket(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        int ticketId = Integer.parseInt(request.getParameter("ticketId"));
+        Ticket ticket = getTicketById(ticketId);
+        if (ticket == null) {
+            throw new ServletException("Error getting this ticket.");
+        }
+        int status = 0;
+        status = bookService.resolveTicket(ticketId, "n");
+        if (status != 1) {
+            throw new ServletException("SQL Error");
+        }
+        outputToHtml(response, "This ticket has been denied.");
     }
     
     private Ticket getTicketById(int ticketId) {
