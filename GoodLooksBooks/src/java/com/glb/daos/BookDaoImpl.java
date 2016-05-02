@@ -249,22 +249,25 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         return itemsList;
     }
     
-     @Override
+    @Override
     public Map<String, Review> getAllReviewsForBook(String isbn){
-        Map<String, Review>reviewsMap = new HashMap<>();
+        Map<String, Review>reviewsMap = new LinkedHashMap<>();
         Connection conn = getConnection();
         ResultSet rs = null;
         String query = "SELECT * FROM reviews WHERE isbn = '" + isbn + "'"; 
         try {
             Statement stmt = conn.createStatement();
             rs = stmt.executeQuery(query);
+            Review tempReview = null;
             while (rs.next()) { 
                 Review review = new Review(); 
                 review.setRating(rs.getInt("rating")); 
                 review.setReviewText(rs.getString("reviewText")); 
                 String userName = rs.getString("username");
+                
                 reviewsMap.put(userName, review);
             }
+             
             rs.close();
             
         } catch (SQLException ex) {
@@ -576,7 +579,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 "<publisher>" + publisher + "</publisher>";
         return xmlStr;
     }
-    
+     
     private String createEditXmlString(String oldIsbn, String newIsbn, String title, 
             String author, String description) {
         String xmlStr = "<type>edit</type>" +
@@ -586,6 +589,33 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 "<author>" + author + "</author>" + 
                 "<description>" + description + "</description>";
         return xmlStr;
+    }
+
+    @Override
+    public Book editReview(Review review, String isbn, String username) {
+        String sql = "UPDATE reviews SET"
+                    + " rating = ?"
+                    + ",reviewText = ?"
+                    + " WHERE isbn = ? AND username = ?";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        Book book = null;
+        int status = 0;
+        try { 
+            book = getBookByIsbn(isbn);
+            conToUse = getConnection();
+            ps = conToUse.prepareStatement(sql);
+            ps.setInt(1, review.getRating());
+            ps.setString(2, review.getReviewText());
+            ps.setString(3, isbn);
+            ps.setString(4, username); 
+            status = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(ps);
+        }
+        return book;
     }
 }
  

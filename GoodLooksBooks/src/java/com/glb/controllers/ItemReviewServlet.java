@@ -94,42 +94,57 @@ public class ItemReviewServlet extends HttpServlet {
         String method = request.getParameter("method");
         String isbn = request.getParameter("isbn"); 
         HttpSession session = request.getSession();
-        if(method.equals("add")){
-            addReview(request, response, session, isbn);
-        }
-        else if(method.equals("delete")){ 
-            deleteReview(request, response, session, isbn);
-        }
-           
-       
+        User user = (User)session.getAttribute("user");
+        switch(method){
+            case "add"    :  addReview(request, response, user, isbn, session);     break;
+            case "delete" :  deleteReview(request, response, user, isbn);           break;
+            case "edit"   :  editReview(request, response, user, isbn, session);      
+        } 
          
     }  
     
-    private void addReview(HttpServletRequest request, HttpServletResponse response,  HttpSession session, String isbn) throws IOException{
-        User user = (User)session.getAttribute("user");
+    private void addReview(HttpServletRequest request, HttpServletResponse response, User user, String isbn, HttpSession session) throws IOException{
+       
         String text = request.getParameter("text"); 
         int numOfStars = Integer.parseInt(request.getParameter("numOfStars")); 
         Review review = new Review(numOfStars, text); 
         Book book = bookService.getBookByIsbn(isbn);  
-        Map<String,Review>reviews = bookService.getAllReviewsForBook(isbn);
+        Map<String,Review>reviewsMap = bookService.getAllReviewsForBook(isbn);
         bookService.addReview(review, book, user);  //returns an int (status)
-        reviews.put(user.getUsername(), review);
-        book.setReviews(reviews);
+        reviewsMap.put(user.getUsername(), review);
+        book.setReviews(reviewsMap);
+        book.updateOrderOfReviews(user.getUsername());
         session.setAttribute("itemClicked", book); 
-        
         try {
-           response.getWriter().print(JsonHandler.createJSONObj(user, book));
+            response.getWriter().print(JsonHandler.createJSONObj(user, book));
         } catch (JSONException ex) {
             Logger.getLogger(ItemReviewServlet.class.getName()).log(Level.SEVERE, null, ex);
         }  
     }
     
-    private void deleteReview(HttpServletRequest request, HttpServletResponse response, HttpSession session, String isbn) throws IOException{
-        User user = (User)session.getAttribute("user");
+    private void deleteReview(HttpServletRequest request, HttpServletResponse response, User user, String isbn) throws IOException{
         bookService.deleteReview(isbn, user.getUsername());
         double newAvgRating = bookService.getBookByIsbn(isbn).getAvgRating();
         response.getWriter().print(newAvgRating);
         
+    }
+    
+    private void editReview(HttpServletRequest request, HttpServletResponse response, User user, String isbn, HttpSession session) throws IOException{
+        String text = request.getParameter("text"); 
+        int numOfStars = Integer.parseInt(request.getParameter("numOfStars")); 
+        Review review = new Review(numOfStars, text); 
+        Book book = bookService.getBookByIsbn(isbn);  
+        Map<String,Review>reviewsMap = bookService.getAllReviewsForBook(isbn);
+        bookService.editReview(review, book.getIsbn(), user.getUsername());  //returns an int (status)
+        reviewsMap.put(user.getUsername(), review);
+        book.setReviews(reviewsMap);
+        book.updateOrderOfReviews(user.getUsername());
+        session.setAttribute("itemClicked", book); 
+        try {
+            response.getWriter().print(JsonHandler.createJSONObj(user, book));
+        } catch (JSONException ex) {
+            Logger.getLogger(ItemReviewServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }  
     }
      
     public static void printData(HttpServletRequest request, HttpServletResponse response, Map<String, Review>map) throws IOException{
