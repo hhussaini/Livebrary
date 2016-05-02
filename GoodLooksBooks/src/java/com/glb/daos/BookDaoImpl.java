@@ -15,7 +15,7 @@ import com.glb.objects.Ticket;
 import com.glb.objects.User;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -269,7 +269,6 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             }
              
             rs.close();
-            
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -492,6 +491,9 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         String xmlStr = createAddXmlString(isbn, isbn10, title, author, description, 
                 binding, imageUrl, pages, language, listPrice, currency, publisher, category);
         int status = 0;
+        if (!categoryMap.containsKey(category)) {
+            return 0;
+        }
         try {
             conToUse = getConnection();
             ps = conToUse.prepareStatement(sql);

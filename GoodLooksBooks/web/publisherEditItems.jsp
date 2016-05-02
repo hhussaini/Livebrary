@@ -16,10 +16,7 @@
                 <c:forEach var="item" items="${publisherItems}">
                     <tr>
                         <td><h3><u>${item.title}</u></h3> 
-                            <form action="BookDescriptionServlet" method = "post">
-                                <input type="image" src="${item.imageUrl}" id="${item.isbn}" style="width: 200px;">
-                                <input type="hidden" name="isbn" value="${item.isbn}">
-                            </form> 
+                            <img src="${item.imageUrl}" alt="Item" style="width: 200px;">
                         </td>
                         <td>
                             <form action="PublisherEditItemsServlet" method="post">
