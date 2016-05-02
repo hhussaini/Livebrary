@@ -1,13 +1,14 @@
 package com.glb.controllers;
 
 import com.glb.factories.ServiceFactory;
+import static com.glb.helpers.Helpers.goToSignIn;
+import static com.glb.helpers.Helpers.outputToHtml;
 import static com.glb.helpers.Helpers.println;
 import com.glb.objects.Book;
 import com.glb.objects.User;
 import com.glb.services.BookService;
 import com.glb.services.UserService;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -40,6 +41,8 @@ public class PublisherEditItemsServlet extends HttpServlet {
         method = (method == null) ? "" : method;
         if (method.equals("doEdit")){
             doEdit(request, response);
+        } else if (method.equals("doAdd")) {
+            doAdd(request, response);
         } else {
             super.service(request, response);
         } 
@@ -74,6 +77,10 @@ public class PublisherEditItemsServlet extends HttpServlet {
         println(this.getServletName() + " : " + "doGet");
         HttpSession session = request.getSession();
         publisher = (User)session.getAttribute("user");
+        if (publisher == null) {
+            goToSignIn(request, response);
+            return;
+        }
         publisherItems = userService.getPublisherItems(publisher);
         session.setAttribute("publisherItems", publisherItems);
         session.setAttribute("publisherItemsSize", publisherItems.size());
@@ -108,20 +115,44 @@ public class PublisherEditItemsServlet extends HttpServlet {
         String author = request.getParameter("author");
         String description = request.getParameter("description");
         int status = 0;
-        status = bookService.submitEditRequest(oldIsbn, newIsbn, title, author, description);
+        status = bookService.submitEditRequest(oldIsbn, newIsbn, title, author, 
+                                            description);
         if (status != 1) {
             throw new ServletException("SQL Error");
         }
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<body>");
-            out.println("<p>Your ticket has been sent. The site admin "
-                    + "will respond to your ticket soon.</p>");
-            out.println("</body>");
-            out.println("</html>");
+        outputToHtml(response, "Your ticket has been sent. The site admin "
+                    + "will respond to your ticket soon.");
+    }
+    
+    protected void doAdd(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        println(this.getServletName() + " : " + "doAdd");
+        HttpSession session = request.getSession();
+        publisher = (User)session.getAttribute("user");
+        if (publisher == null) {
+            goToSignIn(request, response);
+            return;
         }
+        String publisherName = publisher.getCompany();
+        String isbn = request.getParameter("isbn");
+        String isbn10 = request.getParameter("isbn10");
+        String title = request.getParameter("title"); 
+        String author = request.getParameter("author");
+        String description = request.getParameter("description");
+        String binding = request.getParameter("binding");
+        String imageUrl = request.getParameter("imageUrl");
+        int pages = Integer.parseInt(request.getParameter("pages"));
+        String language = request.getParameter("language");
+        double listPrice = Double.parseDouble(request.getParameter("listPrice"));
+        String currency = request.getParameter("currency");
+        int status = 0;
+        status = bookService.submitAddRequest(isbn, isbn10, title, author, description, 
+                binding, imageUrl, pages, language, listPrice, currency, publisherName);
+        if (status != 1) {
+            throw new ServletException("SQL Error");
+        }
+        outputToHtml(response, "Your ticket has been sent. The site admin "
+                    + "will respond to your ticket soon.");
     }
 
     /**

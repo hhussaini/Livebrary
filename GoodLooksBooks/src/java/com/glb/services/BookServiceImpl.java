@@ -265,6 +265,35 @@ public class BookServiceImpl implements BookService {
     
         return status;
     }
+    
+    @Override
+    public int submitAddRequest(String isbn, String isbn10, String title, String author, String description, 
+            String binding, String imageUrl, int pages, String language, double listPrice, String currency, String publisher) {
+        Connection conToUse = null;
+        int status = 0;
+        // get the connection from util class
+        // set the transaction to con & pass con to dao
+        try {
+            conToUse = ConnectionUtil.getConnection();
+            conToUse.setAutoCommit(false);
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conToUse);;
+            status = bookDao.submitAddRequest(isbn, isbn10, title, author,description, 
+                    binding, imageUrl, pages, language, listPrice, currency, publisher);
+            conToUse.commit();
+        } catch (ResourceHelperException e) {
+            System.out.println("ResourceHelperException");
+            DbUtils.rollbackAndCloseQuietly(conToUse);
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, e);
+        } catch (SQLException ex) {
+            System.out.println("SQLException");
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(conToUse);
+        }
+    
+        return status;
+    }
 
 //    @Override
 //    public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description) {

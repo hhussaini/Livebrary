@@ -11,6 +11,10 @@ public interface BookDao extends JdbcDaoSupport {
     public List<Book> searchBooks(String term, String[] categories, int offset, int recordsPerPage);
     public int getNumberOfResults();
     public List<Book> getAllBooks();
+    public int submitAddRequest(String isbn, String isbn10, String title, String author, String description, 
+            String binding, String imageUrl, int pages, String language, double listPrice, String currency, String publisher);
+    public int addBook(String isbn, String isbn10, String title, String author, String description, 
+            String binding, String imageUrl, int pages, String language, double listPrice, String currency, String publisher);
     public List<Ticket> getTickets(String resolved);
     public int acceptTicket(int ticketId);
     public int resolveTicket(int ticketId, String accepted);
