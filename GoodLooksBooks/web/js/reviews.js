@@ -234,49 +234,6 @@ function addReview(){
     
 }
 
-function editReview(id){
+function editReview(){
     document.getElementById("submittingReviewInnerID").style.display = "block";
-    
-//    console.log("In editReview()");
-//    var type = 'POST';
-//    var url = 'ItemReviewServlet';
-//    var isbn = document.getElementById("isbn").value.toString();
-//    
-//   // console.log(document.getElementById("reviewdetails"));
-//    
-//    var itemObject = { 
-//        numOfStars : starsSelected,  
-//        isbn : isbn,
-//        method : "edit"
-//    }; 
-//    $.ajax({ 
-//        type: type,
-//        url:  url,
-//        data: itemObject,
-//        dataType: 'json',
-//        success: function(result){
-//            console.log("Success!");
-//            var currentUser = result.currentUser;
-//            var jsonArray = result.reviews;
-//            for (var i = 0; i < jsonArray.length; i++){
-////                var starRating = jsonArray[i].rating;
-////                var username = jsonArray[i].username;
-////                var reviewText = jsonArray[i].reviewText;
-////                if(currentUser === username){
-////                   document.getElementById("userReviewName_0").innerHTML = username;
-////                   document.getElementById("loggedInRatingID_0").innerHTML = starRating;
-////                   document.getElementById("reviewText_0").innerHTML = reviewText;
-////                   document.getElementById("reviewContainer_0").style.display = "initial";
-////                   updateAverageStarRating(starRating, "loggedInRatingID_0", false);
-////                   updateAverageStarRating(result.avgRating, "avgStarID", true);
-////                   document.getElementById("submittingReviewInnerID").style.display = "none";
-//                    
-////                }
-//            }  
-//        },
-//        error: function(result){
-//            console.log("Error");
-//        }
-//    });    
-       
 } 

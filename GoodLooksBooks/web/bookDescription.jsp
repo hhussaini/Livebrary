@@ -122,7 +122,7 @@
         
         <!--current user logged in review-->
         <div id= "reviewContainer_0" class="col-xs-12 col-sm-12" style="border-style: groove; display: none;">
-            <button type="button" id="edit-review-btn" onClick="editReview(this.id)" class="btn btn-info">Resubmit/edit review</button>
+            <button type="button" id="edit-review-btn" onClick="editReview()" class="btn btn-info">Resubmit/edit review</button>
             &nbsp;&nbsp;
             <button class="btn btn-danger" id="remove-review" onClick="removeReview(this.id)">Remove review</button>
             <br><br>                
