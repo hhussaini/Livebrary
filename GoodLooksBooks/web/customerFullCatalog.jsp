@@ -125,7 +125,7 @@
                                                 <td> 
                                                     
                                                     <a href = "#" id = "${item.isbn}" class="thumbnail" onclick = "selectedBook(this.id)">
-                                                        <img onload="validateImgUrl(this.id)" name="bookImage" id="book${count} class="bookImage" src="${item.imageUrl}" alt="${item.title}" style="width: 200px;">
+                                                        <img onload="validateImgUrl(this.id)" name="bookImage" id="book${count}" class="bookImage" src="${item.imageUrl}" alt="${item.title}" style="width: 200px;">
                                                         <c:out value="${item.title}"/> <br> <br>
                                                         <c:out value="by ${item.author}"/>
                                                     </a>

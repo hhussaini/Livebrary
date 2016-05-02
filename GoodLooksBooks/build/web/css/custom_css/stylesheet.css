@@ -50,6 +50,15 @@ th, td {
   margin-right: auto;
   margin-left: auto;
 }
+
+.btn-primary {
+    background: #E79A35;
+    border: 0 none;
+}
+.btn-primary:hover {
+    background: #BF7516;
+}
+
 @media (min-width: 768px) {
   .glb-page {
     width: 750px;
