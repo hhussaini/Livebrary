@@ -83,8 +83,7 @@
             
             <div><font color="white" size="100">.</font>  <!--Some random filler-->
                 <hr class="fancy">
-        <br>
-<!--        <form id="submitReviewForm" action="SubmitItemReviewServlet" method="post"> -->
+        <br> 
              
             <c:if test="${user.type == 'customer' && itemClicked.reviews[user.username] == null}" >
             <div id="submittingReviewID" class="container" style = "width: 75%;">
@@ -113,12 +112,12 @@
         <hr class="fancy">
         <br>
          
-        
+        <div id="topReviewContainerID_1">    
         <div id = "newReviewID" style="display:none;">
           <div class="col-xs-12 col-sm-12" style="border-style: groove;"> 
-            <button type="button" id="edit-review-btn" class="btn btn-info">Resubmit/edit review</button>
+            <button type="button" id="edit-review-btn1" onClick="resetReview(this.id)" class="btn btn-info">Resubmit/edit review</button>
             &nbsp;&nbsp;
-            <button class="btn btn-danger" onClick="resetReview()" id="remove-review">Remove review</button>
+            <button class="btn btn-danger"  id="remove-review1" onClick="removeReview(this.id)">Remove review</button>
             <br><br>
             <div id="newReviewIDStars" value = ""> 
             </div> 
@@ -128,25 +127,27 @@
           <br> 
           </div>
         </div>
+        </div>
         
         
         <c:forEach var="entry" items="${itemClicked.reviews}" varStatus="i">
           <c:if test="${entry.key == user.username}"> 
-        <div class="col-xs-12 col-sm-12" style="border-style: groove;">
+          <div id="topReviewContainerID_2">    
+        <div id="firstReviewID" class="col-xs-12 col-sm-12" style="border-style: groove;">
           <!--took this line out-->
-            <button type="button" id="edit-review-btn" class="btn btn-info">Resubmit/edit review</button>
+            <button type="button" id="edit-review-btn2" onClick="resetReview(this.id)" class="btn btn-info">Resubmit/edit review</button>
             &nbsp;&nbsp;
-            <button class="btn btn-danger" onClick="resetReview()" id="remove-review">Remove review</button>
+            <button class="btn btn-danger" id="remove-review2" onClick="removeReview(this.id)">Remove review</button>
             <br><br>
             <div id="loggedInRatingID" value = "${itemClicked.reviews[entry.key].rating}"> 
-            </div>
-<!--          <input id="input-3" value="3" class="rating-md" style="font-size: 1.0em">-->
+            </div> 
           <label for="input-3" class="control-label"> It was OK </label>
            <!--took end of this if statement out-->
           <h4>By: ${entry.key}</h4><h4 id="usernameTextID"></h4>
           <h5><c:out value="${entry.value.reviewText}"/></h5><h5 id="userReviewTextID"></h5>
           <br> 
         </div>
+          </div>
         </c:if>
         </c:forEach>
         

@@ -123,7 +123,7 @@ public class AdminRespondToTicketsServlet extends HttpServlet {
             throw new ServletException("SQL Error");
         }
         outputToHtml(response, "This ticket has been accepted.");
-    }
+    } 
     
     protected void denyTicket(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {

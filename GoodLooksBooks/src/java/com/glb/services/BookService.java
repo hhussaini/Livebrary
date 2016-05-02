@@ -23,5 +23,6 @@ public interface BookService {
     public List<Book> getItemsList(String username);
     public Map<String, Review> getAllReviewsForBook(String isbn);
     public int addReview(Review review, Book book, User user);
+    public int deleteReview(String isbn, String username);
     // public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description);
 }  

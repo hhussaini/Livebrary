@@ -182,6 +182,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 book.setDescription(rs.getString("description"));
                 book.setDate(rs.getString("published"));
                 book.setLanguage(rs.getString("language"));
+                Map<String, Review> reviews = getAllReviewsForBook(isbn);
+                book.setReviews(reviews);
             }
             rs.close();
             
@@ -514,16 +516,33 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         }
         return status;
     }
-    
-    private String createEditXmlString(String oldIsbn, String newIsbn, String title, 
-            String author, String description) {
-        String xmlStr = "<type>edit</type>" +
-                "<oldIsbn>" + oldIsbn + "</oldIsbn>" +
-                "<newIsbn>" + newIsbn + "</newIsbn>" +
-                "<title>" + title + "</title>" + 
-                "<author>" + author + "</author>" + 
-                "<description>" + description + "</description>";
-        return xmlStr;
+
+    @Override
+    public int deleteReview(String isbn, String username) {
+        Connection conToUse = null;
+        PreparedStatement preparedStmt = null;
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            if (conToUse == null)
+                System.out.println("conToUse == null");
+             
+           
+            String sql = "DELETE FROM reviews WHERE isbn = ? AND username = ?";
+            preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
+            preparedStmt.setString(1, isbn);
+            preparedStmt.setString(2, username);
+            
+            status = preparedStmt.executeUpdate(); 
+            
+           // book.addReview(user, review);
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            DbUtils.closeQuietly(preparedStmt);
+        }
+        return status;
     }
     
     private String createAddXmlString(String isbn, String isbn10, String title, String author, String description, 
@@ -543,4 +562,16 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 "<publisher>" + publisher + "</publisher>";
         return xmlStr;
     }
+    
+    private String createEditXmlString(String oldIsbn, String newIsbn, String title, 
+            String author, String description) {
+        String xmlStr = "<type>edit</type>" +
+                "<oldIsbn>" + oldIsbn + "</oldIsbn>" +
+                "<newIsbn>" + newIsbn + "</newIsbn>" +
+                "<title>" + title + "</title>" + 
+                "<author>" + author + "</author>" + 
+                "<description>" + description + "</description>";
+        return xmlStr;
+    }
 }
+ 
