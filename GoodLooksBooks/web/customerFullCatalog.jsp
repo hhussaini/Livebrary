@@ -62,7 +62,7 @@
                                 <td>
                                     <h4> Author</h4>
                                 </td>
-                                <td>
+                                <td> 
                                     <h4> Publisher</h4>
                                 </td>
                                 <td>

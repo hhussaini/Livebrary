@@ -5,10 +5,14 @@
  */
 package com.glb.controllers;
 
+import com.glb.factories.ServiceFactory;
 import static com.glb.helpers.Helpers.*;
+import com.glb.objects.Book;
 import com.glb.objects.User;
+import com.glb.services.UserService;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,11 +21,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- *
  * @author PaulMan
  */
 public class CustomerServlet extends HttpServlet {
 
+    
+    UserService userService;
+    
+    public void init() {
+        System.out.println(getServletName() + ": initialised" );
+        userService = ServiceFactory.getUserService();
+    }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -63,7 +73,19 @@ public class CustomerServlet extends HttpServlet {
         println(this.getServletName() + " : doGet");
         
         HttpSession session = request.getSession();
-        session.setAttribute("test1", "It worked");
+        User user = (User) session.getAttribute("user");
+        
+        List<Book> checkedOut = userService.getCheckedOutItems(user);
+        session.setAttribute("checkedOutItems", checkedOut);
+        List<Book> onHold = userService.getOnHoldItems(user);
+        session.setAttribute("onHoldItems", onHold);
+        println(onHold.size());
+        List<Book> wishlist = userService.getWishlist(user);
+        session.setAttribute("customerWishlist", wishlist);
+        
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/customerIndex.jsp");
+        dispatcher.forward(request, response); 
     }
 
     /**
