@@ -25,7 +25,6 @@ public interface BookDao extends JdbcDaoSupport {
     public int addBookToUserItems(String username, String isbn);
     public int submitEditRequest(String oldIsbn, String newIsbn, String title, String author, String description);
     public int submitDeleteRequest(String isbn);
-    public List<Book> getItemsList(String userName);
     public Map<String, Review> getAllReviewsForBook(String isbn);
     public int addReview(Review review, String isbn, String username);
     public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description);

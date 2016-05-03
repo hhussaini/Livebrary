@@ -252,32 +252,6 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     }
     
     @Override
-    public List<Book> getItemsList(String userName) {
-        List<Book> itemsList = new ArrayList<>();        
-        Connection conToUse = null;
-        PreparedStatement ps = null;
-        ResultSet res = null;
-        try {
-            conToUse = getConnection();
-            String sql = "SELECT isbn from RESERVED WHERE username = ?";
-            
-            ps = (PreparedStatement) conToUse.prepareStatement(sql);
-            ps.setString(1, userName);
-            res = ps.executeQuery();
-            
-            while (res.next()) { 
-                  itemsList.add(this.getBookByIsbn(res.getString("isbn"))); 
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            DbUtils.closeQuietly(ps);
-        }
-        
-        return itemsList;
-    }
-    
-    @Override
     public Map<String, Review> getAllReviewsForBook(String isbn){
         Map<String, Review>reviewsMap = new LinkedHashMap<>();
         Connection conn = getConnection();
