@@ -4,10 +4,12 @@ import java.util.List;
 import com.glb.objects.Book;
 import com.glb.objects.Review;
 import com.glb.objects.Ticket;
+import com.glb.objects.User;
+import java.util.HashMap;
 import java.util.Map;
 
 public interface BookDao extends JdbcDaoSupport {    
-    public List<Book> searchBooks(String term, String[] categories, int offset, int recordsPerPage);
+    public List<Book> searchBooks(HashMap<String, String> searchTermMap, String[] categories, int offset, int recordsPerPage);
     public int getNumberOfResults();
     public List<Book> getAllBooks();
     public int submitAddRequest(String isbn, String isbn10, String title, String author, String description, String binding, 
