@@ -29,7 +29,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h3>Items checkout out</h3>
+                                    <h3>Items checked out</h3>
                                 </td>
                                 <td>
                                     <h2><c:out value="${fn:length(checkedOut)}">No name</c:out></h2>
@@ -78,7 +78,6 @@
                                                         <c:out value="${item.title}"/> <br> <br>
                                                         <c:out value="by ${item.author}"/>
                                                     </a>
-                                                    
                                                 </td>
                                             </div>
                                         </td>  
