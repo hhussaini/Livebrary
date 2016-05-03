@@ -36,10 +36,6 @@ public class Helpers {
         }
     }
     
-    public static String getNavbarUrl(String userType) {
-        return "/" + userType + "Navbar" + ".jsp";
-    }
-    
     public static void goToSignIn(HttpServletRequest request, HttpServletResponse response) 
         throws ServletException, IOException {
         String url = "/signIn.jsp";
