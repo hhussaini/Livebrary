@@ -26,5 +26,6 @@ public interface BookService {
     public int addReview(Review review, String isbn, String username);
     public int deleteReview(String isbn, String username);
     public Book editReview(Review review, String isbn, String username);
+    public int banBook(String isbn);
     // public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description);
 }  

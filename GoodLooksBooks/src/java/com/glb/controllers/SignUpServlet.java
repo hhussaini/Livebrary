@@ -102,6 +102,9 @@ public class SignUpServlet extends HttpServlet {
                     case "publisher":
                         url = "/publisherIndex.jsp";
                         break;
+                    case "admin":
+                        url = "/adminIndex.jsp";
+                        break; 
                 }        
                 dispatcher = request.getRequestDispatcher(url);
                 dispatcher.forward(request, response);

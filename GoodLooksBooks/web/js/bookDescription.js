@@ -95,3 +95,7 @@ function fbShare(url,winWidth, winHeight) {
         var winLeft = (screen.width / 2) - (winWidth / 2);
         window.open('http://www.facebook.com/sharer.php?s=100&p[url]=' + url, 'sharer','top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width='+winWidth+',height='+winHeight);
 }
+
+function banFunction(bookID){
+    document.getElementById("banBookForm").submit();
+}

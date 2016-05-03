@@ -24,7 +24,8 @@ public class Item implements Serializable{
     private String imageUrl;
     private List<String> genres;
     private int numOfDownloads;
-    private Map<String, Review> reviews; 
+    private Map<String, Review> reviews;
+    private boolean isBanned;
     
     public Item(){
         this.reviews = new LinkedHashMap<>();
@@ -46,6 +47,7 @@ public class Item implements Serializable{
         this.imageUrl = imageUrl;
         this.genres = new ArrayList<>();
         this.numOfDownloads = numOfDownloads;
+        this.isBanned = isBanned;
     }
 
     public String getIsbn() {
@@ -216,6 +218,14 @@ public class Item implements Serializable{
                 "\nAuthor: " + this.author + 
                 "\nImageUrl: " + this.imageUrl + "\n";
                 
+    }
+    
+    public boolean getIsBanned(){
+        return isBanned;
+    }
+    
+    public void setIsBanned(boolean isBanned){
+        this.isBanned = isBanned;
     }
      
 }

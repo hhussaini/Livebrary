@@ -103,6 +103,10 @@
         <servlet-name>AdminRespondToTicketsServlet</servlet-name>
         <servlet-class>com.glb.controllers.AdminRespondToTicketsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BanItemServlet</servlet-name>
+        <servlet-class>com.glb.controllers.BanItemServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -186,6 +190,10 @@
     <servlet-mapping>
         <servlet-name>AdminRespondToTicketsServlet</servlet-name>
         <url-pattern>/AdminRespondToTicketsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BanItemServlet</servlet-name>
+        <url-pattern>/BanItemServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

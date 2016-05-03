@@ -352,4 +352,20 @@ public class BookServiceImpl implements BookService {
     
         return status;
     }
+    
+    @Override
+    public int banBook(String isbn) {
+        Connection conn = null;
+        int status = 0;
+        try {            
+            conn = ConnectionUtil.getConnection();
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conn);
+            status = bookDao.banBook(isbn);
+        } catch (ResourceHelperException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+       return status;
+    }
 }

@@ -680,5 +680,31 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         }
         return status;
     }
+    
+    @Override
+    public int banBook(String isbn) {
+        Connection conToUse = null;
+        PreparedStatement preparedStmt = null;
+        String sql = null;
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            if (conToUse == null)
+                System.out.println("conToUse == null");
+            
+            Book bookToBan = getBookByIsbn(isbn);
+            bookToBan.setIsBanned(true);
+            sql = "UPDATE Books B SET B.isBanned= " + "'" + bookToBan.getIsBanned() + "'" + ", " 
+                    + "WHERE B.isbn= " + "'" + bookToBan.getIsbn() + "'";
+            preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
+            status = preparedStmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            DbUtils.closeQuietly(preparedStmt);
+        }
+        return status;
+    }
 }
  
