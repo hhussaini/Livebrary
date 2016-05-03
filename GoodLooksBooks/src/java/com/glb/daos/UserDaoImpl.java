@@ -285,4 +285,33 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         return checkedOut;
     }
     
+    @Override
+    public int update(User user) {
+        String sql = "update USERS U" + " SET U.firstname = '" + user.getFirstName() + "'" + ", " 
+                + "U.lastname = '" + user.getLastName() + "'" + ", "
+                + "U.email = '" + user.getEmail() + "'" + ", " 
+                + "U.street = '" + user.getStreet() + "'" + ", " 
+                + "U.city = '" + user.getCity() + "'" + ", "
+                + "U.state = '" + user.getState() + "'" + ", "
+                + "U.zipcode = '" + user.getZipcode() + "'" + ", "
+                + "U.phoneNumber = '" + user.getPhoneNumber() + "'"
+                 + "   where U.username = '" + user.getUsername() + "'"
+                 + "   and U.password = '" + user.getPassword() + "'";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            ps = conToUse.prepareStatement(sql);
+            status = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
+            DbUtils.closeQuietly(ps);
+        }
+        return status;
+    }
+    
+    
+    
 }

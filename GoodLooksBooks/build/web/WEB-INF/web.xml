@@ -108,6 +108,14 @@
         <servlet-class>com.glb.controllers.BanItemServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>AccountSettingsServlet</servlet-name>
+        <servlet-class>com.glb.controllers.AccountSettingsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateUserServlet</servlet-name>
+        <servlet-class>com.glb.controllers.UpdateUserServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>CustomerServlet</servlet-name>
         <servlet-class>com.glb.controllers.CustomerServlet</servlet-class>
         <init-param>
@@ -206,6 +214,14 @@
     <servlet-mapping>
         <servlet-name>CustomerServlet</servlet-name>
         <url-pattern>/CustomerServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AccountSettingsServlet</servlet-name>
+        <url-pattern>/AccountSettingsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateUserServlet</servlet-name>
+        <url-pattern>/UpdateUserServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

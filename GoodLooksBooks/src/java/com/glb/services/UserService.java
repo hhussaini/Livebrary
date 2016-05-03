@@ -12,4 +12,5 @@ public interface UserService {
     public int removeFromWishlist(User user, String isbn);
     public int addToWishlist(User user, String isbn);
     public List<Book> getCheckedOut(User user);
+    public int update(User user);
 }
