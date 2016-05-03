@@ -88,6 +88,7 @@ public class SignInServlet extends HttpServlet {
                 break;
             case "customer":
                 url = "/customerIndex.jsp";
+                url = "CustomerServlet";
                 setCustomerLists(session, user);
                 break;
             case "librarian": 
@@ -97,9 +98,9 @@ public class SignInServlet extends HttpServlet {
                 url = "/publisherIndex.jsp";
                 break;
         }       
-        
-        RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-        dispatcher.forward(request, response); 
+        response.sendRedirect(url);
+//        RequestDispatcher dispatcher = request.getRequestDispatcher(url);
+//        dispatcher.forward(request, response); 
     }
 
     public void setCustomerLists(HttpSession session, User user) {

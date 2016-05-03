@@ -63,22 +63,28 @@
                 <div class="tab-pane fade" id="on-hold">
                     <c:choose>
                         <c:when test="${fn:length(onHoldItems) > 0}">
-                            <c:forEach var="item" items="${onHoldItems}" varStatus="status">
-                                <c:if test="${status.index != 0 && status.index % 3 == 0}">
-                                </tr>
+                            <table>
                                 <tr>
-                                </c:if>
-                                <td>
-                                    <div class="col-xs-6 col-md-3"> 
-                                        <td> 
-                                            <a href = "#" id = "${item.isbn}" class="thumbnail" onclick = "selectedBook(this.id)">
-                                                <img src = "${item.imageUrl}" alt="${item.title}">
-                                                <c:out value="${item.title}"/> 
-                                            </a>
-                                        </td>
-                                    </div>
-                                </td>  
-                            </c:forEach>
+                                    <c:forEach var="item" items="${onHoldItems}" varStatus="status">
+                                        <c:if test="${status.index != 0 && status.index % 3 == 0}">
+                                        </tr>
+                                        <tr>
+                                        </c:if>
+                                        <td>
+                                            <div class="col-xs-6 col-md-3"> 
+                                                <td> 
+                                                    <a href = "BookDescriptionServlet?isbn=${item.isbn}" id="${item.isbn}" class="thumbnail">
+                                                        <img onload="validateImgUrl(this.id)" name="bookImage" id="book${count}" class="bookImage" src="${item.imageUrl}" alt="${item.title}" style="width: 200px;">
+                                                        <c:out value="${item.title}"/> <br> <br>
+                                                        <c:out value="by ${item.author}"/>
+                                                    </a>
+                                                    
+                                                </td>
+                                            </div>
+                                        </td>  
+                                    </c:forEach>
+                                </tr>
+                            </table>
                         </c:when>
                         <c:otherwise>
                             <div class="heading-box">
@@ -86,11 +92,20 @@
                                 <a href="SearchServlet"><h3>Browse some books!</h3></a>                                
                             </div>
                         </c:otherwise>
-                        
                     </c:choose>
                 </div>
-                
             </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
             
             
             
@@ -108,7 +123,3 @@
                                 </div>
                             </div>
                         </div>            -->
-        </div>
-    </div>
-</body>
-</html>
