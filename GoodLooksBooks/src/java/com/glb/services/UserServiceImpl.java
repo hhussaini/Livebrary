@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import com.glb.services.UserService;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
@@ -184,5 +185,29 @@ public class UserServiceImpl implements UserService {
         }
         
         return publisherItems;
+    }
+
+    @Override
+    public List<Book> getCheckedOut(User user) {
+        List<Book> checkedOut = new ArrayList<Book>();
+        Connection conToUse = null;
+        try {
+            conToUse = ConnectionUtil.getConnection();
+            conToUse.setAutoCommit(false);
+            UserDao userDao = DaoFactory.getUserDao();
+            userDao.setConnection(conToUse);
+            checkedOut = userDao.getCheckedOut(user);
+        } catch (ResourceHelperException e) {
+            System.out.println("ResourceHelperException");
+            DbUtils.rollbackAndCloseQuietly(conToUse);
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, e);
+        } catch (SQLException ex) {
+            System.out.println("SQLException");
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(conToUse);
+        }
+        
+        return checkedOut;
     }
 }

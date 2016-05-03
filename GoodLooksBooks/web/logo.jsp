@@ -21,6 +21,4 @@
 </div>
 <div class="container" styl="padding: 100px;">
     &nbsp;<br>
-    &nbsp;<br>
-    &nbsp;<br>
 </div>

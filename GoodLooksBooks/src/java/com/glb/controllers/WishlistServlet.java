@@ -20,7 +20,7 @@ import com.glb.objects.Book;
 public class WishlistServlet extends HttpServlet {
     
     UserService userService;
-    List<Book> wishlist;
+    
     User user;
     
     public void init() {
@@ -80,11 +80,13 @@ public class WishlistServlet extends HttpServlet {
             throws ServletException, IOException {
         println(this.getServletName() + " : " + "doGet");
         HttpSession session = request.getSession();
+        List<Book> wishlist;
         user = (User)session.getAttribute("user");
         if (user == null) {
             goToSignIn(request, response);
             return;
         }
+        
         wishlist = userService.getWishlist(user);
         session.setAttribute("customerWishlist", wishlist);
         session.setAttribute("wishlistSize", wishlist.size());

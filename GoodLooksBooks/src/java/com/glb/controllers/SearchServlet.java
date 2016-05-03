@@ -66,6 +66,7 @@ public class SearchServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            println(this.getServletName() + " : doGet");
             HttpSession session = request.getSession();
             HashMap<String, String> searchTermMap = new HashMap<String,String>();
             String keyword = request.getParameter("keyword");
