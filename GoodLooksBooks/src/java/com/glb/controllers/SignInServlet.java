@@ -90,17 +90,17 @@ public class SignInServlet extends HttpServlet {
                 url = "/customerIndex.jsp";
                 url = "CustomerServlet";
                 setCustomerLists(session, user);
-                break;
+                response.sendRedirect(url);
+                return;
             case "librarian": 
                 url = "/librarianIndex.jsp";
                 break;
             case "publisher":
                 url = "/publisherIndex.jsp";
                 break;
-        }       
-        response.sendRedirect(url);
-//        RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-//        dispatcher.forward(request, response); 
+        }
+        RequestDispatcher dispatcher = request.getRequestDispatcher(url);
+        dispatcher.forward(request, response); 
     }
 
     public void setCustomerLists(HttpSession session, User user) {

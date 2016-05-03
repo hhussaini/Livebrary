@@ -3,7 +3,6 @@
     Author     : Kevin Young
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="form-group">
   <label class = "control-label regLabel" for="username">Username:</label>
   <div class = "controls regControl">

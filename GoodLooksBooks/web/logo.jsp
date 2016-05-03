@@ -3,8 +3,6 @@
     Author     : Kevin Young
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%-- any content can be specified here e.g.: --%>
 <div class="container">
     <div id="mycarousel" class="carousel slide" data-ride="carousel">
         <div class="carousel-inner">

@@ -3,7 +3,6 @@
     Author     : Hamza Hussaini
 --%>
 
-<%-- any content can be specified here e.g.: --%>
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -14,7 +13,7 @@
       <ul class="nav navbar-nav" style="font-weight: bold;">
         <li><a href="customerIndex.jsp">Admin Home</a></li>
         <li><a href="about.jsp">About</a></li>
-        <li><a href="SearchServlet">Full Catalog</a></li>
+        <!--<li><a href="SearchServlet">Full Catalog</a></li>-->
         <li><a href="account.jsp">Account</a></li>
         <li><a href="help.jsp">Help</a></li>
       </ul>
@@ -25,7 +24,7 @@
             <li><a href="UserMyItemsServlet">My Items</a></li>
             <li><a href="WishlistServlet">My Wishlist</a></li>
             <li role="separator" class="divider"></li>
-            <li onclick="signOutForm.submit();"><a href="#">Sign Out</a></li>
+            <li><a href="SignOutServlet">Sign Out</a></li>
           </ul>
         </li>
       </ul>

@@ -3,7 +3,6 @@
     Author     : Kevin Young
 --%>
 
-<%-- any content can be specified here e.g.: --%>
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
