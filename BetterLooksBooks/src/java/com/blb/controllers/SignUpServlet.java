@@ -76,15 +76,12 @@ public class SignUpServlet extends HttpServlet {
         String zipcode = request.getParameter("zipcode");
         String phoneNumber = request.getParameter("phoneNumber");
         String email = request.getParameter("email");
-        String userType = request.getParameter("userType");
-        String accessCode = request.getParameter("accessCode");
-        
+        String userType = request.getParameter("userType");    
         RequestDispatcher dispatcher = null;
-        if (isNull(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email) || (!userType.equals("customer") && accessCode == null)) {
+        if (isNull(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email)) {
             throw new ServletException("Please fill in all fields.");
         }
-        User user = new User(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType);
-        
+        User user = new User(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType);        
         int status = 0;
         try {
             status = userService.save(user);

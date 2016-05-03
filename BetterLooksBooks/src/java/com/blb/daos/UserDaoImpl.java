@@ -9,12 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.blb.objects.User;
 
-import org.apache.commons.dbutils.DbUtils;
-
 public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
-    
-    private Statement stmt = null;
-    private ResultSet res = null;
     
     @Override
     public int save(User user) {
@@ -40,7 +35,8 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeStatement(ps);
+            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }
@@ -50,10 +46,10 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         String sql = "select U.username, U.password, U.firstname, U.lastname, U.street, U.city, U.state, U.zipcode, U.phoneNumber, U.email, U.type"
                         + "   from USERS U "
                         + "   where U.username = '" + username + "'"
-                        + "   and U.password = '" + password + "'";
-        
+                        + "   and U.password = '" + password + "'";        
         Connection conToUse = null;
-        PreparedStatement ps = null;
+        ResultSet res = null;
+        Statement stmt = null;
         try {
             conToUse = getConnection();
             stmt = (Statement) conToUse.createStatement();
@@ -92,7 +88,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeAll(conToUse, stmt, res);
         }
         
         return null;

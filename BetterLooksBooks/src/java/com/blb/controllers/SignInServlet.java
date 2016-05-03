@@ -66,15 +66,13 @@ public class SignInServlet extends HttpServlet {
             throws ServletException, IOException {
         // processRequest(request, response);
         String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        
+        String password = request.getParameter("password");        
         User user = userService.getUser(username, password);
         if (user == null) {
             throw new ServletException("This user does not exist.");
         }
         HttpSession session = request.getSession();
-        session.setAttribute("user", user);
-        
+        session.setAttribute("user", user);        
         String url = "/bookDescription.jsp";
         RequestDispatcher dispatcher = request.getRequestDispatcher(url);
         dispatcher.forward(request, response); 
@@ -87,6 +85,6 @@ public class SignInServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Handles an admin, customer, libararian, or publisher logging in";
+        return "Handles a customer logging in";
     }
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.blb.objects;
 
 import java.io.Serializable;
@@ -23,7 +18,6 @@ public class User implements Serializable{
     private String phoneNumber;
     private String email;
     private String type;
-    private String accessCode;
     
     public User(){}
 
@@ -126,8 +120,7 @@ public class User implements Serializable{
         // TODO. Remove this?
         if (type == null) {
             return "guest";
-        }
-        
+        } 
         return type;
     }
 

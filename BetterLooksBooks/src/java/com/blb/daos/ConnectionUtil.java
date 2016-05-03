@@ -3,7 +3,9 @@ package com.blb.daos;
 import com.blb.exceptions.ResourceHelperException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -57,10 +59,25 @@ public class ConnectionUtil {
         //        return connection;
     }
 
-    // this method closes the connection
+    // Close a Connection, avoid closing if null and hide any SQLExceptions that occur.
     public static void closeConnection(Connection connection) {
         // Close a Connection, avoid closing if null and hide any SQLExceptions that occur.
         DbUtils.closeQuietly(connection);
+    }
+    
+    // Close a ResultSet, avoid closing if null and hide any SQLExceptions that occur.
+    public static void closeRS(ResultSet rs) {
+        DbUtils.closeQuietly(rs);
+    }
+    
+    // Close a Sttement, avoid closing if null and hide any SQLExceptions that occur.
+    public static void closeStatement(Statement statement) {
+        DbUtils.closeQuietly(statement);
+    }
+    
+    // Close a connection, statement, and resultset, avoid closing if null and hide any SQLExceptions that occur.
+    public static void closeAll(Connection conn, Statement stmt, ResultSet rs) {
+        DbUtils.closeQuietly(conn, stmt, rs);
     }
     
     /**
