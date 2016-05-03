@@ -132,14 +132,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             
             if (numberOfResults == 0) {
                 println("No results");
-//                Book book = new Book();
-//                book.setIsbn("0");
-//                book.setTitle("");
-//                book.setImageUrl("assets/no-results.png");
-//                book.setAuthor("");
-//                results.add(book);
             }
-            
             
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
