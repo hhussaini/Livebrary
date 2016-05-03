@@ -23,6 +23,10 @@
             <a href="AdminRespondToTicketsServlet"><img alt="brand" width = "100" height = "100" src="assets/service-request-icon.jpeg"></a>
             Respond to Tickets         
           </div>
+          <div class="list-group">
+            <a href="AdminAccountManagementServlet"><img alt="brand" width = "100" height = "100" src="assets/account-management-icon.gif"></a>
+            Account Management        
+          </div>
         </div>
       </div>
     </div>
