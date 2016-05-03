@@ -1,6 +1,8 @@
 package com.glb.controllers;
 
 import com.glb.factories.ServiceFactory;
+import static com.glb.helpers.Helpers.*;
+import com.glb.objects.Book;
 import com.glb.objects.User;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
@@ -10,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.glb.services.UserService;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -84,6 +88,7 @@ public class SignInServlet extends HttpServlet {
                 break;
             case "customer":
                 url = "/customerIndex.jsp";
+                setCustomerLists(session, user);
                 break;
             case "librarian": 
                 url = "/librarianIndex.jsp";
@@ -91,11 +96,22 @@ public class SignInServlet extends HttpServlet {
             case "publisher":
                 url = "/publisherIndex.jsp";
                 break;
-        }        
+        }       
+        
         RequestDispatcher dispatcher = request.getRequestDispatcher(url);
         dispatcher.forward(request, response); 
     }
 
+    public void setCustomerLists(HttpSession session, User user) {
+        List<Book> checkedOut = userService.getCheckedOutItems(user);
+        session.setAttribute("checkedOutItems", checkedOut);
+        List<Book> onHold = userService.getOnHoldItems(user);
+        session.setAttribute("onHoldItems", onHold);
+        println(onHold.size());
+        List<Book> wishlist = userService.getWishlist(user);
+        session.setAttribute("customerWishlist", wishlist);
+    }
+    
     /**
      * Returns a short description of the servlet.
      *

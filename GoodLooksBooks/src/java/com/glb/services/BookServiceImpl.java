@@ -128,22 +128,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> getItemsList(String username) {
-        Connection conn = null;
-       List<Book>listOfBooks = null;
-        try {            
-            conn = ConnectionUtil.getConnection();
-            BookDao bookDao = DaoFactory.getBookDao();
-            bookDao.setConnection(conn);
-            listOfBooks = bookDao.getItemsList(username);
-        } catch (ResourceHelperException ex) {
-            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return listOfBooks;
-    }
-
-    @Override
     public int addReview(Review review, String isbn, String username){
         Connection conn = null;
         int status = 0;

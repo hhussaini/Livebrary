@@ -155,7 +155,8 @@
                                                 </tr>
                                                 <tr>
                                                 </c:if>
-                                                <td>
+                                                <c:if test="${!item.isBanned}">    
+                                                <td>                                                   
                                                     <div class="col-xs-6 col-md-3"> 
                                                         <td> 
                                                             
@@ -167,6 +168,7 @@
                                                         </td>
                                                     </div>
                                                 </td>
+                                                </c:if>
                                                 <c:set var="count" value="${count + 1}" scope="page"/>
                                             </c:forEach>
                                             <%--For displaying Page numbers. The when condition does not display a link for the current page--%>

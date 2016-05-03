@@ -49,6 +49,7 @@ th, td {
   box-shadow: 0 0 50px black;
   margin-right: auto;
   margin-left: auto;
+  height: 100%;
 }
 
 .btn-primary {
@@ -286,4 +287,32 @@ p.fontHeader {
     left: 5px; 
     padding:10px; 
     border:10px ridge gray;
+}
+
+.container-small, .container-large {
+    max-width: 100%;
+}
+@media (min-width: 768px) {
+    .container-small {
+        width: 300px;
+    }
+    .container-large {
+        width: 970px;
+    }
+}
+@media (min-width: 992px) {
+    .container-small {
+        width: 500px;
+    }
+    .container-large {
+        width: 1170px;
+    }
+}
+@media (min-width: 1200px) {
+    .container-small {
+        width: 700px;
+    }
+    .container-large {
+        width: 1500px;
+    }
 }

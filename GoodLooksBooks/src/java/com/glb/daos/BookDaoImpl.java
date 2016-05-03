@@ -214,6 +214,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 book.setLanguage(rs.getString("language"));
                 Map<String, Review> reviews = getAllReviewsForBook(isbn);
                 book.setReviews(reviews);
+                book.setIsBanned(rs.getInt("isBanned")==1?true:false);
             }
             rs.close();
             
@@ -249,32 +250,6 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             DbUtils.closeQuietly(preparedStmt);
         }
         return status;
-    }
-    
-    @Override
-    public List<Book> getItemsList(String userName) {
-        List<Book> itemsList = new ArrayList<>();        
-        Connection conToUse = null;
-        PreparedStatement ps = null;
-        ResultSet res = null;
-        try {
-            conToUse = getConnection();
-            String sql = "SELECT isbn from RESERVED WHERE username = ?";
-            
-            ps = (PreparedStatement) conToUse.prepareStatement(sql);
-            ps.setString(1, userName);
-            res = ps.executeQuery();
-            
-            while (res.next()) { 
-                  itemsList.add(this.getBookByIsbn(res.getString("isbn"))); 
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            DbUtils.closeQuietly(ps);
-        }
-        
-        return itemsList;
     }
     
     @Override
@@ -722,8 +697,11 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 System.out.println("conToUse == null");
             
             Book bookToBan = getBookByIsbn(isbn);
-            bookToBan.setIsBanned(1);
-            sql = "update Books B"  + " SET B.isBanned = " + "'" + bookToBan.getIsBanned() + "'" + 
+            bookToBan.setIsBanned(!bookToBan.getIsBanned());
+            int isbanned = 0;
+            if (bookToBan.getIsBanned() == false){isbanned = 0;}
+            else if (bookToBan.getIsBanned() == true){isbanned = 1;}
+            sql = "update Books B"  + " SET B.isBanned = " + "'" + isbanned + "'" + 
                     " where B.isbn = " + "'" + bookToBan.getIsbn() + "'";
             preparedStmt = conToUse.prepareStatement(sql);
             status = preparedStmt.executeUpdate();

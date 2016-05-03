@@ -22,7 +22,6 @@ public interface BookService {
     public int submitAddRequest(String isbn, String isbn10, String title, String author, String description, String binding, 
             String imageUrl, int pages, String language, double listPrice, String currency, String publisher, String category);
      public int submitDeleteRequest(String isbn);
-    public List<Book> getItemsList(String username);
     public Map<String, Review> getAllReviewsForBook(String isbn);
     public int addReview(Review review, String isbn, String username);
     public int deleteReview(String isbn, String username);

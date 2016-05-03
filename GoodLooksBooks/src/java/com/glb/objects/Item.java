@@ -25,7 +25,8 @@ public class Item implements Serializable{
     private List<String> genres;
     private int numOfDownloads;
     private Map<String, Review> reviews;
-    private int isBanned;
+    private boolean isBanned;
+    private int copiesLeft;
     
     public Item(){
         this.reviews = new LinkedHashMap<>();
@@ -220,12 +221,19 @@ public class Item implements Serializable{
                 
     }
     
-    public int getIsBanned(){
+    public boolean getIsBanned(){
         return isBanned;
     }
     
-    public void setIsBanned(int isBanned){
+    public void setIsBanned(boolean isBanned){
         this.isBanned = isBanned;
     }
-     
+    
+    public int getCopiesLeft() {
+        return this.copiesLeft;
+    }
+    
+     public void setCopiesLeft(int left) {
+        this.copiesLeft = left;
+    }
 }
