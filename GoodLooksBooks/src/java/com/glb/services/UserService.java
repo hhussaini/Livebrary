@@ -11,4 +11,5 @@ public interface UserService {
     public List<Book> getPublisherItems(User publisher);
     public int removeFromWishlist(User user, String isbn);
     public int addToWishlist(User user, String isbn);
+    public int update(User user);
 }
