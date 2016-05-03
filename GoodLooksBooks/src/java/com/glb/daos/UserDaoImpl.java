@@ -1,5 +1,6 @@
 package com.glb.daos;
 
+import com.glb.factories.ServiceFactory;
 import static com.glb.helpers.Helpers.println;
 import com.glb.objects.Book;
 import java.sql.Connection;
@@ -10,6 +11,8 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.glb.objects.User;
+import com.glb.services.BookService;
+import com.glb.services.UserService;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,12 @@ import org.apache.commons.dbutils.DbUtils;
 
 public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
     
+    
+    BookService bookService;
+    
+    public void init() {
+        bookService = ServiceFactory.getBookService();
+    }
     private Statement stmt = null;
     
     @Override
@@ -310,6 +319,33 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             DbUtils.closeQuietly(ps);
         }
         return status;
+    }
+
+    @Override
+    public List<Book> getOnHoldItems(User user) {
+          List<Book> onHold = new ArrayList<Book>();   
+          BookService bookService = ServiceFactory.getBookService();
+        Connection conToUse = null;
+        java.sql.PreparedStatement ps = null;
+        ResultSet res = null;
+        try {
+            conToUse = getConnection();
+            String sql = "SELECT isbn from RESERVED WHERE username = ?";
+            
+            ps = (PreparedStatement) conToUse.prepareStatement(sql);
+            ps.setString(1, user.getUsername());
+            res = ps.executeQuery();
+            
+            while (res.next()) { 
+                  onHold.add(bookService.getBookByIsbn(res.getString("isbn"))); 
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(ps);
+        }
+        
+        return onHold;
     }
     
     

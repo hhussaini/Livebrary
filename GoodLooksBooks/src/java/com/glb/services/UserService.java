@@ -11,6 +11,7 @@ public interface UserService {
     public List<Book> getPublisherItems(User publisher);
     public int removeFromWishlist(User user, String isbn);
     public int addToWishlist(User user, String isbn);
-    public List<Book> getCheckedOut(User user);
+    public List<Book> getCheckedOutItems(User user);
+    public List<Book> getOnHoldItems(User user);
     public int update(User user);
 }

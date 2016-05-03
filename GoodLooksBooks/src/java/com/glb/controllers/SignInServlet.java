@@ -103,10 +103,11 @@ public class SignInServlet extends HttpServlet {
     }
 
     public void setCustomerLists(HttpSession session, User user) {
-        List<Book> checkedOut = userService.getCheckedOut(user);
+        List<Book> checkedOut = userService.getCheckedOutItems(user);
         session.setAttribute("checkedOutItems", checkedOut);
-        List<Book> reserved = userService.getCheckedOut(user);
-        session.setAttribute("onHold", reserved);
+        List<Book> onHold = userService.getOnHoldItems(user);
+        session.setAttribute("onHoldItems", onHold);
+        println(onHold.size());
         List<Book> wishlist = userService.getWishlist(user);
         session.setAttribute("customerWishlist", wishlist);
     }

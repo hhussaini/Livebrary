@@ -10,6 +10,7 @@ import static com.glb.helpers.Helpers.println;
 import com.glb.objects.Book;
 import com.glb.objects.User;
 import com.glb.services.BookService;
+import com.glb.services.UserService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -26,10 +27,12 @@ import javax.servlet.http.HttpSession;
  */
 public class UserMyItemsServlet extends HttpServlet {
     BookService bookService;
+    UserService userService;
     
     public void init() {
         println(getServletName() + ": initialised" );
         bookService = ServiceFactory.getBookService();
+        userService = ServiceFactory.getUserService();
     }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -73,7 +76,7 @@ public class UserMyItemsServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
         if(user != null){
-           List<Book> myItemsList =  bookService.getItemsList(user.getUsername()); 
+           List<Book> myItemsList =  userService.getCheckedOutItems(user); 
            session.setAttribute("userItemsList", myItemsList);
         }
         else{

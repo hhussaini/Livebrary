@@ -40,7 +40,7 @@
                                     <h3>On hold</h3>
                                 </td>
                                 <td>
-                                    <h2><c:out value="${fn:length(onHold)}">No name</c:out></h2>
+                                    <h2><c:out value="${fn:length(onHoldItems)}">No name</c:out></h2>
                                 </td>
                             </tr>
                         </table>
@@ -62,9 +62,23 @@
                 </div>
                 <div class="tab-pane fade" id="on-hold">
                     <c:choose>
-                        <c:when test="${fn:length(onHold) > 0}">
-                            
-                            
+                        <c:when test="${fn:length(onHoldItems) > 0}">
+                            <c:forEach var="item" items="${onHoldItems}" varStatus="status">
+                                <c:if test="${status.index != 0 && status.index % 3 == 0}">
+                                </tr>
+                                <tr>
+                                </c:if>
+                                <td>
+                                    <div class="col-xs-6 col-md-3"> 
+                                        <td> 
+                                            <a href = "#" id = "${item.isbn}" class="thumbnail" onclick = "selectedBook(this.id)">
+                                                <img src = "${item.imageUrl}" alt="${item.title}">
+                                                <c:out value="${item.title}"/> 
+                                            </a>
+                                        </td>
+                                    </div>
+                                </td>  
+                            </c:forEach>
                         </c:when>
                         <c:otherwise>
                             <div class="heading-box">
