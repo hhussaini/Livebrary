@@ -1,10 +1,10 @@
 package com.glb.controllers;
 
 import static com.glb.helpers.Helpers.goToSignIn;
+import static com.glb.helpers.Helpers.outputToHtml;
 import com.glb.objects.Item;
 import com.glb.objects.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -101,15 +101,7 @@ public class EmailItemServlet extends HttpServlet {
         try {
             EmailUtility.sendEmail(host, port, doNotReplyEmail, doNotReplyPass, recipient, subject,
                     message);
-            response.setContentType("text/html;charset=UTF-8");
-            try (PrintWriter out = response.getWriter()) {
-                out.println("<!DOCTYPE html>");
-                out.println("<html>");
-                out.println("<body>");
-                out.println("<p>Your email has been sent.</p>");
-                out.println("</body>");
-                out.println("</html>");
-            }
+            outputToHtml(response, "Your email has been sent.");
         } catch (Exception ex) {
             throw new ServletException(ex.getMessage());
         }

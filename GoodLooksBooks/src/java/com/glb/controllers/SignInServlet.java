@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.glb.services.UserService;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -69,14 +68,13 @@ public class SignInServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // processRequest(request, response);
+        println(this.getServletName() + ": doPost");
         String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        
+        String password = request.getParameter("password");        
         User user = userService.getUser(username, password);
         if (user == null) {
             throw new ServletException("This user does not exist.");
-        }
-        
+        }        
         String userType = user.getType();
         HttpSession session = request.getSession();
         session.setAttribute("user", user);

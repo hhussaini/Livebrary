@@ -1,8 +1,8 @@
 package com.glb.controllers;
 
+import static com.glb.helpers.Helpers.outputToHtml;
 import com.glb.objects.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -88,16 +88,8 @@ public class ContactSupportServlet extends HttpServlet {
         try {
             EmailUtility.sendEmail(host, port, doNotReplyEmail, doNotReplyPass, supportEmail, subject,
                     message);
-            response.setContentType("text/html;charset=UTF-8");
-            try (PrintWriter out = response.getWriter()) {
-                out.println("<!DOCTYPE html>");
-                out.println("<html>");
-                out.println("<body>");
-                out.println("<p>Your message has been sent. Contact will send you "
-                        + "an email soon.</p>");
-                out.println("</body>");
-                out.println("</html>");
-            }
+            outputToHtml(response, "Your message has been sent. Contact will send you "
+                        + "an email soon.");
         } catch (Exception ex) {
             throw new ServletException(ex.getMessage());
         }

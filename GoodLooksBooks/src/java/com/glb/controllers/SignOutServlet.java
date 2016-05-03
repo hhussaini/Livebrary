@@ -1,6 +1,5 @@
 package com.glb.controllers;
 
-import com.glb.objects.User;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

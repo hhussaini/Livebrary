@@ -2,6 +2,8 @@ package com.glb.controllers;
 
 import com.glb.objects.User;
 import com.glb.factories.ServiceFactory;
+import com.glb.helpers.Helpers;
+import static com.glb.helpers.Helpers.appendParameter;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -77,42 +79,24 @@ public class SignUpServlet extends HttpServlet {
         String phoneNumber = request.getParameter("phoneNumber");
         String email = request.getParameter("email");
         String userType = request.getParameter("userType");
-        String company = request.getParameter("company");
-        
+        String company = request.getParameter("company");        
         RequestDispatcher dispatcher = null;
         if (isNull(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email) || (!userType.equals("customer") && company == null)) {
             throw new ServletException("Please fill in all fields.");
         }
-        User user = new User(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType, company);
-        
+        User user = new User(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType, company);        
         int status = 0;
         try {
             status = userService.save(user);
             if (status == 1) {
-                HttpSession session = request.getSession();
-                session.setAttribute("user", user);
-                String url = "";
-                switch (userType) {
-                    case "customer":
-                        url = "/customerIndex.jsp";
-                        break;
-                    case "librarian": 
-                        url = "/librarianIndex.jsp";
-                        break;
-                    case "publisher":
-                        url = "/publisherIndex.jsp";
-                        break;
-                    case "admin":
-                        url = "/adminIndex.jsp";
-                        break; 
-                }        
-                dispatcher = request.getRequestDispatcher(url);
-                dispatcher.forward(request, response);
+               String url = "/index.jsp";
+               dispatcher = request.getRequestDispatcher(url);
+               dispatcher.forward(request, response);
             } else {
                 throw new ServletException("SQL Error.");
             }
         } catch (Exception e) {
-            throw new ServletException("Exception");
+            throw new ServletException(e.getMessage());
         }
     }
     

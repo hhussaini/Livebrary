@@ -17,7 +17,6 @@
          <form name = "librarianSignUpForm" action = "SignUpServlet" method = "post" class="form-horizontal signUpBody">
            <a href="signUp.jsp" class="btn btn-info">Customer Sign Up</a></li>
            <a href="publisherSignUp.jsp" class="btn btn-info">Publisher Sign Up</a></li>
-           <a href="adminSignUp.jsp" class="btn btn-info">Administrator Sign Up</a></li>
            <input type="hidden" name="userType" value="librarian">
            <div class="form-group">
              <label class = "control-label regLabel" for="company">Library Name:</label>
