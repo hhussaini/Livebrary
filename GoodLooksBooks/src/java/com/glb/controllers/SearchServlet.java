@@ -6,7 +6,9 @@ import com.glb.objects.Book;
 import com.glb.services.BookService;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -64,29 +66,44 @@ public class SearchServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            println(this.getServletName() + " : doGet");
             HttpSession session = request.getSession();
-            String term = request.getParameter("searchTerm");
-                   term = (term == null) ? "" : term;
+            HashMap<String, String> searchTermMap = new HashMap<String,String>();
+            String keyword = request.getParameter("keyword");
+                   keyword = (keyword == null) ? "" : keyword;
+                   searchTermMap.put("term", keyword);
+            String author = request.getParameter("author");
+                   author = author == null ? "" : author;
+                   searchTermMap.put("author", author);
+            String publisher = request.getParameter("publisher");
+                   publisher = publisher == null ? "" : publisher;
+                   searchTermMap.put("publisher", publisher);
+            String isbn = request.getParameter("isbn");
+                   isbn = isbn == null ? "" : isbn;
+                   searchTermMap.put("isbn", isbn);
+                   
             String[] categories = request.getParameterValues("category");
-            categories = (categories == null) ? new String[]{""} : categories;
+                     categories = (categories == null) ? new String[]{""} : categories;
+            
             int page = 1;
             if (request.getParameter("page") != null)
                 page = Integer.parseInt(request.getParameter("page"));
             int recordsPerPage = 18;
             int offset = (page-1) * recordsPerPage;
             
-            searchResults = bookService.searchBooks(term, categories, offset, recordsPerPage);
+            searchResults = bookService.searchBooks(searchTermMap, categories, offset, recordsPerPage);
             int numOfResults = bookService.getNumberOfResults();
             int numOfPages = (int) Math.ceil(numOfResults * 1.0 / recordsPerPage);
             int firstDisplayPage = (page - 5 < 1) ? 1 : page - 5;
             int lastDisplayPage = (page + 5 > numOfPages) ? numOfPages : page + 5;
+            lastDisplayPage = (lastDisplayPage == 0) ? lastDisplayPage :  (lastDisplayPage - 1);
             
             session.setAttribute("searchResults", searchResults);
             request.setAttribute("numOfPages", numOfPages);
             request.setAttribute("currentPage", page);
             request.setAttribute("firstPage", firstDisplayPage);
-            request.setAttribute("lastPage", lastDisplayPage - 1);
-            request.setAttribute("lastTermSearched", term);
+            request.setAttribute("lastPage", lastDisplayPage);
+            request.setAttribute("lastKeywordSearched", keyword);
             session.setAttribute("resultSize", numOfResults);
             request.getRequestDispatcher("/customerFullCatalog.jsp").include(request, response);
         } catch (Exception ex) {

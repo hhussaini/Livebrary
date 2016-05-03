@@ -1,25 +1,30 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.glb.controllers;
 
 import com.glb.factories.ServiceFactory;
 import static com.glb.helpers.Helpers.*;
 import com.glb.objects.Book;
 import com.glb.objects.User;
+import com.glb.services.UserService;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import com.glb.services.UserService;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- *
- * @author Kevin Young
+ * @author PaulMan
  */
-public class SignInServlet extends HttpServlet {
+public class CustomerServlet extends HttpServlet {
+
     
     UserService userService;
     
@@ -27,7 +32,6 @@ public class SignInServlet extends HttpServlet {
         System.out.println(getServletName() + ": initialised" );
         userService = ServiceFactory.getUserService();
     }
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,9 +44,20 @@ public class SignInServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-    } 
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet CustomerServlet</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet CustomerServlet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
+    }
+    
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -54,7 +69,23 @@ public class SignInServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+        println(this.getServletName() + " : doGet");
+        
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        
+        List<Book> checkedOut = userService.getCheckedOutItems(user);
+        session.setAttribute("checkedOutItems", checkedOut);
+        List<Book> onHold = userService.getOnHoldItems(user);
+        session.setAttribute("onHoldItems", onHold);
+        println(onHold.size());
+        List<Book> wishlist = userService.getWishlist(user);
+        session.setAttribute("customerWishlist", wishlist);
+        
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/customerIndex.jsp");
+        dispatcher.forward(request, response); 
     }
 
     /**
@@ -68,51 +99,10 @@ public class SignInServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // processRequest(request, response);
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        
-        User user = userService.getUser(username, password);
-        if (user == null) {
-            throw new ServletException("This user does not exist.");
-        }
-        
-        String userType = user.getType();
-        HttpSession session = request.getSession();
-        session.setAttribute("user", user);
-        
-        String url = "";
-        switch (userType) {
-            case "admin":
-                url = "/adminIndex.jsp";
-                break;
-            case "customer":
-                url = "/customerIndex.jsp";
-                url = "CustomerServlet";
-                setCustomerLists(session, user);
-                break;
-            case "librarian": 
-                url = "/librarianIndex.jsp";
-                break;
-            case "publisher":
-                url = "/publisherIndex.jsp";
-                break;
-        }       
-        response.sendRedirect(url);
-//        RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-//        dispatcher.forward(request, response); 
+        println(this.getServletName() + " : doGet");
+        processRequest(request, response);
     }
 
-    public void setCustomerLists(HttpSession session, User user) {
-        List<Book> checkedOut = userService.getCheckedOutItems(user);
-        session.setAttribute("checkedOutItems", checkedOut);
-        List<Book> onHold = userService.getOnHoldItems(user);
-        session.setAttribute("onHoldItems", onHold);
-        println(onHold.size());
-        List<Book> wishlist = userService.getWishlist(user);
-        session.setAttribute("customerWishlist", wishlist);
-    }
-    
     /**
      * Returns a short description of the servlet.
      *
@@ -120,6 +110,7 @@ public class SignInServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Handles an admin, customer, libararian, or publisher logging in";
-    }
+        return "Short description";
+    }// </editor-fold>
+
 }

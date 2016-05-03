@@ -1,5 +1,6 @@
 package com.glb.daos;
 
+import com.glb.factories.ServiceFactory;
 import static com.glb.helpers.Helpers.println;
 import com.glb.objects.Book;
 import java.sql.Connection;
@@ -10,6 +11,8 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.glb.objects.User;
+import com.glb.services.BookService;
+import com.glb.services.UserService;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,12 @@ import org.apache.commons.dbutils.DbUtils;
 
 public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
     
+    
+    BookService bookService;
+    
+    public void init() {
+        bookService = ServiceFactory.getBookService();
+    }
     private Statement stmt = null;
     
     @Override
@@ -118,22 +127,35 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         Connection conToUse = null;
         java.sql.PreparedStatement ps = null;
         ResultSet res = null;
+        ResultSet res2 = null;
         try {
             String username = user.getUsername();
             conToUse = getConnection();
             String sql = "select * from WISHLISTS where USERNAME = ?";
-            
             ps = (PreparedStatement) conToUse.prepareStatement(sql);
             ps.setString(1, username);
             res = ps.executeQuery();
             
+            sql = "select copiesLeft from books where isbn = ?";
+             ps = (PreparedStatement) conToUse.prepareStatement(sql);
             while (res.next()) {
                 Book book = new Book();
-                book.setIsbn(res.getString("isbn"));
+                String isbn = res.getString("isbn");
+                book.setIsbn(isbn);
                 book.setTitle(res.getString("title"));
                 book.setImageUrl(res.getString("imageUrl"));
+                
+                ps.setString(1, isbn);
+                res2 = ps.executeQuery();
+                while(res2.next()) {
+                    book.setCopiesLeft(res2.getInt("copiesLeft"));
+                }
                 booksOnWishlist.add(book);
             }
+            
+            
+           
+            
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -241,5 +263,91 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         
         return publisherItems;
     }
+
+    @Override
+    public List<Book> getCheckedOut(User user) {
+          List<Book> checkedOut = new ArrayList<Book>();        
+        Connection conToUse = null;
+        java.sql.PreparedStatement ps = null;
+        ResultSet res = null;
+        try {
+            String username = user.getUsername();
+            conToUse = getConnection();
+            String sql = "select * from checked_out where username = ?";
+            
+            ps = (PreparedStatement) conToUse.prepareStatement(sql);
+            ps.setString(1, username);
+            res = ps.executeQuery();
+            while (res.next()) {
+                Book book = new Book();
+                book.setIsbn(res.getString("isbn"));
+                book.setTitle(res.getString("title"));
+                book.setImageUrl(res.getString("imageUrl"));
+                checkedOut.add(book);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(ps);
+        }
+        
+        return checkedOut;
+    }
+    
+    @Override
+    public int update(User user) {
+        String sql = "update USERS U" + " SET U.firstname = '" + user.getFirstName() + "'" + ", " 
+                + "U.lastname = '" + user.getLastName() + "'" + ", "
+                + "U.email = '" + user.getEmail() + "'" + ", " 
+                + "U.street = '" + user.getStreet() + "'" + ", " 
+                + "U.city = '" + user.getCity() + "'" + ", "
+                + "U.state = '" + user.getState() + "'" + ", "
+                + "U.zipcode = '" + user.getZipcode() + "'" + ", "
+                + "U.phoneNumber = '" + user.getPhoneNumber() + "'"
+                 + "   where U.username = '" + user.getUsername() + "'"
+                 + "   and U.password = '" + user.getPassword() + "'";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            ps = conToUse.prepareStatement(sql);
+            status = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
+            DbUtils.closeQuietly(ps);
+        }
+        return status;
+    }
+
+    @Override
+    public List<Book> getOnHoldItems(User user) {
+          List<Book> onHold = new ArrayList<Book>();   
+          BookService bookService = ServiceFactory.getBookService();
+        Connection conToUse = null;
+        java.sql.PreparedStatement ps = null;
+        ResultSet res = null;
+        try {
+            conToUse = getConnection();
+            String sql = "SELECT isbn from RESERVED WHERE username = ?";
+            
+            ps = (PreparedStatement) conToUse.prepareStatement(sql);
+            ps.setString(1, user.getUsername());
+            res = ps.executeQuery();
+            
+            while (res.next()) { 
+                  onHold.add(bookService.getBookByIsbn(res.getString("isbn"))); 
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(ps);
+        }
+        
+        return onHold;
+    }
+    
+    
     
 }

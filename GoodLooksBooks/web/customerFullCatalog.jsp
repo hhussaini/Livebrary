@@ -2,8 +2,9 @@
     Document   : customerFullCatalog
     Author     : Kevin_Setayesh & Paul M.
 --%>
-
+    
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,18 +33,49 @@
             <jsp:include page="/logo.jsp" />
             <br>
             <div class="container">
+                <form class="form" name="searchForm" id="searchForm" action="SearchServlet" method = "get" role="search">
+                    <div class="input-group">
+                        <table>
+                            <tr>
+                                <td>
+                                    <input name="keyword" type="text" class="form-control" value="${lastKeywordSearched}" placeholder="Title, Genre, Keyword, etc..." id="keyword">
+                                </td>
+                                <td>
+                                    <input name="author" type="text" class="form-control" value="${lastAuthorSearched}" placeholder="Author" id="author">
+                                </td>
+                                <td>
+                                    <input name="publisher" type="text" class="form-control" value="${lastPublisherSearched}" placeholder="Publisher" id="publisher">
+                                </td>
+                                <td>
+                                    <input name="isbn" type="text" class="form-control" value="${lastIsbnSearched}" placeholder="Isbn" id="isbn-term">
+                                </td>
+                                <td>
+                                    <div class="input-group-btn">
+                                        <button name="searchbtn" class="btn btn-default" type="submit">search</button>  
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h4> Keyword</h4>
+                                </td>
+                                <td>
+                                    <h4> Author</h4>
+                                </td>
+                                <td> 
+                                    <h4> Publisher</h4>
+                                </td>
+                                <td>
+                                    <h4> Isbn</h4>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
                 <div class="row row-offcanvas row-offcanvas-left">
                     <!-- sidebar -->
                     <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
                         <div class="panel panel-default">
-                            <form class="form" name="searchForm" id="searchForm" action="SearchServlet" method = "get" role="search">
-                                <div class="input-group">
-                                    <input name="searchTerm" type="text" class="form-control" value="${lastTermSearched}" placeholder="Title, Author, Genre, etc..." id="srch-term">
-                                    <div class="input-group-btn">
-                                        <button name="searchbtn" class="btn btn-default" type="submit">search</button>  
-                                    </div>
-                                </div>
-                            </form>
                             <!-- <p> ${resultSize} results</p>  -->
                             <div class="panel-heading">Active Filters</div> <br>
                             <div class="panel-heading">Literature Medium</div>
@@ -116,66 +148,78 @@
                             <table>
                                 <tr>
                                     <c:set var="count" value="0" scope="page" />
-                                    <c:forEach var="item" items="${searchResults}" varStatus="status">
-                                        <c:if test="${status.index != 0 && status.index % 3 == 0}">
-                                        </tr>
-                                        <tr>
-                                        </c:if>
-                                        <td>
-                                            <div class="col-xs-6 col-md-3"> 
-                                                <td> 
-                                                    
-                                                    <a href = "#" id = "${item.isbn}" class="thumbnail" onclick = "selectedBook(this.id)">
-                                                        <img onload="validateImgUrl(this.id)" name="bookImage" id="book${count} class="bookImage" src="${item.imageUrl}" alt="${item.title}" style="width: 200px;">
-                                                        <c:out value="${item.title}"/> <br> <br>
-                                                        <c:out value="by ${item.author}"/>
-                                                    </a>
+                                    <c:choose>
+                                        <c:when test="${fn:length(searchResults) > 0}">
+                                            <c:forEach var="item" items="${searchResults}" varStatus="status">
+                                                <c:if test="${status.index != 0 && status.index % 3 == 0}">
+                                                </tr>
+                                                <tr>
+                                                </c:if>
+                                                <c:if test="${!item.isBanned}">    
+                                                <td>                                                   
+                                                    <div class="col-xs-6 col-md-3"> 
+                                                        <td> 
+                                                            
+                                                            <a href = "#" id = "${item.isbn}" class="thumbnail" onclick = "selectedBook(this.id)">
+                                                                <img onload="validateImgUrl(this.id)" name="bookImage" id="book${count}" class="bookImage" src="${item.imageUrl}" alt="${item.title}" style="width: 200px;">
+                                                                <c:out value="${item.title}"/> <br> <br>
+                                                                <c:out value="by ${item.author}"/>
+                                                            </a>
+                                                        </td>
+                                                    </div>
                                                 </td>
-                                            </div>
-                                        </td>
-                                        <c:set var="count" value="${count + 1}" scope="page"/>
-                                    </c:forEach>
+                                                </c:if>
+                                                <c:set var="count" value="${count + 1}" scope="page"/>
+                                            </c:forEach>
+                                            <%--For displaying Page numbers. The when condition does not display a link for the current page--%>
+                                        <table border="1" cellpadding="5" cellspacing="5" align="center">
+                                            <tr>
+                                                <%--For displaying Previous link except for the 1st page --%>
+                                                <td><a href="SearchServlet?page=1&searchTerm=${lastTermSearched}"><<</a></td>
+                                                <c:if test="${currentPage != 1}">
+                                                    <td><a href="SearchServlet?page=${currentPage - 1}&searchTerm=${lastTermSearched}">Previous</a></td>
+                                                </c:if>
+                                                <c:forEach begin="${firstPage}" end="${lastPage}" var="i">
+                                                    <c:choose>
+                                                        <c:when test="${currentPage eq i}">
+                                                            <td>${i}</td>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <td><a href="SearchServlet?page=${i}&searchTerm=${lastTermSearched}">${i}</a>
+                                                            </td>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:forEach>
+                                                <%--For displaying Next link --%>
+                                                <c:if test="${currentPage lt numOfPages}">
+                                                    <td><a href="SearchServlet?page=${currentPage + 1}&searchTerm=${lastTermSearched}">Next</a>
+                                                    </td>
+                                                </c:if> 
+                                                <td><a href="SearchServlet?page=${numOfPages}&searchTerm=${lastTermSearched}">>></a></td>
+                                            </tr>
+                                        </table>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="heading-box">
+                                            <h2>No results.</h2>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
                                 </tr>
                             </table>
                         </div>
-                        <%--For displaying Page numbers. The when condition does not display a link for the current page--%>
-                        <table border="1" cellpadding="5" cellspacing="5" align="center">
-                            <tr>
-                                <%--For displaying Previous link except for the 1st page --%>
-                                <td><a href="SearchServlet?page=1&searchTerm=${lastTermSearched}"><<</a></td>
-                                <c:if test="${currentPage != 1}">
-                                    <td><a href="SearchServlet?page=${currentPage - 1}&searchTerm=${lastTermSearched}">Previous</a></td>
-                                </c:if>
-                                <c:forEach begin="${firstPage}" end="${lastPage}" var="i">
-                                    <c:choose>
-                                        <c:when test="${currentPage eq i}">
-                                            <td>${i}</td>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <td><a href="SearchServlet?page=${i}&searchTerm=${lastTermSearched}">${i}</a>
-                                            </td>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:forEach>
-                                <%--For displaying Next link --%>
-                                <c:if test="${currentPage lt numOfPages}">
-                                    <td><a href="SearchServlet?page=${currentPage + 1}&searchTerm=${lastTermSearched}">Next</a>
-                                    </td>
-                                </c:if> 
-                                <td><a href="SearchServlet?page=${numOfPages}&searchTerm=${lastTermSearched}">>></a></td>
-                            </tr>
-                        </table>
+                            
                     </div>
                 </div><!-- /.col-xs-12 main -->
             </div><!--/.row-->
         </div>
     </body>
 </html>
-    
+
 <!--<script>
     window.onload=validateImgUrl();
 </script>
-                            -->
+-->
 <!--Form for clicking on an "item" (book)-->
 <form id = "itemSelectionForm" name = "itemSelectionForm" action = "BookDescriptionServlet" method = "post">
     <input type = "hidden" id = "isbn" name = "isbn" value = "null">

@@ -34,19 +34,7 @@
                 <div class="panel-heading">
                     <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i>Change Account Settings</h3>
                 </div>
-                    <form name="myForm" id = "signUpForm" class="form-horizontal signUpBody" action="" method="post">
-                    <div class="form-group">
-                      <label class = "control-label regLabel" for="username">Username:</label>
-                      <div class = "controls regControl">
-                          <input type="text" class="form-control" name = "username">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class = "control-label regLabel" for="password">Password:</label>
-                      <div class = "controls regControl">
-                          <input type="password" class="form-control" name = "password">
-                      </div>
-                    </div>
+                    <form name = "accountSettingsForm" action = "UpdateUserServlet" method = "post">
                     <div class="form-group">
                       <label class = "control-label regLabel" for="firstName">First Name:</label>
                       <div class = "controls regControl">
@@ -136,9 +124,9 @@
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class = "control-label regLabel" for="telephone">Phone Number:</label>
+                      <label class = "control-label regLabel" for="phoneNumber">Phone Number:</label>
                       <div class = "controls regControl">
-                          <input type="text" class="form-control input-medium bfh-phone" data-country="US" name="telephone" placeholder="0123456789">
+                          <input type="text" class="form-control input-medium bfh-phone" data-country="US" name="phoneNumber" placeholder="0123456789">
                       </div>
                     </div>
                     <div class="form-group">

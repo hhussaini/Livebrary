@@ -44,8 +44,22 @@ public class BookDescriptionServlet extends HttpServlet {
             throws ServletException, IOException {
         println("Inside BookDescriptionServlet.processRequest");
         // returns the isbn of the book clicked, so we can go to the database and query for that book
- 
-        String isbn = request.getParameter("isbn"); 
+    }
+
+     /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        println("Inside BookDescriptionServlet.doGet");
+        processRequest(request, response);
+         String isbn = request.getParameter("isbn"); 
         Book book = bookService.getBookByIsbn(isbn);
         String url = "/bookDescription.jsp";
         HttpSession session = request.getSession();
@@ -64,21 +78,6 @@ public class BookDescriptionServlet extends HttpServlet {
         else{
              throw new ServletException("Error getting book with isbn = " + (isbn == null ? "NULL" : isbn));
         }
-    }
-
-     /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        println("Inside BookDescriptionServlet.doGet");
-        processRequest(request, response);
     }
 
     /**

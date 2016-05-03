@@ -11,4 +11,7 @@ public interface UserDao extends JdbcDaoSupport {
     public List<Book> getPublisherItems(User publisher);
     public int addToWishlist(User user, String isbn);
     public int removeFromWishlist(String username, String bookName);
+    public List<Book> getCheckedOut(User user);
+    public List<Book> getOnHoldItems(User user);
+    public int update(User user);
 }

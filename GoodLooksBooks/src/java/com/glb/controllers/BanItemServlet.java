@@ -1,31 +1,36 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.glb.controllers;
 
 import com.glb.factories.ServiceFactory;
-import static com.glb.helpers.Helpers.*;
-import com.glb.objects.Book;
+import static com.glb.helpers.Helpers.goToSignIn;
 import com.glb.objects.User;
+import com.glb.services.BookService;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import com.glb.services.UserService;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
- * @author Kevin Young
+ * @author Hamza
  */
-public class SignInServlet extends HttpServlet {
+public class BanItemServlet extends HttpServlet {
     
-    UserService userService;
+    
+    BookService bookService;
+    User user;
     
     public void init() {
         System.out.println(getServletName() + ": initialised" );
-        userService = ServiceFactory.getUserService();
+        bookService = ServiceFactory.getBookService();
     }
 
     /**
@@ -40,7 +45,8 @@ public class SignInServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-    } 
+        
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -68,51 +74,32 @@ public class SignInServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // processRequest(request, response);
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        
-        User user = userService.getUser(username, password);
+        processRequest(request, response);
+        RequestDispatcher dispatcher = null;
+        String isbn = request.getParameter("isbn");
+        HttpSession session = request.getSession();
+        user = (User)session.getAttribute("user");
         if (user == null) {
-            throw new ServletException("This user does not exist.");
+            goToSignIn(request, response);
+            return;
+         }
+        int status = 0;
+        try {
+            status = bookService.banBook(isbn);
+            if (status == 1) {
+            dispatcher = request.getRequestDispatcher("/bookDescription.jsp");
+            dispatcher.forward(request, response);
+            } else {
+                throw new ServletException("SQL Error.");
+            }
+        } catch (Exception e) {
+            throw new ServletException("Exception");
         }
         
-        String userType = user.getType();
-        HttpSession session = request.getSession();
-        session.setAttribute("user", user);
         
-        String url = "";
-        switch (userType) {
-            case "admin":
-                url = "/adminIndex.jsp";
-                break;
-            case "customer":
-                url = "/customerIndex.jsp";
-                url = "CustomerServlet";
-                setCustomerLists(session, user);
-                break;
-            case "librarian": 
-                url = "/librarianIndex.jsp";
-                break;
-            case "publisher":
-                url = "/publisherIndex.jsp";
-                break;
-        }       
-        response.sendRedirect(url);
-//        RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-//        dispatcher.forward(request, response); 
+        
     }
 
-    public void setCustomerLists(HttpSession session, User user) {
-        List<Book> checkedOut = userService.getCheckedOutItems(user);
-        session.setAttribute("checkedOutItems", checkedOut);
-        List<Book> onHold = userService.getOnHoldItems(user);
-        session.setAttribute("onHoldItems", onHold);
-        println(onHold.size());
-        List<Book> wishlist = userService.getWishlist(user);
-        session.setAttribute("customerWishlist", wishlist);
-    }
-    
     /**
      * Returns a short description of the servlet.
      *
@@ -120,6 +107,7 @@ public class SignInServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Handles an admin, customer, libararian, or publisher logging in";
-    }
+        return "Short description";
+    }// </editor-fold>
+
 }

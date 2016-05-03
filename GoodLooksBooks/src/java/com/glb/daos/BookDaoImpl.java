@@ -1,7 +1,8 @@
 package com.glb.daos;
- 
+
 import com.glb.constants.CategoryMap;
 import static com.glb.helpers.Helpers.getTagFromXmlStr;
+import static com.glb.helpers.Helpers.*;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,6 +15,7 @@ import com.glb.objects.Review;
 import com.glb.objects.Ticket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -21,7 +23,6 @@ import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 
 /**
- *
  * @author mobile-mann
  */
 public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
@@ -32,66 +33,83 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     private int totalBooks;
     
     @Override
-    public List<Book> searchBooks(String term, String[] categories, int offset, int recordsPerPage) {
+    public List<Book> searchBooks(HashMap<String,String> searchTermMap, String[] categories, int offset, int recordsPerPage) {
+        Connection conn = getConnection();
+        ResultSet rs;
+        String finalView = "";
         String limit = " limit " + offset + ", " + recordsPerPage;
         List<Book> results = new ArrayList<Book>();
         this.numberOfResults = 0;
-        Connection conn = getConnection();
-        ResultSet rs;
         
-        // Category Query
-        String catQuery = "";
-        for (int i = 0; i < categories.length; i++) {
-            if (i == 0)
-                catQuery += " (";
-            catQuery += "category rlike ?";
-            if (i == categories.length - 1) {
-                catQuery += ") ";
-            } else {
-                catQuery += " or ";
-            }
-        }
+        String keyword = searchTermMap.get("term");
+        String author = searchTermMap.get("author");
+        String publisher = searchTermMap.get("publisher");
+        String isbn = searchTermMap.get("isbn");
+        
         // Search term query
-        term = "%" + term + "%";
-        String query = "create view results1 as"
-                + " select b.isbn, b.title, b.author, b.imageUrl, c.category from books b, categories c"
-                + " where b.isbn = c.isbn and"
+        String query = "create view searchTermView as"
+                + " select b.isbn, b.title, b.author, b.imageUrl from books b"
+                + " where"
                 + " (b.publisher like ?"
-                + " OR b.language like ?"
-                + " OR b.author like ?"
-                + " OR b.title like ?)";
+                + " AND b.author like ?"
+                + " AND b.title like ?"
+                + " AND b.isbn like ?)";
         try {
             stmt = conn.createStatement();
-            stmt.executeUpdate("drop view if exists results1");
+            stmt.executeUpdate("drop view if exists searchTermView");
             PreparedStatement pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, term);
-            pstmt.setString(2, term);
-            pstmt.setString(3, term);
-            pstmt.setString(4, term);
+            finalView = "searchTermView";
+            
+            pstmt.setString(1, "%"+publisher+"%");
+            pstmt.setString(2, "%"+author+"%");
+            pstmt.setString(3, "%"+keyword+"%");
+            pstmt.setString(4, "%"+isbn+"%");
             pstmt.executeUpdate();
             
-            stmt.executeUpdate("drop view if exists results2");
-            query =  "create view results2 as"
-                    + " select isbn, title, author, imageUrl from results1 where"
-                    + catQuery;
-            pstmt = conn.prepareStatement(query);
-            for (int i = 0; i < categories.length; i++) {
-                if (categories[i].equals(""))
-                    pstmt.setString(i+1, ".*");
-                else {
-                    String category = categoryMap.get(categories[i]).toString();
-                    pstmt.setString(i+1, category);
+            // Category Query
+            String catQuery = (categories[0].equals("")) ? null : "";
+            if (!categories[0].equals("")) {
+                for (int i = 0; i < categories.length; i++) {
+                    if (i == 0)
+                        catQuery += " (";
+                    catQuery += "c.category rlike ?";
+                    if (i == categories.length - 1) {
+                        catQuery += ") ";
+                    } else {
+                        catQuery += " or ";
+                    }
                 }
+                
+                stmt = conn.createStatement();
+                stmt.executeUpdate("drop view if exists categoryView");
+                query =  "create view categoryView as"
+                        + " select b.isbn, b.title, b.author, b.imageUrl from books b, category c, "
+                        + " searchTermView r where b.isbn = r.isbn or c.isbn = r.isbn and "
+                        + catQuery;
+                pstmt = conn.prepareStatement(query);
+                for (int i = 0; i < categories.length; i++) {
+                    if (categories[i].equals(""))
+                        pstmt.setString(i+1, ".*");
+                    else {
+                        String category = categoryMap.get(categories[i]).toString();
+                        pstmt.setString(i+1, category);
+                    }
+                }
+                pstmt.executeUpdate();
+                finalView += " categoryView";
             }
-            pstmt.executeUpdate();
             
-            query = "select count(distinct isbn) from results2";
-            rs = stmt.executeQuery(query);
-            while (rs.next()) {
-                numberOfResults = rs.getInt(1);
+            if (catQuery != null) {
+                stmt = conn.createStatement();
+                stmt.executeUpdate("drop view if exists finalView");
+                query =  "create view finalView as"
+                        + " select isbn, title, author, imageUrl"
+                        + " from books inner join categories"
+                        + " on books.isbn = categories.isbn";
+                finalView = "finalView";
             }
             
-            query = "select * from results2"
+            query = "select * from "+ finalView
                     + " group by isbn";
             stmt = conn.createStatement();
             rs = stmt.executeQuery(query + limit);
@@ -105,6 +123,17 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 results.add(book);
             }
             rs.close();
+            
+            query = "select count(distinct isbn) from " + finalView;
+            rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                numberOfResults = rs.getInt(1);
+            }
+            
+            if (numberOfResults == 0) {
+                println("No results");
+            }
+            
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -185,6 +214,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 book.setLanguage(rs.getString("language"));
                 Map<String, Review> reviews = getAllReviewsForBook(isbn);
                 book.setReviews(reviews);
+                book.setIsBanned(rs.getInt("isBanned")==1?true:false);
             }
             rs.close();
             
@@ -220,32 +250,6 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             DbUtils.closeQuietly(preparedStmt);
         }
         return status;
-    }
-    
-    @Override
-    public List<Book> getItemsList(String userName) {
-        List<Book> itemsList = new ArrayList<>();        
-        Connection conToUse = null;
-        PreparedStatement ps = null;
-        ResultSet res = null;
-        try {
-            conToUse = getConnection();
-            String sql = "SELECT isbn from RESERVED WHERE username = ?";
-            
-            ps = (PreparedStatement) conToUse.prepareStatement(sql);
-            ps.setString(1, userName);
-            res = ps.executeQuery();
-            
-            while (res.next()) { 
-                  itemsList.add(this.getBookByIsbn(res.getString("isbn"))); 
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            DbUtils.closeQuietly(ps);
-        }
-        
-        return itemsList;
     }
     
     @Override
@@ -680,5 +684,33 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         }
         return status;
     }
+    
+    @Override
+    public int banBook(String isbn) {
+        Connection conToUse = null;
+        PreparedStatement preparedStmt = null;
+        String sql = null;
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            if (conToUse == null)
+                System.out.println("conToUse == null");
+            
+            Book bookToBan = getBookByIsbn(isbn);
+            bookToBan.setIsBanned(!bookToBan.getIsBanned());
+            int isbanned = 0;
+            if (bookToBan.getIsBanned() == false){isbanned = 0;}
+            else if (bookToBan.getIsBanned() == true){isbanned = 1;}
+            sql = "update Books B"  + " SET B.isBanned = " + "'" + isbanned + "'" + 
+                    " where B.isbn = " + "'" + bookToBan.getIsbn() + "'";
+            preparedStmt = conToUse.prepareStatement(sql);
+            status = preparedStmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            DbUtils.closeQuietly(preparedStmt);
+        }
+        return status;
+    }
 }
- 

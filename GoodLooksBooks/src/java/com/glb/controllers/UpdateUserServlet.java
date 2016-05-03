@@ -1,22 +1,30 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.glb.controllers;
 
-import com.glb.objects.User;
 import com.glb.factories.ServiceFactory;
+import com.glb.objects.User;
+import com.glb.services.UserService;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import com.glb.services.UserService;
+
 
 /**
  *
- * @author Kevin Young
+ * @author Hamza
  */
-public class SignUpServlet extends HttpServlet {
+public class UpdateUserServlet extends HttpServlet {
 
+    
     UserService userService;
     
     public void init() {
@@ -51,7 +59,9 @@ public class SignUpServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // processRequest(request, response);       
+        processRequest(request, response);
+        
+        
     }
 
     /**
@@ -65,9 +75,13 @@ public class SignUpServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // processRequest(request, response);
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        processRequest(request, response);
+        
+        HttpSession session = request.getSession();
+        
+        User user = (User)session.getAttribute("user");
+        String userType = user.getType();
+        
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String street = request.getParameter("street");
@@ -75,24 +89,32 @@ public class SignUpServlet extends HttpServlet {
         String state = request.getParameter("state");
         String zipcode = request.getParameter("zipcode");
         String phoneNumber = request.getParameter("phoneNumber");
-        String email = request.getParameter("email");
-        String userType = request.getParameter("userType");
-        String company = request.getParameter("company");
+        String email = request.getParameter("email");        
+       
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setStreet(street);
+        user.setCity(city);
+        user.setState(state);
+        user.setZipcode(zipcode);
+        user.setPhoneNumber(phoneNumber);
+        user.setEmail(email);
         
         RequestDispatcher dispatcher = null;
-        if (isNull(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email) || (!userType.equals("customer") && company == null)) {
+        if (isNull(firstName, lastName, street, city, state, zipcode, phoneNumber, email)) {
             throw new ServletException("Please fill in all fields.");
         }
-        User user = new User(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType, company);
         
         int status = 0;
         try {
-            status = userService.save(user);
+            status = userService.update(user);
             if (status == 1) {
-                HttpSession session = request.getSession();
                 session.setAttribute("user", user);
                 String url = "";
                 switch (userType) {
+                    case "admin":
+                        url = "/adminIndex.jsp";
+                        break;
                     case "customer":
                         url = "/customerIndex.jsp";
                         break;
@@ -102,9 +124,6 @@ public class SignUpServlet extends HttpServlet {
                     case "publisher":
                         url = "/publisherIndex.jsp";
                         break;
-                    case "admin":
-                        url = "/adminIndex.jsp";
-                        break; 
                 }        
                 dispatcher = request.getRequestDispatcher(url);
                 dispatcher.forward(request, response);
@@ -115,8 +134,18 @@ public class SignUpServlet extends HttpServlet {
             throw new ServletException("Exception");
         }
     }
-    
+
     /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+    
+     /**
      * Checks if any of the objects in args is null
      * @param args
      * @return True if any of the objects in args is null
@@ -131,13 +160,6 @@ public class SignUpServlet extends HttpServlet {
         return false;
     }
     
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Handles signing up a Customer, Publisher, or Librarian";
-    } // </editor-fold>
+    
+
 }
