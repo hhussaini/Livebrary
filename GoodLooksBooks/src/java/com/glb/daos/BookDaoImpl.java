@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 
 /**
- *
  * @author mobile-mann
  */
 public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
@@ -32,33 +31,37 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     private int totalBooks;
     
     @Override
-    public List<Book> searchBooks(String term, String[] categories, int offset, int recordsPerPage) {
+    public List<Book> searchBooks(HashMap<String,String> searchTermMap, String[] categories, int offset, int recordsPerPage) {
+        Connection conn = getConnection();
+        ResultSet rs;
         String finalView = "";
         String limit = " limit " + offset + ", " + recordsPerPage;
         List<Book> results = new ArrayList<Book>();
         this.numberOfResults = 0;
-        Connection conn = getConnection();
-        ResultSet rs;
+
+        String keyword = searchTermMap.get("term");
+        String author = searchTermMap.get("author");
+        String publisher = searchTermMap.get("publisher");
+        String isbn = searchTermMap.get("isbn");
         
         // Search term query
-        term = "%" + term + "%";
         String query = "create view searchTermView as"
                 + " select b.isbn, b.title, b.author, b.imageUrl from books b"
                 + " where"
                 + " (b.publisher like ?"
-                + " OR b.language like ?"
-                + " OR b.author like ?"
-                + " OR b.title like ?)";
+                + " AND b.author like ?"
+                + " AND b.title like ?"
+                + " AND b.isbn like ?)";
         try {
             stmt = conn.createStatement();
             stmt.executeUpdate("drop view if exists searchTermView");
             PreparedStatement pstmt = conn.prepareStatement(query);
             finalView = "searchTermView";
             
-            pstmt.setString(1, term);
-            pstmt.setString(2, term);
-            pstmt.setString(3, term);
-            pstmt.setString(4, term);
+            pstmt.setString(1, "%"+publisher+"%");
+            pstmt.setString(2, "%"+author+"%");
+            pstmt.setString(3, "%"+keyword+"%");
+            pstmt.setString(4, "%"+isbn+"%");
             pstmt.executeUpdate();
             
             // Category Query
@@ -127,6 +130,12 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             
             if (numberOfResults == 0) {
                 println("No results");
+//                Book book = new Book();
+//                book.setIsbn("0");
+//                book.setTitle("");
+//                book.setImageUrl("assets/no-results.png");
+//                book.setAuthor("");
+//                results.add(book);
             }
             
           
