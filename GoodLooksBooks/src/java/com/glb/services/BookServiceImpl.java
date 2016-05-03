@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 import com.glb.objects.Book;
 import com.glb.objects.Review; 
 import com.glb.objects.Ticket;
-import com.glb.objects.User;
 import java.sql.ResultSet;
 import java.sql.SQLException; 
 import java.util.HashMap;
@@ -145,14 +144,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public int addReview(Review review, Book book, User user){
+    public int addReview(Review review, String isbn, String username){
         Connection conn = null;
         int status = 0;
         try {            
             conn = ConnectionUtil.getConnection();
             BookDao bookDao = DaoFactory.getBookDao();
             bookDao.setConnection(conn);
-            status = bookDao.addReview(review, book, user);
+            status = bookDao.addReview(review, isbn, username);
         } catch (ResourceHelperException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -269,8 +268,8 @@ public class BookServiceImpl implements BookService {
     }
     
     @Override
-    public int submitAddRequest(String isbn, String isbn10, String title, String author, String description, 
-            String binding, String imageUrl, int pages, String language, double listPrice, String currency, String publisher) {
+    public int submitAddRequest(String isbn, String isbn10, String title, String author, String description, String binding, 
+            String imageUrl, int pages, String language, double listPrice, String currency, String publisher, String category) {
         Connection conToUse = null;
         int status = 0;
         // get the connection from util class
@@ -281,7 +280,7 @@ public class BookServiceImpl implements BookService {
             BookDao bookDao = DaoFactory.getBookDao();
             bookDao.setConnection(conToUse);;
             status = bookDao.submitAddRequest(isbn, isbn10, title, author,description, 
-                    binding, imageUrl, pages, language, listPrice, currency, publisher);
+                    binding, imageUrl, pages, language, listPrice, currency, publisher, category);
             conToUse.commit();
         } catch (ResourceHelperException e) {
             System.out.println("ResourceHelperException");
@@ -309,6 +308,50 @@ public class BookServiceImpl implements BookService {
         } catch (ResourceHelperException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return status;
+    }
+
+    @Override
+    public Book editReview(Review review, String isbn, String username) {
+        Connection conn = null;
+        int status = 0;
+        Book book = null;
+        try {            
+            conn = ConnectionUtil.getConnection();
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conn); 
+            book = bookDao.editReview(review, isbn, username);
+        } catch (ResourceHelperException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return book;
+    }
+
+    @Override
+    public int submitDeleteRequest(String isbn) {
+        Connection conToUse = null;
+        int status = 0;
+        // get the connection from util class
+        // set the transaction to con & pass con to dao
+        try {
+            conToUse = ConnectionUtil.getConnection();
+            conToUse.setAutoCommit(false);
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conToUse);;
+            status = bookDao.submitDeleteRequest(isbn);
+            conToUse.commit();
+        } catch (ResourceHelperException e) {
+            System.out.println("ResourceHelperException");
+            DbUtils.rollbackAndCloseQuietly(conToUse);
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, e);
+        } catch (SQLException ex) {
+            System.out.println("SQLException");
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(conToUse);
+        }
+    
         return status;
     }
 }

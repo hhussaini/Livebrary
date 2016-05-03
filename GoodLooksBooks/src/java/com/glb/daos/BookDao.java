@@ -12,10 +12,11 @@ public interface BookDao extends JdbcDaoSupport {
     public List<Book> searchBooks(HashMap<String, String> searchTermMap, String[] categories, int offset, int recordsPerPage);
     public int getNumberOfResults();
     public List<Book> getAllBooks();
-    public int submitAddRequest(String isbn, String isbn10, String title, String author, String description, 
-            String binding, String imageUrl, int pages, String language, double listPrice, String currency, String publisher);
-    public int addBook(String isbn, String isbn10, String title, String author, String description, 
-            String binding, String imageUrl, int pages, String language, double listPrice, String currency, String publisher);
+    public int submitAddRequest(String isbn, String isbn10, String title, String author, String description, String binding, 
+            String imageUrl, int pages, String language, double listPrice, String currency, String publisher, String category);
+    public int addBook(String isbn, String isbn10, String title, String author, String description, String binding, 
+            String imageUrl, int pages, String language, double listPrice, String currency, String publisher, String category);
+    public int deleteBook(String isbn);
     public List<Ticket> getTickets(String resolved);
     public int acceptTicket(int ticketId);
     public int resolveTicket(int ticketId, String accepted);
@@ -23,9 +24,11 @@ public interface BookDao extends JdbcDaoSupport {
     public Book getBookByIsbn(String isbn);
     public int addBookToUserItems(String username, String isbn);
     public int submitEditRequest(String oldIsbn, String newIsbn, String title, String author, String description);
+    public int submitDeleteRequest(String isbn);
     public List<Book> getItemsList(String userName);
     public Map<String, Review> getAllReviewsForBook(String isbn);
-    public int addReview(Review review, Book book, User user);
+    public int addReview(Review review, String isbn, String username);
     public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description);
     public int deleteReview(String isbn, String username);
+    public Book editReview(Review review, String isbn, String username);
 }

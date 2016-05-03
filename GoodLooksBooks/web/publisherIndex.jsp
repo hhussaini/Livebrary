@@ -20,7 +20,7 @@
                     Edit Item Data
                 </div>
                 <div class="list-group">
-                    <a href="PublisherAddItemsServlet"><img alt="brand" width = "100" height = "100" src="assets/book-placeholder.png"></a>
+                    <a href="addItem.jsp"><img alt="brand" width = "100" height = "100" src="assets/book-placeholder.png"></a>
                     Add Item
                 </div>
             </div>

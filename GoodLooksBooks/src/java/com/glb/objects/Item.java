@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import static com.glb.helpers.Helpers.round;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -24,17 +24,17 @@ public class Item implements Serializable{
     private String imageUrl;
     private List<String> genres;
     private int numOfDownloads;
-    private Map<String, Review> reviews;
+    private Map<String, Review> reviews; 
     
     public Item(){
-        this.reviews = new HashMap<>();
-        this.genres = new ArrayList<>();       
+        this.reviews = new LinkedHashMap<>();
+        this.genres = new ArrayList<>();    
     }
 
     public Item(String isbn, String title, String description, double avgRating, String downloadLink, 
             String author, String date, String language, String imageUrl, int numOfDownloads) {
-        this.reviews = new HashMap<>();
-        this.genres = new ArrayList<>();
+        this.reviews = new LinkedHashMap<>();
+        this.genres = new ArrayList<>(); 
         this.isbn = isbn;
         this.title = title;
         this.description = description;
@@ -161,6 +161,33 @@ public class Item implements Serializable{
         this.reviews = reviews;
     } 
     
+    public void updateOrderOfReviews(String username){
+        List<String>usernameList = new ArrayList<>();
+        List<Review>reviewsList = new ArrayList<>();
+        int counter = 0;
+        int index = -1;
+        for(String key : reviews.keySet()){
+            usernameList.add(key);
+            reviewsList.add(reviews.get(key));
+            if(key.equals(username)){
+                index = counter; 
+            }  
+            counter++;
+        }
+        Map<String,Review>reviewsTemp = new LinkedHashMap<>();
+        if(index > -1){
+            reviewsTemp.put(usernameList.get(index), reviewsList.get(index));
+        }
+    
+        for(int i = 0; i<reviewsList.size(); i++){
+            if(i!=index){
+        	reviewsTemp.put(usernameList.get(i), reviewsList.get(i));
+            }
+        }
+        this.reviews = reviewsTemp;
+         
+    }
+    
     public boolean addReview(User user, Review review){
         if(this.reviews.get(user.getUsername()) == null){
             this.reviews.put(user.getUsername(), review);
@@ -181,7 +208,7 @@ public class Item implements Serializable{
     public void editReview(User user, Review review){
         this.reviews.remove(user.getEmail());
         this.reviews.put(user.getEmail(), review);
-    }    
+    }  
     
     @Override
     public String toString(){
