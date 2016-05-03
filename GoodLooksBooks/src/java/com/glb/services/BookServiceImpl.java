@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 import com.glb.objects.Book;
 import com.glb.objects.Review; 
 import com.glb.objects.Ticket;
-import java.sql.ResultSet;
 import java.sql.SQLException; 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,13 +20,11 @@ public class BookServiceImpl implements BookService {
     
     private int numberOfResults;
     private int totalBooks;
-    private ResultSet res = null;
     
     @Override
     public List<Book> searchBooks(HashMap<String,String> searchTermMap, String[] categories, int offset, int recordsPerPage) {
         List<Book> results = null;
-        Connection conn = null;       
-       
+        Connection conn = null;  
         try {            
             conn = ConnectionUtil.getConnection();
             BookDao bookDao = DaoFactory.getBookDao();
@@ -36,6 +33,8 @@ public class BookServiceImpl implements BookService {
             this.numberOfResults = bookDao.getNumberOfResults();
         } catch (ResourceHelperException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConnectionUtil.closeConnection(conn);
         }
         
         return results;
@@ -53,6 +52,8 @@ public class BookServiceImpl implements BookService {
             this.totalBooks = bookDao.getTotalBooks();
         } catch (ResourceHelperException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConnectionUtil.closeConnection(conn);
         }
         
         return results;
@@ -69,6 +70,8 @@ public class BookServiceImpl implements BookService {
             book = bookDao.getBookByIsbn(isbn);
         } catch (ResourceHelperException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConnectionUtil.closeConnection(conn);
         }
         
         return book;
@@ -114,7 +117,7 @@ public class BookServiceImpl implements BookService {
     @Override
      public Map<String, Review> getAllReviewsForBook(String isbn){
         Connection conn = null;
-        Map<String, Review>reviewsMap = null;
+        Map<String, Review> reviewsMap = null;
         try {            
             conn = ConnectionUtil.getConnection();
             BookDao bookDao = DaoFactory.getBookDao();
@@ -122,6 +125,8 @@ public class BookServiceImpl implements BookService {
             reviewsMap = bookDao.getAllReviewsForBook(isbn);
         } catch (ResourceHelperException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConnectionUtil.closeConnection(conn);
         }
         
         return reviewsMap;
@@ -138,6 +143,8 @@ public class BookServiceImpl implements BookService {
             status = bookDao.addReview(review, isbn, username);
         } catch (ResourceHelperException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConnectionUtil.closeConnection(conn);
         }
         
         return status;
@@ -291,7 +298,10 @@ public class BookServiceImpl implements BookService {
             status = bookDao.deleteReview(isbn, username);
         } catch (ResourceHelperException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConnectionUtil.closeConnection(conn);
         }
+        
         return status;
     }
 
@@ -307,6 +317,8 @@ public class BookServiceImpl implements BookService {
             book = bookDao.editReview(review, isbn, username);
         } catch (ResourceHelperException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConnectionUtil.closeConnection(conn);
         }
         
         return book;
@@ -350,6 +362,8 @@ public class BookServiceImpl implements BookService {
             status = bookDao.banBook(isbn);
         } catch (ResourceHelperException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConnectionUtil.closeConnection(conn);
         }
         
        return status;

@@ -20,14 +20,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.dbutils.DbUtils;
 
 /**
  * @author mobile-mann
  */
 public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     
-    private Statement stmt = null;
     private static CategoryMap categoryMap = new CategoryMap();
     private int numberOfResults;
     private int totalBooks;
@@ -35,7 +33,9 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     @Override
     public List<Book> searchBooks(HashMap<String,String> searchTermMap, String[] categories, int offset, int recordsPerPage) {
         Connection conn = getConnection();
-        ResultSet rs;
+        ResultSet rs = null;
+        Statement stmt = null;
+        PreparedStatement pstmt = null;
         String finalView = "";
         String limit = " limit " + offset + ", " + recordsPerPage;
         List<Book> results = new ArrayList<Book>();
@@ -57,7 +57,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         try {
             stmt = conn.createStatement();
             stmt.executeUpdate("drop view if exists searchTermView");
-            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt = conn.prepareStatement(query);
             finalView = "searchTermView";
             
             pstmt.setString(1, "%"+publisher+"%");
@@ -137,14 +137,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            try {
-                if(stmt != null)
-                    stmt.close();
-                if(conn != null)
-                    conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            ConnectionUtil.closeStatement(pstmt);
+            ConnectionUtil.closeAll(conn, stmt, rs);
         }
         return results;
     }
@@ -164,10 +158,11 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         List<Book> results = new ArrayList<Book>();
         this.totalBooks = 0;
         Connection conn = getConnection();
-        ResultSet rs;
+        ResultSet rs = null;
+        Statement stmt = null;
         String query = "select * from books where title is not null";
         try {
-            Statement stmt = conn.createStatement();
+            stmt = conn.createStatement();
             rs = stmt.executeQuery(query);
             while (rs.next()) {
                 Book book = new Book();
@@ -178,18 +173,10 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 results.add(book);
                 totalBooks++;
             }
-            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            try {
-                if(stmt != null)
-                    stmt.close();
-                if(conn != null)
-                    conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            ConnectionUtil.closeAll(conn, stmt, rs);
         }
         return results;
     }
@@ -199,9 +186,10 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         Book book = null;
         Connection conn = getConnection();
         ResultSet rs = null;
+        Statement stmt = null;
         String query = "select * from books where isbn = '" + isbn + "'";
         try {
-            Statement stmt = conn.createStatement();
+            stmt = conn.createStatement();
             rs = stmt.executeQuery(query);
             while (rs.next()) {
                 book = new Book();
@@ -215,14 +203,12 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 Map<String, Review> reviews = getAllReviewsForBook(isbn);
                 book.setReviews(reviews);
                 book.setIsBanned(rs.getInt("isBanned")==1?true:false);
-            }
-            rs.close();
-            
+            }            
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-            DbUtils.closeQuietly(rs);
+           ConnectionUtil.closeAll(conn, stmt, rs);
         }
         return book;
     }
@@ -247,7 +233,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-            DbUtils.closeQuietly(preparedStmt);
+            ConnectionUtil.closeStatement(preparedStmt);
+            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }
@@ -257,9 +244,10 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         Map<String, Review>reviewsMap = new LinkedHashMap<>();
         Connection conn = getConnection();
         ResultSet rs = null;
+        Statement stmt = null;
         String query = "SELECT * FROM reviews WHERE isbn = '" + isbn + "'"; 
         try {
-            Statement stmt = conn.createStatement();
+            stmt = conn.createStatement();
             rs = stmt.executeQuery(query);
             Review tempReview = null;
             while (rs.next()) { 
@@ -267,16 +255,13 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 review.setRating(rs.getInt("rating")); 
                 review.setReviewText(rs.getString("reviewText")); 
                 String userName = rs.getString("username");
-                
                 reviewsMap.put(userName, review);
             }
-             
-            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-            DbUtils.closeQuietly(rs);
+            ConnectionUtil.closeAll(conn, stmt, rs);
         }
         return reviewsMap;
     }
@@ -290,22 +275,20 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             conToUse = getConnection();
             if (conToUse == null)
                 System.out.println("conToUse == null");
-             
-           
             String sql = "INSERT INTO reviews(isbn, username, rating, reviewText) VALUES(?,?,?,?)";
             preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
             preparedStmt.setString(1, isbn);
             preparedStmt.setString(2, username);
             preparedStmt.setInt(3, review.getRating());
             preparedStmt.setString(4, review.getReviewText());
-            status = preparedStmt.executeUpdate(); 
-            
+            status = preparedStmt.executeUpdate();
            // book.addReview(user, review);
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-            DbUtils.closeQuietly(preparedStmt);
+            ConnectionUtil.closeStatement(preparedStmt);
+            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }
@@ -327,7 +310,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeStatement(ps);
+            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }
@@ -337,11 +321,11 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         List<Ticket> tickets = new ArrayList<>();       
         String sql = "select * from TICKETS where resolved = \'" + resolved + "\'";
         Connection conToUse = null;
-        PreparedStatement ps = null;
         ResultSet rs = null;
+        Statement stmt = null;
         try {
             conToUse = getConnection();
-            Statement stmt = conToUse.createStatement();
+            stmt = conToUse.createStatement();
             rs = stmt.executeQuery(sql);
             while (rs.next()) { 
                 Ticket ticket = new Ticket(); 
@@ -353,7 +337,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeAll(conToUse, stmt, rs);
         }
         return tickets;
     }
@@ -362,12 +346,12 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     public int acceptTicket(int ticketId) {
         String sql = "select type, xmlStr from TICKETS where id = " + "'" + ticketId + "'";
         Connection conToUse = null;
-        PreparedStatement ps = null;
         ResultSet rs = null;
+        Statement stmt = null;
         int status = 0;
         try {
             conToUse = getConnection();
-            Statement stmt = conToUse.createStatement();
+            stmt = conToUse.createStatement();
             rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 String type = rs.getString("type");
@@ -386,7 +370,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeAll(conToUse, stmt, rs);
         }
         return status;
     }
@@ -431,7 +415,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeStatement(ps);
+            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }
@@ -460,7 +445,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeStatement(ps);
+            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }
@@ -486,7 +472,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeStatement(ps);
+            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }
@@ -508,7 +495,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeStatement(ps);
+            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }
@@ -535,7 +523,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeStatement(ps);
+            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }
@@ -549,21 +538,18 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             conToUse = getConnection();
             if (conToUse == null)
                 System.out.println("conToUse == null");
-             
-           
             String sql = "DELETE FROM reviews WHERE isbn = ? AND username = ?";
             preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
             preparedStmt.setString(1, isbn);
             preparedStmt.setString(2, username);
-            
-            status = preparedStmt.executeUpdate(); 
-            
+            status = preparedStmt.executeUpdate();
            // book.addReview(user, review);
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-            DbUtils.closeQuietly(preparedStmt);
+            ConnectionUtil.closeStatement(preparedStmt);
+            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }
@@ -658,7 +644,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeStatement(ps);
+            ConnectionUtil.closeConnection(conToUse);
         }
         return book;
     }
@@ -680,7 +667,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeStatement(ps);
+            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }
@@ -709,7 +697,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-            DbUtils.closeQuietly(preparedStmt);
+            ConnectionUtil.closeStatement(preparedStmt);
+            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }

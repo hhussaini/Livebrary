@@ -245,7 +245,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Book> getOnHoldItems(User user) {
-         List<Book> onHold = new ArrayList<Book>();
+        List<Book> onHold = new ArrayList<Book>();
         Connection conToUse = null;
         try {
             conToUse = ConnectionUtil.getConnection();

@@ -12,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.glb.objects.User;
 import com.glb.services.BookService;
-import com.glb.services.UserService;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +20,12 @@ import org.apache.commons.dbutils.DbUtils;
 
 public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
     
-    
     BookService bookService;
     
     public void init() {
         bookService = ServiceFactory.getBookService();
     }
-    private Statement stmt = null;
-    
+  
     @Override
     public int save(User user) {
         String sql = "insert into USERS values(?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -54,7 +51,8 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeStatement(ps);
+            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }
@@ -65,10 +63,9 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
                         + "   from USERS U "
                         + "   where U.username = '" + username + "'"
                         + "   and U.password = '" + password + "'";
-        
         Connection conToUse = null;
-        PreparedStatement ps = null;
         ResultSet res = null;
+        Statement stmt = null;
         try {
             conToUse = getConnection();
             stmt = (Statement) conToUse.createStatement();
@@ -109,7 +106,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeAll(conToUse, stmt, res);
         }
         
         return null;
@@ -135,9 +132,8 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             ps = (PreparedStatement) conToUse.prepareStatement(sql);
             ps.setString(1, username);
             res = ps.executeQuery();
-            
             sql = "select copiesLeft from books where isbn = ?";
-             ps = (PreparedStatement) conToUse.prepareStatement(sql);
+            ps = (PreparedStatement) conToUse.prepareStatement(sql);
             while (res.next()) {
                 Book book = new Book();
                 String isbn = res.getString("isbn");
@@ -152,14 +148,11 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
                 }
                 booksOnWishlist.add(book);
             }
-            
-            
-           
-            
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeRS(res);
+            ConnectionUtil.closeAll(conToUse, ps, res2);
         }
         
         return booksOnWishlist;
@@ -179,7 +172,6 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             conToUse = getConnection();
             if (conToUse == null)
                 System.out.println("conToUse == null");
-            
             sql = "select title, imageUrl from books where isbn = ?";
             preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
             preparedStmt.setString(1, isbn);
@@ -203,7 +195,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-            DbUtils.closeQuietly(preparedStmt);
+           ConnectionUtil.closeAll(conToUse, preparedStmt, res);
         }
         
         return status;
@@ -228,7 +220,8 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-            DbUtils.closeQuietly(preparedStmt);
+            ConnectionUtil.closeStatement(preparedStmt);
+            ConnectionUtil.closeConnection(conToUse);
         }
         
         return status;
@@ -244,7 +237,6 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             String company = publisher.getCompany();
             conToUse = getConnection();
             String sql = "select * from BOOKS where publisher = ? and title is not null";
-            
             ps = (PreparedStatement) conToUse.prepareStatement(sql);
             ps.setString(1, company);
             res = ps.executeQuery();
@@ -258,7 +250,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeAll(conToUse, ps, res);
         }
         
         return publisherItems;
@@ -266,7 +258,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
 
     @Override
     public List<Book> getCheckedOut(User user) {
-          List<Book> checkedOut = new ArrayList<Book>();        
+        List<Book> checkedOut = new ArrayList<Book>();        
         Connection conToUse = null;
         java.sql.PreparedStatement ps = null;
         ResultSet res = null;
@@ -288,7 +280,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeAll(conToUse, ps, res);
         }
         
         return checkedOut;
@@ -316,15 +308,16 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeStatement(ps);
+            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }
 
     @Override
     public List<Book> getOnHoldItems(User user) {
-          List<Book> onHold = new ArrayList<Book>();   
-          BookService bookService = ServiceFactory.getBookService();
+        List<Book> onHold = new ArrayList<Book>();   
+        BookService bookService = ServiceFactory.getBookService();
         Connection conToUse = null;
         java.sql.PreparedStatement ps = null;
         ResultSet res = null;
@@ -342,12 +335,9 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DbUtils.closeQuietly(ps);
+            ConnectionUtil.closeAll(conToUse, ps, res);
         }
         
         return onHold;
     }
-    
-    
-    
 }
