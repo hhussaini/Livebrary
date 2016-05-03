@@ -43,8 +43,8 @@ public class ConnectionUtil {
     }
     
     // Close a Connection, avoid closing if null and hide any SQLExceptions that occur.
-    public static void closeConnection(Connection connection) {
-        DbUtils.closeQuietly(connection);
+    public static void closeConnection(Connection connection1) {
+        DbUtils.closeQuietly(connection1);
     }
     
     // Close a ResultSet, avoid closing if null and hide any SQLExceptions that occur.
@@ -58,8 +58,8 @@ public class ConnectionUtil {
     }
     
     // Close a connection, statement, and resultset, avoid closing if null and hide any SQLExceptions that occur.
-    public static void closeAll(Connection conn, Statement stmt, ResultSet rs) {
-        DbUtils.closeQuietly(conn, stmt, rs);
+    public static void closeAll(Connection conn1, Statement stmt, ResultSet rs) {
+        DbUtils.closeQuietly(conn1, stmt, rs);
     }
     
     /**

@@ -58,8 +58,8 @@ public class BookDescriptionServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         println("Inside BookDescriptionServlet.doGet");
-        processRequest(request, response);
-         String isbn = request.getParameter("isbn"); 
+        //processRequest(request, response);
+        String isbn = request.getParameter("isbn"); 
         Book book = bookService.getBookByIsbn(isbn);
         String url = "/bookDescription.jsp";
         HttpSession session = request.getSession();
@@ -91,7 +91,7 @@ public class BookDescriptionServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-          processRequest(request, response);
+          //processRequest(request, response);
     }
     
     public static void printData(HttpServletRequest request, HttpServletResponse response, Map<String, Review>map) throws IOException{
