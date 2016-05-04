@@ -6,43 +6,43 @@
 <div class="form-group">
   <label class = "control-label regLabel" for="username">Username:</label>
   <div class = "controls regControl">
-      <input type="text" class="form-control" name="username">
+      <input type="text" class="form-control" id="username">
   </div>
 </div>
 <div class="form-group">
   <label class = "control-label regLabel" for="password">Password:</label>
   <div class = "controls regControl">
-      <input type="password" class="form-control" name="password">
+      <input type="password" class="form-control" id="password">
   </div>
 </div>
 <div class="form-group">
   <label class = "control-label regLabel" for="firstName">First Name:</label>
   <div class = "controls regControl">
-      <input type="text" class="form-control" name="firstName">
+      <input type="text" class="form-control" id="firstName">
   </div>
 </div>
 <div class="form-group">
   <label class = "control-label regLabel" for="lastName">Last Name:</label>
   <div class = "controls regControl">
-      <input type="text" class="form-control" name="lastName">
+      <input type="text" class="form-control" id="lastName">
   </div>
 </div>
 <div class="form-group">
   <label class = "control-label regLabel" for="street">Street:</label>
   <div class = "controls regControl">
-      <input type="text" class="form-control" name="street">
+      <input type="text" class="form-control" id="street">
   </div>
 </div>
 <div class="form-group">
   <label class = "control-label regLabel" for="city">City:</label>
   <div class = "controls regControl">
-      <input type="text" class="form-control" name="city">
+      <input type="text" class="form-control" id="city">
   </div>
 </div>
 <div class="form-group">
   <label class = "control-label regLabel" for="state">State:</label>
   <div class = "controls regControl">
-      <select name="state" class="form-control" name="state">
+      <select id="state" class="form-control" id="state">
       <option value="AL">AL</option>
       <option value="AK">AK</option>
       <option value="AZ">AZ</option>
@@ -100,19 +100,19 @@
 <div class="form-group">
   <label class = "control-label regLabel" for="zipcode">Zipcode:</label>
   <div class = "controls regControl">
-      <input type="text" class="form-control" name="zipcode">
+      <input type="text" class="form-control" id="zipcode">
   </div>
 </div>
 <div class="form-group">
   <label class = "control-label regLabel" for="telephone">Phone Number:</label>
   <div class = "controls regControl">
-      <input type="text" class="form-control input-medium bfh-phone" data-country="US" name="phoneNumber" placeholder="0123456789">
+      <input type="text" class="form-control input-medium bfh-phone" data-country="US" id="phoneNumber" placeholder="0123456789">
   </div>
 </div>
 <div class="form-group">
   <label class = "control-label regLabel" for="email">Email:</label>
   <div class = "controls regControl">
-      <input type="email" class="form-control" name="email">
+      <input type="email" class="form-control" id="email">
   </div>
 </div>
 <input id="registerBtn" class="btn btn-info" type="submit" value="Register">
