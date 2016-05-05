@@ -17,7 +17,7 @@ body {
   background-attachment: fixed;
 
 }
-table td + td { border-left:2px solid red; }
+.srch-bar .srch-box + .srch-box { border-left:2px solid red; }
 /*table { 
     border: none; 
     border-collapse: collapse; 
