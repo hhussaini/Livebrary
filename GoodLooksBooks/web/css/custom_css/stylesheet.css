@@ -17,10 +17,21 @@ body {
   background-attachment: fixed;
 
 }
-
-th, td {
-    padding: 10px;
+table td + td { border-left:2px solid red; }
+/*table { 
+    border: none; 
+    border-collapse: collapse; 
 }
+table td { 
+    border-left: 1px solid #000; 
+}
+table td:first-child { 
+    border-left: none; 
+}*/
+/*th, td {
+    padding: 10px;
+    border: 1px;
+}*/
 
 .thumbnail {
   margin-bottom:7px;

@@ -38,6 +38,20 @@
                         <table>
                             <tr>
                                 <td>
+                                    <h4> Keyword</h4>
+                                </td>
+                                <td>
+                                    <h4> Author</h4>
+                                </td>
+                                <td> 
+                                    <h4> Publisher</h4>
+                                </td>
+                                <td>
+                                    <h4> Isbn</h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
                                     <input name="keyword" type="text" class="form-control" value="${lastKeywordSearched}" placeholder="Title, Genre, Keyword, etc..." id="keyword">
                                 </td>
                                 <td>
@@ -53,20 +67,6 @@
                                     <div class="input-group-btn">
                                         <button name="searchbtn" class="btn btn-default" type="submit">search</button>  
                                     </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h4> Keyword</h4>
-                                </td>
-                                <td>
-                                    <h4> Author</h4>
-                                </td>
-                                <td> 
-                                    <h4> Publisher</h4>
-                                </td>
-                                <td>
-                                    <h4> Isbn</h4>
                                 </td>
                             </tr>
                         </table>
