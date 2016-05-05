@@ -20,6 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 
 /**
  * @author mobile-mann
@@ -137,8 +138,14 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            ConnectionUtil.closeStatement(pstmt);
-            ConnectionUtil.closeAll(conn, stmt, rs);
+            try {
+               if(stmt != null)
+                   stmt.close();
+               if(conn != null)
+                   conn.close();
+          } catch (SQLException e) {
+               e.printStackTrace();
+         }
         }
         return results;
     }
@@ -176,7 +183,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            ConnectionUtil.closeAll(conn, stmt, rs);
+            DbUtils.closeQuietly(rs);
         }
         return results;
     }
@@ -202,13 +209,13 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 book.setLanguage(rs.getString("language"));
                 Map<String, Review> reviews = getAllReviewsForBook(isbn);
                 book.setReviews(reviews);
-                book.setIsBanned(rs.getInt("isBanned")==1?true:false);
+                //book.setIsBanned(rs.getInt("isBanned")==1?true:false);
             }            
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-           ConnectionUtil.closeAll(conn, stmt, rs);
+           DbUtils.closeQuietly(rs);
         }
         return book;
     }
@@ -224,7 +231,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             if (conToUse == null)
                 System.out.println("conToUse == null");
             
-            sql = "INSERT into RESERVED(username, isbn) values(?,?)";
+            sql = "INSERT into CHECKED_OUT(username, isbn) values(?,?)";
             preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
             preparedStmt.setString(1, username);
             preparedStmt.setString(2, isbn);
@@ -233,8 +240,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-            ConnectionUtil.closeStatement(preparedStmt);
-            ConnectionUtil.closeConnection(conToUse);
+            DbUtils.closeQuietly(preparedStmt);
         }
         return status;
     }
@@ -261,7 +267,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-            ConnectionUtil.closeAll(conn, stmt, rs);
+            DbUtils.closeQuietly(rs);
         }
         return reviewsMap;
     }
@@ -287,8 +293,9 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-            ConnectionUtil.closeStatement(preparedStmt);
-            ConnectionUtil.closeConnection(conToUse);
+           DbUtils.closeQuietly(preparedStmt);
+//            ConnectionUtil.closeStatement(preparedStmt);
+//            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }
@@ -310,8 +317,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
-            ConnectionUtil.closeStatement(ps);
-            ConnectionUtil.closeConnection(conToUse);
+            DbUtils.closeQuietly(ps);
         }
         return status;
     }
@@ -337,7 +343,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
-            ConnectionUtil.closeAll(conToUse, stmt, rs);
+            DbUtils.closeQuietly(stmt);
         }
         return tickets;
     }
@@ -370,7 +376,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
-            ConnectionUtil.closeAll(conToUse, stmt, rs);
+            DbUtils.closeQuietly(stmt);
         }
         return status;
     }
@@ -415,8 +421,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            ConnectionUtil.closeStatement(ps);
-            ConnectionUtil.closeConnection(conToUse);
+            DbUtils.closeQuietly(ps);
         }
         return status;
     }
@@ -445,8 +450,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            ConnectionUtil.closeStatement(ps);
-            ConnectionUtil.closeConnection(conToUse);
+            DbUtils.closeQuietly(ps);
         }
         return status;
     }
@@ -472,8 +476,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            ConnectionUtil.closeStatement(ps);
-            ConnectionUtil.closeConnection(conToUse);
+            DbUtils.closeQuietly(ps);
         }
         return status;
     }
@@ -495,8 +498,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
-            ConnectionUtil.closeStatement(ps);
-            ConnectionUtil.closeConnection(conToUse);
+            DbUtils.closeQuietly(ps);
         }
         return status;
     }
@@ -523,8 +525,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
-            ConnectionUtil.closeStatement(ps);
-            ConnectionUtil.closeConnection(conToUse);
+            DbUtils.closeQuietly(ps);
         }
         return status;
     }
@@ -548,8 +549,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-            ConnectionUtil.closeStatement(preparedStmt);
-            ConnectionUtil.closeConnection(conToUse);
+            DbUtils.closeQuietly(preparedStmt);
         }
         return status;
     }
@@ -644,8 +644,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            ConnectionUtil.closeStatement(ps);
-            ConnectionUtil.closeConnection(conToUse);
+           DbUtils.closeQuietly(ps);
         }
         return book;
     }
@@ -667,8 +666,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
-            ConnectionUtil.closeStatement(ps);
-            ConnectionUtil.closeConnection(conToUse);
+            DbUtils.closeQuietly(ps);
         }
         return status;
     }
@@ -697,8 +695,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-            ConnectionUtil.closeStatement(preparedStmt);
-            ConnectionUtil.closeConnection(conToUse);
+            DbUtils.closeQuietly(preparedStmt);
         }
         return status;
     }

@@ -6,43 +6,43 @@
 <div class="form-group">
   <label class = "control-label regLabel" for="username">Username:</label>
   <div class = "controls regControl">
-      <input type="text" class="form-control" id="username">
+      <input type="text" class="form-control" id="username" name="username">
   </div>
 </div>
 <div class="form-group">
   <label class = "control-label regLabel" for="password">Password:</label>
   <div class = "controls regControl">
-      <input type="password" class="form-control" id="password">
+      <input type="password" class="form-control" id="password" name="password">
   </div>
 </div>
 <div class="form-group">
   <label class = "control-label regLabel" for="firstName">First Name:</label>
   <div class = "controls regControl">
-      <input type="text" class="form-control" id="firstName">
+      <input type="text" class="form-control" id="firstName" name="firstName">
   </div>
 </div>
 <div class="form-group">
   <label class = "control-label regLabel" for="lastName">Last Name:</label>
   <div class = "controls regControl">
-      <input type="text" class="form-control" id="lastName">
+      <input type="text" class="form-control" id="lastName" name="lastName">
   </div>
 </div>
 <div class="form-group">
   <label class = "control-label regLabel" for="street">Street:</label>
   <div class = "controls regControl">
-      <input type="text" class="form-control" id="street">
+      <input type="text" class="form-control" id="street" name="street">
   </div>
 </div>
 <div class="form-group">
   <label class = "control-label regLabel" for="city">City:</label>
   <div class = "controls regControl">
-      <input type="text" class="form-control" id="city">
+      <input type="text" class="form-control" id="city" name="city">
   </div>
 </div>
 <div class="form-group">
   <label class = "control-label regLabel" for="state">State:</label>
   <div class = "controls regControl">
-      <select id="state" class="form-control" id="state">
+      <select id="state" class="form-control" id="state" name="state">
       <option value="AL">AL</option>
       <option value="AK">AK</option>
       <option value="AZ">AZ</option>
@@ -100,19 +100,19 @@
 <div class="form-group">
   <label class = "control-label regLabel" for="zipcode">Zipcode:</label>
   <div class = "controls regControl">
-      <input type="text" class="form-control" id="zipcode">
+      <input type="text" class="form-control" id="zipcode" name="zipcode">
   </div>
 </div>
 <div class="form-group">
-  <label class = "control-label regLabel" for="telephone">Phone Number:</label>
+  <label class = "control-label regLabel" for="phoneNumber">Phone Number:</label>
   <div class = "controls regControl">
-      <input type="text" class="form-control input-medium bfh-phone" data-country="US" id="phoneNumber" placeholder="0123456789">
+      <input type="text" class="form-control input-medium bfh-phone" data-country="US" id="phoneNumber" name="phoneNumber" placeholder="0123456789">
   </div>
 </div>
 <div class="form-group">
   <label class = "control-label regLabel" for="email">Email:</label>
   <div class = "controls regControl">
-      <input type="email" class="form-control" id="email">
+      <input type="email" class="form-control" id="email" name="email">
   </div>
 </div>
 <input id="registerBtn" class="btn btn-info" type="submit" value="Register">

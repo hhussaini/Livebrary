@@ -52,7 +52,6 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
             ConnectionUtil.closeStatement(ps);
-            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }
@@ -106,7 +105,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            ConnectionUtil.closeAll(conToUse, stmt, res);
+            ConnectionUtil.closeStatement(stmt);
         }
         
         return null;
@@ -151,8 +150,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            ConnectionUtil.closeRS(res);
-            ConnectionUtil.closeAll(conToUse, ps, res2);
+            ConnectionUtil.closeStatement(ps);
         }
         
         return booksOnWishlist;
@@ -195,7 +193,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-           ConnectionUtil.closeAll(conToUse, preparedStmt, res);
+           ConnectionUtil.closeStatement(preparedStmt);
         }
         
         return status;
@@ -221,7 +219,6 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         }
         finally {
             ConnectionUtil.closeStatement(preparedStmt);
-            ConnectionUtil.closeConnection(conToUse);
         }
         
         return status;
@@ -250,8 +247,8 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            ConnectionUtil.closeAll(conToUse, ps, res);
-        }
+            ConnectionUtil.closeStatement(ps);
+       }
         
         return publisherItems;
     }
@@ -265,22 +262,21 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         try {
             String username = user.getUsername();
             conToUse = getConnection();
-            String sql = "select * from checked_out where username = ?";
-            
+            String sql = "select * from checked_out where username = ?";            
             ps = (PreparedStatement) conToUse.prepareStatement(sql);
             ps.setString(1, username);
             res = ps.executeQuery();
             while (res.next()) {
-                Book book = new Book();
-                book.setIsbn(res.getString("isbn"));
-                book.setTitle(res.getString("title"));
-                book.setImageUrl(res.getString("imageUrl"));
+               Book book = new Book();
+               book.setIsbn(res.getString("isbn"));
+                //book.setTitle(res.getString("title"));
+                //book.setImageUrl(res.getString("imageUrl"));
                 checkedOut.add(book);
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            ConnectionUtil.closeAll(conToUse, ps, res);
+            ConnectionUtil.closeStatement(ps);
         }
         
         return checkedOut;
@@ -309,7 +305,6 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
             ConnectionUtil.closeStatement(ps);
-            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }
@@ -335,7 +330,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            ConnectionUtil.closeAll(conToUse, ps, res);
+            ConnectionUtil.closeStatement(ps);
         }
         
         return onHold;

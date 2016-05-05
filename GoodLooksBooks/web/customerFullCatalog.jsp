@@ -221,6 +221,6 @@
 </script>
 -->
 <!--Form for clicking on an "item" (book)-->
-<form id = "itemSelectionForm" name = "itemSelectionForm" action = "BookDescriptionServlet" method = "post">
+<form id = "itemSelectionForm" name = "itemSelectionForm" action = "BookDescriptionServlet" method = "get">
     <input type = "hidden" id = "isbn" name = "isbn" value = "null">
 </form>
