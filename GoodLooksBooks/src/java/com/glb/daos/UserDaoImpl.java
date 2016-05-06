@@ -16,8 +16,6 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.dbutils.DbUtils;
-
 public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
     
     BookService bookService;
@@ -228,7 +226,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
     public List<Book> getPublisherItems(User publisher) {
         List<Book> publisherItems = new ArrayList<Book>();        
         Connection conToUse = null;
-        java.sql.PreparedStatement ps = null;
+        PreparedStatement ps = null;
         ResultSet res = null;
         try {
             String company = publisher.getCompany();
@@ -334,5 +332,144 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         }
         
         return onHold;
+    }
+    
+   // TODO. Check for extra logic when our lending stuff is sorted out more
+   @Override
+   public int deleteUser(String username) {
+      println("deleteUser.username: " + username);
+      Connection conToUse = null;
+      PreparedStatement preparedStmt = null;
+      String sql = "delete from USERS where username = ?";
+      int status = 0;
+      try {
+         //status = deleteHolds(username);
+         status = returnCheckedOut(username);
+         if (status == -1) {
+            throw new SQLException();
+         }
+         status = deleteWishlist(username);
+         if (status == -1) {
+            throw new SQLException();
+         }
+         status = deleteReserved(username);
+         if (status == -1) {
+            throw new SQLException();
+         }
+         conToUse = getConnection();
+         // Finally now that we've removed traces of the user in other tables we 
+         // can delete from the users table
+         preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
+         preparedStmt.setString(1, username);
+         status = preparedStmt.executeUpdate();
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      } 
+      finally {
+          ConnectionUtil.closeStatement(preparedStmt);
+      }
+
+      return status;
+   }
+   
+   /*
+   TODO. Probably needs more logic
+   */
+   private int returnCheckedOut(String username) {
+      Connection conToUse = null;
+      PreparedStatement preparedStmt = null;
+      String sql = "delete from CHECKED_OUT where username = ?";
+      int status = 0;
+      try {
+          conToUse = getConnection();
+          preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
+          preparedStmt.setString(1, username);
+          status = preparedStmt.executeUpdate();
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+          status = -1;
+      } finally {
+          ConnectionUtil.closeStatement(preparedStmt);
+      }
+
+      return status;
+   }
+
+   private int deleteHolds(String username) {
+      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+   }
+   
+   /**
+    * Deletes the wishlist of the user with the given username.
+    * @param username
+    * @return 
+    */
+   private int deleteWishlist(String username) {
+      Connection conToUse = null;
+      PreparedStatement preparedStmt = null;
+      String sql = "delete from WISHLISTS where username = ?";
+      int status = 0;
+      try {
+          conToUse = getConnection();
+          preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
+          preparedStmt.setString(1, username);
+          status = preparedStmt.executeUpdate();
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+          status = -1;
+      }
+      finally {
+          ConnectionUtil.closeStatement(preparedStmt);
+      }
+
+      return status;
+   }
+   
+   /*
+   TODO. Probably needs more logic. Like new users need to be notified that a book opened up if they reserved it
+   */
+   private int deleteReserved(String username) {
+      Connection conToUse = null;
+      PreparedStatement preparedStmt = null;
+      String sql = "delete from RESERVED where username = ?";
+      int status = 0;
+      try {
+          conToUse = getConnection();
+          preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
+          preparedStmt.setString(1, username);
+          status = preparedStmt.executeUpdate();
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+          status = -1;
+      }
+      finally {
+          ConnectionUtil.closeStatement(preparedStmt);
+      }
+
+      return status;
+   }
+
+   @Override
+   public List<User> getAllUsers() {
+        List<User> users = new ArrayList<User>();        
+        Connection conToUse = null;
+        java.sql.PreparedStatement ps = null;
+        ResultSet res = null;
+        try {
+            conToUse = getConnection();
+            String sql = "select * from USERS";
+            ps = (PreparedStatement) conToUse.prepareStatement(sql);
+            res = ps.executeQuery();
+            while (res.next()) {
+                User user = getUser(res.getString("username"), res.getString("password"));
+                users.add(user);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConnectionUtil.closeStatement(ps);
+        }
+        
+        return users;
     }
 }

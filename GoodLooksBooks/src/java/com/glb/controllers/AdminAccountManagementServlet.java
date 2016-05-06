@@ -1,18 +1,47 @@
 package com.glb.controllers;
 
+import com.glb.factories.ServiceFactory;
+import static com.glb.helpers.Helpers.outputToHtml;
+import static com.glb.helpers.Helpers.println;
+import com.glb.objects.User;
+import com.glb.services.UserService;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Kevin Young
  */
 public class AdminAccountManagementServlet extends HttpServlet {
+   
+   UserService userService;
+   List<User> allUsers;
+    
+   public void init() {
+       System.out.println(getServletName() + ": initialised" );
+       userService = ServiceFactory.getUserService();        
+   }
 
+   @Override
+   protected void service(HttpServletRequest request, HttpServletResponse response)
+           throws ServletException, java.io.IOException {
+       println(request.getMethod().toString());
+       String method = request.getParameter("method");
+       method = (method == null) ? "" : method;
+       if (method.equals("doEdit")){
+           doEdit(request, response);
+       } else if (method.equals("doDelete")){
+           doDelete(request, response);
+       } else {
+           super.service(request, response);
+       } 
+   }
+   
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -24,19 +53,28 @@ public class AdminAccountManagementServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet AdminAccountManagementServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet AdminAccountManagementServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+      HttpSession session = request.getSession();
+      allUsers = userService.getAllUsers();
+      if (allUsers == null) {
+         throw new ServletException("Error getting all users");
+      }
+      session.setAttribute("allUsers", allUsers);
+      request.getRequestDispatcher("/accountManagement.jsp").include(request, response);
+    }
+    
+    protected void doEdit(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+    
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+      String username = request.getParameter("username");
+      int status = userService.deleteUser(username);
+      if (status != 1) {
+            throw new ServletException("SQL Error");
+      }
+      outputToHtml(response, "User " + username + " has been deleted.");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

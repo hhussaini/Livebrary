@@ -266,4 +266,58 @@ public class UserServiceImpl implements UserService {
         
         return onHold;
     }
+
+   @Override
+   public int deleteUser(String username) {
+      System.out.println("Inside UserServiceImpl.deleteUser");
+      Connection conToUse = null;
+      int status = 0;
+      // get the connection from util class
+      // set the transaction to con & pass con to dao
+      try {
+          conToUse = ConnectionUtil.getConnection();
+          conToUse.setAutoCommit(false);
+          UserDao userDao = DaoFactory.getUserDao();
+          userDao.setConnection(conToUse);
+          status = userDao.deleteUser(username);
+          conToUse.commit();
+      } catch (ResourceHelperException e) {
+          // TODO Auto-generated catch block
+          System.out.println("ResourceHelperException");
+          DbUtils.rollbackAndCloseQuietly(conToUse);
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, e);
+      } catch (SQLException ex) {
+          System.out.println("SQLException");
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          DbUtils.closeQuietly(conToUse);
+      }
+
+      System.out.println("Status from UserServiceImpl.deleteUser() = " + status);
+      return status;
+   }
+
+   @Override
+   public List<User> getAllUsers() {
+      System.out.println(this.getClass().getName() + " : getAllUsers");
+        Connection conToUse = null;
+        List<User> users = null;
+        // get the connection from util class
+        // set the transaction to con & pass con to dao
+        try {
+            conToUse = ConnectionUtil.getConnection();
+            UserDao userDao = DaoFactory.getUserDao();
+            userDao.setConnection(conToUse);
+            users = userDao.getAllUsers();
+        } catch (ResourceHelperException e) {
+            // TODO Auto-generated catch block
+            System.out.println("ResourceHelperException");
+            DbUtils.rollbackAndCloseQuietly(conToUse);
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            DbUtils.closeQuietly(conToUse);
+        }
+        
+        return users;
+   }
 }
