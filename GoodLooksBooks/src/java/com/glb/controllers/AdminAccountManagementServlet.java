@@ -2,6 +2,7 @@ package com.glb.controllers;
 
 import com.glb.constants.UserTypes;
 import com.glb.factories.ServiceFactory;
+import static com.glb.helpers.Helpers.createReturnTag;
 import static com.glb.helpers.Helpers.isNull;
 import static com.glb.helpers.Helpers.isNullOrEmpty;
 import static com.glb.helpers.Helpers.outputToHtml;
@@ -130,7 +131,7 @@ public class AdminAccountManagementServlet extends HttpServlet {
       if (status != 1) {
          throw new ServletException("SQL Error when updating user.");
       }
-      outputToHtml(response, "User updated successfully.");
+      outputToHtml(response, "User updated successfully. " + createReturnTag("Return", "AdminAccountManagementServlet"));
     }
     
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
@@ -140,7 +141,7 @@ public class AdminAccountManagementServlet extends HttpServlet {
       if (status != 1) {
             throw new ServletException("SQL Error");
       }
-      outputToHtml(response, "User " + username + " has been deleted.");
+      outputToHtml(response, "User " + username + " has been deleted. " + createReturnTag("Return", "AdminAccountManagementServlet"));
     }
     
     protected void submitAdd(HttpServletRequest request, HttpServletResponse response)
@@ -176,7 +177,7 @@ public class AdminAccountManagementServlet extends HttpServlet {
       try {
           status = userService.save(user);
           if (status == 1) {
-             outputToHtml(response, "User " + username + " added successfully.");
+             outputToHtml(response, "User " + username + " added successfully. " + createReturnTag("Return", "AdminAccountManagementServlet"));
           } else {
               throw new ServletException("SQL Error.");
           }

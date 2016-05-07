@@ -1,5 +1,6 @@
 package com.glb.controllers;
 
+import static com.glb.helpers.Helpers.createReturnTag;
 import static com.glb.helpers.Helpers.goToSignIn;
 import static com.glb.helpers.Helpers.outputToHtml;
 import com.glb.objects.Item;
@@ -101,7 +102,8 @@ public class EmailItemServlet extends HttpServlet {
         try {
             EmailUtility.sendEmail(host, port, doNotReplyEmail, doNotReplyPass, recipient, subject,
                     message);
-            outputToHtml(response, "Your email has been sent.");
+            outputToHtml(response, "Your email has been sent. " + createReturnTag("Return", "BookDescriptionServlet?isbn="
+                + item.getIsbn()));
         } catch (Exception ex) {
             throw new ServletException(ex.getMessage());
         }

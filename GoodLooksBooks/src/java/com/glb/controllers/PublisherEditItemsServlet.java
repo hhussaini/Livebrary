@@ -1,6 +1,7 @@
 package com.glb.controllers;
 
 import com.glb.factories.ServiceFactory;
+import static com.glb.helpers.Helpers.createReturnTag;
 import static com.glb.helpers.Helpers.goToSignIn;
 import static com.glb.helpers.Helpers.outputToHtml;
 import static com.glb.helpers.Helpers.println;
@@ -123,7 +124,7 @@ public class PublisherEditItemsServlet extends HttpServlet {
             throw new ServletException("SQL Error");
         }
         outputToHtml(response, "Your ticket has been sent. The site admin "
-                    + "will respond to your ticket soon.");
+                    + "will respond to your ticket soon. " + createReturnTag("Return", this.getServletName()));
     }
     
     protected void doAdd(HttpServletRequest request, HttpServletResponse response)
@@ -155,7 +156,7 @@ public class PublisherEditItemsServlet extends HttpServlet {
             throw new ServletException("SQL Error");
         }
         outputToHtml(response, "Your ticket has been sent. The site admin "
-                    + "will respond to your ticket soon.");
+                    + "will respond to your ticket soon. " + createReturnTag("Return", this.getServletName()));
     }
     
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
@@ -168,7 +169,7 @@ public class PublisherEditItemsServlet extends HttpServlet {
             throw new ServletException("SQL Error");
         }
         outputToHtml(response, "Your ticket has been sent. The site admin "
-                    + "will respond to your ticket soon.");
+                    + "will respond to your ticket soon. " + createReturnTag("Return", this.getServletName()));
     }
 
     /**

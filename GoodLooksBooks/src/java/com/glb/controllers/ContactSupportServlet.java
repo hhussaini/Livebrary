@@ -1,5 +1,6 @@
 package com.glb.controllers;
 
+import static com.glb.helpers.Helpers.createReturnTag;
 import static com.glb.helpers.Helpers.outputToHtml;
 import com.glb.objects.User;
 import java.io.IOException;
@@ -89,7 +90,7 @@ public class ContactSupportServlet extends HttpServlet {
             EmailUtility.sendEmail(host, port, doNotReplyEmail, doNotReplyPass, supportEmail, subject,
                     message);
             outputToHtml(response, "Your message has been sent. Contact will send you "
-                        + "an email soon.");
+                        + "an email soon. " + createReturnTag("Return", "help.jsp"));
         } catch (Exception ex) {
             throw new ServletException(ex.getMessage());
         }
