@@ -72,4 +72,19 @@ public class Helpers {
         }
         return false;
     }
+    
+    /**
+     * Checks if any of the objects in args is null
+     * @param args
+     * @return True if any of the objects in args is null
+     */
+    public static boolean isNull(Object... args) {
+        for (Object arg : args) {
+            if (arg == null || ((String)arg).isEmpty()) {
+                System.out.println("ARG = " + arg + " is null or empty");
+                return true;
+            }
+        }
+        return false;
+    }
 }

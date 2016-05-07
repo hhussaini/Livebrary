@@ -2,6 +2,7 @@ package com.glb.controllers;
 
 import com.glb.constants.UserTypes;
 import com.glb.factories.ServiceFactory;
+import static com.glb.helpers.Helpers.isNull;
 import static com.glb.helpers.Helpers.isNullOrEmpty;
 import static com.glb.helpers.Helpers.outputToHtml;
 import static com.glb.helpers.Helpers.println;
@@ -42,6 +43,8 @@ public class AdminAccountManagementServlet extends HttpServlet {
            doDelete(request, response);
        } else if (method.equals("submitEdit")){
            submitEdit(request, response);
+       } else if (method.equals("submitAdd")){
+           submitAdd(request, response);
        } else {
            super.service(request, response);
        } 
@@ -138,6 +141,48 @@ public class AdminAccountManagementServlet extends HttpServlet {
             throw new ServletException("SQL Error");
       }
       outputToHtml(response, "User " + username + " has been deleted.");
+    }
+    
+    protected void submitAdd(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+      String username = request.getParameter("username");
+      String password = request.getParameter("password");
+      String firstName = request.getParameter("firstName");
+      String lastName = request.getParameter("lastName");
+      String street = request.getParameter("street");
+      String city = request.getParameter("city");
+      String state = request.getParameter("state");
+      String zipcode = request.getParameter("zipcode");
+      String phoneNumber = request.getParameter("phoneNumber");
+      String email = request.getParameter("email");
+      String userType = request.getParameter("userType");
+      String company = request.getParameter("company");
+      if (userType.equalsIgnoreCase(UserTypes.CUSTOMER.toString())) {
+         if (!isNullOrEmpty(company)) {
+            throw new ServletException("A customer can not have a company.");
+         }
+      } else if (userType.equalsIgnoreCase(UserTypes.PUBLISHER.toString())) {
+         if (isNullOrEmpty(company)) {
+            throw new ServletException("A publisher must have a company.");
+         }
+      }
+      
+      if (isNull(firstName, lastName, street, city, state, zipcode, phoneNumber, email)) {
+           throw new ServletException("Please fill in all fields.");
+      }
+      
+      User user = new User(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType, company);        
+      int status = 0;
+      try {
+          status = userService.save(user);
+          if (status == 1) {
+             outputToHtml(response, "User " + username + " added successfully.");
+          } else {
+              throw new ServletException("SQL Error.");
+          }
+      } catch (Exception e) {
+          throw new ServletException(e.getMessage());
+      }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

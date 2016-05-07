@@ -18,9 +18,8 @@
            <div class="container">
                <h1>Good Looks Books Users</h1>
                <table>
-                   <form action="AdminAccountManagementServlet" method="doAdd">
-                       <button name="userToAdd" class="btn btn-danger">Add New User</button>
-                       <input type="hidden" name="method" value="doAdd">
+                   <form action="/GoodLooksBooks/addUser.jsp">
+                     <input type="submit" value="Add New User">
                    </form>
                    <c:forEach var="user" items="${allUsers}">
                        <tr>
