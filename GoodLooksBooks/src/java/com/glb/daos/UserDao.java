@@ -7,6 +7,7 @@ import java.util.List;
 public interface UserDao extends JdbcDaoSupport {   
     public int save(User user);
     public User getUser(String username, String password);
+    public User getUser(String username);
     public List<User> getAllUsers();
     public List<Book> getWishlist(User user);
     public List<Book> getPublisherItems(User publisher);

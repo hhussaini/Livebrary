@@ -63,4 +63,28 @@ public class Helpers {
         String result = xmlStr.substring(xmlStr.indexOf("<" + tag + ">") + tag.length() + 2, xmlStr.indexOf("</" + tag + ">"));
         return result;
     }
+    
+    public static boolean isNullOrEmpty(String str) {
+        if (str == null) {
+           return true;
+        } else if (str.isEmpty()) {
+           return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Checks if any of the objects in args is null
+     * @param args
+     * @return True if any of the objects in args is null
+     */
+    public static boolean isNull(Object... args) {
+        for (Object arg : args) {
+            if (arg == null || ((String)arg).isEmpty()) {
+                System.out.println("ARG = " + arg + " is null or empty");
+                return true;
+            }
+        }
+        return false;
+    }
 }
