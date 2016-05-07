@@ -33,9 +33,22 @@ table td:first-child {
     border: 1px;
 }*/
 
-th, td {
+table.padded td {
     padding: 20px;
     /*text-align: center;*/
+}
+
+#list.results-table {
+    margin-top:25px;
+    margin-left:175px;
+}
+.results-table {
+    margin-left:150px;
+    margin-right:175px;
+}
+
+.category-box {
+    
 }
 
 /*.dspl-tab {

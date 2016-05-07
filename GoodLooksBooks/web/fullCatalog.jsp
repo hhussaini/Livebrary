@@ -31,27 +31,28 @@
         </c:choose>
         <div class="glb-page">
             <jsp:include page="/logo.jsp" />
+            <c:set var="results" scope="session" value="${resultSet}"/>
             <br>
             <div class="container">
                 <form class="form" name="searchForm" id="searchForm" action="SearchServlet" method = "get" role="search">
                     <div class="input-group">
-                        <table>
+                        <table class="padded">
                             <tr>
                                 <td>
-                                    <label for="keyword">Keyword</label>
-                                    <input name="keyword" type="text" class="form-control" value="${lastKeywordSearched}" placeholder="Title, Genre, Keyword, etc..." id="keyword">
+                                    <label for="title">Title</label>
+                                    <input name="title" type="text" class="form-control" value="${results.title}" placeholder="Title" id="title">
                                 </td>
                                 <td>
                                     <label for="author">Author</label>
-                                    <input name="author" type="text" class="form-control" value="${lastAuthorSearched}" placeholder="Author" id="author">
+                                    <input name="author" type="text" class="form-control" value="${results.author}" placeholder="Author" id="author">
                                 </td>
                                 <td>
                                     <label for="publisher">Publisher</label>
-                                    <input name="publisher" type="text" class="form-control" value="${lastPublisherSearched}" placeholder="Publisher" id="publisher">
+                                    <input name="publisher" type="text" class="form-control" value="${results.publisher}" placeholder="Publisher" id="publisher">
                                 </td>
                                 <td>
                                     <label for="isbn-term">ISBN</label>
-                                    <input name="isbn" type="text" class="form-control" value="${lastIsbnSearched}" placeholder="Isbn" id="isbn-term">
+                                    <input name="isbn" type="text" class="form-control" value="${results.isbn}" placeholder="Isbn" id="isbn-term">
                                 </td>
                                 <td>
                                     <div class="input-group-btn">
@@ -61,13 +62,18 @@
                             </tr>
                         </table>
                     </div>
+                                
+                <div id="cats-view" class="dropdown">
+                    <jsp:include page="/categoryForm.jsp" />
+                </div>
                 </form>
                 
                 <ul class="nav nav-pills">
+                    
                     <li class="active"><a href="#grid-view" data-toggle="tab"><img id="grid-tab" src="assets/glyphicons-157-show-thumbnails.png"></a></li>
                     <li><a href="#list-view" data-toggle="tab"><img id="list-tab" src="assets/glyphicons-530-list-alt.png"></a></li>
+                    
                 </ul>
-                
                 <div class="tab-content">
                     <div id="grid-view" class="tab-pane fade in active">
                         <jsp:include page="/searchGridView.jsp" />

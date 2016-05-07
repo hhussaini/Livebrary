@@ -6,9 +6,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <c:choose>
-    <c:when test="${fn:length(searchResults) > 0}">        
-        <table>
-            <c:forEach var="item" items="${searchResults}" varStatus="status">
+    <c:when test="${fn:length(results.books) > 0}">        
+        <table class="results-table" id="list">
+            <c:forEach var="item" items="${results.books}" varStatus="status">
                 <tr>
                     <td>
                         <a href="BookDescriptionServlet?isbn=${item.isbn}" id="${item.isbn}" class="thumbnail">

@@ -1,19 +1,23 @@
 package com.glb.services;
 
+import com.glb.constants.CategoryMap;
 import com.glb.daos.BookDao;
 import com.glb.factories.DaoFactory;
 import com.glb.exceptions.ResourceHelperException;
 import java.sql.Connection;
-import com.glb.daos.ConnectionUtil; 
+import com.glb.daos.ConnectionUtil;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.glb.objects.Book;
-import com.glb.objects.Review; 
+import com.glb.objects.Review;
 import com.glb.objects.Ticket;
-import java.sql.SQLException; 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import org.apache.commons.dbutils.DbUtils;
 
 public class BookServiceImpl implements BookService {
@@ -24,8 +28,8 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> searchBooks(HashMap<String,String> searchTermMap, String[] categories, int offset, int recordsPerPage) {
         List<Book> results = null;
-        Connection conn = null;  
-        try {            
+        Connection conn = null;
+        try {
             conn = ConnectionUtil.getConnection();
             BookDao bookDao = DaoFactory.getBookDao();
             bookDao.setConnection(conn);
@@ -43,8 +47,8 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> getAllBooks() {
         List<Book> results = null;
-        Connection conn = null;       
-        try {            
+        Connection conn = null;
+        try {
             conn = ConnectionUtil.getConnection();
             BookDao bookDao = DaoFactory.getBookDao();
             bookDao.setConnection(conn);
@@ -63,7 +67,7 @@ public class BookServiceImpl implements BookService {
     public Book getBookByIsbn(String isbn) {
         Connection conn = null;
         Book book = null;
-        try {            
+        try {
             conn = ConnectionUtil.getConnection();
             BookDao bookDao = DaoFactory.getBookDao();
             bookDao.setConnection(conn);
@@ -85,14 +89,14 @@ public class BookServiceImpl implements BookService {
     public int getTotalBooks() {
         return totalBooks;
     }
-
-      @Override
+    
+    @Override
     public int addBookToUserItems(String username, String isbn) {
         Connection conToUse = null;
         int status = 0;
         // get the connection from util class
         // set the transaction to con & pass con to dao
-        try { 
+        try {
             conToUse = ConnectionUtil.getConnection();
             conToUse.setAutoCommit(false);
             BookDao bookDao = DaoFactory.getBookDao();
@@ -113,12 +117,12 @@ public class BookServiceImpl implements BookService {
         System.out.println("Status from BookServiceImpl.addBookToUserItems() = " + status);
         return status;
     }
-
+    
     @Override
-     public Map<String, Review> getAllReviewsForBook(String isbn){
+    public Map<String, Review> getAllReviewsForBook(String isbn){
         Connection conn = null;
         Map<String, Review> reviewsMap = null;
-        try {            
+        try {
             conn = ConnectionUtil.getConnection();
             BookDao bookDao = DaoFactory.getBookDao();
             bookDao.setConnection(conn);
@@ -131,12 +135,12 @@ public class BookServiceImpl implements BookService {
         
         return reviewsMap;
     }
-
+    
     @Override
     public int addReview(Review review, String isbn, String username){
         Connection conn = null;
         int status = 0;
-        try {            
+        try {
             conn = ConnectionUtil.getConnection();
             BookDao bookDao = DaoFactory.getBookDao();
             bookDao.setConnection(conn);
@@ -149,7 +153,7 @@ public class BookServiceImpl implements BookService {
         
         return status;
     }
-
+    
     @Override
     public int submitEditRequest(String oldIsbn, String newIsbn, String title, String author, String description) {
         Connection conToUse = null;
@@ -173,10 +177,10 @@ public class BookServiceImpl implements BookService {
         } finally {
             DbUtils.closeQuietly(conToUse);
         }
-    
+        
         return status;
     }
-
+    
     @Override
     public List<Ticket> getTickets(String resolved) {
         Connection conToUse = null;
@@ -200,10 +204,10 @@ public class BookServiceImpl implements BookService {
         } finally {
             DbUtils.closeQuietly(conToUse);
         }
-    
+        
         return tickets;
     }
-
+    
     @Override
     public int acceptTicket(int ticketId) {
         Connection conToUse = null;
@@ -227,7 +231,7 @@ public class BookServiceImpl implements BookService {
         } finally {
             DbUtils.closeQuietly(conToUse);
         }
-    
+        
         return status;
     }
     
@@ -254,12 +258,12 @@ public class BookServiceImpl implements BookService {
         } finally {
             DbUtils.closeQuietly(conToUse);
         }
-    
+        
         return status;
     }
     
     @Override
-    public int submitAddRequest(String isbn, String isbn10, String title, String author, String description, String binding, 
+    public int submitAddRequest(String isbn, String isbn10, String title, String author, String description, String binding,
             String imageUrl, int pages, String language, double listPrice, String currency, String publisher, String category) {
         Connection conToUse = null;
         int status = 0;
@@ -270,7 +274,7 @@ public class BookServiceImpl implements BookService {
             conToUse.setAutoCommit(false);
             BookDao bookDao = DaoFactory.getBookDao();
             bookDao.setConnection(conToUse);;
-            status = bookDao.submitAddRequest(isbn, isbn10, title, author,description, 
+            status = bookDao.submitAddRequest(isbn, isbn10, title, author,description,
                     binding, imageUrl, pages, language, listPrice, currency, publisher, category);
             conToUse.commit();
         } catch (ResourceHelperException e) {
@@ -283,15 +287,15 @@ public class BookServiceImpl implements BookService {
         } finally {
             DbUtils.closeQuietly(conToUse);
         }
-    
+        
         return status;
     }
-
+    
     @Override
     public int deleteReview(String isbn, String username) {
         Connection conn = null;
         int status = 0;
-        try {            
+        try {
             conn = ConnectionUtil.getConnection();
             BookDao bookDao = DaoFactory.getBookDao();
             bookDao.setConnection(conn);
@@ -304,16 +308,16 @@ public class BookServiceImpl implements BookService {
         
         return status;
     }
-
+    
     @Override
     public Book editReview(Review review, String isbn, String username) {
         Connection conn = null;
         int status = 0;
         Book book = null;
-        try {            
+        try {
             conn = ConnectionUtil.getConnection();
             BookDao bookDao = DaoFactory.getBookDao();
-            bookDao.setConnection(conn); 
+            bookDao.setConnection(conn);
             book = bookDao.editReview(review, isbn, username);
         } catch (ResourceHelperException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -323,7 +327,7 @@ public class BookServiceImpl implements BookService {
         
         return book;
     }
-
+    
     @Override
     public int submitDeleteRequest(String isbn) {
         Connection conToUse = null;
@@ -347,7 +351,7 @@ public class BookServiceImpl implements BookService {
         } finally {
             DbUtils.closeQuietly(conToUse);
         }
-    
+        
         return status;
     }
     
@@ -355,7 +359,7 @@ public class BookServiceImpl implements BookService {
     public int banBook(String isbn) {
         Connection conn = null;
         int status = 0;
-        try {            
+        try {
             conn = ConnectionUtil.getConnection();
             BookDao bookDao = DaoFactory.getBookDao();
             bookDao.setConnection(conn);
@@ -366,6 +370,6 @@ public class BookServiceImpl implements BookService {
             ConnectionUtil.closeConnection(conn);
         }
         
-       return status;
+        return status;
     }
 }

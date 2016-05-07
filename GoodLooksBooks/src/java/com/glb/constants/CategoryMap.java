@@ -4,11 +4,11 @@ import java.util.HashMap;
 
 /**
  * @author PaulMan
+ * @param <String>
  */
 
-public class CategoryMap extends HashMap {
+public class CategoryMap extends HashMap<String, String> {
     
-    private HashMap<String, String> categoryMap;
     private String action= "[[:<:]]action[[:>:]]";
     private String americas = "[[:<:]]americas[[:>:]]";
     private String animals = "[[:<:]]animals[[:>:]]";
@@ -16,9 +16,10 @@ public class CategoryMap extends HashMap {
     private String adventure= "[[:<:]]adventures?[[:>:]]";
     private String africa= "[[:<:]]africa[[:>:]]";
     private String artsAndPhotos = "Arts & Photography";
+    private String business = "Business & Investing";
     private String biographies = "Biographies & Memoirs";
     private String cooking = "[[:<:]]cooking[[:>:]]";
-    private String health = "Business & Investing";
+    private String health = "health";
     private String children = "[[:<:]]children('s)?[[:>:]]";
     private String entertainment = "[[:<:]]Entertainment[[:>:]]";
     private String europe = "[[:<:]]europe[[:>:]]";
@@ -38,7 +39,7 @@ public class CategoryMap extends HashMap {
     private String thriller = "[[:<:]]thrillers[[:>:]]";
     private String travel = "[[:<:]]Travel[[:>:]]";
     private String usa = "[[:<:]]united states[[:>:]]";
-    private final String war = "[[:<:]]wars?[[:>:]]";
+    private String war = "[[:<:]]wars?[[:>:]]";
     
     public CategoryMap() {
         initCategories();
@@ -46,37 +47,36 @@ public class CategoryMap extends HashMap {
     
     public void initCategories() {
         
-        this.put( "action", action);
-        this.put( "americas", americas);
-        this.put( "animals", animals);
-        this.put( "administration", administration);
-        this.put( "adventure", adventure);
-        this.put( "africa", africa);
-        this.put( "artsAndPhotos",artsAndPhotos );
-        this.put( "biographies", biographies);
-        this.put( "cooking",cooking );
-        this.put( "health", health);
-        this.put( "children", children);
-        this.put( "entertainment", entertainment);
-        this.put( "europe", europe);
-        this.put( "foodAndWine", foodAndWine);
-        this.put( "history",history );
+        this.put( "Action", action);
+        this.put( "Americas", americas);
+        this.put( "Animals", animals);
+        this.put( "Administration", administration);
+        this.put( "Adventure", adventure);
+        this.put( "Africa", africa);
+        this.put( "ArtsAndPhotos",artsAndPhotos );
+        this.put( "Biographies", biographies);
+        this.put( "Business", business);
+        this.put( "Cooking",cooking );
+        this.put( "Health", health);
+        this.put( "Children", children);
+        this.put( "Entertainment", entertainment);
+        this.put( "Europe", europe);
+        this.put( "FoodAndWine", foodAndWine);
+        this.put( "History",history );
         this.put( "horror", horror);
-        this.put( "law", law);
-        this.put( "fiction", fiction);
-        this.put( "home",home );
-        this.put( "medicine",medicine );
-        this.put( "mystery", mystery);
-        this.put( "reference",reference );
-        this.put( "religion",religion );
-        this.put( "science",science );
-        this.put( "space",space );
-        this.put( "sport",sport );
-        this.put( "thriller",thriller );
-        this.put( "travel", travel);
-        this.put( "usa", usa);
-        this.put( "war", war);
-    }
-    
-    
+        this.put( "Law", law);
+        this.put( "Fiction", fiction);
+        this.put( "Home",home );
+        this.put( "Medicine",medicine );
+        this.put( "Mystery", mystery);
+        this.put( "Reference",reference );
+        this.put( "Religion",religion );
+        this.put( "Science",science );
+        this.put( "Space",space );
+        this.put( "Sport",sport );
+        this.put( "Thriller",thriller );
+        this.put( "Travel", travel);
+        this.put( "Usa", usa);
+        this.put( "War", war);
+    } 
 }

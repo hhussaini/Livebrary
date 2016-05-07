@@ -7,7 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
     
 <%--For displaying Page numbers. The when condition does not display a link for the current page--%>
-<table border="1" cellpadding="5" cellspacing="5" align="center">
+<table border="1" cellpadding="5" cellspacing="5" align="center" class="padded">
     <tr>
         <%--For displaying Previous link except for the 1st page --%>
         <td><a href="SearchServlet?page=1&searchTerm=${lastTermSearched}"><<</a></td>
