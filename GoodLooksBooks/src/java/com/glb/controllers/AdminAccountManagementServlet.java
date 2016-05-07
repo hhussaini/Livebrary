@@ -7,6 +7,7 @@ import com.glb.objects.User;
 import com.glb.services.UserService;
 import java.io.IOException;
 import java.util.List;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -59,12 +60,53 @@ public class AdminAccountManagementServlet extends HttpServlet {
          throw new ServletException("Error getting all users");
       }
       session.setAttribute("allUsers", allUsers);
-      request.getRequestDispatcher("/accountManagement.jsp").include(request, response);
+      RequestDispatcher dispatcher = request.getRequestDispatcher("/accountManagement.jsp");
+      dispatcher.forward(request, response); 
+      //request.getRequestDispatcher("/accountManagement.jsp").include(request, response);
     }
     
     protected void doEdit(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+      String username = request.getParameter("username");
+      HttpSession session = request.getSession();
+      User selectedUser = userService.getUser(username);
+      session.setAttribute("selectedUser", selectedUser);
+      RequestDispatcher dispatcher = request.getRequestDispatcher("/adminAccountSettings.jsp");
+      dispatcher.forward(request, response); 
+    }
+    
+    protected void submitEdit(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+      String username = request.getParameter("username");
+      String password = request.getParameter("password");
+      String firstName = request.getParameter("firstName");
+      String lastName = request.getParameter("lastName");
+      String street = request.getParameter("street");
+      String city = request.getParameter("city");
+      String state = request.getParameter("state");
+      String zipcode = request.getParameter("zipcode");
+      String phoneNumber = request.getParameter("phoneNumber");
+      String email = request.getParameter("email");
+      String userType = request.getParameter("userType");
+      
+      HttpSession session = request.getSession();
+      User userToUpdate = (User)session.getAttribute("selectedUser");
+      userToUpdate.setUsername(username);
+      userToUpdate.setPassword(password);
+      userToUpdate.setFirstName(firstName);
+      userToUpdate.setLastName(lastName);
+      userToUpdate.setStreet(street);
+      userToUpdate.setCity(city);
+      userToUpdate.setState(state);
+      userToUpdate.setZipcode(zipcode);
+      userToUpdate.setPhoneNumber(phoneNumber);
+      userToUpdate.setEmail(email);
+      userToUpdate.setType(userType);
+      int status = userService.update(userToUpdate);
+      if (status != 1) {
+         throw new ServletException("SQL Error when updating user.");
+      }
+      outputToHtml(response, "User updated successfully.");
     }
     
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)

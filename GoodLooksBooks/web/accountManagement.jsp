@@ -19,7 +19,7 @@
                <h1>Good Looks Books Users</h1>
                <table>
                    <form action="AdminAccountManagementServlet" method="doAdd">
-                       <button name="username" value="${user.username}" class="btn btn-danger">Add New User</button>
+                       <button name="addUserBtn" value="${user.username}" class="btn btn-danger">Add New User</button>
                        <input type="hidden" name="method" value="doAdd">
                    </form>
                    <c:forEach var="user" items="${allUsers}">
@@ -27,12 +27,12 @@
                         <td>
                            <h3><u>${user.username}</u></h3>  
                            <form action="AdminAccountManagementServlet" method="doEdit">
-                               <button name="username" value="${user.username}" class="btn btn-danger">Edit</button
-                               <input type="hidden" name="method" value="doEdit">
+                              <button name="editUserBtn" value="${user.username}" class="btn btn-danger">Edit</button>
+                              <input type="hidden" name="method" value="doEdit">
                            </form>
                            <br>
                            <form action="AdminAccountManagementServlet" method="doDelete">
-                               <button name="username" value="${user.username}" class="btn btn-danger">Delete</button>
+                               <button name="deleteUserBtn" value="${user.username}" class="btn btn-danger">Delete</button>
                                <input type="hidden" name="method" value="doDelete">
                            </form>
                            <br>

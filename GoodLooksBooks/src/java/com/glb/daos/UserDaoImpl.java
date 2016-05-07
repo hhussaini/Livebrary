@@ -472,4 +472,32 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         
         return users;
     }
+
+   @Override
+   public User getUser(String username) {
+      String sql = "select U.password where U.username = ?";
+      Connection conToUse = null;
+      ResultSet res = null;
+      PreparedStatement ps = null;
+      try {
+         
+          conToUse = getConnection();
+          ps = (PreparedStatement) conToUse.prepareStatement(sql);
+          ps.setString(1, username);
+          User user = new User();
+          String password = "";
+          res = ps.executeQuery(sql);
+          while (res.next()) {
+             password = res.getString("password");
+          }
+          user = getUser(username, password);
+          return user;
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          ConnectionUtil.closeStatement(ps);
+      }
+
+      return null;
+   }
 }

@@ -320,4 +320,27 @@ public class UserServiceImpl implements UserService {
         
         return users;
    }
+
+   @Override
+   public User getUser(String username) {
+      Connection conToUse = null;
+      User user = null;
+      // get the connection from util class
+      // set the transaction to con & pass con to dao
+      try {
+          conToUse = ConnectionUtil.getConnection();
+          UserDao userDao = DaoFactory.getUserDao();
+          userDao.setConnection(conToUse);
+          user = userDao.getUser(username);
+      } catch (ResourceHelperException e) {
+          // TODO Auto-generated catch block
+          System.out.println("ResourceHelperException");
+          DbUtils.rollbackAndCloseQuietly(conToUse);
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, e);
+      } finally {
+          DbUtils.closeQuietly(conToUse);
+      }
+
+      return user;
+   }
 }
