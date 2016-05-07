@@ -282,22 +282,36 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
     
     @Override
     public int update(User user) {
-        String sql = "update USERS U" + " SET U.firstname = '" + user.getFirstName() + "'" + ", " 
-                + "U.lastname = '" + user.getLastName() + "'" + ", "
-                + "U.email = '" + user.getEmail() + "'" + ", " 
-                + "U.street = '" + user.getStreet() + "'" + ", " 
-                + "U.city = '" + user.getCity() + "'" + ", "
-                + "U.state = '" + user.getState() + "'" + ", "
-                + "U.zipcode = '" + user.getZipcode() + "'" + ", "
-                + "U.phoneNumber = '" + user.getPhoneNumber() + "'"
-                 + "   where U.username = '" + user.getUsername() + "'"
-                 + "   and U.password = '" + user.getPassword() + "'";
+        String sql = "update USERS U SET U.firstname = ?,"
+                + "U.lastname = ?,"
+                + "U.email = ?," 
+                + "U.street = ?," 
+                + "U.city = ?,"
+                + "U.state = ?,"
+                + "U.zipcode = ?,"
+                + "U.phoneNumber = ?,"
+                + "U.company = ?,"
+                + "U.type = ?"
+                 + "   where U.username = ?"
+                 + "   and U.password = ?";
         Connection conToUse = null;
         PreparedStatement ps = null;
         int status = 0;
         try {
             conToUse = getConnection();
             ps = conToUse.prepareStatement(sql);
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getLastName());
+            ps.setString(3, user.getEmail());
+            ps.setString(4, user.getStreet());
+            ps.setString(5, user.getCity());
+            ps.setString(6, user.getState());
+            ps.setString(7, user.getZipcode());
+            ps.setString(8, user.getPhoneNumber());
+            ps.setString(9, user.getCompany());
+            ps.setString(10, user.getType());
+            ps.setString(11, user.getUsername());
+            ps.setString(12, user.getPassword());
             status = ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -448,7 +462,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
 
       return status;
    }
-
+   
    @Override
    public List<User> getAllUsers() {
         List<User> users = new ArrayList<User>();        
@@ -457,7 +471,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         ResultSet res = null;
         try {
             conToUse = getConnection();
-            String sql = "select * from USERS";
+            String sql = "select * from USERS where type != \'admin\'";
             ps = (PreparedStatement) conToUse.prepareStatement(sql);
             res = ps.executeQuery();
             while (res.next()) {
@@ -475,18 +489,17 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
 
    @Override
    public User getUser(String username) {
-      String sql = "select U.password where U.username = ?";
+      String sql = "select password from USERS where username = ?";
       Connection conToUse = null;
       ResultSet res = null;
       PreparedStatement ps = null;
-      try {
-         
+      try {         
           conToUse = getConnection();
           ps = (PreparedStatement) conToUse.prepareStatement(sql);
           ps.setString(1, username);
           User user = new User();
           String password = "";
-          res = ps.executeQuery(sql);
+          res = ps.executeQuery();          
           while (res.next()) {
              password = res.getString("password");
           }

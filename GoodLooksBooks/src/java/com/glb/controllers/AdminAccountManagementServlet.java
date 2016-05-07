@@ -1,6 +1,8 @@
 package com.glb.controllers;
 
+import com.glb.constants.UserTypes;
 import com.glb.factories.ServiceFactory;
+import static com.glb.helpers.Helpers.isNullOrEmpty;
 import static com.glb.helpers.Helpers.outputToHtml;
 import static com.glb.helpers.Helpers.println;
 import com.glb.objects.User;
@@ -38,6 +40,8 @@ public class AdminAccountManagementServlet extends HttpServlet {
            doEdit(request, response);
        } else if (method.equals("doDelete")){
            doDelete(request, response);
+       } else if (method.equals("submitEdit")){
+           submitEdit(request, response);
        } else {
            super.service(request, response);
        } 
@@ -67,7 +71,7 @@ public class AdminAccountManagementServlet extends HttpServlet {
     
     protected void doEdit(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-      String username = request.getParameter("username");
+      String username = request.getParameter("userToEdit");
       HttpSession session = request.getSession();
       User selectedUser = userService.getUser(username);
       session.setAttribute("selectedUser", selectedUser);
@@ -77,8 +81,6 @@ public class AdminAccountManagementServlet extends HttpServlet {
     
     protected void submitEdit(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-      String username = request.getParameter("username");
-      String password = request.getParameter("password");
       String firstName = request.getParameter("firstName");
       String lastName = request.getParameter("lastName");
       String street = request.getParameter("street");
@@ -88,20 +90,39 @@ public class AdminAccountManagementServlet extends HttpServlet {
       String phoneNumber = request.getParameter("phoneNumber");
       String email = request.getParameter("email");
       String userType = request.getParameter("userType");
+      String company = request.getParameter("company");
+      if (userType.equalsIgnoreCase(UserTypes.CUSTOMER.toString())) {
+         if (!isNullOrEmpty(company)) {
+            throw new ServletException("A customer can not have a company.");
+         }
+      } else if (userType.equalsIgnoreCase(UserTypes.PUBLISHER.toString())) {
+         if (isNullOrEmpty(company)) {
+            throw new ServletException("A publisher must have a company.");
+         }
+      }
       
       HttpSession session = request.getSession();
       User userToUpdate = (User)session.getAttribute("selectedUser");
-      userToUpdate.setUsername(username);
-      userToUpdate.setPassword(password);
-      userToUpdate.setFirstName(firstName);
-      userToUpdate.setLastName(lastName);
-      userToUpdate.setStreet(street);
-      userToUpdate.setCity(city);
-      userToUpdate.setState(state);
-      userToUpdate.setZipcode(zipcode);
-      userToUpdate.setPhoneNumber(phoneNumber);
-      userToUpdate.setEmail(email);
-      userToUpdate.setType(userType);
+      if (!isNullOrEmpty(firstName))
+         userToUpdate.setFirstName(firstName);
+      if (!isNullOrEmpty(lastName))
+         userToUpdate.setLastName(lastName);
+      if (!isNullOrEmpty(street))
+         userToUpdate.setStreet(street);
+      if (!isNullOrEmpty(city))
+         userToUpdate.setCity(city);
+      if (!isNullOrEmpty(state))
+         userToUpdate.setState(state);
+      if (!isNullOrEmpty(zipcode))
+         userToUpdate.setZipcode(zipcode);
+      if (!isNullOrEmpty(phoneNumber))
+         userToUpdate.setPhoneNumber(phoneNumber);
+      if (!isNullOrEmpty(email))
+         userToUpdate.setEmail(email);
+      if (!isNullOrEmpty(userType))
+         userToUpdate.setType(userType);
+      if (!isNullOrEmpty(company))
+         userToUpdate.setCompany(company);
       int status = userService.update(userToUpdate);
       if (status != 1) {
          throw new ServletException("SQL Error when updating user.");
@@ -111,7 +132,7 @@ public class AdminAccountManagementServlet extends HttpServlet {
     
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-      String username = request.getParameter("username");
+      String username = request.getParameter("userToDelete");
       int status = userService.deleteUser(username);
       if (status != 1) {
             throw new ServletException("SQL Error");

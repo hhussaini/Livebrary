@@ -129,6 +129,12 @@
                            </select>
                          </div>
                        </div>
+                        <div class="form-group">
+                           <label class = "control-label regLabel" for="company">Company: ${selectedUser.company}</label>
+                           <div class = "controls regControl">
+                               <input type="text" class="form-control" name="company">
+                           </div>
+                        </div>
                        <input type="hidden" name="method" value="submitEdit">
                        <input id="Button1" class="btn btn-info" type="submit" value="Submit">                       
                    </form>

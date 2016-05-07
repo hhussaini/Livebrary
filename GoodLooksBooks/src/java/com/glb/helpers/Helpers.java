@@ -63,4 +63,13 @@ public class Helpers {
         String result = xmlStr.substring(xmlStr.indexOf("<" + tag + ">") + tag.length() + 2, xmlStr.indexOf("</" + tag + ">"));
         return result;
     }
+    
+    public static boolean isNullOrEmpty(String str) {
+        if (str == null) {
+           return true;
+        } else if (str.isEmpty()) {
+           return true;
+        }
+        return false;
+    }
 }
