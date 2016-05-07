@@ -49,7 +49,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         
         // Search term query
         String query = "create view searchTermView as"
-                + " select b.isbn, b.title, b.author, b.imageUrl from books b"
+                + " select * from books b"
                 + " where"
                 + " (b.publisher like ?"
                 + " AND b.author like ?"
@@ -84,7 +84,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 stmt = conn.createStatement();
                 stmt.executeUpdate("drop view if exists categoryView");
                 query =  "create view categoryView as"
-                        + " select b.isbn, b.title, b.author, b.imageUrl from books b, category c, "
+                        + " select * from books b, category c, "
                         + " searchTermView r where b.isbn = r.isbn or c.isbn = r.isbn and "
                         + catQuery;
                 pstmt = conn.prepareStatement(query);
@@ -104,7 +104,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 stmt = conn.createStatement();
                 stmt.executeUpdate("drop view if exists finalView");
                 query =  "create view finalView as"
-                        + " select isbn, title, author, imageUrl"
+                        + " select *"
                         + " from books inner join categories"
                         + " on books.isbn = categories.isbn";
                 finalView = "finalView";
@@ -121,6 +121,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 book.setTitle(rs.getString("title"));
                 book.setImageUrl(rs.getString("imageUrl"));
                 book.setAuthor(rs.getString("author"));
+                book.setDate(rs.getString("published"));
+                book.setCopiesLeft(rs.getInt("copiesLeft"));
                 results.add(book);
             }
             rs.close();

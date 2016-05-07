@@ -10,6 +10,9 @@
 <html>
    <head>
    <jsp:include page="/header.jsp" />
+   <script src="js/bootstrap-tabcollapse.js"></script>
+   <link rel="stylesheet" href="css/custom_css/high_contrast.css">
+   <link rel="stylesheet" href="css/custom_css/dyslexic_font.css">
    </head>
    <body>
        <jsp:include page="/customerNavbar.jsp" />
@@ -24,21 +27,21 @@
                </ul>
                <div id="tabContent" class="tab-content">
                    <div class="tab-pane fade in active" id="acct-sum">
-                       <table>
+                       <table padding="">
                            <tr>
                                <td>
-                                   <a href="WishlistServlet"><h3>Wishlist size</h3></a>
+                                   <h3><a href="WishlistServlet">Wishlist</a> size</h3>
                                </td>
                                <td>
-                                   <h2><c:out value="${fn:length(customerWishlist)}">No name</c:out></h2>
+                                   <h2><c:out value="${fn:length(customerWishlist)}"></c:out></h2>
                                    </td>
                                </tr>
                                <tr>
                                    <td>
-                                       <h3>Items checked out</h3>
+                                       <h3>Checked out</h3>
                                    </td>
                                    <td>
-                                       <h2><c:out value="${fn:length(checkedOut)}">No name</c:out></h2>
+                                       <h2><c:out value="${fn:length(checkedOut)}"></c:out></h2>
                                    </td>
                                </tr>
                                <tr>
@@ -46,7 +49,7 @@
                                        <h3>On hold</h3>
                                    </td>
                                    <td>
-                                       <h2><c:out value="${fn:length(onHoldItems)}">No name</c:out></h2>
+                                       <h2><c:out value="${fn:length(onHoldItems)}"></c:out></h2>
                                    </td>
                                </tr>
                            </table>

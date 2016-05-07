@@ -1,0 +1,23 @@
+a {
+  color: #428bca;
+  text-decoration: none;
+}
+
+a {
+  color: #3277b3;
+  text-decoration: none;
+}
+
+.btn-default {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+}
+
+input {
+	background-color: #fff;
+}
+
+.glb-page {
+    background-color: #FFFFFF;
+}

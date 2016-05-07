@@ -105,7 +105,7 @@ public class SearchServlet extends HttpServlet {
             request.setAttribute("lastPage", lastDisplayPage);
             request.setAttribute("lastKeywordSearched", keyword);
             session.setAttribute("resultSize", numOfResults);
-            request.getRequestDispatcher("/customerFullCatalog.jsp").include(request, response);
+            request.getRequestDispatcher("/fullCatalog.jsp").include(request, response);
         } catch (Exception ex) {
             println(ex.getClass().toString() + " : " + ex.getMessage());
         }

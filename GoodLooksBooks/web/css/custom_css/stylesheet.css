@@ -33,6 +33,21 @@ table td:first-child {
     border: 1px;
 }*/
 
+th, td {
+    padding: 20px;
+    /*text-align: center;*/
+}
+
+/*.dspl-tab {
+    background-color: #E79A35;
+}
+
+.active {
+    color: #BF7516;
+}*/
+
+
+
 .thumbnail {
   margin-bottom:7px;
 }

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.glb.objects.Book;
+import java.util.ArrayList;
 
 /**
  * @author mobile-mann
@@ -80,17 +81,23 @@ public class WishlistServlet extends HttpServlet {
             throws ServletException, IOException {
         println(this.getServletName() + " : " + "doGet");
         HttpSession session = request.getSession();
-        List<Book> wishlist;
+        List<Book> allWishlist;
+        List<Book> availWishlist;
         user = (User)session.getAttribute("user");
         if (user == null) {
             goToSignIn(request, response);
             return;
         }
         
-        wishlist = userService.getWishlist(user);
-        session.setAttribute("customerWishlist", wishlist);
-        session.setAttribute("wishlistSize", wishlist.size());
-        request.getRequestDispatcher("/wishlist.jsp").include(request, response);
+        allWishlist = userService.getWishlist(user);
+        availWishlist = new ArrayList<Book>();
+        for (Book book : allWishlist) {
+            if (book.getCopiesLeft() > 0)
+                availWishlist.add(book);
+        }
+        session.setAttribute("allWishlist", allWishlist);
+        session.setAttribute("availWishlist", availWishlist);
+        request.getRequestDispatcher("/wishlist.jsp").forward(request, response);
     }
     
     /**

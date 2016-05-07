@@ -63,7 +63,7 @@
         <servlet-class>com.glb.controllers.SearchServlet</servlet-class>
         <init-param>
             <param-name>included-resource</param-name>
-            <param-value>/customerFullCatalog.jsp</param-value>
+            <param-value>/fullCatalog.jsp</param-value>
         </init-param>
         <load-on-startup>7</load-on-startup>
     </servlet>
@@ -122,6 +122,10 @@
             <param-name>included-resource</param-name>
             <param-value>/customerIndex.jsp</param-value>
         </init-param>
+    </servlet>
+    <servlet>
+        <servlet-name>AccessibilityServlet</servlet-name>
+        <servlet-class>com.glb.controllers.AccessibilityServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
@@ -222,6 +226,10 @@
     <servlet-mapping>
         <servlet-name>UpdateUserServlet</servlet-name>
         <url-pattern>/UpdateUserServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AccessibilityServlet</servlet-name>
+        <url-pattern>/AccessibilityServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

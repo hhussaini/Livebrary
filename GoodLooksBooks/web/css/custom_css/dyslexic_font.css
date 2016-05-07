@@ -1,0 +1,14 @@
+@font-face {
+font-family: dyslexic;
+src: url("font/OpenDyslexicMono-Regular.otf") format("opentype");
+}
+
+@font-face {
+font-family: dyslexic;
+font-weight: bold;
+src: url("font/OpenDyslexicAtla-Bold.otf") format("opentype");
+}
+
+body {
+    font-family: dyslexic;
+}
