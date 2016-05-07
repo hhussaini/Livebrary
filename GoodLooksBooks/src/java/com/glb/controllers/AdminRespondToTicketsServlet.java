@@ -1,6 +1,7 @@
 package com.glb.controllers;
 
 import com.glb.factories.ServiceFactory;
+import static com.glb.helpers.Helpers.createReturnTag;
 import static com.glb.helpers.Helpers.outputToHtml;
 import static com.glb.helpers.Helpers.println;
 import com.glb.objects.Ticket;
@@ -122,7 +123,7 @@ public class AdminRespondToTicketsServlet extends HttpServlet {
         if (status != 1) {
             throw new ServletException("SQL Error");
         }
-        outputToHtml(response, "This ticket has been accepted.");
+        outputToHtml(response, "This ticket has been accepted. " + createReturnTag("Return", "AdminRespondToTicketsServlet"));
     } 
     
     protected void denyTicket(HttpServletRequest request, HttpServletResponse response) 
@@ -137,7 +138,7 @@ public class AdminRespondToTicketsServlet extends HttpServlet {
         if (status != 1) {
             throw new ServletException("SQL Error");
         }
-        outputToHtml(response, "This ticket has been denied.");
+        outputToHtml(response, "This ticket has been denied. " + createReturnTag("Return", "AdminRespondToTicketsServlet"));
     }
     
     private Ticket getTicketById(int ticketId) {

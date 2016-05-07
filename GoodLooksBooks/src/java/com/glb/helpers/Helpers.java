@@ -87,4 +87,9 @@ public class Helpers {
         }
         return false;
     }
+    
+    public static String createReturnTag(String displayText, String link) {
+        return "<a href=\"/GoodLooksBooks/" + link +"\">" + displayText + "</a>";
+    }
+    
 }

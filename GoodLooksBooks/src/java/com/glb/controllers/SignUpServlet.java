@@ -3,14 +3,14 @@ package com.glb.controllers;
 import com.glb.objects.User;
 import com.glb.factories.ServiceFactory;
 import com.glb.helpers.Helpers;
-import static com.glb.helpers.Helpers.appendParameter;
+import static com.glb.helpers.Helpers.createReturnTag;
+import static com.glb.helpers.Helpers.outputToHtml;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import com.glb.services.UserService;
 
 /**
@@ -89,6 +89,7 @@ public class SignUpServlet extends HttpServlet {
         try {
             status = userService.save(user);
             if (status == 1) {
+               outputToHtml(response, "Sign up successful! Welcome. " + createReturnTag("Sign In", "signIn.jsp"));
                String url = "/index.jsp";
                dispatcher = request.getRequestDispatcher(url);
                dispatcher.forward(request, response);
