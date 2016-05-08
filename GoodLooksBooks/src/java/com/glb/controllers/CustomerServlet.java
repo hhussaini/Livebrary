@@ -74,6 +74,10 @@ public class CustomerServlet extends HttpServlet {
         
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
+        if (user == null) {
+           goToSignIn(request, response);
+           return;
+        }
         
         List<Book> checkedOut = userService.getCheckedOutItems(user);
         session.setAttribute("checkedOutItems", checkedOut);

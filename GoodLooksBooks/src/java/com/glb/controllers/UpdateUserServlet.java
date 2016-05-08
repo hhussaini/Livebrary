@@ -6,6 +6,7 @@
 package com.glb.controllers;
 
 import com.glb.factories.ServiceFactory;
+import static com.glb.helpers.Helpers.goToSignIn;
 import com.glb.objects.User;
 import com.glb.services.UserService;
 import java.io.IOException;
@@ -75,13 +76,13 @@ public class UpdateUserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-        
         HttpSession session = request.getSession();
-        
         User user = (User)session.getAttribute("user");
+        if (user == null) {
+           goToSignIn(request, response);
+           return;
+        }
         String userType = user.getType();
-        
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String street = request.getParameter("street");

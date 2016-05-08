@@ -33,6 +33,7 @@ public class BuyItemServlet extends HttpServlet {
         String imageUrl = request.getParameter("imageUrl");
         String date = request.getParameter("date").equals("null") ? "" : request.getParameter("date");
         String language = request.getParameter("language").equals("null") ? "" : request.getParameter("language");
+        String firstServerUsername = request.getParameter("firstServerUsername");
         Item item = new Item();
         item.setIsbn(isbn);
         item.setTitle(title);
@@ -42,6 +43,7 @@ public class BuyItemServlet extends HttpServlet {
         item.setDate(date);
         item.setLanguage(language);
         HttpSession session = request.getSession();
+        session.setAttribute("firstServerUsername", firstServerUsername);
         session.setAttribute("itemClicked", item);
         session.setAttribute("user", null);
         response.sendRedirect("http://localhost:29462/BetterLooksBooks/bookDescription.jsp");
