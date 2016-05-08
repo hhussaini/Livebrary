@@ -15,7 +15,7 @@
          <jsp:include page="/logo.jsp" />
          <div class="container">
            <div class="login">
-             <h1>Login to Good Looks Books</h1>
+             <h1>Login to Bad Looks Books</h1>
              <jsp:include page="/signInForm.jsp" />
            </div>
          </div>

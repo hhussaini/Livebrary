@@ -1,5 +1,6 @@
 package com.blb.controllers;
 
+import static com.blb.helpers.Helpers.appendParameter;
 import com.blb.objects.Item;
 import com.blb.objects.User;
 import java.io.IOException;
@@ -81,7 +82,9 @@ public class ConfirmBuyItemServlet extends HttpServlet {
                 throw new ServletException("Error getting the selected item.");
             }
             String isbn = item.getIsbn();
-            url = "http://localhost:8080/GoodLooksBooks/SecondServerResponseServlet?isbn=" + isbn;
+            url = "http://localhost:8080/GoodLooksBooks/SecondServerResponseServlet";
+            url = appendParameter(url, "isbn", isbn, true);
+            url = appendParameter(url, "firstServerUsername", user.getFirstServerUsername(), false);
         }
         response.sendRedirect(url);
     }

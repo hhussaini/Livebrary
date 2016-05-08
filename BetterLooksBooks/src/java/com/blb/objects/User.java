@@ -18,7 +18,8 @@ public class User implements Serializable{
     private String phoneNumber;
     private String email;
     private String type;
-    
+    private String firstServerUsername;
+
     public User(){}
 
     public User(String username, String password, String firstName, String lastName, String street, 
@@ -35,6 +36,14 @@ public class User implements Serializable{
         this.email = email;    
         this.type = type;
     }
+    
+   public String getFirstServerUsername() {
+      return firstServerUsername;
+   }
+
+   public void setFirstServerUsername(String firstServerUsername) {
+      this.firstServerUsername = firstServerUsername;
+   }
 
     public String getUsername() {
         return username;

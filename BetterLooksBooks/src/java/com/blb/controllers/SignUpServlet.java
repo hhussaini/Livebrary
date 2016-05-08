@@ -81,12 +81,14 @@ public class SignUpServlet extends HttpServlet {
         if (isNull(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email)) {
             throw new ServletException("Please fill in all fields.");
         }
-        User user = new User(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType);        
+        User user = new User(username, password, firstName, lastName, street, city, state, zipcode, phoneNumber, email, userType);   
+        HttpSession session = request.getSession();
+        String firstServerUsername = (String) session.getAttribute("firstServerUsername");
+        user.setFirstServerUsername(firstServerUsername);
         int status = 0;
         try {
             status = userService.save(user);
             if (status == 1) {
-                HttpSession session = request.getSession();
                 session.setAttribute("user", user);
                 dispatcher = request.getRequestDispatcher("/bookDescription.jsp");
                 dispatcher.forward(request, response);

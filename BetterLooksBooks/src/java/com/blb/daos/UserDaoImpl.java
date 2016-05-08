@@ -13,7 +13,9 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
     
     @Override
     public int save(User user) {
-        String sql = "insert into USERS values(?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into USERS (username, password, firstname, lastname, email,"
+                + "street, city, state, zipcode, phoneNumber, type, firstServerUsername) "
+                + "values(?,?,?,?,?,?,?,?,?,?,?,?)";
         Connection conToUse = null;
         PreparedStatement ps = null;
         int status = 0;
@@ -21,29 +23,30 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             conToUse = getConnection();
             ps = conToUse.prepareStatement(sql);
             ps.setString(1, user.getUsername());
-            ps.setString(2, user.getFirstName());
-            ps.setString(3, user.getLastName());
-            ps.setString(4, user.getEmail());
-            ps.setString(5, user.getPassword());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getFirstName());
+            ps.setString(4, user.getLastName());
+            ps.setString(5, user.getEmail());
             ps.setString(6, user.getStreet());
             ps.setString(7, user.getCity());
             ps.setString(8, user.getState());
             ps.setString(9, user.getZipcode());
             ps.setString(10, user.getPhoneNumber());
             ps.setString(11, user.getType());
+            ps.setString(12, user.getFirstServerUsername());
             status = ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
             ConnectionUtil.closeStatement(ps);
-            ConnectionUtil.closeConnection(conToUse);
         }
         return status;
     }
 
     @Override
     public User getUser(String username, String password) {
-        String sql = "select U.username, U.password, U.firstname, U.lastname, U.street, U.city, U.state, U.zipcode, U.phoneNumber, U.email, U.type"
+        String sql = "select U.username, U.password, U.firstname, U.lastname, U.street, "
+                + "U.city, U.state, U.zipcode, U.phoneNumber, U.email, U.type, U.firstServerUsername"
                         + "   from USERS U "
                         + "   where U.username = '" + username + "'"
                         + "   and U.password = '" + password + "'";        
@@ -68,6 +71,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
               String phoneNumber = res.getString("phoneNumber"); 
               String email = res.getString("email");
               String type = res.getString("type");
+              String firstServerUsername = res.getString("firstServerUsername");
               user.setUsername(user_name);
               user.setPassword(pass_word);
               user.setFirstName(firstname);
@@ -79,6 +83,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
               user.setPhoneNumber(phoneNumber);
               user.setEmail(email);
               user.setType(type);
+              user.setFirstServerUsername(firstServerUsername);
               count++;
             }
             if (count != 1) {
@@ -88,7 +93,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         } catch (SQLException ex) {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            ConnectionUtil.closeAll(conToUse, stmt, res);
+            ConnectionUtil.closeStatement(stmt);
         }
         
         return null;
