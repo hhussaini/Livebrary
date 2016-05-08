@@ -1,13 +1,14 @@
 package com.glb.constants;
 
 import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * @author PaulMan
  * @param <String>
  */
 
-public class CategoryMap extends HashMap<String, String> {
+public class CategoryMap extends TreeMap<String, String> {
     
     private String action= "[[:<:]]action[[:>:]]";
     private String americas = "[[:<:]]americas[[:>:]]";
@@ -57,16 +58,16 @@ public class CategoryMap extends HashMap<String, String> {
         this.put( "Biographies", biographies);
         this.put( "Business", business);
         this.put( "Cooking",cooking );
-        this.put( "Health", health);
         this.put( "Children", children);
         this.put( "Entertainment", entertainment);
         this.put( "Europe", europe);
         this.put( "FoodAndWine", foodAndWine);
-        this.put( "History",history );
-        this.put( "horror", horror);
-        this.put( "Law", law);
         this.put( "Fiction", fiction);
         this.put( "Home",home );
+        this.put( "History",history );
+        this.put( "Health", health);
+        this.put( "Horror", horror);
+        this.put( "Law", law);
         this.put( "Medicine",medicine );
         this.put( "Mystery", mystery);
         this.put( "Reference",reference );

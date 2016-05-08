@@ -47,10 +47,10 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         String author = searchTermMap.get("author");
         String publisher = searchTermMap.get("publisher");
         String isbn = searchTermMap.get("isbn");
-        System.out.println("SEARCH books");
         try {
             // Search term query
-            String query = "select * from books "
+            String query = "create or replace view resultsView as "
+                    + "select * from books "
                     + "where "
                     + "(publisher like ? "
                     + "AND author like ? "
@@ -73,7 +73,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 query += "))";
             }
             
-            pstmt = (PreparedStatement) conn.prepareStatement(query + limit);
+            pstmt = (PreparedStatement) conn.prepareStatement(query);// + limit);
             
             pstmt.setString(pRows++, "%"+publisher+"%");
             pstmt.setString(pRows++, "%"+author+"%");
@@ -86,9 +86,19 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 }
             }
             
-            System.out.println(pstmt.toString());
+            pstmt.executeUpdate();
             
-            rs = pstmt.executeQuery();
+            String countQuery = "select count(*) from resultsView";
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(countQuery);
+            while (rs.next()) {
+                numberOfResults = rs.getInt(1);
+            }
+            
+            System.out.println(numberOfResults);
+            
+            rs = stmt.executeQuery("select * from resultsView " + limit);
+            
             while (rs.next()) {
                 Book book = new Book();
                 book.setIsbn(rs.getString("isbn"));
@@ -100,12 +110,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 results.add(book);
             }
             rs.close();
-//            query = "select count(distinct isbn) from " + finalView;
-//            rs = stmt.executeQuery(query);
-//            while (rs.next()) {
-//                numberOfResults = rs.getInt(1);
-//            }
-            numberOfResults = results.size();
+            results.size();
             if (numberOfResults == 0) {
                 println("No results");
             }
