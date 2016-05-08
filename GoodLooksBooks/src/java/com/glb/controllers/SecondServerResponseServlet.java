@@ -1,6 +1,9 @@
 package com.glb.controllers;
 
 import com.glb.factories.ServiceFactory;
+import com.glb.helpers.Helpers;
+import static com.glb.helpers.Helpers.createReturnTag;
+import static com.glb.helpers.Helpers.outputToHtml;
 import static com.glb.helpers.Helpers.println;
 import com.glb.objects.User;
 import com.glb.services.BookService;
@@ -40,11 +43,17 @@ public class SecondServerResponseServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             User user = (User)session.getAttribute("user");
-            String username = user.getUsername();
+            String username;
+            if (user == null) {
+               username = request.getParameter("firstServerUsername");
+            } else {
+               username = user.getUsername();
+            }
             status = bookService.addBookToUserItems(username, isbn);
             if (status == 1) {
-                String url = "http://localhost:8080/GoodLooksBooks/customerIndex.jsp";
-                response.sendRedirect(url);
+               // GOOD!
+               outputToHtml(response, "Your request has been successful on Good Looks Books. "
+                           + "<a href=\"http://localhost:29462/BetterLooksBooks/bookDescription.jsp\">Return</a>");
             } else {
                 throw new ServletException("SQL Error.");
             }

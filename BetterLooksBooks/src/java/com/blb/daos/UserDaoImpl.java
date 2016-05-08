@@ -13,7 +13,9 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
     
     @Override
     public int save(User user) {
-        String sql = "insert into USERS values(?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into USERS (username, password, firstname, lastname, email,"
+                + "street, city, state, zipcode, phoneNumber, type, firstServerUsername) "
+                + "values(?,?,?,?,?,?,?,?,?,?,?,?)";
         Connection conToUse = null;
         PreparedStatement ps = null;
         int status = 0;
@@ -21,10 +23,10 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             conToUse = getConnection();
             ps = conToUse.prepareStatement(sql);
             ps.setString(1, user.getUsername());
-            ps.setString(2, user.getFirstName());
-            ps.setString(3, user.getLastName());
-            ps.setString(4, user.getEmail());
-            ps.setString(5, user.getPassword());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getFirstName());
+            ps.setString(4, user.getLastName());
+            ps.setString(5, user.getEmail());
             ps.setString(6, user.getStreet());
             ps.setString(7, user.getCity());
             ps.setString(8, user.getState());
