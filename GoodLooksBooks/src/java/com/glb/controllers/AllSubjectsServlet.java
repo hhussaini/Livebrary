@@ -1,10 +1,8 @@
 package com.glb.controllers;
 
 import com.glb.constants.CategoryMap;
-import static com.glb.helpers.Helpers.println;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
+import java.util.TreeMap;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +16,7 @@ import javax.servlet.http.HttpSession;
  */
 public class AllSubjectsServlet extends HttpServlet {
    
-   private HashMap<String, String> categories;
+   private TreeMap<String, String> categories;
    
    /**
     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
