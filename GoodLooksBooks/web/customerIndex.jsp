@@ -101,7 +101,7 @@
                    </div>
                </div>
            </div>
-       </div>
+       </div> <!-- glb page -->
    </body>
 </html>
 <!--            <div class="container container-small">
