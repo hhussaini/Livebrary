@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -15,7 +16,8 @@ import javax.servlet.http.HttpSession;
 
 public class SearchResult {
     
-    private HashMap<String, String> categories;
+    private TreeMap<String, String> categoryMap;
+    private ArrayList<String> selectedCategories;
     private List<Book> books;
     private int numPages;
     private int currentPage;
@@ -31,13 +33,14 @@ public class SearchResult {
     
     public SearchResult(HttpServletRequest request, HttpSession session, BookService bookService) {
         System.out.println("IN " + this.getClass() + " : GETTING result set");
-        categories = new CategoryMap();
+        categoryMap = new CategoryMap();
         
         HashMap<String, String> searchTermMap = getTerms(request);
-        System.out.println(searchTermMap.toString());
         
         String[] categories = request.getParameterValues("categories");
         categories = (categories == null) ? new String[]{""} : categories;
+        if (categories.length > 0)
+            setSelectedCategories(categories);
         
         currentPage = 1;
         if (request.getParameter("page") != null)
@@ -54,8 +57,8 @@ public class SearchResult {
     }
     
     
-    public HashMap<String, String> getCategories() {
-        return categories;
+    public TreeMap<String, String> getCategories() {
+        return categoryMap;
     }
     
     private HashMap<String, String> getTerms(HttpServletRequest request) {
@@ -78,8 +81,8 @@ public class SearchResult {
         return searchTermMap;
     }
 
-    public void setCategories(HashMap<String, String> categories) {
-        this.categories = categories;
+    public void setCategories(TreeMap<String, String> categories) {
+        this.categoryMap = categories;
     }
 
     public List<Book> getBooks() {
@@ -177,7 +180,16 @@ public class SearchResult {
     public void setTitle(String title) {
         this.title = title;
     }
-    
-    
-    
+
+    public ArrayList<String> getSelectedCategories() {
+        return selectedCategories;
+    }
+
+    public void setSelectedCategories(String[] selectedCategories) {
+        this.selectedCategories = new ArrayList<String>();
+        for (String category : selectedCategories) {
+            this.selectedCategories.add(category);
+        }
+        
+    }
 }

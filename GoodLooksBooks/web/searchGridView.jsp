@@ -14,7 +14,7 @@
                             <td> 
                                 <a href = "BookDescriptionServlet?isbn=${item.isbn}" id="${item.isbn}" class="thumbnail">
                                     <img onload="validateImgUrl(this.id)" name="bookImage" id="book${count}" class="bookImage" src="${item.imageUrl}" alt="${item.title}" style="width: 200px;">
-                                    <p>${item.title}"</p>
+                                    <p>${item.title}</p>
                                     <h6>by</h6>
                                     <h5>${item.author}</h5>
                                 </a>
