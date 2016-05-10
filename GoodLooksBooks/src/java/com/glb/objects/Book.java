@@ -6,7 +6,7 @@ import java.io.Serializable;
  *
  * @author mobile-mann
  */
-public class Book extends Item implements Serializable {
+public class Book extends Item implements Serializable{
     private int numPages;
     
     public Book(){}
@@ -18,4 +18,5 @@ public class Book extends Item implements Serializable {
     public void setNumPages(int numPages) {
         this.numPages = numPages;
     }
+   
 }

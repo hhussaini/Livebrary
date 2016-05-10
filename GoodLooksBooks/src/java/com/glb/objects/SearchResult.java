@@ -1,11 +1,12 @@
 package com.glb.objects;
 
 import com.glb.constants.CategoryMap;
+import com.glb.objects.Item.ItemSorting;
 import com.glb.services.BookService;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.List; 
 import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -48,8 +49,13 @@ public class SearchResult {
         int offset = (currentPage-1) * recordsPerPage;
        
         books = bookService.searchBooks(searchTermMap, categories, offset, recordsPerPage);
-        
-        numResults = bookService.getNumberOfResults();
+        setPages(bookService.getNumberOfResults());
+       
+    }
+    
+    public void setPages(int numResults){
+      //  numResults = bookService.getNumberOfResults();
+        this.numResults = numResults;
         numPages = (int) Math.ceil(numResults * 1.0 / recordsPerPage);
         firstPage = (currentPage - 5 < 1) ? 1 : currentPage - 5;
         lastPage = (currentPage + 5 > numPages) ? numPages : currentPage + 5;
@@ -192,4 +198,18 @@ public class SearchResult {
         }
         
     }
+    
+    public void sortBooks(String colNumberString){
+         
+        switch(colNumberString){
+            case "title"       :  ItemSorting.sort = 1;   break;
+            case "author"      :  ItemSorting.sort = 2;   break;
+            case "releaseDate" :  ItemSorting.sort = 3;   break;
+            case "addedToSite" :  ItemSorting.sort = 4;   break;
+            default            :  ItemSorting.sort = 5;
+        }
+       
+        Collections.sort(books, (o1, o2) -> o1.compareTo(o2));
+        setPages(books.size());
+    } 
 }

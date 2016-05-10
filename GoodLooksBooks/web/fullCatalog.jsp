@@ -18,6 +18,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script src="js/bootstrap.js"></script>
         <script src="js/bookDescription.js" type="text/javascript"></script>
+        <script src="js/fullCatalog.js" type="text/javascript"></script>
         <script src="js/reviews.js" type="text/javascript"></script>
     </head>
     <body>
@@ -62,10 +63,17 @@
                             </tr>
                         </table>
                     </div>
-                                
-                <div id="cats-view" class="dropdown">
-                    <jsp:include page="/categoryForm.jsp" />
-                </div>
+                   
+             
+                 <div id="cats-view" class="dropdown">
+                    <jsp:include page="/categoryForm.jsp" />    
+                </div>  
+                </form>
+                
+                <form id="sortRadioButtons" name="sortRadioButtons" action="SortItemsServlet" method = "post">
+                <div>
+                     <jsp:include page="/sortForm.jsp" /> 
+                </div>  
                 </form>
                 
                 <ul class="nav nav-pills">

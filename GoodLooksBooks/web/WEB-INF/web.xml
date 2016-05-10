@@ -131,6 +131,10 @@
         <servlet-name>AllSubjectsServlet</servlet-name>
         <servlet-class>com.glb.controllers.AllSubjectsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SortItemsServlet</servlet-name>
+        <servlet-class>com.glb.controllers.SortItemsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -238,6 +242,10 @@
     <servlet-mapping>
         <servlet-name>AllSubjectsServlet</servlet-name>
         <url-pattern>/AllSubjectsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SortItemsServlet</servlet-name>
+        <url-pattern>/SortItemsServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

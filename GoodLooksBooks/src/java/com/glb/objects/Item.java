@@ -11,7 +11,7 @@ import java.util.LinkedHashMap;
  *
  * @author Kevin_Setayesh
  */
-public class Item implements Serializable{
+public class Item implements Serializable, Comparable{
     private String isbn;
     private String title;
     private String description;
@@ -236,4 +236,21 @@ public class Item implements Serializable{
      public void setCopiesLeft(int left) {
         this.copiesLeft = left;
     }
+     
+      
+    @Override
+    public int compareTo(Object o) {
+       Book book = (Book)o;
+       switch(ItemSorting.sort){
+           case 1 : return this.getTitle().compareTo(book.getTitle());
+           case 2 : return this.getAuthor().compareTo(book.getAuthor());      
+       }
+       return -1;
+    }
+    
+    public static class ItemSorting{
+        public static int sort;
+    }
+     
+    
 }
