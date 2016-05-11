@@ -93,12 +93,12 @@
                   <br><br>
                   <br> 
                </div>
-               <button type="button" name = "button1" onclick="sampleFunction()" class="btn btn-primary">Sample</button>
-               <button type="button" name = "button2" onclick="buyItNowFunction(${itemClicked.isbn})"class="btn btn-primary">Buy It Now</button> <br>
-               <button type="button" name = "button3" onclick="borrowFuntion()"class="btn btn-primary">Borrow</button>
-               <button type="button" name = "button4" onclick="reserveFunction()"class="btn btn-primary">Reserve</button> <br>
+               <button type="button" name = "button1" onclick="sampleFunction('${itemClicked.sampleUrl}')" class="btn btn-primary">Sample</button>
+               <button type="button" name = "button2" onclick="buyItNowFunction(${itemClicked.isbn})" class="btn btn-primary">Buy It Now</button> <br>
+               <button type="button" name = "button3" onclick="borrowFuntion()" class="btn btn-primary">Borrow</button>
+               <button type="button" name = "button4" onclick="reserveFunction()" class="btn btn-primary">Reserve</button> <br>
                <c:if test="${user.type == 'admin'}">
-                  <button type="button" name = "button5" onclick="banFunction(${itemClicked.isbn})"class="btn btn-primary">${itemClicked.isBanned ? "Ban Book" : "Unban Book"}</button>
+                  <button type="button" name = "button5" onclick="banFunction(${itemClicked.isbn})" class="btn btn-primary">${itemClicked.isBanned ? "Ban Book" : "Unban Book"}</button>
                </c:if>
                <br>
                <form action="WishlistServlet" method = "post">

@@ -1,24 +1,32 @@
- 
-
 $(document).ready(function(){
    console.log("isbn: " + document.getElementById("isbn").value);
-   
     $("#emailButton").click(function(){
         console.log("email button clicked");
         $('#emailModal').modal('show');
     });
-    
 });
- 
 
-function sampleFunction(){
-    
+$(document).on('ready', function(){ 
+    if (window.location.href === "BookDescriptionServlet"){
+        $('#input-3').rating({displayOnly: true, step: 0.5});
+    }
+    else {
+        console.log("Not on page");
+    }      
+}); 
+
+function sampleFunction(sampleUrl) {
+   console.log("sampleFunction");
+   if (!isEmpty(sampleUrl)) {
+      window.open(sampleUrl);
+   } else {
+      alert('No sample is available for this item.');
+   }
 }
 
 function buyItNowFunction(bookID){
     console.log("buyItNowFunction");
     console.log('bookID = ' + bookID);
-//    document.getElementById("secondServerForm").submit();
     window.open("http://localhost:8080/GoodLooksBooks/SecondServerServlet");
 }
 
@@ -37,8 +45,6 @@ function selectedBook(bookID){ // the id of the form is the isbn number of the s
     document.getElementById("isbn").value = bookID;
     document.getElementById("itemSelectionForm").submit(); 
 }
-
- 
  
 function changeWishlist() {
     var text = document.getElementById("wishlist").innerHTML;
@@ -57,22 +63,7 @@ function setColor(btn, color){
     else {
         property.style.backgroundColor = "#E1E1E1";
     }
-}
- 
- 
-
-$(document).on('ready', function(){ 
-    if(window.location.href === "BookDescriptionServlet"){
-        
-        $('#input-3').rating({displayOnly: true, step: 0.5});
-    }
-    else{
-        console.log("Not on page");
-    }      
-});
-
-
- 
+} 
 
 function validateImgUrl(id) {
     var book = document.getElementById(id);
@@ -99,4 +90,8 @@ function fbShare(url,winWidth, winHeight) {
 
 function banFunction(bookID){
     document.getElementById("banBookForm").submit();
+}
+
+function isEmpty(str) {
+    return (!str || 0 === str.length);
 }

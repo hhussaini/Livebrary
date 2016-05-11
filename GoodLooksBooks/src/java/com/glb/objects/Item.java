@@ -22,6 +22,7 @@ public class Item implements Serializable, Comparable{
     private String date;
     private String language;
     private String imageUrl;
+    private String sampleUrl;
     private List<String> genres;
     private int numOfDownloads;
     private Map<String, Review> reviews;
@@ -150,6 +151,14 @@ public class Item implements Serializable, Comparable{
     public Map<String, Review> getReviews() {
         return reviews;
     }
+    
+   public String getSampleUrl() {
+     return sampleUrl;
+   }
+
+   public void setSampleUrl(String sampleUrl) {
+      this.sampleUrl = sampleUrl;
+   }
 
     public void setReviews(Map<String, Review> reviews) {
         this.numberOfRatings = 0;

@@ -189,6 +189,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 book.setLanguage(rs.getString("language"));
                 Map<String, Review> reviews = getAllReviewsForBook(isbn);
                 book.setReviews(reviews);
+                book.setSampleUrl(rs.getString("sampleUrl"));
                 //book.setIsBanned(rs.getInt("isBanned")==1?true:false);
             }
         } catch (SQLException ex) {
