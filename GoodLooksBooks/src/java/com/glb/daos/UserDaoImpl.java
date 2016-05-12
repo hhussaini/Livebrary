@@ -255,6 +255,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
     public List<Book> getCheckedOut(User user) {
         List<Book> checkedOut = new ArrayList<Book>();        
         Connection conToUse = null;
+        BookService bookService = ServiceFactory.getBookService();
         java.sql.PreparedStatement ps = null;
         ResultSet res = null;
         try {
@@ -266,10 +267,8 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             res = ps.executeQuery();
             while (res.next()) {
                Book book = new Book();
-               book.setIsbn(res.getString("isbn"));
-                //book.setTitle(res.getString("title"));
-                //book.setImageUrl(res.getString("imageUrl"));
-                checkedOut.add(book);
+               book = bookService.getBookByIsbn(res.getString("isbn"));
+               checkedOut.add(book);
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);

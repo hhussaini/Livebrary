@@ -10,8 +10,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.glb.objects.Book;
+import com.glb.objects.Item;
 import com.glb.objects.Review;
 import com.glb.objects.Ticket;
+import com.glb.objects.User;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -372,4 +374,9 @@ public class BookServiceImpl implements BookService {
         
         return status;
     }
+
+   @Override
+   public String getItemAccess(User user, Item item) {
+      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+   }
 }

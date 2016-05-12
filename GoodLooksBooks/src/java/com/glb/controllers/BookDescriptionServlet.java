@@ -71,7 +71,8 @@ public class BookDescriptionServlet extends HttpServlet {
              if(user != null && user.getType().equalsIgnoreCase(UserTypes.CUSTOMER.toString())){
                 book.updateOrderOfReviews(user.getUsername());
              }
-             session.setAttribute("itemClicked", book);    
+             session.setAttribute("itemClicked", book);
+             session.setAttribute("itemAccess", bookService.getItemAccess(user, book));
              RequestDispatcher dispatcher = request.getRequestDispatcher(url);
              dispatcher.forward(request, response); 
         } 

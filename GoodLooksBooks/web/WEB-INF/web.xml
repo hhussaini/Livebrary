@@ -72,10 +72,6 @@
         <servlet-class>com.glb.controllers.SecondServerResponseServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ItemReserveServlet</servlet-name>
-        <servlet-class>com.glb.controllers.ItemReserveServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>UserMyItemsServlet</servlet-name>
         <servlet-class>com.glb.controllers.UserMyItemsServlet</servlet-class>
     </servlet>
@@ -135,6 +131,10 @@
         <servlet-name>SortItemsServlet</servlet-name>
         <servlet-class>com.glb.controllers.SortItemsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ItemAccessServlet</servlet-name>
+        <servlet-class>com.glb.controllers.ItemAccessServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -186,10 +186,6 @@
     <servlet-mapping>
         <servlet-name>SecondServerResponseServlet</servlet-name>
         <url-pattern>/SecondServerResponseServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ItemReserveServlet</servlet-name>
-        <url-pattern>/ItemReserveServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>UserMyItemsServlet</servlet-name>
@@ -246,6 +242,10 @@
     <servlet-mapping>
         <servlet-name>SortItemsServlet</servlet-name>
         <url-pattern>/SortItemsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ItemAccessServlet</servlet-name>
+        <url-pattern>/ItemAccessServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

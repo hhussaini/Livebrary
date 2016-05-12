@@ -42,40 +42,23 @@
             <div class="col-xs-6 col-sm-7" style="border-style: groove;">
                <button type="button" class="btn btn-primary" 
                   onclick="fbShare('http://openisbn.com/${itemClicked.isbn}', 520, 350)">
-               Share</button>
+               Share
+               </button>
                <button id="emailButton" type="button" class="btn btn-primary">Email</button>
-               <form id="bookDescriptionForm" action="ItemReserveServlet" method="get">
-                  <h5 id="bookTitleID">Book Title:  ${itemClicked.title}</h5>
-                  <br> 
-                  <h5 id="bookAuthorID">Book Author: ${itemClicked.author}</h5>
-                  <br> 
-                  <h5 id="bookDescriptionID">Book Description: ${itemClicked.description}</h5>
-                  <br> 
-                  <h5 id="dateCreatedID">Date Created: ${itemClicked.date}</h5>
-                  <br> 
-                  <h5 id="copiesAvailableID">Copies Available: ${itemClicked.numOfDownloads}</h5>
-                  <br> 
-                  <h5 id="availableFormatsID">Available Formats: Kindle</h5>
-                  <br> 
-                  <h5 id="languageID" value = "${itemClicked.language}">Language: ${itemClicked.language}</h5>
-                  <br> <input type="hidden" name = "isbn" id = "isbn" value="${itemClicked.isbn}" </h5>
-               </form>
-               <form id="banBookForm" action="BanItemServlet" method="post">
-                  <h5 id="bookTitleID">Book Title:  ${itemClicked.title}</h5>
-                  <br> 
-                  <h5 id="bookAuthorID">Book Author: ${itemClicked.author}</h5>
-                  <br> 
-                  <h5 id="bookDescriptionID">Book Description: ${itemClicked.description}</h5>
-                  <br> 
-                  <h5 id="dateCreatedID">Date Created: ${itemClicked.date}</h5>
-                  <br> 
-                  <h5 id="copiesAvailableID">Copies Available: ${itemClicked.numOfDownloads}</h5>
-                  <br> 
-                  <h5 id="availableFormatsID">Available Formats: Kindle</h5>
-                  <br> 
-                  <h5 id="languageID" value = "${itemClicked.language}">Language: ${itemClicked.language}</h5>
-                  <br> <input type="hidden" name = "isbn" id = "isbn" value="${itemClicked.isbn}" </h5>
-               </form>
+               <h5 id="bookTitleID">Book Title:  ${itemClicked.title}</h5>
+               <br> 
+               <h5 id="bookAuthorID">Book Author: ${itemClicked.author}</h5>
+               <br> 
+               <h5 id="bookDescriptionID">Book Description: ${itemClicked.description}</h5>
+               <br> 
+               <h5 id="dateCreatedID">Date Created: ${itemClicked.date}</h5>
+               <br> 
+               <h5 id="copiesAvailableID">Copies Available: ${itemClicked.numOfDownloads}</h5>
+               <br> 
+               <h5 id="availableFormatsID">Available Formats: Kindle</h5>
+               <br> 
+               <h5 id="languageID" value = "${itemClicked.language}">Language: ${itemClicked.language}</h5>
+               <br> <input type="hidden" name = "isbn" id = "isbn" value="${itemClicked.isbn}" </h5>
             </div>
             <div class="col-xs-6 col-sm-5 bookDescriptionPictures">
                <img src = ${itemClicked.imageUrl} class="img-rounded" alt="Andersonville: A Story of Rebel Military Prisons" width="250" height="250">
@@ -88,15 +71,12 @@
                   </label>
                   <br>
                   <div id="avgStarID" value="${itemClicked.avgRating}">
-                     <!--                    <img id="clip" src="assets/yellowStar.png" />--> 
+                     <!-- <img id="clip" src="assets/yellowStar.png" />--> 
                   </div>
                   <br><br>
                   <br> 
                </div>
-               <button type="button" name = "button1" onclick="sampleFunction('${itemClicked.sampleUrl}')" class="btn btn-primary">Sample</button>
-               
-               <button type="button" name = "button3" onclick="borrowFuntion()" class="btn btn-primary">Borrow</button>
-               <button type="button" name = "button4" onclick="reserveFunction()" class="btn btn-primary">Reserve</button> <br>
+               <jsp:include page="/itemButtons.jsp" />
                <c:if test="${user.type == 'admin'}">
                   <button type="button" name = "button5" onclick="banFunction(${itemClicked.isbn})" class="btn btn-primary">${itemClicked.isBanned ? "Ban Book" : "Unban Book"}</button>
                </c:if>

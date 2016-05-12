@@ -5,25 +5,6 @@ function downloadBook(bookID){
 }
 
 function validateImgUrl(id) {
-   alert('rrr');
-    var book = document.getElementById(id);
-        try {
-            var img = document.createElement("img");
-            img.src = book.src;
-        } catch(err) {
-            //
-        }
-        if(img.height > 0 && img.width > 0) {
-            console.log("image exists");
-            //image exists
-        } else {
-            console.log("image does not exists");
-            book.src = "assets/no-media.png";
-        }
-}
-
-function validateImgUrl() {
-   alert('rrr');
     var book = document.getElementById(id);
         try {
             var img = document.createElement("img");
