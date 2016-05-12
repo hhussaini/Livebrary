@@ -15,8 +15,8 @@ $(document).on('ready', function(){
     }      
 }); 
 
-function sampleFunction(sampleUrl) {
-   console.log("sampleFunction");
+function sampleItem(sampleUrl) {
+   console.log("sampleItem");
    if (!isEmpty(sampleUrl)) {
       window.open(sampleUrl);
    } else {
@@ -24,13 +24,19 @@ function sampleFunction(sampleUrl) {
    }
 }
 
-function borrowFunction(){
+function borrowItem(){
+   console.log("borrowItem");
+   document.getElementById("borrowItemForm").submit();
 }
 
-function reserveFunction(){
-    console.log("reserveFunction");
-    console.log("isbn: " + document.getElementById("isbn").value);
-    document.getElementById("bookDescriptionForm").submit();
+function reserveItem(){
+   console.log("reserveItem");
+   document.getElementById("reserveItemForm").submit();
+}
+
+function holdItem(){
+   console.log("holdItem");
+   document.getElementById("holdItemForm").submit();
 }
 
 function selectedBook(bookID){ // the id of the form is the isbn number of the selected book

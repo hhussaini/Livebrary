@@ -41,8 +41,8 @@ public class ItemAccessServlet extends HttpServlet {
         println(request.getMethod().toString());
         String method = request.getParameter("method");
         method = (method == null) ? "" : method;
-        if (method.equals("doCheckOut")){
-            doCheckOut(request, response);
+        if (method.equals("doBorrow")){
+            doBorrow(request, response);
         } else if (method.equals("doHold")) {
             doHold(request, response);
         } else if (method.equals("doReserve")) {
@@ -65,9 +65,9 @@ public class ItemAccessServlet extends HttpServlet {
            throws ServletException, IOException {
    }
    
-   protected void doCheckOut(HttpServletRequest request, HttpServletResponse response)
+   protected void doBorrow(HttpServletRequest request, HttpServletResponse response)
            throws ServletException, IOException {
-      processRequest(request, response);
+      System.out.println("INSIDE DO BORROW");
    }
    
    protected void doHold(HttpServletRequest request, HttpServletResponse response)

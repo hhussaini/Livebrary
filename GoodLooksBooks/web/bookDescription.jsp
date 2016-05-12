@@ -211,6 +211,7 @@
       </div>
    </body>
 </html>
+
 <!--Form for communicating with the second server -->
 <form id = "secondServerForm" name = "secondServerForm" action = "SecondServerServlet" method = "post"></form>
 <form id = "facebookShareForm" name = "facebookShareForm" action = "SecondServerServlet" method = "post"></form>
