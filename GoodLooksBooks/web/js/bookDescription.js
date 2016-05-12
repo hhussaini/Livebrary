@@ -24,12 +24,6 @@ function sampleFunction(sampleUrl) {
    }
 }
 
-function buyItNowFunction(bookID){
-    console.log("buyItNowFunction");
-    console.log('bookID = ' + bookID);
-    window.open("http://localhost:8080/GoodLooksBooks/SecondServerServlet");
-}
-
 function borrowFunction(){
 }
 

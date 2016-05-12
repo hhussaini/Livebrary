@@ -1,10 +1,12 @@
 package com.glb.controllers;
 
+import com.glb.factories.ServiceFactory;
 import com.glb.helpers.Helpers;
 import static com.glb.helpers.Helpers.goToSignIn;
 import static com.glb.helpers.Helpers.println;
 import com.glb.objects.Item;
 import com.glb.objects.User;
+import com.glb.services.BookService;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +19,14 @@ import javax.servlet.http.HttpSession;
  * @author Kevin Young
  */
 public class SecondServerServlet extends HttpServlet {
-
+   
+   BookService bookService;
+    
+   public void init() {
+      System.out.println(getServletName() + ": initialised" );
+      bookService = ServiceFactory.getBookService();        
+   }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,11 +45,11 @@ public class SecondServerServlet extends HttpServlet {
             goToSignIn(request, response);
             return;
         }
-        Item item = (Item)session.getAttribute("itemClicked");
+        String isbn = request.getParameter("isbn");
+        Item item = bookService.getBookByIsbn(isbn);
         if (item == null) {
             throw new ServletException("Error getting the selected item.");
         }
-        String isbn = item.getIsbn();
         String url = "http://localhost:29462/BetterLooksBooks/BuyItemServlet";
         url = Helpers.appendParameter(url, "isbn", isbn, true);
         url = Helpers.appendParameter(url, "title", item.getTitle(), false);

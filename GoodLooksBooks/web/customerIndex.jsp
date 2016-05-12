@@ -11,6 +11,7 @@
    <head>
    <jsp:include page="/header.jsp" />
    <script src="js/bootstrap-tabcollapse.js"></script>
+   <script src="js/customerScript.js"></script>
    <link rel="stylesheet" href="css/custom_css/high_contrast.css">
    <link rel="stylesheet" href="css/custom_css/dyslexic_font.css">
    </head>
@@ -57,6 +58,7 @@
                        <div class="tab-pane fade" id="checked-out">
                        <c:choose>
                            <c:when test="${fn:length(checkedOutItems) > 0}">
+                              <jsp:include page="/checkedOutItems.jsp" />
                            </c:when>
                            <c:otherwise>
                                <div class="heading-box">
