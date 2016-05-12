@@ -72,7 +72,11 @@ public class BookDescriptionServlet extends HttpServlet {
                 book.updateOrderOfReviews(user.getUsername());
              }
              session.setAttribute("itemClicked", book);
-             session.setAttribute("itemAccess", bookService.getItemAccess(user, book));
+             String itemAccess = "borrow";
+             if (user != null) {
+                itemAccess = bookService.getItemAccess(user, book);
+             }
+             session.setAttribute("itemAccess", itemAccess);
              RequestDispatcher dispatcher = request.getRequestDispatcher(url);
              dispatcher.forward(request, response); 
         } 

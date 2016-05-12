@@ -15,6 +15,9 @@
    <c:when test="${itemAccess == 'hold'}">
       <button type="button" name = "button3" onclick="holdFunction()" class="btn btn-primary">Hold</button> <br>
    </c:when>
+   <c:when test="${itemAccess == 'isCheckedOut'}">
+      <button type="button" name = "button3" onclick="holdFunction()" class="btn btn-primary">Is Checked Out</button> <br>
+   </c:when>
    <c:otherwise>
       <button type="button" name = "button4" onclick="borrowFunction()" class="btn btn-primary">Borrow</button> <br>
    </c:otherwise>

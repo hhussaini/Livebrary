@@ -2,6 +2,7 @@ package com.glb.daos;
 
 import java.util.List;
 import com.glb.objects.Book;
+import com.glb.objects.Item;
 import com.glb.objects.Review;
 import com.glb.objects.Ticket;
 import com.glb.objects.User;
@@ -31,4 +32,5 @@ public interface BookDao extends JdbcDaoSupport {
     public int deleteReview(String isbn, String username);
     public Book editReview(Review review, String isbn, String username);
     public int banBook(String isbn);
+    public String getItemAccess(User user, Item item);
 }

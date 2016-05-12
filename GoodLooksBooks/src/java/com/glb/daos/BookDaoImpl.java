@@ -11,8 +11,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import com.glb.objects.Book;
+import com.glb.objects.Item;
 import com.glb.objects.Review;
 import com.glb.objects.Ticket;
+import com.glb.objects.User;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -680,4 +682,47 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         }
         return status;
     }
+    
+    // TODO. This will need more logic when we figure out exactly how we're doing
+    // reserves and holds and stuff 
+   @Override
+   public String getItemAccess(User user, Item item) {
+      Connection conToUse = null;
+      ResultSet rs = null;
+      PreparedStatement ps = null;
+      String isbn = item.getIsbn();
+      // First check if the user already has this item checked out
+      String sql = "select username from CHECKED_OUT where isbn = ? and username = ?";
+      try {
+          conToUse = getConnection();
+          ps = conToUse.prepareStatement(sql);
+          ps.setString(1, isbn);
+          ps.setString(2, user.getUsername());
+          rs = ps.executeQuery(sql);
+          int count = 0;
+          while (rs.next()) {
+            count++;
+          }
+          if (count > 0) {
+            return "isCheckedOut";
+          }
+          rs.close();
+          // Second, check if there are any copies of this item left
+          int copiesLeft = 0;
+          sql = "select copiesLeft from BOOKS where isbn = ?";
+          ps.setString(1, isbn);
+          rs = ps.executeQuery(sql);
+          while (rs.next()) {
+            copiesLeft = rs.getInt("copiesLeft");
+          }
+          if (copiesLeft == 0) {
+            return "Hold";
+          }
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      }finally {
+          DbUtils.closeQuietly(ps);
+      }
+      return "Borrow";
+   }
 }
