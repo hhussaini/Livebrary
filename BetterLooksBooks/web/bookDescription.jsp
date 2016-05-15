@@ -3,6 +3,7 @@
     Author     : Kevin Young
 --%>
 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">  
@@ -31,13 +32,13 @@
             <br> <h5 id="dateCreatedID">Date Created: ${itemClicked.date}</h5>
             <br> <h5 id="availableFormatsID">Available Formats: Kindle</h5>
             <br> <h5 id="languageID" value = "${itemClicked.language}">Language: ${itemClicked.language}</h5>
-            <br> <input type="hidden" name = "isbn" id = "isbn" value="${itemClicked.isbn}" </h5> 
             <br> <h5>Subjects: "Military prisons", "United States -- History -- Civil War, 1861-1865 -- Prisoners and prisons", "Andersonville Prison", "Confederate States of America. Army -- Prisons" </h5>
         </div>
         <div class="col-xs-6 col-sm-5 bookDescriptionPictures">
           <img src = ${itemClicked.imageUrl} class="img-rounded" alt="Andersonville: A Story of Rebel Military Prisons" width="250" height="250">
           <br>
-          <button type="button" name = "button1" onclick="confirmBuyFunction(${itemClicked.isbn})"class="btn btn-primary">Confirm Buy</button> <br>
+          <button type="button" onclick="confirmDownload('${user.username}', '${itemClicked.downloadUrl}')" class="btn btn-primary">Confirm Download</button> <br>
+          <button type="button" onclick="confirmReturn('${user.username}' ${itemClicked.isbn})" class="btn btn-primary">Confirm Return</button> <br>
         </div>
       </div> <!-- bookDescription-->
       <hr class="fancy">
@@ -48,5 +49,7 @@
     </div> <!-- BLBPage -->
   </body>
  </html>
-
-<form id = "confirmBuyItemForm" name = "confirmBuyItemForm" action = "ConfirmBuyItemServlet" method = "post"></form>
+ 
+ <form id = "confirmReturnForm" name = "confirmReturnForm" action = "ConfirmActionServlet" method = "post">
+   <input type="hidden" name = "action" value="download" </h5> 
+ </form>

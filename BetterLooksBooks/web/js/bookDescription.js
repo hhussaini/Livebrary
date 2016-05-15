@@ -1,6 +1,15 @@
-function confirmBuyFunction(bookID){
-    console.log("confirmBuyFunction");
-    document.getElementById("confirmBuyItemForm").submit();
+function confirmDownload(username, downloadUrl){
+    console.log("confirmDownload.downloadUrl = " + downloadUrl);
+    if (isEmpty(username)) {
+       alert('Please login first.')
+    } else {
+      window.open(downloadUrl);
+    }
+}
+
+function confirmReturn(username, bookID){
+    console.log("confirmReturn");
+    document.getElementById("confirmReturnForm").submit();
 }
 
 $(document).on('ready', function(){
@@ -14,3 +23,6 @@ $(document).on('ready', function(){
     }     
 });
 
+function isEmpty(str) {
+    return (!str || 0 === str.length);
+}

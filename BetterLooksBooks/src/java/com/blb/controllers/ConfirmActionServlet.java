@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Kevin Young
  */
-public class ConfirmBuyItemServlet extends HttpServlet {
+public class ConfirmActionServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -28,19 +28,6 @@ public class ConfirmBuyItemServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ConfirmBuyItemServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ConfirmBuyItemServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -77,6 +64,7 @@ public class ConfirmBuyItemServlet extends HttpServlet {
             url = "http://localhost:29462/BetterLooksBooks/signIn.jsp";
         }
         else {
+            String action = request.getParameter("action");
             Item item = (Item)session.getAttribute("itemClicked");
             if (item == null) {
                 throw new ServletException("Error getting the selected item.");
@@ -85,6 +73,7 @@ public class ConfirmBuyItemServlet extends HttpServlet {
             url = "http://localhost:8080/GoodLooksBooks/SecondServerResponseServlet";
             url = appendParameter(url, "isbn", isbn, true);
             url = appendParameter(url, "firstServerUsername", user.getFirstServerUsername(), false);
+            url = appendParameter(url, "action", action, false);
         }
         response.sendRedirect(url);
     }

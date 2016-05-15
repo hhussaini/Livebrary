@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Kevin Young
  */
-public class BuyItemServlet extends HttpServlet {
+public class FirstServerRequestServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,6 +33,7 @@ public class BuyItemServlet extends HttpServlet {
         String imageUrl = request.getParameter("imageUrl");
         String date = request.getParameter("date").equals("null") ? "" : request.getParameter("date");
         String language = request.getParameter("language").equals("null") ? "" : request.getParameter("language");
+        String downloadUrl = request.getParameter("downloadUrl").equals("null") ? "" : request.getParameter("downloadUrl");
         String firstServerUsername = request.getParameter("firstServerUsername");
         Item item = new Item();
         item.setIsbn(isbn);
@@ -42,6 +43,7 @@ public class BuyItemServlet extends HttpServlet {
         item.setImageUrl(imageUrl);
         item.setDate(date);
         item.setLanguage(language);
+        item.setDownloadUrl(downloadUrl);
         HttpSession session = request.getSession();
         session.setAttribute("firstServerUsername", firstServerUsername);
         session.setAttribute("itemClicked", item);

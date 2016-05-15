@@ -18,12 +18,12 @@ public class Item implements Serializable, Comparable{
     private String description;
     private double avgRating;
     private int numberOfRatings;
-    private String downloadLink;
     private String author;
     private String date;
     private String language;
     private String imageUrl;
     private String sampleUrl;
+    private String downloadUrl;
     private List<String> genres;
     private int numOfDownloads;
     private Map<String, Review> reviews;
@@ -35,7 +35,7 @@ public class Item implements Serializable, Comparable{
         this.genres = new ArrayList<>();    
     }
 
-    public Item(String isbn, String title, String description, double avgRating, String downloadLink, 
+    public Item(String isbn, String title, String description, double avgRating, String downloadUrl, 
             String author, String date, String language, String imageUrl, int numOfDownloads) {
         this.reviews = new LinkedHashMap<>();
         this.genres = new ArrayList<>(); 
@@ -43,7 +43,7 @@ public class Item implements Serializable, Comparable{
         this.title = title;
         this.description = description;
         this.avgRating = avgRating;
-        this.downloadLink = downloadLink;
+        this.downloadUrl = downloadUrl;
         this.author = author;
         this.date = date;
         this.language = language;
@@ -91,14 +91,6 @@ public class Item implements Serializable, Comparable{
 
     public void setNumberOfRatings(int numberOfRatings) {
         this.numberOfRatings = numberOfRatings;
-    }  
-
-    public String getDownloadLink() {
-        return downloadLink;
-    }
-
-    public void setDownloadLink(String downloadLink) {
-        this.downloadLink = downloadLink;
     }
 
     public String getAuthor() {
@@ -245,6 +237,14 @@ public class Item implements Serializable, Comparable{
     
     public void setIsBanned(boolean isBanned){
         this.isBanned = isBanned;
+    }
+    
+    public String getDownloadUrl(){
+        return downloadUrl;
+    }
+    
+    public void setDownloadUrl(String downloadUrl){
+        this.downloadUrl = downloadUrl;
     }
     
     public int getCopiesLeft() {

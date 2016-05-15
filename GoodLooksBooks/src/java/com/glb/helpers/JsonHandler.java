@@ -38,7 +38,7 @@ public class JsonHandler {
         jso.put("description", book.getDescription());
         jso.put("avgRating", book.getAvgRating());
         jso.put("numberOfRatings", book.getNumberOfRatings());
-        jso.put("downloadLink", book.getDownloadLink());
+        jso.put("downloadUrl", book.getDownloadUrl());
         jso.put("author", book.getAuthor());
         jso.put("date", book.getDate());
         jso.put("language", book.getLanguage());

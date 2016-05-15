@@ -50,16 +50,16 @@ public class SecondServerServlet extends HttpServlet {
         if (item == null) {
             throw new ServletException("Error getting the selected item.");
         }
-        String url = "http://localhost:29462/BetterLooksBooks/BuyItemServlet";
+        String url = "http://localhost:29462/BetterLooksBooks/FirstServerRequestServlet";
         url = Helpers.appendParameter(url, "isbn", isbn, true);
         url = Helpers.appendParameter(url, "title", item.getTitle(), false);
         url = Helpers.appendParameter(url, "author", item.getAuthor(), false);
         url = Helpers.appendParameter(url, "description", item.getDescription(), false);
         url = Helpers.appendParameter(url, "imageUrl", item.getImageUrl(), false);
         url = Helpers.appendParameter(url, "date", item.getDate(), false);
-        url = Helpers.appendParameter(url, "numOfDownloads", Integer.toString(item.getNumOfDownloads()), false);
         url = Helpers.appendParameter(url, "language", item.getLanguage(), false);
         url = Helpers.appendParameter(url, "firstServerUsername", user.getUsername(), false);
+        url = Helpers.appendParameter(url, "downloadUrl", item.getDownloadUrl(), false);
         response.sendRedirect(url);
     }
 

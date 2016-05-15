@@ -39,6 +39,7 @@ public class SecondServerResponseServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String isbn = request.getParameter("isbn");
+        String action = request.getParameter("action");
         int status = 0;        
         try {
             HttpSession session = request.getSession();
@@ -49,9 +50,12 @@ public class SecondServerResponseServlet extends HttpServlet {
             } else {
                username = user.getUsername();
             }
-            status = bookService.addBookToUserItems(username, isbn);
+            switch (action) {
+//               case "return": status = bookService.returnItem(username, isbn);
+//                              break;
+            }
+            
             if (status == 1) {
-               // GOOD!
                outputToHtml(response, "Your request has been successful on Good Looks Books. "
                            + "<a href=\"http://localhost:29462/BetterLooksBooks/bookDescription.jsp\">Return</a>");
             } else {

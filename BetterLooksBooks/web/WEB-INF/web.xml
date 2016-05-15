@@ -5,8 +5,8 @@
         <servlet-class>com.blb.controllers.SignUpServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>BuyItemServlet</servlet-name>
-        <servlet-class>com.blb.controllers.BuyItemServlet</servlet-class>
+        <servlet-name>FirstServerRequestServlet</servlet-name>
+        <servlet-class>com.blb.controllers.FirstServerRequestServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ErrorHandler</servlet-name>
@@ -17,12 +17,12 @@
         <servlet-class>com.blb.controllers.SignInServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ConfirmBuyItemServlet</servlet-name>
-        <servlet-class>com.blb.controllers.ConfirmBuyItemServlet</servlet-class>
+        <servlet-name>ConfirmActionServlet</servlet-name>
+        <servlet-class>com.blb.controllers.ConfirmActionServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>BuyItemServlet</servlet-name>
-        <url-pattern>/BuyItemServlet</url-pattern>
+        <servlet-name>FirstServerRequestServlet</servlet-name>
+        <url-pattern>/FirstServerRequestServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
@@ -49,8 +49,8 @@
         <url-pattern>/SignInServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ConfirmBuyItemServlet</servlet-name>
-        <url-pattern>/ConfirmBuyItemServlet</url-pattern>
+        <servlet-name>ConfirmActionServlet</servlet-name>
+        <url-pattern>/ConfirmActionServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

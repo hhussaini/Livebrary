@@ -1,12 +1,11 @@
 package com.blb.objects;
 
-import java.io.Serializable; 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
- * @author Kevin_Setayesh
+ * @author Kevin Young
  */
 public class Item implements Serializable{
     private String isbn;
@@ -14,32 +13,13 @@ public class Item implements Serializable{
     private String description;
     private double avgRating;
     private int numberOfRatings;
-    private String downloadLink;
     private String author;
     private String date;
     private String language;
     private String imageUrl;
+    private String downloadUrl;
     private List<String> genres;
     private int numOfDownloads;
-    
-    public Item(){
-        this.imageUrl = "yolo";
-    }
-
-    public Item(String isbn, String title, String description, double avgRating, String downloadLink, 
-            String author, String date, String language, String imageUrl, int numOfDownloads) {
-        this.isbn = isbn;
-        this.title = title;
-        this.description = description;
-        this.avgRating = avgRating;
-        this.downloadLink = downloadLink;
-        this.author = author;
-        this.date = date;
-        this.language = language;
-        this.imageUrl = imageUrl;
-        this.genres = new ArrayList<>();
-        this.numOfDownloads = numOfDownloads;
-    }
 
     public String getIsbn() {
         return isbn;
@@ -48,6 +28,14 @@ public class Item implements Serializable{
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
+
+   public String getDownloadUrl() {
+      return downloadUrl;
+   }
+
+   public void setDownloadUrl(String downloadUrl) {
+      this.downloadUrl = downloadUrl;
+   }
 
     public String getTitle() {
         return title;
@@ -81,14 +69,6 @@ public class Item implements Serializable{
 
     public void setNumberOfRatings(int numberOfRatings) {
         this.numberOfRatings = numberOfRatings;
-    }  
-
-    public String getDownloadLink() {
-        return downloadLink;
-    }
-
-    public void setDownloadLink(String downloadLink) {
-        this.downloadLink = downloadLink;
     }
 
     public String getAuthor() {
@@ -149,11 +129,5 @@ public class Item implements Serializable{
     
     private double round(double num){
         return (double)Math.round(num * 100) / 100;
-    }
-    
-    
-    
-    
-    
-    
+    }    
 }
