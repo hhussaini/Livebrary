@@ -23,7 +23,7 @@
                <h1 class="jumbotron">Welcome ${user.username}!<br></h1>
                <ul id="tabs" class="nav nav-tabs">
                    <li class="active"><a href="#acct-sum" data-toggle="tab">Account at a glance</a></li>
-                   <li><a href="#checked-out" data-toggle="tab">Current Collection</a></li>
+                   <!--<li><a href="#checked-out" data-toggle="tab">Current Collection</a></li>-->
                    <li><a href="#on-hold" data-toggle="tab">On hold</a></li>
                </ul>
                <div id="tabContent" class="tab-content">
@@ -55,19 +55,19 @@
                                </tr>
                            </table>
                        </div>
-                       <div class="tab-pane fade" id="checked-out">
-                       <c:choose>
-                           <c:when test="${fn:length(checkedOutItems) > 0}">
-                              <jsp:include page="/checkedOutItems.jsp" />
-                           </c:when>
-                           <c:otherwise>
+<!--                       <div class="tab-pane fade" id="checked-out">
+                       <%--<c:choose>--%>
+                           <%--<c:when test="${fn:length(checkedOutItems) > 0}">--%>
+                              <%--<jsp:include page="/checkedOutItems.jsp" />--%>
+                           <%--</c:when>--%>
+                           <%--<c:otherwise>--%>
                                <div class="heading-box">
                                    <h2>You currently have no books checked out.</h2>
                                    <a href="SearchServlet"><h3>Browse some books!</h3></a>
                                </div>
-                           </c:otherwise>
-                       </c:choose>
-                   </div>
+                           <%--</c:otherwise>--%>
+                       <%--</c:choose>--%>
+                   </div>-->
                    <div class="tab-pane fade" id="on-hold">
                        <c:choose>
                            <c:when test="${fn:length(onHoldItems) > 0}">

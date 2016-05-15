@@ -214,7 +214,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             if (conToUse == null)
                 System.out.println("conToUse == null");
             
-            sql = "INSERT into CHECKED_OUT(username, isbn) values(?,?)";
+            sql = "INSERT into CHECKED_OUT(username, isbn, startDate) values(?,?)";
             preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
             preparedStmt.setString(1, username);
             preparedStmt.setString(2, isbn);
@@ -698,7 +698,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
           ps = conToUse.prepareStatement(sql);
           ps.setString(1, isbn);
           ps.setString(2, user.getUsername());
-          rs = ps.executeQuery(sql);
+          rs = ps.executeQuery();
           int count = 0;
           while (rs.next()) {
             count++;

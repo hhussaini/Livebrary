@@ -6,6 +6,7 @@
 package com.glb.controllers;
 
 import com.glb.factories.ServiceFactory;
+import static com.glb.helpers.Helpers.goToSignIn;
 import static com.glb.helpers.Helpers.println;
 import com.glb.objects.Book;
 import com.glb.objects.User;
@@ -80,7 +81,8 @@ public class UserMyItemsServlet extends HttpServlet {
            session.setAttribute("userItemsList", myItemsList);
         }
         else{
-            throw new ServletException("User doesn't exist");
+            goToSignIn(request, response);
+            return;
         } 
         String url = "/customerOwnedItems.jsp";
         RequestDispatcher dispatcher = request.getRequestDispatcher(url);

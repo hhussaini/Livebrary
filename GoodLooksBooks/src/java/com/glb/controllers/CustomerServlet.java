@@ -79,14 +79,13 @@ public class CustomerServlet extends HttpServlet {
            return;
         }
         
-        List<Book> checkedOut = userService.getCheckedOutItems(user);
-        session.setAttribute("checkedOutItems", checkedOut);
+//      List<Book> checkedOut = userService.getCheckedOutItems(user);
+//      session.setAttribute("checkedOutItems", checkedOut);
         List<Book> onHold = userService.getOnHoldItems(user);
         session.setAttribute("onHoldItems", onHold);
         println(onHold.size());
         List<Book> wishlist = userService.getWishlist(user);
         session.setAttribute("customerWishlist", wishlist);
-        
         
         RequestDispatcher dispatcher = request.getRequestDispatcher("/customerIndex.jsp");
         dispatcher.forward(request, response); 

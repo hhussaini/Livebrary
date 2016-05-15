@@ -9,7 +9,6 @@ import com.glb.objects.User;
 import com.glb.services.BookService;
 import com.glb.services.UserService;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
