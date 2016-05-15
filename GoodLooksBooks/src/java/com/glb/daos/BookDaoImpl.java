@@ -264,7 +264,6 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
       String sql = "select * from CHECKED_OUT";
       Connection conToUse = null;
       PreparedStatement ps = null;
-      int status = 0;
       ResultSet rs = null;
       try {
           conToUse = getConnection();
@@ -280,15 +279,9 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
              username = rs.getString("username");
              // If true, the check out is expired
              if (now.after(endDate) || now.equals(endDate)) {
-               // TODO. Do email and stuff here for users waiting?
-               sql = "delete from CHECKED_OUT where isbn = ? and username = ?";
-               ps = conToUse.prepareStatement(sql);
-               ps.setString(1, isbn);
-               ps.setString(2, username);
-               status = ps.executeUpdate();
-               if (status == 1) {
-                  changeItemQuantity(isbn, 1);
-               }
+               // TODO. Do email and stuff here for users waiting. PLACE THAT CODE
+               // IN RETURNITEM
+               returnItem(username, isbn);
             }
           }
       } catch (SQLException ex) {
@@ -793,7 +786,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
       PreparedStatement ps = null;
       String isbn = item.getIsbn();
       // First check if the user already has this item checked out
-      String sql = "select username from CHECKED_OUT where isbn = ? and username = ?";
+      String sql = "select username from CHECKED_OUT where isbn = ? and username = ? and expired = \'n\'";
       try {
           conToUse = getConnection();
           ps = conToUse.prepareStatement(sql);
@@ -825,5 +818,26 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
           DbUtils.closeQuietly(ps);
       }
       return "Borrow";
+   }
+
+   @Override
+   public int returnItem(String username, String isbn) {
+      int status = 0;
+      Connection conToUse = null;
+      PreparedStatement ps = null;
+      String sql = "update CHECKED_OUT set expired = \'y\' where isbn = ? and username = ?";
+      try {
+          conToUse = getConnection();
+          ps = conToUse.prepareStatement(sql);
+          ps.setString(1, isbn);
+          ps.setString(2, username);
+          status = ps.executeUpdate();
+          status = changeItemQuantity(isbn, 1);
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      }finally {
+          DbUtils.closeQuietly(ps);
+      }
+      return status;
    }
 }

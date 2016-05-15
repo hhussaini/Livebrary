@@ -72,7 +72,7 @@ public class SignInServlet extends HttpServlet {
             throw new ServletException("This user does not exist.");
         }
         HttpSession session = request.getSession();
-        session.setAttribute("user", user);        
+        session.setAttribute("user", user);
         String url = "/bookDescription.jsp";
         RequestDispatcher dispatcher = request.getRequestDispatcher(url);
         dispatcher.forward(request, response); 

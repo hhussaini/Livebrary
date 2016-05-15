@@ -412,4 +412,22 @@ public class BookServiceImpl implements BookService {
           ConnectionUtil.closeConnection(conn);
       }
    }
+
+   @Override
+   public int returnItem(String username, String isbn) {
+        Connection conn = null;
+        int status = 0;
+        try {
+            conn = ConnectionUtil.getConnection();
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conn);
+            status = bookDao.returnItem(username, isbn);
+        } catch (ResourceHelperException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConnectionUtil.closeConnection(conn);
+        }
+        
+        return status;
+   }
 }

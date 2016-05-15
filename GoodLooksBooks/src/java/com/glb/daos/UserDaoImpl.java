@@ -265,7 +265,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         try {
             String username = user.getUsername();
             conToUse = getConnection();
-            String sql = "select * from checked_out where username = ?";            
+            String sql = "select * from checked_out where username = ? and expired = \'n\'";            
             ps = (PreparedStatement) conToUse.prepareStatement(sql);
             ps.setString(1, username);
             res = ps.executeQuery();
@@ -334,11 +334,9 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         try {
             conToUse = getConnection();
             String sql = "SELECT isbn from RESERVED WHERE username = ?";
-            
             ps = (PreparedStatement) conToUse.prepareStatement(sql);
             ps.setString(1, user.getUsername());
             res = ps.executeQuery();
-            
             while (res.next()) { 
                   onHold.add(bookService.getBookByIsbn(res.getString("isbn"))); 
             }
@@ -361,7 +359,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
       int status = 0;
       try {
          //status = deleteHolds(username);
-         status = returnCheckedOut(username);
+         status = returnAllCheckedOut(username);
          if (status == -1) {
             throw new SQLException();
          }
@@ -390,23 +388,30 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
    }
    
    /*
-   TODO. Probably needs more logic
+   TODO. Probably needs more logic. 
+   This returns all the items of the given user
    */
-   private int returnCheckedOut(String username) {
+   private int returnAllCheckedOut(String username) {
       Connection conToUse = null;
-      PreparedStatement preparedStmt = null;
-      String sql = "delete from CHECKED_OUT where username = ?";
+      PreparedStatement ps = null;
+      String sql = "select * from CHECKED_OUT where username = ?";
       int status = 0;
+      ResultSet rs = null;
+      BookService bookService = ServiceFactory.getBookService();
       try {
-          conToUse = getConnection();
-          preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
-          preparedStmt.setString(1, username);
-          status = preparedStmt.executeUpdate();
+         conToUse = getConnection();
+         ps = (PreparedStatement) conToUse.prepareStatement(sql);
+         ps.setString(1, username);
+         rs = ps.executeQuery();
+         while (rs.next()) {
+            String isbn = rs.getString("isbn");
+            bookService.returnItem(username, isbn);
+         }
       } catch (SQLException ex) {
           Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
           status = -1;
       } finally {
-          ConnectionUtil.closeStatement(preparedStmt);
+          ConnectionUtil.closeStatement(ps);
       }
 
       return status;

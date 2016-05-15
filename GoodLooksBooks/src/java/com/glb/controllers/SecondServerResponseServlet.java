@@ -5,6 +5,7 @@ import com.glb.helpers.Helpers;
 import static com.glb.helpers.Helpers.createReturnTag;
 import static com.glb.helpers.Helpers.outputToHtml;
 import static com.glb.helpers.Helpers.println;
+import com.glb.objects.Item;
 import com.glb.objects.User;
 import com.glb.services.BookService;
 import java.io.IOException;
@@ -51,16 +52,23 @@ public class SecondServerResponseServlet extends HttpServlet {
                username = user.getUsername();
             }
             switch (action) {
-//               case "return": status = bookService.returnItem(username, isbn);
-//                              break;
+               case "return": status = bookService.returnItem(username, isbn);
+                              break;
             }
-            
-            if (status == 1) {
-               outputToHtml(response, "Your request has been successful on Good Looks Books. "
-                           + "<a href=\"http://localhost:29462/BetterLooksBooks/bookDescription.jsp\">Return</a>");
-            } else {
-                throw new ServletException("SQL Error.");
-            }
+            String url = "http://localhost:29462/BetterLooksBooks/FirstServerRequestServlet";
+            Item item = bookService.getBookByIsbn(isbn);
+            url = Helpers.appendParameter(url, "isbn", isbn, true);
+            url = Helpers.appendParameter(url, "title", item.getTitle(), false);
+            url = Helpers.appendParameter(url, "author", item.getAuthor(), false);
+            url = Helpers.appendParameter(url, "description", item.getDescription(), false);
+            url = Helpers.appendParameter(url, "imageUrl", item.getImageUrl(), false);
+            url = Helpers.appendParameter(url, "date", item.getDate(), false);
+            url = Helpers.appendParameter(url, "language", item.getLanguage(), false);
+            url = Helpers.appendParameter(url, "firstServerUsername", user.getUsername(), false);
+            url = Helpers.appendParameter(url, "downloadUrl", item.getDownloadUrl(), false);
+            url = Helpers.appendParameter(url, "isCheckedOut", "n", false);
+            outputToHtml(response, "Your request has been successful on Good Looks Books. "
+                        + "<a href=\"" + url +"\">" + "Return" + "</a>");
         } catch (Exception e) {
             throw new ServletException(e.getMessage());
         }

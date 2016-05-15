@@ -60,6 +60,7 @@ public class SecondServerServlet extends HttpServlet {
         url = Helpers.appendParameter(url, "language", item.getLanguage(), false);
         url = Helpers.appendParameter(url, "firstServerUsername", user.getUsername(), false);
         url = Helpers.appendParameter(url, "downloadUrl", item.getDownloadUrl(), false);
+        url = Helpers.appendParameter(url, "isCheckedOut", "y", false);
         response.sendRedirect(url);
     }
 

@@ -10,7 +10,7 @@
      <jsp:include page="/header.jsp" />
    </head>
    <body>
-     <jsp:include page="/navbar.jsp" />
+     <jsp:include page="/guestNavbar.jsp" />
      <div class="blb-page">
        <jsp:include page="/logo.jsp" />
        <div class="container">

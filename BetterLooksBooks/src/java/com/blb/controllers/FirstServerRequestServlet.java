@@ -35,6 +35,7 @@ public class FirstServerRequestServlet extends HttpServlet {
         String language = request.getParameter("language").equals("null") ? "" : request.getParameter("language");
         String downloadUrl = request.getParameter("downloadUrl").equals("null") ? "" : request.getParameter("downloadUrl");
         String firstServerUsername = request.getParameter("firstServerUsername");
+        String isCheckedOut = request.getParameter("isCheckedOut").equals("null") ? "" : request.getParameter("isCheckedOut");
         Item item = new Item();
         item.setIsbn(isbn);
         item.setTitle(title);
@@ -47,7 +48,7 @@ public class FirstServerRequestServlet extends HttpServlet {
         HttpSession session = request.getSession();
         session.setAttribute("firstServerUsername", firstServerUsername);
         session.setAttribute("itemClicked", item);
-        session.setAttribute("user", null);
+        session.setAttribute("isCheckedOut", isCheckedOut);
         response.sendRedirect("http://localhost:29462/BetterLooksBooks/bookDescription.jsp");
     }
 

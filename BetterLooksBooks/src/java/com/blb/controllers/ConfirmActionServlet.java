@@ -4,7 +4,6 @@ import static com.blb.helpers.Helpers.appendParameter;
 import com.blb.objects.Item;
 import com.blb.objects.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

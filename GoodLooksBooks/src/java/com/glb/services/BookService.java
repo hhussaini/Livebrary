@@ -30,5 +30,6 @@ public interface BookService {
     public int banBook(String isbn);
     public String getItemAccess(User user, Item item);
     public void checkExpiredCheckouts();
+    public int returnItem(String username, String isbn);
     // public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description);
 }  
