@@ -33,4 +33,5 @@ public interface BookDao extends JdbcDaoSupport {
     public Book editReview(Review review, String isbn, String username);
     public int banBook(String isbn);
     public String getItemAccess(User user, Item item);
+    public void checkExpiredCheckouts();
 }

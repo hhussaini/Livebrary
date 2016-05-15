@@ -2,7 +2,6 @@ package com.glb.controllers;
 
 import com.glb.constants.UserTypes;
 import com.glb.factories.ServiceFactory;
-import static com.glb.helpers.Helpers.println;
 import com.glb.objects.Book;
 import com.glb.services.BookService;
 import java.io.IOException;
@@ -58,6 +57,8 @@ public class BookDescriptionServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         println("Inside BookDescriptionServlet.doGet");
+        // Check for any expired checkouts
+        bookService.checkExpiredCheckouts();
         //processRequest(request, response);
         String isbn = request.getParameter("isbn"); 
         Book book = bookService.getBookByIsbn(isbn);
@@ -65,11 +66,13 @@ public class BookDescriptionServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
         if(book != null){ 
-             println("Clicked " + isbn); 
+             println("Clicked " + isbn);
              Map<String, Review> reviewsMap = bookService.getAllReviewsForBook(isbn);
              book.setReviews(reviewsMap);
-             if(user != null && user.getType().equalsIgnoreCase(UserTypes.CUSTOMER.toString())){
-                book.updateOrderOfReviews(user.getUsername());
+             if(user != null){
+                if (user.getType().equalsIgnoreCase(UserTypes.CUSTOMER.toString())) {
+                  book.updateOrderOfReviews(user.getUsername());
+                }
              }
              session.setAttribute("itemClicked", book);
              String itemAccess = "borrow";

@@ -397,4 +397,19 @@ public class BookServiceImpl implements BookService {
 
       return access;
    }
+
+   @Override
+   public void checkExpiredCheckouts() {
+      Connection conn = null;
+      try {
+          conn = ConnectionUtil.getConnection();
+          BookDao bookDao = DaoFactory.getBookDao();
+          bookDao.setConnection(conn);
+          bookDao.checkExpiredCheckouts();
+      } catch (ResourceHelperException ex) {
+          Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          ConnectionUtil.closeConnection(conn);
+      }
+   }
 }

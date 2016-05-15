@@ -250,6 +250,53 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         return status;
     }
     
+    /**
+     * Checks if the item checked out by the user has expired. If so, then increment
+     * the stock and delete the record from the checked_out table.
+     * @param username
+     * @param isbn
+     * @return 
+     */
+    @Override
+    public void checkExpiredCheckouts() {
+      println("Inside checkExpiredCheckout");
+      String sql = "select * from CHECKED_OUT";
+      Connection conToUse = null;
+      PreparedStatement ps = null;
+      int status = 0;
+      ResultSet rs = null;
+      try {
+          conToUse = getConnection();
+          ps = conToUse.prepareStatement(sql);
+          rs = ps.executeQuery();
+          Timestamp endDate = null;
+          Date date= new Date();
+          Timestamp now = new Timestamp(date.getTime());
+          String isbn, username;
+          while (rs.next()) {
+             endDate = rs.getTimestamp("endDate");
+             isbn = rs.getString("isbn");
+             username = rs.getString("username");
+             // If true, the check out is expired
+             if (now.after(endDate) || now.equals(endDate)) {
+               // TODO. Do email and stuff here for users waiting?
+               sql = "delete from CHECKED_OUT where isbn = ? and username = ?";
+               ps = conToUse.prepareStatement(sql);
+               ps.setString(1, isbn);
+               ps.setString(2, username);
+               status = ps.executeUpdate();
+               if (status == 1) {
+                  changeItemQuantity(isbn, 1);
+               }
+            }
+          }
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          DbUtils.closeQuietly(ps);
+      }
+    }
+    
     public int changeItemQuantity(String isbn, int quantityChange) {
         String sql = "select copiesLeft from BOOKS where isbn = ?";
         Connection conToUse = null;

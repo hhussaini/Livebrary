@@ -77,20 +77,26 @@ public class ItemAccessServlet extends HttpServlet {
           return;
       }
       if(user.getType().equalsIgnoreCase(UserTypes.CUSTOMER.toString())){
-          status = bookService.addBookToUserItems(user.getUsername(), isbn); 
-      }
-      if (status == 1) {
-         outputToHtml(response, "Item checked out successfully. " + createReturnTag("Return", "BookDescriptionServlet?isbn=" + isbn));
-      }
-      else {
-         throw new ServletException("Error checking out item.");
+         status = bookService.addBookToUserItems(user.getUsername(), isbn); 
+         if (status == 1) {
+            outputToHtml(response, "Item checked out successfully. " + createReturnTag("Return", "BookDescriptionServlet?isbn=" + isbn));
+         }
+         else {
+            throw new ServletException("Error checking out item.");
+         }
       }
    }
    
    // TODO. Implement me
    protected void doHold(HttpServletRequest request, HttpServletResponse response)
            throws ServletException, IOException {
-      //processRequest(request, response);
+      HttpSession session = request.getSession();
+      User user = (User)session.getAttribute("user");
+      String isbn = request.getParameter("isbn");
+      if (user == null) {
+          goToSignIn(request, response);
+          return;
+      }
    }
    
    // TODO. Implement me
@@ -98,6 +104,7 @@ public class ItemAccessServlet extends HttpServlet {
            throws ServletException, IOException {
       HttpSession session = request.getSession();
       User user = (User)session.getAttribute("user");
+      String isbn = request.getParameter("isbn");
       if (user == null) {
           goToSignIn(request, response);
           return;
@@ -116,7 +123,7 @@ public class ItemAccessServlet extends HttpServlet {
    @Override
    protected void doGet(HttpServletRequest request, HttpServletResponse response)
            throws ServletException, IOException {
-      processRequest(request, response);
+      // processRequest(request, response);
    }
 
    /**
@@ -130,7 +137,7 @@ public class ItemAccessServlet extends HttpServlet {
    @Override
    protected void doPost(HttpServletRequest request, HttpServletResponse response)
            throws ServletException, IOException {
-      processRequest(request, response);
+      // processRequest(request, response);
    }
 
    /**
