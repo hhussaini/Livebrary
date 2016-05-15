@@ -37,14 +37,14 @@
                                    <h2><c:out value="${fn:length(customerWishlist)}"></c:out></h2>
                                    </td>
                                </tr>
-                               <tr>
+<!--                               <tr>
                                    <td>
                                        <h3>Checked out</h3>
                                    </td>
                                    <td>
                                        <h2><c:out value="${fn:length(checkedOut)}"></c:out></h2>
                                    </td>
-                               </tr>
+                               </tr>-->
                                <tr>
                                    <td>
                                        <h3>On hold</h3>

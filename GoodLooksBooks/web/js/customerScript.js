@@ -1,5 +1,11 @@
 function downloadBook(bookID){
-    console.log("downloadFunction");
+    console.log("downloadBook");
+    console.log('bookID = ' + bookID);
+    window.open("http://localhost:8080/GoodLooksBooks/SecondServerServlet?isbn="+bookID);
+}
+
+function returnBook(bookID){
+    console.log("downloadBook");
     console.log('bookID = ' + bookID);
     window.open("http://localhost:8080/GoodLooksBooks/SecondServerServlet?isbn="+bookID);
 }

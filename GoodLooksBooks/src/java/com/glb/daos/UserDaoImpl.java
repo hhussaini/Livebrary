@@ -26,7 +26,8 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
   
     @Override
     public int save(User user) {
-        String sql = "insert into USERS values(?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into USERS (username, firstname, lastname, email, password, street, city, state, zipcode, phoneNumber, type, company)"
+                + "  values(?,?,?,?,?,?,?,?,?,?,?,?)";
         Connection conToUse = null;
         PreparedStatement ps = null;
         int status = 0;
@@ -56,7 +57,8 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
 
     @Override
     public User getUser(String username, String password) {
-        String sql = "select U.username, U.password, U.firstname, U.lastname, U.street, U.city, U.state, U.zipcode, U.phoneNumber, U.email, U.type, U.company"
+        String sql = "select U.username, U.password, U.firstname, U.lastname, U.street, U.city, U.state, U.zipcode, U.phoneNumber, U.email, U.type, U.company,"
+                + "U.eBookLendPeriod"
                         + "   from USERS U "
                         + "   where U.username = '" + username + "'"
                         + "   and U.password = '" + password + "'";
@@ -82,6 +84,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
               String email = res.getString("email");
               String type = res.getString("type");
               String company = res.getString("company");
+              int eBookLendPeriod = res.getInt("eBookLendPeriod");
               user.setUsername(user_name);
               user.setPassword(pass_word);
               user.setFirstName(firstname);
@@ -94,6 +97,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
               user.setEmail(email);
               user.setType(type);
               user.setCompany(company);
+              user.setEBookLendPeriod(eBookLendPeriod);
               count++;
             }
             if (count != 1) {

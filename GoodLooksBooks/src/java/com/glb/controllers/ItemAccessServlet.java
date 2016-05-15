@@ -2,7 +2,9 @@ package com.glb.controllers;
 
 import com.glb.constants.UserTypes;
 import com.glb.factories.ServiceFactory;
+import static com.glb.helpers.Helpers.createReturnTag;
 import static com.glb.helpers.Helpers.goToSignIn;
+import static com.glb.helpers.Helpers.outputToHtml;
 import static com.glb.helpers.Helpers.println;
 import com.glb.objects.Book;
 import com.glb.objects.User;
@@ -66,29 +68,37 @@ public class ItemAccessServlet extends HttpServlet {
    
    protected void doBorrow(HttpServletRequest request, HttpServletResponse response)
            throws ServletException, IOException {
-      System.out.println("INSIDE DO BORROW");
+      HttpSession session = request.getSession();
+      User user = (User)session.getAttribute("user");
+      String isbn = request.getParameter("isbn");
+      if (user == null) {
+          goToSignIn(request, response);
+          return;
+      }
+      if(user.getType().equalsIgnoreCase(UserTypes.CUSTOMER.toString())){
+          bookService.addBookToUserItems(user.getUsername(), isbn); 
+      }
+      outputToHtml(response, "Item checked out successfully. " + createReturnTag("Return", "BookDescriptionServlet?isbn=" + isbn));
+      String url = "/customerFullCatalog.jsp";
+      RequestDispatcher dispatcher = request.getRequestDispatcher(url);
+      dispatcher.forward(request, response); 
    }
    
+   // TODO. Implement me
    protected void doHold(HttpServletRequest request, HttpServletResponse response)
            throws ServletException, IOException {
-      processRequest(request, response);
+      //processRequest(request, response);
    }
    
+   // TODO. Implement me
    protected void doReserve(HttpServletRequest request, HttpServletResponse response)
            throws ServletException, IOException {
       HttpSession session = request.getSession();
-        User user = (User)session.getAttribute("user");
-        if (user == null) {
-            goToSignIn(request, response);
-            return;
-        }
-        if(user.getType().equalsIgnoreCase(UserTypes.CUSTOMER.toString())){     
-            String isbn = request.getParameter("isbn");
-            bookService.addBookToUserItems(user.getUsername(), isbn); 
-        }
-        String url = "/customerFullCatalog.jsp";
-        RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-        dispatcher.forward(request, response); 
+      User user = (User)session.getAttribute("user");
+      if (user == null) {
+          goToSignIn(request, response);
+          return;
+      }
    }
 
    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

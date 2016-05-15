@@ -1,6 +1,7 @@
 package com.glb.daos;
 
 import com.glb.constants.CategoryMap;
+import com.glb.factories.ServiceFactory;
 import static com.glb.helpers.Helpers.getTagFromXmlStr;
 import static com.glb.helpers.Helpers.*;
 import java.sql.PreparedStatement;
@@ -15,6 +16,8 @@ import com.glb.objects.Item;
 import com.glb.objects.Review;
 import com.glb.objects.Ticket;
 import com.glb.objects.User;
+import com.glb.services.UserService;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -192,6 +195,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 Map<String, Review> reviews = getAllReviewsForBook(isbn);
                 book.setReviews(reviews);
                 book.setSampleUrl(rs.getString("sampleUrl"));
+                book.setType(rs.getString("type"));
                 //book.setIsBanned(rs.getInt("isBanned")==1?true:false);
             }
         } catch (SQLException ex) {
@@ -209,15 +213,29 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         PreparedStatement preparedStmt = null;
         String sql = null;
         int status = 0;
+        Book book = null;
+        User user = null;
+        UserService userService = ServiceFactory.getUserService();
         try {
             conToUse = getConnection();
             if (conToUse == null)
                 System.out.println("conToUse == null");
-            
-            sql = "INSERT into CHECKED_OUT(username, isbn, startDate) values(?,?)";
+            user = userService.getUser(username);
+            book = getBookByIsbn(isbn);
+            int lendPeriod = 0;
+            // TODO. Add other book types
+            switch (book.getType()) {
+               case "eBook": lendPeriod = user.getEBookLendPeriod();
+                             break;
+            }
+            Timestamp startDate = new Timestamp(new Date().getTime());
+            Timestamp endDate = addDays(lendPeriod, startDate);
+            sql = "insert into CHECKED_OUT(username, isbn, startDate, endDate) values(?,?,?,?)";
             preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
             preparedStmt.setString(1, username);
             preparedStmt.setString(2, isbn);
+            preparedStmt.setTimestamp(3, startDate);
+            preparedStmt.setTimestamp(4, endDate);
             status = preparedStmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -711,7 +729,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
           int copiesLeft = 0;
           sql = "select copiesLeft from BOOKS where isbn = ?";
           ps.setString(1, isbn);
-          rs = ps.executeQuery(sql);
+          rs = ps.executeQuery();
           while (rs.next()) {
             copiesLeft = rs.getInt("copiesLeft");
           }

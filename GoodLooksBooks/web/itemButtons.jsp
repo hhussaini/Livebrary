@@ -22,7 +22,7 @@
       </form>
    </c:when>
    <c:otherwise>
-      <button type="button" name = "button4" onclick="borrowFunction()" class="btn btn-primary">Borrow</button> <br>
+      <button type="button" name = "button4" onclick="borrowItem()" class="btn btn-primary">Borrow</button> <br>
    </c:otherwise>
 </c:choose>
       

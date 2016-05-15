@@ -2,6 +2,7 @@ package com.glb.helpers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -90,6 +91,18 @@ public class Helpers {
     
     public static String createReturnTag(String displayText, String link) {
         return "<a href=\"/GoodLooksBooks/" + link +"\">" + displayText + "</a>";
-    }
-    
+    }  
+
+   public static Long dayToMiliseconds(int days){
+       Long result = Long.valueOf(days * 24 * 60 * 60 * 1000);
+       return result;
+   }
+
+   public static Timestamp addDays(int days, Timestamp t1) {
+       if(days < 0){
+           return null;
+       }
+       Long miliseconds = dayToMiliseconds(days);
+       return new Timestamp(t1.getTime() + miliseconds);
+   }
 }

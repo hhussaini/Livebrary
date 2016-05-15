@@ -23,7 +23,8 @@
                                <h6>by</h6>
                                <h5>${item.author}</h5>
                            </a>
-                           <button type="button" name = "button2" onclick="downloadBook(${item.isbn})" class="btn btn-primary">Download</button> <br>
+                           <button type="button" onclick="downloadBook(${item.isbn})" class="btn btn-primary">Download</button> <br>
+                           <button type="button" onclick="returnBook(${item.isbn})" class="btn btn-primary">Return</button> <br>
                        </td>
                    </div>
                </td>  

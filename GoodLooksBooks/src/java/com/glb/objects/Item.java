@@ -14,6 +14,7 @@ import java.util.LinkedHashMap;
 public class Item implements Serializable, Comparable{
     private String isbn;
     private String title;
+    private String type;
     private String description;
     private double avgRating;
     private int numberOfRatings;
@@ -171,7 +172,15 @@ public class Item implements Serializable, Comparable{
         
         this.avgRating = (this.numberOfRatings > 0) ? (round((double)total / this.numberOfRatings)) : 0;
         this.reviews = reviews;
-    } 
+    }
+    
+    public String getType() {
+      return type;
+    }
+
+   public void setType(String type) {
+      this.type = type;
+   }
     
     public void updateOrderOfReviews(String username){
         List<String>usernameList = new ArrayList<>();
