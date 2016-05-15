@@ -71,17 +71,20 @@ public class ItemAccessServlet extends HttpServlet {
       HttpSession session = request.getSession();
       User user = (User)session.getAttribute("user");
       String isbn = request.getParameter("isbn");
+      int status = 0;
       if (user == null) {
           goToSignIn(request, response);
           return;
       }
       if(user.getType().equalsIgnoreCase(UserTypes.CUSTOMER.toString())){
-          bookService.addBookToUserItems(user.getUsername(), isbn); 
+          status = bookService.addBookToUserItems(user.getUsername(), isbn); 
       }
-      outputToHtml(response, "Item checked out successfully. " + createReturnTag("Return", "BookDescriptionServlet?isbn=" + isbn));
-      String url = "/customerFullCatalog.jsp";
-      RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-      dispatcher.forward(request, response); 
+      if (status == 1) {
+         outputToHtml(response, "Item checked out successfully. " + createReturnTag("Return", "BookDescriptionServlet?isbn=" + isbn));
+      }
+      else {
+         throw new ServletException("Error checking out item.");
+      }
    }
    
    // TODO. Implement me

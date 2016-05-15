@@ -78,7 +78,7 @@ public class UserMyItemsServlet extends HttpServlet {
         User user = (User)session.getAttribute("user");
         if(user != null){
            List<Book> myItemsList =  userService.getCheckedOutItems(user); 
-           session.setAttribute("userItemsList", myItemsList);
+           session.setAttribute("checkedOutItems", myItemsList);
         }
         else{
             goToSignIn(request, response);

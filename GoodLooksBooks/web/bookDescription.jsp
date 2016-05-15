@@ -53,12 +53,11 @@
                <br> 
                <h5 id="dateCreatedID">Date Created: ${itemClicked.date}</h5>
                <br> 
-               <h5 id="copiesAvailableID">Copies Available: ${itemClicked.numOfDownloads}</h5>
+               <h5 id="copiesAvailableID">Copies Available: ${itemClicked.copiesLeft}</h5>
                <br> 
                <h5 id="availableFormatsID">Available Formats: Kindle</h5>
                <br> 
                <h5 id="languageID" value = "${itemClicked.language}">Language: ${itemClicked.language}</h5>
-               <br> <input type="hidden" name = "isbn" id = "isbn" value="${itemClicked.isbn}" </h5>
             </div>
             <div class="col-xs-6 col-sm-5 bookDescriptionPictures">
                <img src = ${itemClicked.imageUrl} class="img-rounded" alt="Andersonville: A Story of Rebel Military Prisons" width="250" height="250">

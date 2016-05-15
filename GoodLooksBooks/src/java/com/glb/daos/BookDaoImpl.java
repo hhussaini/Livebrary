@@ -187,6 +187,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 book = new Book();
                 book.setIsbn(rs.getString("isbn"));
                 book.setTitle(rs.getString("title"));
+                book.setCopiesLeft(rs.getInt("copiesLeft"));
                 book.setImageUrl(rs.getString("imageUrl"));
                 book.setAuthor(rs.getString("author"));
                 book.setDescription(rs.getString("description"));
@@ -237,11 +238,45 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             preparedStmt.setTimestamp(3, startDate);
             preparedStmt.setTimestamp(4, endDate);
             status = preparedStmt.executeUpdate();
+            if (status == 1) {
+               status = changeItemQuantity(isbn, -1);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
             DbUtils.closeQuietly(preparedStmt);
+        }
+        return status;
+    }
+    
+    public int changeItemQuantity(String isbn, int quantityChange) {
+        String sql = "select copiesLeft from BOOKS where isbn = ?";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        int status = 0;
+        ResultSet rs = null;
+        try {
+            conToUse = getConnection();
+            ps = conToUse.prepareStatement(sql);
+            ps.setString(1, isbn);
+            rs = ps.executeQuery();
+            int oldCopiesLeft = 0;
+            while (rs.next()) {
+               oldCopiesLeft = rs.getInt("copiesLeft");
+            }
+            rs.close();
+            
+            int updatedCopiesLeft = oldCopiesLeft + quantityChange;
+            sql = "update BOOKS set copiesLeft = ? where isbn = ?";
+            ps = conToUse.prepareStatement(sql);
+            ps.setInt(1, updatedCopiesLeft);
+            ps.setString(2, isbn);
+            status = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(ps);
         }
         return status;
     }
