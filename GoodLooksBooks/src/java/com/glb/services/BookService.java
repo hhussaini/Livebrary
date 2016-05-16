@@ -6,6 +6,7 @@ import com.glb.objects.Item;
 import com.glb.objects.Review;
 import com.glb.objects.Ticket;
 import com.glb.objects.User;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +31,13 @@ public interface BookService {
     public int banBook(String isbn);
     public String getItemAccess(User user, Item item);
     public void checkExpiredCheckouts();
+    public void checkHolds();
     public int returnItem(String username, String isbn);
     public int editHoldEmail(String username, String email, String isbn);
+    public int suspendHold(String username, String isbn, int days);
+    public int cancelSuspension(String username, String isbn);
+    public Timestamp getHoldSuspensionDate(String username, String isbn);
+    public int editHoldAutoCheckout(String username, String autoCheckout, String isbn);
+    public int removeHold(String username, String isbn);
     // public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description);
 }  

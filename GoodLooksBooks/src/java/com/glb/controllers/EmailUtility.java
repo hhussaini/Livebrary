@@ -1,5 +1,6 @@
 package com.glb.controllers;
  
+import static com.glb.helpers.Helpers.isNullOrEmpty;
 import java.util.Date;
 import java.util.Properties;
 import javax.mail.Authenticator;
@@ -24,6 +25,12 @@ public class EmailUtility {
             MessagingException {
         // sets SMTP server properties
         Properties properties = new Properties();
+        if (isNullOrEmpty(host)) {
+           host = "smtp.gmail.com";
+        }
+        if (isNullOrEmpty(port)) {
+           port = "587";
+        }
         properties.put("mail.smtp.host", host);
         properties.put("mail.smtp.port", port);
         properties.put("mail.smtp.auth", "true");

@@ -63,6 +63,7 @@ public class UserMyItemsServlet extends HttpServlet {
         //processRequest(request, response); 
         // Check for any expired checkouts
         bookService.checkExpiredCheckouts();
+        bookService.checkHolds();
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
         if(user != null){

@@ -59,6 +59,7 @@ public class BookDescriptionServlet extends HttpServlet {
         println("Inside BookDescriptionServlet.doGet");
         // Check for any expired checkouts
         bookService.checkExpiredCheckouts();
+        bookService.checkHolds();
         //processRequest(request, response);
         String isbn = request.getParameter("isbn"); 
         Book book = bookService.getBookByIsbn(isbn);
