@@ -7,17 +7,17 @@
 <button type="button" name = "button1" onclick="sampleItem('${itemClicked.sampleUrl}')" class="btn btn-primary">Sample</button>
 <br><br>
 <c:choose>
-   <c:when test="${itemAccess == 'reserve'}">
+   <c:when test="${itemAccess == 'Reserve'}">
       <button type="button" name = "button1" onclick="reserveItem()" class="btn btn-primary">Reserve</button> <br>
    </c:when>
-   <c:when test="${itemAccess == 'borrow'}">
+   <c:when test="${itemAccess == 'Borrow'}">
       <button type="button" name = "button2" onclick="borrowItem()" class="btn btn-primary">Borrow</button> <br>
    </c:when>
-   <c:when test="${itemAccess == 'hold'}">
+   <c:when test="${itemAccess == 'Hold'}">
       <button type="button" name = "button3" onclick="holdItem()" class="btn btn-primary">Hold</button> <br>
    </c:when>
    <c:when test="${itemAccess == 'isCheckedOut'}">
-      <form action="http://localhost:8080/GoodLooksBooks/UserMyItemsServlet">
+      <form action="http://localhost:8080/GoodLooksBooks/CustomerServlet">
          <input type="submit" class="btn btn-primary" value="Go to Checkouts">
       </form>
    </c:when>
@@ -36,7 +36,7 @@
    <input type="hidden" name="method" value="doReserve">
 </form>
 
-<form id="holdItemForm" action="ItemAccessServlet" method="doHold">
+<form id="holdItemForm" action="ItemAccessServlet" method="requestHold">
    <input type="hidden" name="isbn" value="${itemClicked.isbn}">
-   <input type="hidden" name="method" value="doHold">
+   <input type="hidden" name="method" value="requestHold">
 </form>

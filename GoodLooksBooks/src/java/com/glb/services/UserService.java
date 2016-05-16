@@ -15,6 +15,7 @@ public interface UserService {
     public int addToWishlist(User user, String isbn);
     public List<Book> getCheckedOutItems(User user);
     public List<Book> getOnHoldItems(User user);
+    public int putOnHold(String username, String isbn, String email, String autoCheckout);
     public int update(User user);
     public int deleteUser(String username);
 }

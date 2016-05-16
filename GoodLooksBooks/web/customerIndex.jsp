@@ -23,7 +23,7 @@
                <h1 class="jumbotron">Welcome ${user.username}!<br></h1>
                <ul id="tabs" class="nav nav-tabs">
                    <li class="active"><a href="#acct-sum" data-toggle="tab">Account at a glance</a></li>
-                   <!--<li><a href="#checked-out" data-toggle="tab">Current Collection</a></li>-->
+                   <li><a href="#checked-out" data-toggle="tab">Current Collection</a></li>
                    <li><a href="#on-hold" data-toggle="tab">On hold</a></li>
                </ul>
                <div id="tabContent" class="tab-content">
@@ -55,43 +55,23 @@
                                </tr>
                            </table>
                        </div>
-<!--                       <div class="tab-pane fade" id="checked-out">
-                       <%--<c:choose>--%>
-                           <%--<c:when test="${fn:length(checkedOutItems) > 0}">--%>
-                              <%--<jsp:include page="/checkedOutItems.jsp" />--%>
-                           <%--</c:when>--%>
-                           <%--<c:otherwise>--%>
+                       <div class="tab-pane fade" id="checked-out">
+                       <c:choose>
+                           <c:when test="${fn:length(checkedOutItems) > 0}">
+                              <jsp:include page="/checkedOutItems.jsp" />
+                           </c:when>
+                           <c:otherwise>
                                <div class="heading-box">
                                    <h2>You currently have no books checked out.</h2>
                                    <a href="SearchServlet"><h3>Browse some books!</h3></a>
                                </div>
-                           <%--</c:otherwise>--%>
-                       <%--</c:choose>--%>
-                   </div>-->
+                           </c:otherwise>
+                       </c:choose>
+                   </div>
                    <div class="tab-pane fade" id="on-hold">
                        <c:choose>
                            <c:when test="${fn:length(onHoldItems) > 0}">
-                               <table>
-                                   <tr>
-                                       <c:forEach var="item" items="${onHoldItems}" varStatus="status">
-                                           <c:if test="${status.index != 0 && status.index % 3 == 0}">
-                                           </tr>
-                                           <tr>
-                                           </c:if>
-                                           <td>
-                                               <div class="col-xs-6 col-md-3"> 
-                                                   <td> 
-                                                       <a href = "BookDescriptionServlet?isbn=${item.isbn}" id="${item.isbn}" class="thumbnail">
-                                                           <img onload="validateImgUrl(this.id)" name="bookImage" id="book${count}" class="bookImage" src="${item.imageUrl}" alt="${item.title}" style="width: 200px;">
-                                                           <c:out value="${item.title}"/> <br> <br>
-                                                           <c:out value="by ${item.author}"/>
-                                                       </a>
-                                                   </td>
-                                               </div>
-                                           </td>  
-                                       </c:forEach>
-                                   </tr>
-                               </table>
+                              <jsp:include page="/heldItems.jsp" />
                            </c:when>
                            <c:otherwise>
                                <div class="heading-box">

@@ -785,6 +785,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
       ResultSet rs = null;
       PreparedStatement ps = null;
       String isbn = item.getIsbn();
+      String access = "Borrow";
       // First check if the user already has this item checked out
       String sql = "select username from CHECKED_OUT where isbn = ? and username = ? and expired = \'n\'";
       try {
@@ -798,26 +799,29 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             count++;
           }
           if (count > 0) {
-            return "isCheckedOut";
+            access = "isCheckedOut";
+            return access;
           }
           rs.close();
           // Second, check if there are any copies of this item left
           int copiesLeft = 0;
           sql = "select copiesLeft from BOOKS where isbn = ?";
+          ps = conToUse.prepareStatement(sql);
           ps.setString(1, isbn);
           rs = ps.executeQuery();
           while (rs.next()) {
             copiesLeft = rs.getInt("copiesLeft");
           }
-          if (copiesLeft == 0) {
-            return "Hold";
+          if (copiesLeft <= 0) {
+            access = "Hold";
+            return access;
           }
       } catch (SQLException ex) {
           Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
       }finally {
           DbUtils.closeQuietly(ps);
       }
-      return "Borrow";
+      return access;
    }
 
    @Override

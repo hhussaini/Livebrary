@@ -7,6 +7,7 @@ import static com.glb.helpers.Helpers.goToSignIn;
 import static com.glb.helpers.Helpers.outputToHtml;
 import static com.glb.helpers.Helpers.println;
 import com.glb.objects.Book;
+import com.glb.objects.Item;
 import com.glb.objects.User;
 import com.glb.services.BookService;
 import com.glb.services.UserService;
@@ -44,6 +45,8 @@ public class ItemAccessServlet extends HttpServlet {
         method = (method == null) ? "" : method;
         if (method.equals("doBorrow")){
             doBorrow(request, response);
+        } else if (method.equals("requestHold")) {
+            requestHold(request, response);
         } else if (method.equals("doHold")) {
             doHold(request, response);
         } else if (method.equals("doReserve")) {
@@ -87,8 +90,7 @@ public class ItemAccessServlet extends HttpServlet {
       }
    }
    
-   // TODO. Implement me
-   protected void doHold(HttpServletRequest request, HttpServletResponse response)
+   protected void requestHold(HttpServletRequest request, HttpServletResponse response)
            throws ServletException, IOException {
       HttpSession session = request.getSession();
       User user = (User)session.getAttribute("user");
@@ -96,6 +98,29 @@ public class ItemAccessServlet extends HttpServlet {
       if (user == null) {
           goToSignIn(request, response);
           return;
+      }
+      Item item = bookService.getBookByIsbn(isbn);
+      session.setAttribute("itemHeld", item);
+      RequestDispatcher dispatcher = request.getRequestDispatcher("/requestHold.jsp");
+      dispatcher.forward(request, response); 
+   }
+   
+   protected void doHold(HttpServletRequest request, HttpServletResponse response)
+           throws ServletException, IOException {
+      HttpSession session = request.getSession();
+      User user = (User)session.getAttribute("user");
+      String isbn = request.getParameter("isbn");
+      String email = request.getParameter("email");
+      String automaticCheckout = request.getParameter("automaticCheckout");
+      if (user == null) {
+          goToSignIn(request, response);
+          return;
+      }
+      int status = userService.putOnHold(user.getUsername(), isbn, email, automaticCheckout);
+      if (status == 1) {
+        outputToHtml(response, "Item put on hold successfully. " + createReturnTag("Return", "BookDescriptionServlet?isbn=" + isbn));
+      } else {
+        throw new ServletException("Item is already on hold.");
       }
    }
    

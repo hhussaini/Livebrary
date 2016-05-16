@@ -17,4 +17,5 @@ public interface UserDao extends JdbcDaoSupport {
     public List<Book> getOnHoldItems(User user);
     public int update(User user);
     public int deleteUser(String username);
+    public int putOnHold(String username, String isbn, String email, String automaticCheckout);
 }

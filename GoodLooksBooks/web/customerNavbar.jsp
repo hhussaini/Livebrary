@@ -11,7 +11,7 @@
             </a>
         </div>
         <ul class="nav navbar-nav" style="font-weight: bold;">
-            <li><a href="customerIndex.jsp">Home</a></li>
+            <li><a href="CustomerServlet">Home</a></li>
             <li><a href="about.jsp">About</a></li>
             <li><a href="SearchServlet">Full Catalog</a></li>
             <li><a href="account.jsp">Account</a></li>

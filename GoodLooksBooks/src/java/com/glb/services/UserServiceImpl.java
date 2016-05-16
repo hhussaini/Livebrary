@@ -343,4 +343,27 @@ public class UserServiceImpl implements UserService {
 
       return user;
    }
+
+   @Override
+   public int putOnHold(String username, String isbn, String email, String autoCheckout) {
+      Connection conToUse = null;
+      int status = 0;
+      // get the connection from util class
+      // set the transaction to con & pass con to dao
+      try {
+          conToUse = ConnectionUtil.getConnection();
+          UserDao userDao = DaoFactory.getUserDao();
+          userDao.setConnection(conToUse);
+          status = userDao.putOnHold(username, isbn, email, autoCheckout);
+      } catch (ResourceHelperException e) {
+          // TODO Auto-generated catch block
+          System.out.println("ResourceHelperException");
+          DbUtils.rollbackAndCloseQuietly(conToUse);
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, e);
+      } finally {
+          DbUtils.closeQuietly(conToUse);
+      }
+
+      return status;
+   }
 }

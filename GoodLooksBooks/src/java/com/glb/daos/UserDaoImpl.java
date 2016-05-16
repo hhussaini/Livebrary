@@ -333,7 +333,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         ResultSet res = null;
         try {
             conToUse = getConnection();
-            String sql = "SELECT isbn from RESERVED WHERE username = ?";
+            String sql = "SELECT isbn from HOLDS WHERE username = ?";
             ps = (PreparedStatement) conToUse.prepareStatement(sql);
             ps.setString(1, user.getUsername());
             res = ps.executeQuery();
@@ -520,5 +520,30 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
       }
 
       return null;
+   }
+
+   @Override
+   public int putOnHold(String username, String isbn, String email, String automaticCheckout) {
+      Connection conToUse = null;
+      PreparedStatement ps = null;
+      String sql = "insert into HOLDS (username, isbn, email, autoCheckout) values (?,?,?,?)";
+      int status = 0;
+      try {
+          conToUse = getConnection();
+          ps = (PreparedStatement) conToUse.prepareStatement(sql);
+          ps.setString(1, username);
+          ps.setString(2, isbn);
+          ps.setString(3, email);
+          ps.setString(4, automaticCheckout);
+          status = ps.executeUpdate();
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+          status = -1;
+      }
+      finally {
+          ConnectionUtil.closeStatement(ps);
+      }
+
+      return status;
    }
 }
