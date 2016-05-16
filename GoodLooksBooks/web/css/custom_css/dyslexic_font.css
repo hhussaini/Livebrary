@@ -9,6 +9,6 @@ font-weight: bold;
 src: url("font/OpenDyslexicAtla-Bold.otf") format("opentype");
 }
 
-body {
+body, .glb-page {
     font-family: dyslexic;
 }

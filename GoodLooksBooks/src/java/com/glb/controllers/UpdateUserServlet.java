@@ -91,6 +91,8 @@ public class UpdateUserServlet extends HttpServlet {
         String zipcode = request.getParameter("zipcode");
         String phoneNumber = request.getParameter("phoneNumber");
         String email = request.getParameter("email");        
+        String dyslexic = request.getParameter("dyslexic"); // true or false
+        String contrast = request.getParameter("contrast"); // high or low
        
         user.setFirstName(firstName);
         user.setLastName(lastName);
@@ -100,6 +102,8 @@ public class UpdateUserServlet extends HttpServlet {
         user.setZipcode(zipcode);
         user.setPhoneNumber(phoneNumber);
         user.setEmail(email);
+        user.setContrast(contrast);
+        user.setDyslexic(dyslexic);
         
         RequestDispatcher dispatcher = null;
         if (isNull(firstName, lastName, street, city, state, zipcode, phoneNumber, email)) {

@@ -66,6 +66,8 @@ public class CustomerServlet extends HttpServlet {
            goToSignIn(request, response);
            return;
         }
+        
+        
         // Check for any expired checkouts
         bookService.checkExpiredCheckouts();
         List<Book> checkedOut = userService.getCheckedOutItems(user);

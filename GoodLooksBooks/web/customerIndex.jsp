@@ -12,8 +12,6 @@
    <jsp:include page="/header.jsp" />
    <script src="js/bootstrap-tabcollapse.js"></script>
    <script src="js/customerScript.js"></script>
-   <link rel="stylesheet" href="css/custom_css/high_contrast.css">
-   <link rel="stylesheet" href="css/custom_css/dyslexic_font.css">
    </head>
    <body>
        <jsp:include page="/customerNavbar.jsp" />

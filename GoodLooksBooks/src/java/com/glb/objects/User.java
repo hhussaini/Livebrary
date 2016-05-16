@@ -25,6 +25,8 @@ public class User implements Serializable{
     private String type;
     private String company;
     private int eBookLendPeriod;
+    private String contrast;
+    private String dyslexic;
     
     public User(){}
 
@@ -151,4 +153,22 @@ public class User implements Serializable{
    public void setEBookLendPeriod(int eBookLendPeriod) {
       this.eBookLendPeriod = eBookLendPeriod;
    }
+
+    public String getContrast() {
+        return contrast;
+    }
+
+    public void setContrast(String contrast) {
+        this.contrast = contrast;
+    }
+
+    public String getDyslexic() {
+        return dyslexic;
+    }
+
+    public void setDyslexic(String dyslexic) {
+        this.dyslexic = dyslexic;
+    }
+   
+   
 }

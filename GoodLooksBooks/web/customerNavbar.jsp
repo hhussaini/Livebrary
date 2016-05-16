@@ -24,11 +24,6 @@
                     <!--<li><a href="UserMyItemsServlet">My Items</a></li>-->
                     <li><a href="WishlistServlet">My Wishlist</a></li>
                     <li role="separator" class="divider"></li>
-                    <form action="AccessibilityServlet"> 
-                        <input type="checkbox" name="dyslexic">Dyslexic<BR> 
-                        <input type="checkbox" name="contrast">High Contrast<BR>
-                        <input type="submit" value="submit">
-                    </form>
                     <li><a href="SignOutServlet">Sign Out</a></li>
                 </ul>
             </li>
