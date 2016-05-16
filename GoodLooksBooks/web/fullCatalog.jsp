@@ -63,31 +63,32 @@
                             </tr>
                         </table>
                     </div>
-                   
-             
-                 <div id="cats-view" class="dropdown">
-                    <jsp:include page="/categoryForm.jsp" />    
-                </div>  
-                </form>
-                
-                <form id="sortRadioButtons" name="sortRadioButtons" action="SortItemsServlet" method = "post">
-                <div>
-                     <jsp:include page="/sortForm.jsp" /> 
-                </div>  
-                </form>
-                
-                <ul class="nav nav-pills">
                     
-                    <li class="active"><a href="#grid-view" data-toggle="tab"><img id="grid-tab" src="assets/glyphicons-157-show-thumbnails.png"></a></li>
-                    <li><a href="#list-view" data-toggle="tab"><img id="list-tab" src="assets/glyphicons-530-list-alt.png"></a></li>
-                    
-                </ul>
-                <div class="tab-content">
-                    <div id="grid-view" class="tab-pane fade in active">
-                        <jsp:include page="/searchGridView.jsp" />
-                    </div>
-                    <div id="list-view" class="tab-pane fade">
-                        <jsp:include page="/searchListView.jsp" />
+                    <div id="cats-view" class="dropdown">
+                        <jsp:include page="/categoryForm.jsp" />    
+                    </div>  
+                </form>
+                <div class="col-md-2">
+                    <form id="sortRadioButtons" name="sortRadioButtons" action="SortItemsServlet" method = "post">
+                        <div>
+                            <jsp:include page="/sortForm.jsp" /> 
+                        </div>  
+                    </form>
+                </div>
+                <div class="col-md-10">
+                    <ul class="nav nav-pills">
+                        
+                        <li class="active"><a href="#grid-view" data-toggle="tab"><img id="grid-tab" src="assets/glyphicons-157-show-thumbnails.png"></a></li>
+                        <li><a href="#list-view" data-toggle="tab"><img id="list-tab" src="assets/glyphicons-530-list-alt.png"></a></li>
+                        
+                    </ul>
+                    <div class="tab-content">
+                        <div id="grid-view" class="tab-pane fade in active">
+                            <jsp:include page="/searchGridView.jsp" />
+                        </div>
+                        <div id="list-view" class="tab-pane fade">
+                            <jsp:include page="/searchListView.jsp" />
+                        </div>
                     </div>
                 </div>
             </div><!-- /.col-xs-12 main -->
