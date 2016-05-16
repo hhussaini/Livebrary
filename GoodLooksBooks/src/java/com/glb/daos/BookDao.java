@@ -6,6 +6,7 @@ import com.glb.objects.Item;
 import com.glb.objects.Review;
 import com.glb.objects.Ticket;
 import com.glb.objects.User;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,4 +37,7 @@ public interface BookDao extends JdbcDaoSupport {
     public void checkExpiredCheckouts();
     public int returnItem(String username, String isbn);
     public int editHoldEmail(String username, String email, String isbn);
+    public int suspendHold(String username, String isbn, int days);
+    public int cancelSuspension(String username, String isbn);
+    public Timestamp getHoldSuspensionDate(String username, String isbn);
 }

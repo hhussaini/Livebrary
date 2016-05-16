@@ -851,7 +851,6 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
       Connection conToUse = null;
       PreparedStatement ps = null;
       int status = 0;
-      ResultSet rs = null;
       try {
           conToUse = getConnection();
           ps = conToUse.prepareStatement(sql);
@@ -865,5 +864,72 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
           DbUtils.closeQuietly(ps);
       }
       return status;
+   }
+
+   @Override
+   public int suspendHold(String username, String isbn, int days) {
+      String sql = "update HOLDS set suspended = \'y\', suspendDate = ? where username = ? and isbn = ? and suspended = \'n\'";
+      Connection conToUse = null;
+      PreparedStatement ps = null;
+      int status = 0;
+      try {
+          conToUse = getConnection();
+          ps = conToUse.prepareStatement(sql);
+          Timestamp startDate = new Timestamp(new Date().getTime());
+          Timestamp endDate = addDays(days, startDate);
+          ps.setTimestamp(1, endDate);
+          ps.setString(2, username);
+          ps.setString(3, isbn);
+          status = ps.executeUpdate();
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          DbUtils.closeQuietly(ps);
+      }
+      return status;
+   }
+
+   @Override
+   public int cancelSuspension(String username, String isbn) {
+      String sql = "update HOLDS set suspended = \'n\' where username = ? and isbn = ? and suspended = \'y\'";
+      Connection conToUse = null;
+      PreparedStatement ps = null;
+      int status = 0;
+      try {
+          conToUse = getConnection();
+          ps = conToUse.prepareStatement(sql);
+          ps.setString(1, username);
+          ps.setString(2, isbn);
+          status = ps.executeUpdate();
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          DbUtils.closeQuietly(ps);
+      }
+      return status;
+   }
+
+   @Override
+   public Timestamp getHoldSuspensionDate(String username, String isbn) {
+      Connection conToUse = null;
+      ResultSet rs = null;
+      PreparedStatement ps = null;
+      Timestamp date = null;
+      String sql = "select suspendDate from HOLDS where isbn = ? and username = ? and suspended = \'y\'";
+      try {
+          conToUse = getConnection();
+          ps = conToUse.prepareStatement(sql);
+          ps.setString(1, isbn);
+          ps.setString(2, username);
+          rs = ps.executeQuery();
+          while (rs.next()) {
+            date = rs.getTimestamp("suspendDate");
+          }
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      }finally {
+          DbUtils.closeQuietly(ps);
+      }
+      return date;
    }
 }

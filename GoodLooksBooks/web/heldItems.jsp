@@ -32,7 +32,7 @@
                            </button>
                            <div class="dropdown-menu">
                               <a class="dropdown-item" href="#" onclick="showEditEmailModal()">Edit email</a>
-                              <a class="dropdown-item" href="#" onclick="downloadBook(${item.isbn})">Suspend Hold</a>
+                              <a class="dropdown-item" href="#" onclick="showSuspendModal()">Suspend Hold</a>
                               <a class="dropdown-item" href="#" onclick="downloadBook(${item.isbn})">Auto checkout</a>
                               <a class="dropdown-item" href="#" onclick="downloadBook(${item.isbn})">Remove</a>
                            </div>
@@ -56,6 +56,38 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <input type="hidden" name="isbn" value ="${item.isbn}" />
                         <input type="hidden" name="method" value ="editEmail" />
+                      </form>
+                    </div>
+                  </div>
+               </div>
+               <div class="modal fade" id="suspendModal" tabindex="-1" role="dialog" aria-labelledby="suspendModal" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="contactModal">Suspend Hold</h4>
+                      </div>
+                      <form id="holdsForm" name="holdsForm" action="HoldsServlet" method="suspendHold">  
+                        <div class="modal-body">
+                           <p>Title: ${item.title}</p>
+                           <div class="form-group">
+                            <label for="duration">Suspend hold for:</label>
+                            <div class = "controls regControl">
+                                 <select name="duration" class="form-control" id="duration" name="duration">
+                                    <option value="Cancel">Cancel Suspension</option>
+                                    <option value="7">7 Days</option>
+                                    <option value="14">14 Days</option>
+                                    <option value="21">21 Days</option>
+                                 </select>
+                            </div>
+                           </div>
+                       </div>
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <input type="hidden" name="isbn" value ="${item.isbn}" />
+                        <input type="hidden" name="method" value ="suspendHold" />
                       </form>
                     </div>
                   </div>

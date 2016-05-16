@@ -14,6 +14,7 @@ import com.glb.objects.Review;
 import com.glb.objects.Ticket;
 import com.glb.objects.User;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.dbutils.DbUtils;
@@ -447,5 +448,59 @@ public class BookServiceImpl implements BookService {
       }
 
       return status;
+   }
+
+   @Override
+   public int suspendHold(String username, String isbn, int days) {
+      Connection conn = null;
+      int status = 0;
+      try {
+          conn = ConnectionUtil.getConnection();
+          BookDao bookDao = DaoFactory.getBookDao();
+          bookDao.setConnection(conn);
+          status = bookDao.suspendHold(username, isbn, days);
+      } catch (ResourceHelperException ex) {
+          Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          ConnectionUtil.closeConnection(conn);
+      }
+
+      return status;
+   }
+
+   @Override
+   public int cancelSuspension(String username, String isbn) {
+      Connection conn = null;
+      int status = 0;
+      try {
+          conn = ConnectionUtil.getConnection();
+          BookDao bookDao = DaoFactory.getBookDao();
+          bookDao.setConnection(conn);
+          status = bookDao.cancelSuspension(username, isbn);
+      } catch (ResourceHelperException ex) {
+          Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          ConnectionUtil.closeConnection(conn);
+      }
+
+      return status;
+   }
+   
+   @Override
+   public Timestamp getHoldSuspensionDate(String username, String isbn) {
+      Connection conn = null;
+      Timestamp date = null;
+      try {
+          conn = ConnectionUtil.getConnection();
+          BookDao bookDao = DaoFactory.getBookDao();
+          bookDao.setConnection(conn);
+          date = bookDao.getHoldSuspensionDate(username, isbn);
+      } catch (ResourceHelperException ex) {
+          Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          ConnectionUtil.closeConnection(conn);
+      }
+
+      return date;
    }
 }

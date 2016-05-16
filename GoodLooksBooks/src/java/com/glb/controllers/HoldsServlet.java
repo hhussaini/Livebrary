@@ -39,6 +39,8 @@ public class HoldsServlet extends HttpServlet {
         method = (method == null) ? "" : method;
         if (method.equals("editEmail")){
             editEmail(request, response);
+        } else if(method.equals("suspendHold")) {
+            suspendHold(request, response);
         } else {
             super.service(request, response);
         } 
@@ -57,6 +59,37 @@ public class HoldsServlet extends HttpServlet {
       }
       bookService.editHoldEmail(user.getUsername(), email, isbn);
       outputToHtml(response, "Your email has successfully been changed. " + createReturnTag("Return", "CustomerServlet"));
+   }
+    
+    protected void suspendHold(HttpServletRequest request, HttpServletResponse response)
+           throws ServletException, IOException {
+      HttpSession session = request.getSession();
+      User user = (User)session.getAttribute("user");
+      if (user == null) {
+          goToSignIn(request, response);
+          return;
+      }
+      String isbn = request.getParameter("isbn");
+      String durationStr = request.getParameter("duration");
+      int status = 0;
+      if (durationStr.equals("Cancel")) {
+         status = bookService.cancelSuspension(user.getUsername(), isbn);
+         if (status == 1) {
+            outputToHtml(response, "Your suspension has successfully been cancelled. " + createReturnTag("Return", "CustomerServlet"));
+         } else {
+            outputToHtml(response, "There is no suspension on this item. " + createReturnTag("Return", "CustomerServlet"));
+         }
+      } else {
+         int duration = Integer.parseInt(durationStr);
+         status = bookService.suspendHold(user.getUsername(), isbn, duration);
+         if (status == 1) {
+            outputToHtml(response, "Your suspension has successfully been placed. " + createReturnTag("Return", "CustomerServlet"));
+         } else {
+            outputToHtml(response, "Suspension not placed. There is already a suspension on this item until " + 
+                    bookService.getHoldSuspensionDate(user.getUsername(), isbn) + " " +
+                    createReturnTag("Return", "CustomerServlet"));
+         }
+      }
    }
     
    /**
