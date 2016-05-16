@@ -1,6 +1,7 @@
 package com.glb.daos;
 
 import com.glb.constants.CategoryMap;
+import com.glb.controllers.EmailUtility;
 import com.glb.factories.ServiceFactory;
 import static com.glb.helpers.Helpers.getTagFromXmlStr;
 import static com.glb.helpers.Helpers.*;
@@ -25,6 +26,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.MessagingException;
+import javax.servlet.ServletContext;
 import org.apache.commons.dbutils.DbUtils;
 
 /**
@@ -233,6 +236,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             }
             Timestamp startDate = new Timestamp(new Date().getTime());
             Timestamp endDate = addDays(lendPeriod, startDate);
+            // Remove the hold on the item if it exists
+            removeHold(username, isbn);
             sql = "insert into CHECKED_OUT(username, isbn, startDate, endDate) values(?,?,?,?)";
             preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
             preparedStmt.setString(1, username);
@@ -892,7 +897,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
 
    @Override
    public int cancelSuspension(String username, String isbn) {
-      String sql = "update HOLDS set suspended = \'n\' where username = ? and isbn = ? and suspended = \'y\'";
+      String sql = "update HOLDS set suspended = \'n\', suspendDate = null where username = ? and isbn = ? and suspended = \'y\'";
       Connection conToUse = null;
       PreparedStatement ps = null;
       int status = 0;
@@ -973,5 +978,80 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
           DbUtils.closeQuietly(ps);
       }
       return status;
+   }
+   
+   @Override
+   public void checkHolds() {
+      Connection conToUse = null;
+      ResultSet rs = null;
+      PreparedStatement ps = null;
+      String sql = "select * from HOLDS where suspended = \'n\'";
+      String doNotReplyEmail = "donotreplyglb@gmail.com";
+      String doNotReplyPass = "donotreplyglb308";
+      try {
+          conToUse = getConnection();
+          ps = conToUse.prepareStatement(sql);
+          rs = ps.executeQuery();
+          String isbn, username, email, autoCheckout, title;
+          Timestamp holdUntil;
+          int copiesLeft, status = 0;
+          Book book = null;
+          Timestamp today = new Timestamp(new Date().getTime());
+          while (rs.next()) {
+            isbn = rs.getString("isbn");
+            username = rs.getString("username");
+            email = rs.getString("email");
+            autoCheckout = rs.getString("autoCheckout");
+            book = getBookByIsbn(isbn);
+            title = book.getTitle();
+            copiesLeft = book.getCopiesLeft();
+            // Check if the hold has expired
+            if (rs.getTimestamp("holdUntil") != null) {
+               holdUntil = rs.getTimestamp("holdUntil");
+               if (today.after(holdUntil)) {
+                  removeHold(username, isbn);
+                  try {
+                     EmailUtility.sendEmail(null, null, doNotReplyEmail, doNotReplyPass, email, "Your Hold has been Removed!",
+                             "Your held item, \'"+ title + "\' has been available and held for three days so it has expired. The hold has been removed.");
+                  } catch (MessagingException ex) {
+                     Logger.getLogger(BookDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                  }
+               }
+            }
+            // Means the book is now available
+            if (copiesLeft > 0) {
+               if (autoCheckout.equals("y")) {
+                  removeHold(username, isbn);
+                  status = addBookToUserItems(username, isbn);
+                  if (status == 1) {
+                     try {
+                        EmailUtility.sendEmail(null, null, doNotReplyEmail, doNotReplyPass, email, "Your Held Item has been Checked Out!",
+                                "Your held item, \'"+ title + "\' has become available and has been added to your checked out items.");
+                     } catch (MessagingException ex) {
+                        Logger.getLogger(BookDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                     }
+                  }
+               } else {
+                  try {
+                     sql = "update HOLDS set holdUntil = ? where isbn = ? and username = ?";
+                     ps = conToUse.prepareStatement(sql);
+                     Timestamp holdUntilDate = addDays(3, today);
+                     ps.setTimestamp(1, holdUntilDate);
+                     ps.setString(2, isbn);
+                     ps.setString(3, username);
+                     ps.executeUpdate();
+                     EmailUtility.sendEmail(null, null, doNotReplyEmail, doNotReplyPass, email, "Your Held Item is Available!",
+                             "Your held item, \'"+ title + "\' has become available and will be held for you for the next 3 days.");
+                     } catch (MessagingException ex) {
+                        Logger.getLogger(BookDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                     }
+               }
+            }
+          }
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      }finally {
+          DbUtils.closeQuietly(ps);
+      }
    }
 }

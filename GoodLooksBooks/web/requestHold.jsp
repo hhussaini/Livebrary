@@ -38,7 +38,7 @@
                   <div class="form-group">
                      <label class = "control-label regLabel" for="email">Email:</label>
                      <div class = "controls regControl">
-                         <input type="text" class="form-control" id="email" name="email">
+                         <input type="text" class="form-control" id="email" name="email" required>
                      </div>
                   </div>
                   <div class="form-group">

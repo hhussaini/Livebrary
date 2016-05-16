@@ -68,7 +68,7 @@ public class ConnectionUtil {
      */
     private static Connection getConnectionOldWay() throws ResourceHelperException {
         Connection conn = null;
-        String dbURL = "jdbc:mysql://mysql2.cs.stonybrook.edu:3306/pmannarino";
+        String dbURL = "jdbc:mysql://mysql2.cs.stonybrook.edu:3306/pmannarino?zeroDateTimeBehavior=convertToNull";
         String usr = "pmannarino";
         String pass = "108060069";
         String driver = "com.mysql.jdbc.Driver";

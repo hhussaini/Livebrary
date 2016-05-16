@@ -539,4 +539,19 @@ public class BookServiceImpl implements BookService {
 
       return status;
    }
+   
+   @Override
+   public void checkHolds() {
+      Connection conn = null;
+      try {
+          conn = ConnectionUtil.getConnection();
+          BookDao bookDao = DaoFactory.getBookDao();
+          bookDao.setConnection(conn);
+          bookDao.checkHolds();
+      } catch (ResourceHelperException ex) {
+          Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          ConnectionUtil.closeConnection(conn);
+      }
+   }
 }

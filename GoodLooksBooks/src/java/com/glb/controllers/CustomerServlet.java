@@ -68,6 +68,7 @@ public class CustomerServlet extends HttpServlet {
         }
         // Check for any expired checkouts
         bookService.checkExpiredCheckouts();
+        bookService.checkHolds();
         List<Book> checkedOut = userService.getCheckedOutItems(user);
         session.setAttribute("checkedOutItems", checkedOut);
         List<Book> onHold = userService.getOnHoldItems(user);

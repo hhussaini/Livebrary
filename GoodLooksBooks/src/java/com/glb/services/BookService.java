@@ -31,6 +31,7 @@ public interface BookService {
     public int banBook(String isbn);
     public String getItemAccess(User user, Item item);
     public void checkExpiredCheckouts();
+    public void checkHolds();
     public int returnItem(String username, String isbn);
     public int editHoldEmail(String username, String email, String isbn);
     public int suspendHold(String username, String isbn, int days);
