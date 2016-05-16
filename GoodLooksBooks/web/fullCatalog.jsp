@@ -64,10 +64,23 @@
                         </table>
                     </div>
                     
-                    <div id="cats-view" class="dropdown">
-                        <jsp:include page="/categoryForm.jsp" />    
-                    </div>  
+                    <div class="col-md-2">
+                        <div id="cats-view" class="dropdown">
+                            <jsp:include page="/categoryForm.jsp" />    
+                        </div>  
+                    </div>
+                    
+                    
                 </form>
+                <div class="col-md-2">
+                    <ul class="nav nav-pills">
+                        
+                        <li class="active"><a href="#grid-view" data-toggle="tab"><img id="grid-tab" src="assets/glyphicons-157-show-thumbnails.png"></a></li>
+                        <li><a href="#list-view" data-toggle="tab"><img id="list-tab" src="assets/glyphicons-530-list-alt.png"></a></li>
+                        
+                    </ul>
+                </div>
+                <div class="col-md-12"></div>
                 <div class="col-md-2">
                     <form id="sortRadioButtons" name="sortRadioButtons" action="SortItemsServlet" method = "post">
                         <div>
@@ -75,13 +88,10 @@
                         </div>  
                     </form>
                 </div>
+                
                 <div class="col-md-10">
-                    <ul class="nav nav-pills">
-                        
-                        <li class="active"><a href="#grid-view" data-toggle="tab"><img id="grid-tab" src="assets/glyphicons-157-show-thumbnails.png"></a></li>
-                        <li><a href="#list-view" data-toggle="tab"><img id="list-tab" src="assets/glyphicons-530-list-alt.png"></a></li>
-                        
-                    </ul>
+                    
+                    <br>
                     <div class="tab-content">
                         <div id="grid-view" class="tab-pane fade in active">
                             <jsp:include page="/searchGridView.jsp" />
