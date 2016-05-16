@@ -135,6 +135,10 @@
         <servlet-name>ItemAccessServlet</servlet-name>
         <servlet-class>com.glb.controllers.ItemAccessServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>HoldsServlet</servlet-name>
+        <servlet-class>com.glb.controllers.HoldsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -246,6 +250,10 @@
     <servlet-mapping>
         <servlet-name>ItemAccessServlet</servlet-name>
         <url-pattern>/ItemAccessServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HoldsServlet</servlet-name>
+        <url-pattern>/HoldsServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

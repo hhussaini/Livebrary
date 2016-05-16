@@ -844,4 +844,26 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
       }
       return status;
    }
+
+   @Override
+   public int editHoldEmail(String username, String email, String isbn) {
+      String sql = "update HOLDS set email = ? where username = ? and isbn = ?";
+      Connection conToUse = null;
+      PreparedStatement ps = null;
+      int status = 0;
+      ResultSet rs = null;
+      try {
+          conToUse = getConnection();
+          ps = conToUse.prepareStatement(sql);
+          ps.setString(1, email);
+          ps.setString(2, username);
+          ps.setString(3, isbn);
+          status = ps.executeUpdate();
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          DbUtils.closeQuietly(ps);
+      }
+      return status;
+   }
 }

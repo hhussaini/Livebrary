@@ -21,7 +21,7 @@
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Options<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="UserMyItemsServlet">My Items</a></li>
+                    <!--<li><a href="UserMyItemsServlet">My Items</a></li>-->
                     <li><a href="WishlistServlet">My Wishlist</a></li>
                     <li role="separator" class="divider"></li>
                     <form action="AccessibilityServlet"> 

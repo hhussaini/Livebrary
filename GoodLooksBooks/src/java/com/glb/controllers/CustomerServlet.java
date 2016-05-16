@@ -9,6 +9,7 @@ import com.glb.factories.ServiceFactory;
 import static com.glb.helpers.Helpers.*;
 import com.glb.objects.Book;
 import com.glb.objects.User;
+import com.glb.services.BookService;
 import com.glb.services.UserService;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,14 +25,16 @@ import javax.servlet.http.HttpSession;
  * @author PaulMan
  */
 public class CustomerServlet extends HttpServlet {
-
     
     UserService userService;
+    BookService bookService;
     
     public void init() {
         System.out.println(getServletName() + ": initialised" );
         userService = ServiceFactory.getUserService();
+        bookService = ServiceFactory.getBookService();
     }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -43,19 +46,6 @@ public class CustomerServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CustomerServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CustomerServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
     }
     
     /**
@@ -69,16 +59,15 @@ public class CustomerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         println(this.getServletName() + " : doGet");
-        
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         if (user == null) {
            goToSignIn(request, response);
            return;
         }
-        
+        // Check for any expired checkouts
+        bookService.checkExpiredCheckouts();
         List<Book> checkedOut = userService.getCheckedOutItems(user);
         session.setAttribute("checkedOutItems", checkedOut);
         List<Book> onHold = userService.getOnHoldItems(user);
@@ -86,7 +75,6 @@ public class CustomerServlet extends HttpServlet {
         println(onHold.size());
         List<Book> wishlist = userService.getWishlist(user);
         session.setAttribute("customerWishlist", wishlist);
-        
         RequestDispatcher dispatcher = request.getRequestDispatcher("/customerIndex.jsp");
         dispatcher.forward(request, response); 
     }

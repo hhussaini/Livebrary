@@ -31,5 +31,6 @@ public interface BookService {
     public String getItemAccess(User user, Item item);
     public void checkExpiredCheckouts();
     public int returnItem(String username, String isbn);
+    public int editHoldEmail(String username, String email, String isbn);
     // public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description);
 }  

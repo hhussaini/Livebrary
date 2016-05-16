@@ -35,4 +35,5 @@ public interface BookDao extends JdbcDaoSupport {
     public String getItemAccess(User user, Item item);
     public void checkExpiredCheckouts();
     public int returnItem(String username, String isbn);
+    public int editHoldEmail(String username, String email, String isbn);
 }

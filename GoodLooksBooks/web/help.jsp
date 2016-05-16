@@ -72,7 +72,7 @@
                 <c:choose>
                     <c:when test="${empty user}">
                         <br>
-                        <input type="text" class="form-control" placeholder="Your Email" name="from" required autofocus />
+                        <input type="email" class="form-control" placeholder="Your Email" name="from" required autofocus />
                     </c:when>
                 </c:choose>
               </div>
