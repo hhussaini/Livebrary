@@ -38,11 +38,15 @@ public class HoldsServlet extends HttpServlet {
         String method = request.getParameter("method");
         method = (method == null) ? "" : method;
         if (method.equals("editEmail")){
-            editEmail(request, response);
+           editEmail(request, response);
         } else if(method.equals("suspendHold")) {
-            suspendHold(request, response);
+           suspendHold(request, response);
+        } else if (method.equals("autoCheckout")) {
+           autoCheckout(request, response);
+        } else if (method.equals("removeHold")) {
+           removeHold(request, response);
         } else {
-            super.service(request, response);
+           super.service(request, response);
         } 
     }
     
@@ -59,6 +63,34 @@ public class HoldsServlet extends HttpServlet {
       }
       bookService.editHoldEmail(user.getUsername(), email, isbn);
       outputToHtml(response, "Your email has successfully been changed. " + createReturnTag("Return", "CustomerServlet"));
+   }
+    
+    protected void removeHold(HttpServletRequest request, HttpServletResponse response)
+           throws ServletException, IOException {
+      HttpSession session = request.getSession();
+      User user = (User)session.getAttribute("user");
+      String isbn = request.getParameter("isbn");
+      if (user == null) {
+          goToSignIn(request, response);
+          return;
+      }
+      bookService.removeHold(user.getUsername(), isbn);
+      outputToHtml(response, "The hold has successfully been removed. " + createReturnTag("Return", "CustomerServlet"));
+   }
+    
+    protected void autoCheckout(HttpServletRequest request, HttpServletResponse response)
+           throws ServletException, IOException {
+      HttpSession session = request.getSession();
+      User user = (User)session.getAttribute("user");
+      String isbn = request.getParameter("isbn");
+      String autoCheckout = request.getParameter("autoCheckout");
+      int status = 0;
+      if (user == null) {
+          goToSignIn(request, response);
+          return;
+      }
+      bookService.editHoldAutoCheckout(user.getUsername(), autoCheckout, isbn);
+      outputToHtml(response, "Your auto checkout preference has successfully been changed. " + createReturnTag("Return", "CustomerServlet"));
    }
     
     protected void suspendHold(HttpServletRequest request, HttpServletResponse response)

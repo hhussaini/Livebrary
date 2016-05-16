@@ -36,5 +36,7 @@ public interface BookService {
     public int suspendHold(String username, String isbn, int days);
     public int cancelSuspension(String username, String isbn);
     public Timestamp getHoldSuspensionDate(String username, String isbn);
+    public int editHoldAutoCheckout(String username, String autoCheckout, String isbn);
+    public int removeHold(String username, String isbn);
     // public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description);
 }  

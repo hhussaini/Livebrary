@@ -6,3 +6,6 @@ function showSuspendModal() {
     $('#suspendModal').modal('show');
 }
 
+function showAutoCheckoutModal() {
+   $('#autoCheckoutModal').modal('show');
+}

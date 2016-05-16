@@ -35,6 +35,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     private static CategoryMap categoryMap = new CategoryMap();
     private int numberOfResults;
     private int totalBooks;
+    private Connection conToUse = getConnection();
     
     @Override
     public List<Book> searchBooks(HashMap<String,String> searchTermMap, String[] categories, int offset, int recordsPerPage) {
@@ -931,5 +932,46 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
           DbUtils.closeQuietly(ps);
       }
       return date;
+   }
+
+   @Override
+   public int editHoldAutoCheckout(String username, String autoCheckout, String isbn) {
+      String sql = "update HOLDS set autoCheckout = ? where username = ? and isbn = ?";
+      Connection conToUse = null;
+      PreparedStatement ps = null;
+      int status = 0;
+      try {
+          conToUse = getConnection();
+          ps = conToUse.prepareStatement(sql);
+          ps.setString(1, autoCheckout);
+          ps.setString(2, username);
+          ps.setString(3, isbn);
+          status = ps.executeUpdate();
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          DbUtils.closeQuietly(ps);
+      }
+      return status;
+   }
+
+   @Override
+   public int removeHold(String username, String isbn) {
+      String sql = "delete from HOLDS where username = ? and isbn = ?";
+      Connection conToUse = null;
+      PreparedStatement ps = null;
+      int status = 0;
+      try {
+          conToUse = getConnection();
+          ps = conToUse.prepareStatement(sql);
+          ps.setString(1, username);
+          ps.setString(2, isbn);
+          status = ps.executeUpdate();
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          DbUtils.closeQuietly(ps);
+      }
+      return status;
    }
 }
