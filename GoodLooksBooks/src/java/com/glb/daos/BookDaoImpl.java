@@ -228,12 +228,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 System.out.println("conToUse == null");
             user = userService.getUser(username);
             book = getBookByIsbn(isbn);
-            int lendPeriod = 0;
-            // TODO. Add other book types
-            switch (book.getType()) {
-               case "eBook": lendPeriod = user.getEBookLendPeriod();
-                             break;
-            }
+            int lendPeriod = getItemLendPeriod(user, book.getType());
             Timestamp startDate = new Timestamp(new Date().getTime());
             Timestamp endDate = addDays(lendPeriod, startDate);
             // Remove the hold on the item if it exists
@@ -267,7 +262,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     @Override
     public void checkExpiredCheckouts() {
       println("Inside checkExpiredCheckout");
-      String sql = "select * from CHECKED_OUT";
+      String sql = "select * from CHECKED_OUT where expired = \'n\'";
       Connection conToUse = null;
       PreparedStatement ps = null;
       ResultSet rs = null;
@@ -278,17 +273,29 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
           Timestamp endDate = null;
           Date date= new Date();
           Timestamp now = new Timestamp(date.getTime());
-          String isbn, username;
+          String isbn, username, renew;
           while (rs.next()) {
-             endDate = rs.getTimestamp("endDate");
-             isbn = rs.getString("isbn");
-             username = rs.getString("username");
-             // If true, the check out is expired
-             if (now.after(endDate) || now.equals(endDate)) {
-               // TODO. Do email and stuff here for users waiting. PLACE THAT CODE
-               // IN RETURNITEM
-               returnItem(username, isbn);
-            }
+               endDate = rs.getTimestamp("endDate");
+               isbn = rs.getString("isbn");
+               username = rs.getString("username");
+               renew = rs.getString("renew");
+               // If true, the check out is expired
+               if (now.after(endDate) || now.equals(endDate)) {
+                  if (renew.equals("y")) {
+                  // We must renew the item
+                     sql = "update CHECKED_OUT set renew = \'n\', renewDate = ?, endDate = ? where username = ? and isbn = ?";
+                     ps = conToUse.prepareStatement(sql);
+                     ps.setNull(1, java.sql.Types.TIMESTAMP);
+                     ps.setTimestamp(2, rs.getTimestamp("renewDate"));
+                     ps.setString(3, username);
+                     ps.setString(4, isbn);
+                     ps.executeUpdate();
+                  } else {
+                     // TODO. Do email and stuff here for users waiting. PLACE THAT CODE
+                     // IN RETURNITEM                     
+                     returnItem(username, isbn);
+                  }
+               }
           }
       } catch (SQLException ex) {
           Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -313,7 +320,6 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                oldCopiesLeft = rs.getInt("copiesLeft");
             }
             rs.close();
-            
             int updatedCopiesLeft = oldCopiesLeft + quantityChange;
             sql = "update BOOKS set copiesLeft = ? where isbn = ?";
             ps = conToUse.prepareStatement(sql);
@@ -782,9 +788,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         }
         return status;
     }
-    
-    // TODO. This will need more logic when we figure out exactly how we're doing
-    // reserves and holds and stuff 
+   
    @Override
    public String getItemAccess(User user, Item item) {
       Connection conToUse = null;
@@ -1053,5 +1057,80 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
       }finally {
           DbUtils.closeQuietly(ps);
       }
+   }
+   
+   /**
+    * 
+    * @param username
+    * @param isbn
+    * @return status -1 = can't be renewed because on waiting list. -2 = can't be renewed because not >= 3 days before checkout expires
+    */
+   @Override
+   public int renewItem(String username, String isbn) {
+      String sql = "select * from HOLDS where isbn = ? and suspended = \'n\'";
+      Connection conToUse = null;
+      PreparedStatement ps = null;
+      int status = 0;
+      ResultSet rs = null;
+      try {
+          conToUse = getConnection();
+          ps = conToUse.prepareStatement(sql);
+          ps.setString(1, isbn);
+          rs = ps.executeQuery();
+          int count = 0;
+          while (rs.next()) {
+             count++;
+          }
+          rs.close();
+          if (count > 0) {
+             // Means this item can not be renewed because its on a waiting list
+             status = -1;
+          } else {
+             // Check if theres 3 days left
+             sql = "select * from CHECKED_OUT where username = ? and isbn = ? and expired = \'n\'";
+             ps = conToUse.prepareStatement(sql);
+             ps.setString(1, username);
+             ps.setString(2, isbn);
+             rs = ps.executeQuery();
+             Timestamp endDate = new Timestamp(new Date().getTime());
+             Timestamp today = new Timestamp(new Date().getTime());
+             Timestamp threeDays = addDays(3, today);
+             while (rs.next()) {
+                endDate = rs.getTimestamp("endDate");
+             }
+             // Means this item can not be renewed because its more than 3 days before the expiration 
+             if (endDate.after(threeDays)) {
+                status = -2;
+             } else {
+               // At this point we can go ahead with the renewal
+               // Get the duration of the lend period in days
+               Book book = getBookByIsbn(isbn);
+               UserService userService = ServiceFactory.getUserService();
+               int lendDuration = getItemLendPeriod(userService.getUser(username), book.getType());
+               Timestamp newDate = addDays(lendDuration, endDate);
+               sql = "update CHECKED_OUT set renew = \'y\', renewDate = ? where isbn = ? and username = ? and expired = \'n\'";
+               ps = conToUse.prepareStatement(sql);
+               ps.setTimestamp(1, newDate);
+               ps.setString(2, isbn);
+               ps.setString(3, username);
+               status = ps.executeUpdate();
+             }
+          }
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          DbUtils.closeQuietly(ps);
+      }
+      return status;
+   }
+   
+   private int getItemLendPeriod(User user, String itemType) {
+      int lendPeriod = 0;
+      // TODO. Add other book types
+      switch (itemType) {
+         case "eBook": lendPeriod = user.getEBookLendPeriod();
+                       break;
+      }
+      return lendPeriod;
    }
 }

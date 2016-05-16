@@ -29,11 +29,6 @@ function borrowItem(){
    document.getElementById("borrowItemForm").submit();
 }
 
-function reserveItem(){
-   console.log("reserveItem");
-   document.getElementById("reserveItemForm").submit();
-}
-
 function holdItem(){
    console.log("holdItem");
    document.getElementById("holdItemForm").submit();

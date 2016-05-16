@@ -367,10 +367,6 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
          if (status == -1) {
             throw new SQLException();
          }
-         status = deleteReserved(username);
-         if (status == -1) {
-            throw new SQLException();
-         }
          conToUse = getConnection();
          // Finally now that we've removed traces of the user in other tables we 
          // can delete from the users table
@@ -430,30 +426,6 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
       Connection conToUse = null;
       PreparedStatement preparedStmt = null;
       String sql = "delete from WISHLISTS where username = ?";
-      int status = 0;
-      try {
-          conToUse = getConnection();
-          preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
-          preparedStmt.setString(1, username);
-          status = preparedStmt.executeUpdate();
-      } catch (SQLException ex) {
-          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
-          status = -1;
-      }
-      finally {
-          ConnectionUtil.closeStatement(preparedStmt);
-      }
-
-      return status;
-   }
-   
-   /*
-   TODO. Probably needs more logic. Like new users need to be notified that a book opened up if they reserved it
-   */
-   private int deleteReserved(String username) {
-      Connection conToUse = null;
-      PreparedStatement preparedStmt = null;
-      String sql = "delete from RESERVED where username = ?";
       int status = 0;
       try {
           conToUse = getConnection();

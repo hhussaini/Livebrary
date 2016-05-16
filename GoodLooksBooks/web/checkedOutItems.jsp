@@ -22,8 +22,20 @@
                             <h6>by</h6>
                             <h5>${item.author}</h5>
                         </a>
-                        <button type="button" onclick="downloadBook(${item.isbn})" class="btn btn-primary">Download</button>
-                        <button type="button" onclick="returnBook(${item.isbn})" class="btn btn-primary">Return</button> <br>
+                        <div class="btn-group">
+                           <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                             Options
+                           </button>
+                           <div class="dropdown-menu">
+                              <a class="dropdown-item" href="#" onclick="downloadBook(${item.isbn})">Download</a><br>
+                              <a class="dropdown-item" href="#" onclick="returnBook(${item.isbn})">Return</a>
+                              <form id="renewItemForm" action="ItemAccessServlet" method="doRenew">
+                                 <input type="hidden" name="isbn" value="${item.isbn}">
+                                 <input type="hidden" name="method" value="doRenew">
+                                 <input type="submit" value="Renew">
+                              </form>
+                           </div>
+                        </div>
                     </td>
                 </div>
             </td>  
