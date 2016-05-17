@@ -1,6 +1,7 @@
 package com.glb.objects;
 
 import com.glb.constants.CategoryMap;
+import com.glb.constants.UserTypes;
 import com.glb.objects.Item.ItemSorting;
 import com.glb.services.BookService;
 import java.util.ArrayList;
@@ -51,7 +52,17 @@ public class SearchResult {
         
         this.bookService = bookService;
         books = bookService.searchBooks(searchTermMap, this.getSelectedCategories(), offset, recordsPerPage);
-        setPages(bookService.getNumberOfResults());
+        User user = (User)session.getAttribute("user");
+        int removedBooksCounter = 0;
+        if(user==null || user.getType().equalsIgnoreCase(UserTypes.GUEST.toString()) || user.getType().equalsIgnoreCase(UserTypes.CUSTOMER.toString())){
+            for(int i = 0; i<books.size(); i++){
+                if(books.get(i).getIsBanned()){
+                    books.remove(i);
+                    removedBooksCounter++;
+                }
+            }
+        }
+        setPages(bookService.getNumberOfResults() - removedBooksCounter);
         
     }
     

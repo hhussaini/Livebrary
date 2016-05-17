@@ -71,7 +71,7 @@
                     </div>
                     <jsp:include page="/itemButtons.jsp" />
                     <c:if test="${user.type == 'admin'}">
-                        <button type="button" name = "button5" onclick="banFunction(${itemClicked.isbn})" class="btn btn-primary">${itemClicked.isBanned ? "Ban Book" : "Unban Book"}</button>
+                        <button type="button" id="banButtonID" action="BanItemServlet" name = "button5" onclick="banFunction(${itemClicked.isBanned ? 1 : 0})" class="btn btn-primary" value="">${itemClicked.isBanned ? 'Ban Book' : 'Unban Book'}</button>
                     </c:if>
                     <br>
                     <form action="WishlistServlet" method = "post">
@@ -207,3 +207,4 @@
 <!--Form for communicating with the second server -->
 <form id = "secondServerForm" name = "secondServerForm" action = "SecondServerServlet" method = "post"></form>
 <form id = "facebookShareForm" name = "facebookShareForm" action = "SecondServerServlet" method = "post"></form>
+<form id = "banButtomForm" name = "banButtomForm" action = "BanItemServlet" method = "post"></form>

@@ -116,6 +116,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 book.setAuthor(rs.getString("author"));
                 book.setDate(rs.getString("published"));
                 book.setCopiesLeft(rs.getInt("copiesLeft"));
+                book.setIsBanned(rs.getInt("isBanned")==1);
                 results.add(book);
             }
             rs.close();
@@ -166,6 +167,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 book.setTitle(rs.getString("title"));
                 book.setImageUrl(rs.getString("imageUrl"));
                 book.setAuthor(rs.getString("author"));
+                book.setIsBanned(rs.getInt("isBanned")==1);
                 results.add(book);
                 totalBooks++;
             }
@@ -202,7 +204,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 book.setSampleUrl(rs.getString("sampleUrl"));
                 book.setDownloadUrl(rs.getString("downloadUrl"));
                 book.setType(rs.getString("type"));
-                //book.setIsBanned(rs.getInt("isBanned")==1?true:false);
+                book.setIsBanned(rs.getInt("isBanned")==1);
             }
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -774,8 +776,12 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             Book bookToBan = getBookByIsbn(isbn);
             bookToBan.setIsBanned(!bookToBan.getIsBanned());
             int isbanned = 0;
-            if (bookToBan.getIsBanned() == false){isbanned = 0;}
-            else if (bookToBan.getIsBanned() == true){isbanned = 1;}
+            if (bookToBan.getIsBanned() == false){
+                isbanned = 0;
+            }
+            else if (bookToBan.getIsBanned() == true){
+                isbanned = 1;
+            }
             sql = "update Books B"  + " SET B.isBanned = " + "'" + isbanned + "'" +
                     " where B.isbn = " + "'" + bookToBan.getIsbn() + "'";
             preparedStmt = conToUse.prepareStatement(sql);

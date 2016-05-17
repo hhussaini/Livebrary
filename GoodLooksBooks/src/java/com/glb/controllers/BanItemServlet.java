@@ -7,6 +7,7 @@ package com.glb.controllers;
 
 import com.glb.factories.ServiceFactory;
 import static com.glb.helpers.Helpers.goToSignIn;
+import com.glb.objects.Book;
 import com.glb.objects.User;
 import com.glb.services.BookService;
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class BanItemServlet extends HttpServlet {
     
     BookService bookService;
     User user;
+    Book book;
     
     public void init() {
         System.out.println(getServletName() + ": initialised" );
@@ -76,19 +78,20 @@ public class BanItemServlet extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
         RequestDispatcher dispatcher = null;
-        String isbn = request.getParameter("isbn");
+//        String isbn = request.getParameter("isbn");
         HttpSession session = request.getSession();
         user = (User)session.getAttribute("user");
+        book = (Book)session.getAttribute("itemClicked"); 
         if (user == null) {
             goToSignIn(request, response);
             return;
          }
         int status = 0;
         try {
-            status = bookService.banBook(isbn);
+            status = bookService.banBook(book.getIsbn());
             if (status == 1) {
-            dispatcher = request.getRequestDispatcher("/bookDescription.jsp");
-            dispatcher.forward(request, response);
+                dispatcher = request.getRequestDispatcher("/bookDescription.jsp");
+                dispatcher.forward(request, response);
             } else {
                 throw new ServletException("SQL Error.");
             }

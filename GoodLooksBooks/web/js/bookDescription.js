@@ -83,8 +83,23 @@ function fbShare(url,winWidth, winHeight) {
         window.open('http://www.facebook.com/sharer.php?s=100&p[url]=' + url, 'sharer','top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width='+winWidth+',height='+winHeight);
 }
 
-function banFunction(bookID){
-    document.getElementById("banBookForm").submit();
+function banFunction(isBanned){
+    if(document.getElementById("banButtonID").value === "" && isBanned === 0){
+        document.getElementById("banButtonID").innerHTML = "Ban Book";
+        document.getElementById("banButtonID").value = "Ban Book";
+    }
+    else if(document.getElementById("banButtonID").value === ""){
+        document.getElementById("banButtonID").innerHTML = "Unban Book";
+        document.getElementById("banButtonID").value = "Unban Book";
+    }
+    else if(document.getElementById("banButtonID").innerHTML === "Unban Book"){
+        document.getElementById("banButtonID").innerHTML = "Ban Book";
+    }
+    else{
+        document.getElementById("banButtonID").innerHTML = "Unban Book";
+    }
+  
+    document.getElementById("banButtomForm").submit();
 }
 
 function isEmpty(str) {
