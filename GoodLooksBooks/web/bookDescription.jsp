@@ -47,8 +47,7 @@
                <h5 id="languageID" value = "${itemClicked.language}">Language: ${itemClicked.language}</h5>
             </div>
             <div class="col-xs-6 col-sm-5 bookDescriptionPictures">
-               <img src = ${itemClicked.imageUrl} class="img-rounded" alt="Andersonville: A Story of Rebel Military Prisons" width="250" height="250">
-               <button type="submit" id="fav" onclick="setColor('fav','#FF0000');" class="btn-fav"><span class="glyphicon glyphicon-heart"></span> Fav!</button>
+               <img src = ${itemClicked.imageUrl} class="img-rounded" alt="Andersonville: A Story of Rebel Military Prisons" height="250">
                <div>
                   Avg. Rating:&nbsp;&nbsp;&nbsp; 
                   <label id="avgRatingText" for="input-3" class="control-label">
@@ -99,7 +98,6 @@
             </div>
             -->
          <!--        </form>-->
-         <br><br><br><br><br> 
          <!--        </div>-->
          <!--        <hr class="fancy">-->
          <!--All review-->
