@@ -41,9 +41,9 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     private Connection conToUse = getConnection();
     
     @Override
-    public List<Book> searchBooks(HashMap<String,String> searchTermMap, String[] categories, int offset, int recordsPerPage) {
+    public List<Book> searchBooks(HashMap<String,String> searchTermMap, ArrayList<String> categories, int offset, int recordsPerPage) {
         Connection conn = getConnection();
-        boolean catSelected = !categories[0].equals("");
+        boolean catSelected = !categories.get(0).equals("");
         ResultSet rs = null;
         Statement stmt = null;
         PreparedStatement pstmt = null;
@@ -72,9 +72,9 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                         + "select b.isbn from categories c, books b "
                         + "where b.isbn = c.isbn and (";
                 
-                for (int i = 0; i < categories.length; i++) {
+                for (int i = 0; i < categories.size(); i++) {
                     query += "c.category regexp ?";
-                    if (i != categories.length - 1) {
+                    if (i != categories.size() - 1) {
                         query += " or ";
                     }
                 }
@@ -90,8 +90,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             pstmt.setString(pRows++, "%"+isbn+"%");
             
             if (catSelected) {
-                for (int i = 0; i < categories.length; i++) {
-                    pstmt.setString(pRows++, categories[i]);
+                for (int i = 0; i < categories.size(); i++) {
+                    pstmt.setString(pRows++, categories.get(i));
                 }
             }
             

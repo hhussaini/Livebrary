@@ -15,6 +15,7 @@ import com.glb.objects.Ticket;
 import com.glb.objects.User;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.dbutils.DbUtils;
@@ -25,7 +26,7 @@ public class BookServiceImpl implements BookService {
     private int totalBooks;
     
     @Override
-    public List<Book> searchBooks(HashMap<String,String> searchTermMap, String[] categories, int offset, int recordsPerPage) {
+    public List<Book> searchBooks(HashMap<String,String> searchTermMap, ArrayList<String> categories, int offset, int recordsPerPage) {
         List<Book> results = null;
         Connection conn = null;
         try {

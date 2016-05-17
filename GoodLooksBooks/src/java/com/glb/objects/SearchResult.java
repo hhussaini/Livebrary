@@ -6,7 +6,7 @@ import com.glb.services.BookService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List; 
+import java.util.List;
 import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -31,6 +31,7 @@ public class SearchResult {
     private String isbn;
     private String keyword;
     private String title;
+    private BookService bookService;
     
     public SearchResult(HttpServletRequest request, HttpSession session, BookService bookService) {
         System.out.println("IN " + this.getClass() + " : GETTING result set");
@@ -47,14 +48,15 @@ public class SearchResult {
         if (request.getParameter("page") != null)
             currentPage = Integer.parseInt(request.getParameter("page"));
         int offset = (currentPage-1) * recordsPerPage;
-       
-        books = bookService.searchBooks(searchTermMap, categories, offset, recordsPerPage);
+        
+        this.bookService = bookService;
+        books = bookService.searchBooks(searchTermMap, this.getSelectedCategories(), offset, recordsPerPage);
         setPages(bookService.getNumberOfResults());
-       
+        
     }
     
     public void setPages(int numResults){
-      //  numResults = bookService.getNumberOfResults();
+        //  numResults = bookService.getNumberOfResults();
         this.numResults = numResults;
         numPages = (int) Math.ceil(numResults * 1.0 / recordsPerPage);
         firstPage = (currentPage - 5 < 1) ? 1 : currentPage - 5;
@@ -86,111 +88,111 @@ public class SearchResult {
         searchTermMap.put("title", getTitle());
         return searchTermMap;
     }
-
+    
     public void setCategories(TreeMap<String, String> categories) {
         this.categoryMap = categories;
     }
-
+    
     public List<Book> getBooks() {
         return books;
     }
-
+    
     public void setBooks(List<Book> books) {
         this.books = books;
     }
-
+    
     public int getNumPages() {
         return numPages;
     }
-
+    
     public void setNumPages(int numPages) {
         this.numPages = numPages;
     }
-
+    
     public int getCurrentPage() {
         return currentPage;
     }
-
+    
     public void setCurrentPage(int currentPage) {
         this.currentPage = currentPage;
     }
-
+    
     public int getFirstPage() {
         return firstPage;
     }
-
+    
     public void setFirstPage(int firstPage) {
         this.firstPage = firstPage;
     }
-
+    
     public int getLastPage() {
         return lastPage;
     }
-
+    
     public void setLastPage(int lastPage) {
         this.lastPage = lastPage;
     }
-
+    
     public int getNumResults() {
         return numResults;
     }
-
+    
     public void setNumResults(int numResults) {
         this.numResults = numResults;
     }
-
+    
     public int getRecordsPerPage() {
         return recordsPerPage;
     }
-
+    
     public void setRecordsPerPage(int recordsPerPage) {
         this.recordsPerPage = recordsPerPage;
     }
-
+    
     public String getAuthor() {
         return author;
     }
-
+    
     public void setAuthor(String author) {
         this.author = author;
     }
-
+    
     public String getPublisher() {
         return publisher;
     }
-
+    
     public void setPublisher(String publisher) {
         this.publisher = publisher;
     }
-
+    
     public String getIsbn() {
         return isbn;
     }
-
+    
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
-
+    
     public String getKeyword() {
         return keyword;
     }
-
+    
     public void setKeyword(String keyword) {
         this.keyword = keyword;
     }
-
+    
     public String getTitle() {
         return title;
     }
-
+    
     public void setTitle(String title) {
         this.title = title;
     }
-
+    
     public ArrayList<String> getSelectedCategories() {
         return selectedCategories;
     }
-
+    
     public void setSelectedCategories(String[] selectedCategories) {
         this.selectedCategories = new ArrayList<String>();
         for (String category : selectedCategories) {
@@ -200,7 +202,7 @@ public class SearchResult {
     }
     
     public void sortBooks(String colNumberString){
-         
+        
         switch(colNumberString){
             case "title"       :  ItemSorting.sort = 1;   break;
             case "author"      :  ItemSorting.sort = 2;   break;
@@ -208,8 +210,16 @@ public class SearchResult {
             case "addedToSite" :  ItemSorting.sort = 4;   break;
             default            :  ItemSorting.sort = 5;
         }
-       
+        
         Collections.sort(books, (o1, o2) -> o1.compareTo(o2));
         setPages(books.size());
-    } 
+    }
+    
+    public void goToPage(int page, HttpServletRequest request) {
+        currentPage = page;
+        int offset = (currentPage-1) * recordsPerPage;
+        this.bookService = bookService;
+        books = bookService.searchBooks(this.getTerms(request), this.getSelectedCategories(), offset, recordsPerPage);
+        setPages(bookService.getNumberOfResults());
+    }
 }

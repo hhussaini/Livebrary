@@ -1,17 +1,13 @@
 package com.glb.controllers;
 
-import com.glb.constants.CategoryMap;
 import com.glb.factories.ServiceFactory;
 import static com.glb.helpers.Helpers.*;
-import com.glb.objects.Book;
 import com.glb.objects.SearchResult;
 import com.glb.services.BookService;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +26,19 @@ public class SearchServlet extends HttpServlet {
     public void init() {
         println(getServletName() + ": initialised" );
         bookService = ServiceFactory.getBookService();
+    }
+    
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, java.io.IOException {
+        println(req.getMethod().toString());
+        String method = req.getParameter("method");
+        method = (method == null) ? "" : method;
+        if(method.equals("jump")){
+            doJump(req,resp);
+        }else {
+            super.service(req, resp);
+        }
     }
     
     /**
@@ -103,5 +112,23 @@ public class SearchServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }    
+    }
+    
+    private void doJump(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        String page = request.getParameter("page");
+        if (page != null) {
+                searchRs = (SearchResult)session.getAttribute("resultSet");
+                searchRs.goToPage(Integer.parseInt(page), request);
+        }
+        
+        session.setAttribute("resultSet", searchRs);
+        try {
+            request.getRequestDispatcher("/fullCatalog.jsp").include(request, response);
+        } catch (ServletException ex) {
+            Logger.getLogger(SearchServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(SearchServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

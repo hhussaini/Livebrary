@@ -7,11 +7,12 @@ import com.glb.objects.Review;
 import com.glb.objects.Ticket;
 import com.glb.objects.User;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public interface BookService {
-    public List<Book> searchBooks(HashMap<String,String> searchTermMap, String[] categories, int offset, int recordsPerPage);
+    public List<Book> searchBooks(HashMap<String,String> searchTermMap, ArrayList<String> categories, int offset, int recordsPerPage);
     public int getNumberOfResults();
     public List<Book> getAllBooks();
     public List<Ticket> getTickets(String resolved);
