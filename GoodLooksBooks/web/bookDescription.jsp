@@ -6,14 +6,27 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <jsp:include page="/header.jsp" />   
-        <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet"/>
-        <link href="css/rating/star-rating.css" media="all" rel="stylesheet" type="text/css" />
-        <link href="css/custom_css/star.css" media="all" rel="stylesheet" type="text/css" />
-        <link href="css/rating/theme-krajee-svg.css" media="all" rel="stylesheet" type="text/css" />
-        <script src="js/rating/star-rating.js" type="text/javascript"></script> 
-    </head>
+   <head>
+      <title>Full Catalog for Good Looks Books</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="css/bootstrap.css">
+      <link rel="stylesheet" href="css/custom_css/stylesheet.css">
+      <link rel="stylesheet" href="css/custom_css/bookPhotoGrid.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+      <script src="js/bootstrap.js"></script>            
+      <!-- star rating-->
+      <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet"/>
+      <link href="css/rating/star-rating.css" media="all" rel="stylesheet" type="text/css" />
+      <link href="css/custom_css/star.css" media="all" rel="stylesheet" type="text/css" />
+      <!-- optionally if you need to use a theme, then include the theme file as mentioned below -->
+      <link href="css/rating/theme-krajee-svg.css" media="all" rel="stylesheet" type="text/css" />
+      <script src="js/rating/star-rating.js" type="text/javascript"></script>            
+      <!-- optionally if you need translation for your language then include locale file as mentioned below -->
+      <!--link to custom javascript page-->
+      <script src="js/bookDescription.js" type="text/javascript"></script>
+      <script src="js/reviews.js" type="text/javascript"></script>
+   </head>
    <body>
       <c:choose>
          <c:when test="${empty user}">
@@ -45,9 +58,11 @@
                <h5 id="availableFormatsID">Available Formats: Kindle</h5>
                <br> 
                <h5 id="languageID" value = "${itemClicked.language}">Language: ${itemClicked.language}</h5>
+               <br> <input type="hidden" name = "isbn" id = "isbn" value="${itemClicked.isbn}" </h5>
             </div>
             <div class="col-xs-6 col-sm-5 bookDescriptionPictures">
-               <img src = ${itemClicked.imageUrl} class="img-rounded" alt="Andersonville: A Story of Rebel Military Prisons" height="250">
+               <img src = ${itemClicked.imageUrl} class="img-rounded" alt="Andersonville: A Story of Rebel Military Prisons" width="250" height="250">
+               <button type="submit" id="fav" onclick="setColor('fav','#FF0000');" class="btn-fav"><span class="glyphicon glyphicon-heart"></span> Fav!</button>
                <div>
                   Avg. Rating:&nbsp;&nbsp;&nbsp; 
                   <label id="avgRatingText" for="input-3" class="control-label">
@@ -98,6 +113,7 @@
             </div>
             -->
          <!--        </form>-->
+         <br><br><br><br><br> 
          <!--        </div>-->
          <!--        <hr class="fancy">-->
          <!--All review-->
