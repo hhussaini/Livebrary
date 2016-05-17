@@ -12,12 +12,14 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script src="js/bootstrap.js"></script>
 <script src="js/bookDescription.js" type="text/javascript"></script>
+<script src="js/fullCatalog.js" type="text/javascript"></script>
+<script src="js/reviews.js" type="text/javascript"></script>
     
 <c:if test="${user.dyslexic == 'true'}">
     <link rel="stylesheet" href="css/custom_css/dyslexic_font.css" type="text/css">
 </c:if>
     
-<c:if test="${user.contrast == 'dark'}">
+<c:if test="${user.contrast == 'true'}">
     <link rel="stylesheet" href="css/custom_css/dark_contrast.css">
 </c:if>
     

@@ -10,14 +10,18 @@ a {
 
 .btn-default {
   color: #333;
-  background-color: #fff;
+  background-color: #000;
   border-color: #ccc;
 }
 
 input {
-	background-color: #fff;
+	background-color: #000;
 }
 
 .glb-page {
-    background-color: #FFFFFF;
+    background-color: #000000;
+}
+
+body {
+    background: #000000;
 }

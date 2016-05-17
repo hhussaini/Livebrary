@@ -9,17 +9,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Full Catalog for Good Looks Books</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="css/bootstrap.css">
-        <link rel="stylesheet" href="css/custom_css/stylesheet.css">
-        <link rel="stylesheet" href="css/custom_css/bookPhotoGrid.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-        <script src="js/bootstrap.js"></script>
-        <script src="js/bookDescription.js" type="text/javascript"></script>
-        <script src="js/fullCatalog.js" type="text/javascript"></script>
-        <script src="js/reviews.js" type="text/javascript"></script>
+        <jsp:include page="/header.jsp" />
     </head>
     <body>
         <c:choose>

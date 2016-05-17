@@ -305,7 +305,9 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
                 + "U.zipcode = ?,"
                 + "U.phoneNumber = ?,"
                 + "U.company = ?,"
-                + "U.type = ?"
+                + "U.type = ?,"
+                + "U.contrast = ?,"
+                + "U.dyslexic = ?"
                 + "   where U.username = ?"
                 + "   and U.password = ?";
         Connection conToUse = null;
@@ -324,8 +326,11 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             ps.setString(8, user.getPhoneNumber());
             ps.setString(9, user.getCompany());
             ps.setString(10, user.getType());
-            ps.setString(11, user.getUsername());
-            ps.setString(12, user.getPassword());
+            ps.setString(11, user.getContrast());
+            ps.setString(12, user.getDyslexic());
+            
+            ps.setString(13, user.getUsername());
+            ps.setString(14, user.getPassword());
             status = ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);

@@ -20,12 +20,12 @@
             <div class="container">
                 <h1 class="jumbotron">Welcome ${user.username}!<br></h1>
                 <ul id="tabs" class="nav nav-tabs">
-                    <li class="active"><a href="#acct-sum" data-toggle="tab">Account at a glance</a></li>
+                    <li class="active"><a href="#acct-sum" data-toggle="tab">Account at a Glance</a></li>
                     <li><a href="#checked-out" data-toggle="tab">Current Collection</a></li>
-                    <li><a href="#on-hold" data-toggle="tab">On hold</a></li>
-                    <li><a href="#rated" data-toggle="tab">Items you've rated</a></li>
-                    <li><a href="#wishlist" data-toggle="tab">Your wishlist</a></li>
-                    <li><a href="#settings" data-toggle="tab">Settings</a></li>
+                    <li><a href="#on-hold" data-toggle="tab">On Hold</a></li>
+                    <li><a href="#rated" data-toggle="tab">Items You've Rated</a></li>
+                    <li><a href="#wishlist" data-toggle="tab">Your Wishlist</a></li>
+                    <li><a href="#settings" data-toggle="tab">Item Settings</a></li>
                 </ul>
                 <div id="tabContent" class="tab-content">
                     <div class="tab-pane fade in active" id="acct-sum">

@@ -92,7 +92,7 @@ public class UpdateUserServlet extends HttpServlet {
         String phoneNumber = request.getParameter("phoneNumber");
         String email = request.getParameter("email");        
         String dyslexic = request.getParameter("dyslexic"); // true or false
-        String contrast = request.getParameter("contrast"); // high or low
+        String contrast = request.getParameter("contrast"); // true or false
        
         user.setFirstName(firstName);
         user.setLastName(lastName);
@@ -156,9 +156,10 @@ public class UpdateUserServlet extends HttpServlet {
      * @return True if any of the objects in args is null
      */
     private boolean isNull(Object... args) {
+        int count = 0;
         for (Object arg : args) {
             if (arg == null || ((String)arg).isEmpty()) {
-                System.out.println("ARG = " + arg + " is null or empty");
+                System.out.println("ARG = " + count++ + " is null or empty");
                 return true;
             }
         }
