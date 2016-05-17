@@ -82,10 +82,10 @@ public class SortItemsServlet extends HttpServlet {
 //        }
        
        searchResults.sortBooks(columnToSort);
-       String url = "/fullCatalog.jsp";
-       RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-       dispatcher.forward(request, response); 
-       
+       String url = "/GoodLooksBooks/fullCatalog.jsp";
+       //RequestDispatcher dispatcher = request.getRequestDispatcher(url).forward(request, response); 
+       //request.getRequestDispatcher(url).forward(request, response);
+       response.sendRedirect(url);
     }
 
     /**

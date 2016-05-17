@@ -53,14 +53,6 @@
                             </tr>
                         </table>
                     </div>
-                    
-                    <div class="col-md-2">
-                        <div id="cats-view" class="dropdown">
-                            <jsp:include page="/categoryForm.jsp" />    
-                        </div>  
-                    </div>
-                    
-                    
                 </form>
                 <div class="col-md-2">
                     <ul class="nav nav-pills">
@@ -71,7 +63,13 @@
                     </ul>
                 </div>
                 <div class="col-md-12"></div>
-                <div class="col-md-2">
+                    
+                <div class="col-md-3">
+                    <form id="category-form" name="category-form" action="SearchServlet" method="get">
+                  
+                            <jsp:include page="/categoryForm.jsp" />    
+                        
+                    </form>
                     <form id="sortRadioButtons" name="sortRadioButtons" action="SortItemsServlet" method = "post">
                         <div>
                             <jsp:include page="/sortForm.jsp" /> 
@@ -79,7 +77,7 @@
                     </form>
                 </div>
                 
-                <div class="col-md-10">
+                <div class="col-md-9">
                     
                     <br>
                     <div class="tab-content">

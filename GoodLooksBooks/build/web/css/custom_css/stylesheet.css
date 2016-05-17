@@ -17,6 +17,29 @@ body {
   background-attachment: fixed;
 
 }
+
+ul {
+    list-style-type: none;
+    text-align: left;
+    padding-left: 0px;
+}
+
+button.link {
+	-moz-user-select: text;
+	background: none;
+	border: none;
+	color: #417AA3;
+	cursor: pointer;
+	font-size: 1em;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+}
+ 
+button.link:hover span {
+	text-decoration: underline;
+}
+
 .srch-bar .srch-box + .srch-box { border-left:2px solid red; }
 /*table { 
     border: none; 
