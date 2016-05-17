@@ -15,7 +15,7 @@
         <td>
             <div class="col-xs-6 col-md-3"> 
                 <td> 
-                    <a href = "BookDescriptionServlet?isbn=${item.isbn}" id="${item.isbn}" class="thumbnail">
+                    <a href = "BookDescriptionServlet?isbn=${item.isbn}" id="${item.isbn}" class="thumbnail" style="width: 200px;">
                         <img onload="validateImgUrl(this.id)" name="bookImage" class="bookImage" src="${item.imageUrl}" alt="${item.title}" style="width: 200px;">
                         <p>${item.title}</p>
                         <h6>by</h6>
