@@ -406,7 +406,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
     private int returnAllCheckedOut(String username) {
         Connection conToUse = null;
         PreparedStatement ps = null;
-        String sql = "select * from CHECKED_OUT where username = ?";
+        String sql = "select * from CHECKED_OUT where username = ? and expired = \'n\'";
         int status = 0;
         ResultSet rs = null;
         BookService bookService = ServiceFactory.getBookService();
