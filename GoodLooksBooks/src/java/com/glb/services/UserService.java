@@ -18,4 +18,6 @@ public interface UserService {
     public int putOnHold(String username, String isbn, String email, String autoCheckout);
     public int update(User user);
     public int deleteUser(String username);
+    public int updateItemSettings(String username, int eBookLendPeriod, int audioBookLendPeriod,
+             int videoLendPeriod, String maturityStart, String maturityEnd);
 }

@@ -1126,9 +1126,12 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
    
    private int getItemLendPeriod(User user, String itemType) {
       int lendPeriod = 0;
-      // TODO. Add other book types
       switch (itemType) {
          case "eBook": lendPeriod = user.getEBookLendPeriod();
+                       break;
+         case "audiobook": lendPeriod = user.getAudiobookLendPeriod();
+                       break;
+         case "video": lendPeriod = user.getVideoLendPeriod();
                        break;
       }
       return lendPeriod;

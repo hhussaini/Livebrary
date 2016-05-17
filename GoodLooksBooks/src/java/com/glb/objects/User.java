@@ -25,6 +25,10 @@ public class User implements Serializable{
     private String type;
     private String company;
     private int eBookLendPeriod;
+    private int audiobookLendPeriod;
+    private int videoLendPeriod;
+    private String maturityStart;
+    private String maturityEnd;
     
     public User(){}
 
@@ -150,5 +154,45 @@ public class User implements Serializable{
 
    public void setEBookLendPeriod(int eBookLendPeriod) {
       this.eBookLendPeriod = eBookLendPeriod;
+   }
+   
+   public int geteBookLendPeriod() {
+      return eBookLendPeriod;
+   }
+
+   public void seteBookLendPeriod(int eBookLendPeriod) {
+      this.eBookLendPeriod = eBookLendPeriod;
+   }
+
+   public int getAudiobookLendPeriod() {
+      return audiobookLendPeriod;
+   }
+
+   public void setAudiobookLendPeriod(int audiobookLendPeriod) {
+      this.audiobookLendPeriod = audiobookLendPeriod;
+   }
+
+   public int getVideoLendPeriod() {
+      return videoLendPeriod;
+   }
+
+   public void setVideoLendPeriod(int videoLendPeriod) {
+      this.videoLendPeriod = videoLendPeriod;
+   }
+
+   public String getMaturityStart() {
+      return maturityStart;
+   }
+
+   public void setMaturityStart(String maturityStart) {
+      this.maturityStart = maturityStart;
+   }
+
+   public String getMaturityEnd() {
+      return maturityEnd;
+   }
+
+   public void setMaturityEnd(String maturityEnd) {
+      this.maturityEnd = maturityEnd;
    }
 }

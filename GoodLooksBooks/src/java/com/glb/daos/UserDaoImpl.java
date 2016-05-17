@@ -57,8 +57,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
 
     @Override
     public User getUser(String username, String password) {
-        String sql = "select U.username, U.password, U.firstname, U.lastname, U.street, U.city, U.state, U.zipcode, U.phoneNumber, U.email, U.type, U.company,"
-                + "U.eBookLendPeriod"
+        String sql = "select *"
                         + "   from USERS U "
                         + "   where U.username = '" + username + "'"
                         + "   and U.password = '" + password + "'";
@@ -85,6 +84,10 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
               String type = res.getString("type");
               String company = res.getString("company");
               int eBookLendPeriod = res.getInt("eBookLendPeriod");
+              int audiobookLendPeriod = res.getInt("audiobookLendPeriod");
+              int videoLendPeriod = res.getInt("videoLendPeriod");
+              String maturityStart = res.getString("maturityStart");
+              String maturityEnd = res.getString("maturityEnd");
               user.setUsername(user_name);
               user.setPassword(pass_word);
               user.setFirstName(firstname);
@@ -98,6 +101,10 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
               user.setType(type);
               user.setCompany(company);
               user.setEBookLendPeriod(eBookLendPeriod);
+              user.setAudiobookLendPeriod(audiobookLendPeriod);
+              user.setVideoLendPeriod(videoLendPeriod);
+              user.setMaturityStart(maturityStart);
+              user.setMaturityEnd(maturityEnd);
               count++;
             }
             if (count != 1) {
@@ -507,6 +514,36 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
           ps.setString(2, isbn);
           ps.setString(3, email);
           ps.setString(4, automaticCheckout);
+          status = ps.executeUpdate();
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+          status = -1;
+      }
+      finally {
+          ConnectionUtil.closeStatement(ps);
+      }
+
+      return status;
+   }
+
+   @Override
+   public int updateItemSettings(String username, int eBookLendPeriod, int audiobookLendPeriod, 
+           int videoLendPeriod, String maturityStart, String maturityEnd) {
+      Connection conToUse = null;
+      PreparedStatement ps = null;
+      String sql = "update USERS set eBookLendPeriod = ?, audiobookLendPeriod = ?,"
+              + "videoLendPeriod = ?, maturityStart = ?, maturityEnd = ? "
+              + "where username = ?";
+      int status = 0;
+      try {
+          conToUse = getConnection();
+          ps = (PreparedStatement) conToUse.prepareStatement(sql);
+          ps.setInt(1, eBookLendPeriod);
+          ps.setInt(2, audiobookLendPeriod);
+          ps.setInt(3, videoLendPeriod);
+          ps.setString(4, maturityStart);
+          ps.setString(5, maturityEnd);
+          ps.setString(6, username);
           status = ps.executeUpdate();
       } catch (SQLException ex) {
           Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);

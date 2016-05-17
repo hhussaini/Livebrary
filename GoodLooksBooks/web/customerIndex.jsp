@@ -25,6 +25,7 @@
                    <li class="active"><a href="#acct-sum" data-toggle="tab">Account at a glance</a></li>
                    <li><a href="#checked-out" data-toggle="tab">Current Collection</a></li>
                    <li><a href="#on-hold" data-toggle="tab">On hold</a></li>
+                   <li><a href="#settings" data-toggle="tab">Settings</a></li>
                </ul>
                <div id="tabContent" class="tab-content">
                    <div class="tab-pane fade in active" id="acct-sum">
@@ -80,6 +81,9 @@
                                </div>
                            </c:otherwise>
                        </c:choose>
+                   </div>
+                   <div class="tab-pane fade" id="settings">
+                     <jsp:include page="/itemSettings.jsp" />
                    </div>
                </div>
            </div>

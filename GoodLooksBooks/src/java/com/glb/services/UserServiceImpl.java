@@ -366,4 +366,29 @@ public class UserServiceImpl implements UserService {
 
       return status;
    }
+   
+   @Override
+   public int updateItemSettings(String username, int eBookLendPeriod, int audioBookLendPeriod,
+             int videoLendPeriod, String maturityStart, String maturityEnd) {
+      Connection conToUse = null;
+      int status = 0;
+      // get the connection from util class
+      // set the transaction to con & pass con to dao
+      try {
+          conToUse = ConnectionUtil.getConnection();
+          UserDao userDao = DaoFactory.getUserDao();
+          userDao.setConnection(conToUse);
+          status = userDao.updateItemSettings(username, eBookLendPeriod, 
+                  audioBookLendPeriod, videoLendPeriod, maturityStart, maturityEnd);
+      } catch (ResourceHelperException e) {
+          // TODO Auto-generated catch block
+          System.out.println("ResourceHelperException");
+          DbUtils.rollbackAndCloseQuietly(conToUse);
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, e);
+      } finally {
+          DbUtils.closeQuietly(conToUse);
+      }
+
+      return status;
+   }
 }
