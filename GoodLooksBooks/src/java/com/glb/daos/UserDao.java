@@ -18,5 +18,7 @@ public interface UserDao extends JdbcDaoSupport {
     public int update(User user);
     public int deleteUser(String username);
     public int putOnHold(String username, String isbn, String email, String automaticCheckout);
+    public int updateItemSettings(String username, int eBookLendPeriod, int audioBookLendPeriod,
+             int videoLendPeriod, String maturityStart, String maturityEnd);
     public List<Book> getRatedItems(User user);
 }

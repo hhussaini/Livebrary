@@ -23,7 +23,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
     public void init() {
         bookService = ServiceFactory.getBookService();
     }
-  
+    
     @Override
     public int save(User user) {
         String sql = "insert into USERS (username, firstname, lastname, email, password, street, city, state, zipcode, phoneNumber, type, company)"
@@ -54,13 +54,13 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         }
         return status;
     }
-
+    
     @Override
     public User getUser(String username, String password) {
-        String sql = "select * "
-                        + "   from USERS U "
-                        + "   where U.username = '" + username + "'"
-                        + "   and U.password = '" + password + "'";
+        String sql = "select *"
+                + "   from USERS U "
+                + "   where U.username = '" + username + "'"
+                + "   and U.password = '" + password + "'";
         Connection conToUse = null;
         ResultSet res = null;
         Statement stmt = null;
@@ -71,37 +71,45 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             User user = new User();
             int count = 0;
             while (res.next()) {
-              String user_name = res.getString("username");
-              String pass_word = res.getString("password");  
-              String firstname = res.getString("firstname");
-              String lastname = res.getString("lastname");
-              String street = res.getString("street"); 
-              String city = res.getString("city"); 
-              String state = res.getString("state"); 
-              String zipcode = res.getString("zipcode"); 
-              String phoneNumber = res.getString("phoneNumber"); 
-              String email = res.getString("email");
-              String type = res.getString("type");
-              String company = res.getString("company");
-              String contrast = res.getString("contrast");
-              String dyslexic = res.getString("dyslexic");
-              int eBookLendPeriod = res.getInt("eBookLendPeriod");
-              user.setUsername(user_name);
-              user.setPassword(pass_word);
-              user.setFirstName(firstname);
-              user.setLastName(lastname);
-              user.setStreet(street);
-              user.setCity(city);
-              user.setState(state);
-              user.setZipcode(zipcode);
-              user.setPhoneNumber(phoneNumber);
-              user.setEmail(email);
-              user.setType(type);
-              user.setCompany(company);
-              user.setEBookLendPeriod(eBookLendPeriod);
-              user.setContrast(contrast);
-              user.setDyslexic(dyslexic);
-              count++;
+                String user_name = res.getString("username");
+                String pass_word = res.getString("password");
+                String firstname = res.getString("firstname");
+                String lastname = res.getString("lastname");
+                String street = res.getString("street");
+                String city = res.getString("city");
+                String state = res.getString("state");
+                String zipcode = res.getString("zipcode");
+                String phoneNumber = res.getString("phoneNumber");
+                String email = res.getString("email");
+                String type = res.getString("type");
+                String company = res.getString("company");
+                String contrast = res.getString("contrast");
+                String dyslexic = res.getString("dyslexic");
+                int eBookLendPeriod = res.getInt("eBookLendPeriod");
+                int audiobookLendPeriod = res.getInt("audiobookLendPeriod");
+                int videoLendPeriod = res.getInt("videoLendPeriod");
+                String maturityStart = res.getString("maturityStart");
+                String maturityEnd = res.getString("maturityEnd");
+                user.setUsername(user_name);
+                user.setPassword(pass_word);
+                user.setFirstName(firstname);
+                user.setLastName(lastname);
+                user.setStreet(street);
+                user.setCity(city);
+                user.setState(state);
+                user.setZipcode(zipcode);
+                user.setPhoneNumber(phoneNumber);
+                user.setEmail(email);
+                user.setType(type);
+                user.setCompany(company);
+                user.setEBookLendPeriod(eBookLendPeriod);
+                user.setAudiobookLendPeriod(audiobookLendPeriod);
+                user.setVideoLendPeriod(videoLendPeriod);
+                user.setMaturityStart(maturityStart);
+                user.setMaturityEnd(maturityEnd);
+                user.setContrast(contrast);
+                user.setDyslexic(dyslexic);
+                count++;
             }
             if (count != 1) {
                 return null;
@@ -124,7 +132,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
      */
     @Override
     public List<Book> getWishlist(User user) {
-        List<Book> booksOnWishlist = new ArrayList<Book>();        
+        List<Book> booksOnWishlist = new ArrayList<Book>();
         Connection conToUse = null;
         java.sql.PreparedStatement ps = null;
         ResultSet res = null;
@@ -198,7 +206,7 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally {
-           ConnectionUtil.closeStatement(preparedStmt);
+            ConnectionUtil.closeStatement(preparedStmt);
         }
         
         return status;
@@ -228,10 +236,10 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         
         return status;
     }
-
+    
     @Override
     public List<Book> getPublisherItems(User publisher) {
-        List<Book> publisherItems = new ArrayList<Book>();        
+        List<Book> publisherItems = new ArrayList<Book>();
         Connection conToUse = null;
         PreparedStatement ps = null;
         ResultSet res = null;
@@ -253,14 +261,14 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             ConnectionUtil.closeStatement(ps);
-       }
+        }
         
         return publisherItems;
     }
-
+    
     @Override
     public List<Book> getCheckedOut(User user) {
-        List<Book> checkedOut = new ArrayList<Book>();        
+        List<Book> checkedOut = new ArrayList<Book>();
         Connection conToUse = null;
         BookService bookService = ServiceFactory.getBookService();
         java.sql.PreparedStatement ps = null;
@@ -268,14 +276,14 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         try {
             String username = user.getUsername();
             conToUse = getConnection();
-            String sql = "select * from checked_out where username = ? and expired = \'n\'";            
+            String sql = "select * from checked_out where username = ? and expired = \'n\'";
             ps = (PreparedStatement) conToUse.prepareStatement(sql);
             ps.setString(1, username);
             res = ps.executeQuery();
             while (res.next()) {
-               Book book = new Book();
-               book = bookService.getBookByIsbn(res.getString("isbn"));
-               checkedOut.add(book);
+                Book book = new Book();
+                book = bookService.getBookByIsbn(res.getString("isbn"));
+                checkedOut.add(book);
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -290,16 +298,16 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
     public int update(User user) {
         String sql = "update USERS U SET U.firstname = ?,"
                 + "U.lastname = ?,"
-                + "U.email = ?," 
-                + "U.street = ?," 
+                + "U.email = ?,"
+                + "U.street = ?,"
                 + "U.city = ?,"
                 + "U.state = ?,"
                 + "U.zipcode = ?,"
                 + "U.phoneNumber = ?,"
                 + "U.company = ?,"
                 + "U.type = ?"
-                 + "   where U.username = ?"
-                 + "   and U.password = ?";
+                + "   where U.username = ?"
+                + "   and U.password = ?";
         Connection conToUse = null;
         PreparedStatement ps = null;
         int status = 0;
@@ -326,10 +334,10 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         }
         return status;
     }
-
+    
     @Override
     public List<Book> getOnHoldItems(User user) {
-        List<Book> onHold = new ArrayList<Book>();   
+        List<Book> onHold = new ArrayList<Book>();
         BookService bookService = ServiceFactory.getBookService();
         Connection conToUse = null;
         java.sql.PreparedStatement ps = null;
@@ -340,8 +348,8 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             ps = (PreparedStatement) conToUse.prepareStatement(sql);
             ps.setString(1, user.getUsername());
             res = ps.executeQuery();
-            while (res.next()) { 
-                  onHold.add(bookService.getBookByIsbn(res.getString("isbn"))); 
+            while (res.next()) {
+                onHold.add(bookService.getBookByIsbn(res.getString("isbn")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -352,131 +360,103 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         return onHold;
     }
     
-   // TODO. Check for extra logic when our lending stuff is sorted out more
-   @Override
-   public int deleteUser(String username) {
-      println("deleteUser.username: " + username);
-      Connection conToUse = null;
-      PreparedStatement preparedStmt = null;
-      String sql = "delete from USERS where username = ?";
-      int status = 0;
-      try {
-         //status = deleteHolds(username);
-         status = returnAllCheckedOut(username);
-         if (status == -1) {
-            throw new SQLException();
-         }
-         status = deleteWishlist(username);
-         if (status == -1) {
-            throw new SQLException();
-         }
-         status = deleteReserved(username);
-         if (status == -1) {
-            throw new SQLException();
-         }
-         conToUse = getConnection();
-         // Finally now that we've removed traces of the user in other tables we 
-         // can delete from the users table
-         preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
-         preparedStmt.setString(1, username);
-         status = preparedStmt.executeUpdate();
-      } catch (SQLException ex) {
-          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
-      } 
-      finally {
-          ConnectionUtil.closeStatement(preparedStmt);
-      }
-
-      return status;
-   }
-   
-   /*
-   TODO. Probably needs more logic. 
-   This returns all the items of the given user
-   */
-   private int returnAllCheckedOut(String username) {
-      Connection conToUse = null;
-      PreparedStatement ps = null;
-      String sql = "select * from CHECKED_OUT where username = ?";
-      int status = 0;
-      ResultSet rs = null;
-      BookService bookService = ServiceFactory.getBookService();
-      try {
-         conToUse = getConnection();
-         ps = (PreparedStatement) conToUse.prepareStatement(sql);
-         ps.setString(1, username);
-         rs = ps.executeQuery();
-         while (rs.next()) {
-            String isbn = rs.getString("isbn");
-            bookService.returnItem(username, isbn);
-         }
-      } catch (SQLException ex) {
-          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
-          status = -1;
-      } finally {
-          ConnectionUtil.closeStatement(ps);
-      }
-
-      return status;
-   }
-
-   private int deleteHolds(String username) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-   }
-   
-   /**
-    * Deletes the wishlist of the user with the given username.
-    * @param username
-    * @return 
+    // TODO. Check for extra logic when our lending stuff is sorted out more
+    @Override
+    public int deleteUser(String username) {
+        println("deleteUser.username: " + username);
+        Connection conToUse = null;
+        PreparedStatement preparedStmt = null;
+        String sql = "delete from USERS where username = ?";
+        int status = 0;
+        try {
+            //status = deleteHolds(username);
+            status = returnAllCheckedOut(username);
+            if (status == -1) {
+                throw new SQLException();
+            }
+            status = deleteWishlist(username);
+            if (status == -1) {
+                throw new SQLException();
+            }
+            conToUse = getConnection();
+            // Finally now that we've removed traces of the user in other tables we
+            // can delete from the users table
+            preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
+            preparedStmt.setString(1, username);
+            status = preparedStmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            ConnectionUtil.closeStatement(preparedStmt);
+        }
+        
+        return status;
+    }
+    
+    /*
+    TODO. Probably needs more logic.
+    This returns all the items of the given user
     */
-   private int deleteWishlist(String username) {
-      Connection conToUse = null;
-      PreparedStatement preparedStmt = null;
-      String sql = "delete from WISHLISTS where username = ?";
-      int status = 0;
-      try {
-          conToUse = getConnection();
-          preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
-          preparedStmt.setString(1, username);
-          status = preparedStmt.executeUpdate();
-      } catch (SQLException ex) {
-          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
-          status = -1;
-      }
-      finally {
-          ConnectionUtil.closeStatement(preparedStmt);
-      }
-
-      return status;
-   }
-   
-   /*
-   TODO. Probably needs more logic. Like new users need to be notified that a book opened up if they reserved it
-   */
-   private int deleteReserved(String username) {
-      Connection conToUse = null;
-      PreparedStatement preparedStmt = null;
-      String sql = "delete from RESERVED where username = ?";
-      int status = 0;
-      try {
-          conToUse = getConnection();
-          preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
-          preparedStmt.setString(1, username);
-          status = preparedStmt.executeUpdate();
-      } catch (SQLException ex) {
-          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
-          status = -1;
-      }
-      finally {
-          ConnectionUtil.closeStatement(preparedStmt);
-      }
-
-      return status;
-   }
-   
-   @Override
-   public List<User> getAllUsers() {
-        List<User> users = new ArrayList<User>();        
+    private int returnAllCheckedOut(String username) {
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        String sql = "select * from CHECKED_OUT where username = ?";
+        int status = 0;
+        ResultSet rs = null;
+        BookService bookService = ServiceFactory.getBookService();
+        try {
+            conToUse = getConnection();
+            ps = (PreparedStatement) conToUse.prepareStatement(sql);
+            ps.setString(1, username);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String isbn = rs.getString("isbn");
+                bookService.returnItem(username, isbn);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+            status = -1;
+        } finally {
+            ConnectionUtil.closeStatement(ps);
+        }
+        
+        return status;
+    }
+    
+    private int deleteHolds(String username) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    /**
+     * Deletes the wishlist of the user with the given username.
+     * @param username
+     * @return
+     */
+    private int deleteWishlist(String username) {
+        Connection conToUse = null;
+        PreparedStatement preparedStmt = null;
+        String sql = "delete from WISHLISTS where username = ?";
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            preparedStmt = (PreparedStatement) conToUse.prepareStatement(sql);
+            preparedStmt.setString(1, username);
+            status = preparedStmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+            status = -1;
+        }
+        finally {
+            ConnectionUtil.closeStatement(preparedStmt);
+        }
+        
+        return status;
+    }
+    
+    @Override
+    public List<User> getAllUsers() {
+        List<User> users = new ArrayList<User>();
         Connection conToUse = null;
         java.sql.PreparedStatement ps = null;
         ResultSet res = null;
@@ -497,63 +477,65 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         
         return users;
     }
-
-   @Override
-   public User getUser(String username) {
-      String sql = "select password from USERS where username = ?";
-      Connection conToUse = null;
-      ResultSet res = null;
-      PreparedStatement ps = null;
-      try {         
-          conToUse = getConnection();
-          ps = (PreparedStatement) conToUse.prepareStatement(sql);
-          ps.setString(1, username);
-          User user = new User();
-          String password = "";
-          res = ps.executeQuery();          
-          while (res.next()) {
-             password = res.getString("password");
-          }
-          user = getUser(username, password);
-          return user;
-      } catch (SQLException ex) {
-          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
-      } finally {
-          ConnectionUtil.closeStatement(ps);
-      }
-
-      return null;
-   }
-
-   @Override
-   public int putOnHold(String username, String isbn, String email, String automaticCheckout) {
-      Connection conToUse = null;
-      PreparedStatement ps = null;
-      String sql = "insert into HOLDS (username, isbn, email, autoCheckout) values (?,?,?,?)";
-      int status = 0;
-      try {
-          conToUse = getConnection();
-          ps = (PreparedStatement) conToUse.prepareStatement(sql);
-          ps.setString(1, username);
-          ps.setString(2, isbn);
-          ps.setString(3, email);
-          ps.setString(4, automaticCheckout);
-          status = ps.executeUpdate();
-      } catch (SQLException ex) {
-          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
-          status = -1;
-      }
-      finally {
-          ConnectionUtil.closeStatement(ps);
-      }
-
-      return status;
-   }
-   
-   @Override
-   public List<Book> getRatedItems(User user) {
-       bookService = ServiceFactory.getBookService();
-        List<Book> ratedItems = new ArrayList<Book>();        
+    
+    @Override
+    public User getUser(String username) {
+        String sql = "select password from USERS where username = ?";
+        Connection conToUse = null;
+        ResultSet res = null;
+        PreparedStatement ps = null;
+        try {
+            conToUse = getConnection();
+            ps = (PreparedStatement) conToUse.prepareStatement(sql);
+            ps.setString(1, username);
+            User user = new User();
+            String password = "";
+            res = ps.executeQuery();
+            while (res.next()) {
+                password = res.getString("password");
+            }
+            user = getUser(username, password);
+            return user;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConnectionUtil.closeStatement(ps);
+        }
+        
+        return null;
+    }
+    
+    @Override
+    public int putOnHold(String username, String isbn, String email, String automaticCheckout) {
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        String sql = "insert into HOLDS (username, isbn, email, autoCheckout) values (?,?,?,?)";
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            ps = (PreparedStatement) conToUse.prepareStatement(sql);
+            ps.setString(1, username);
+            ps.setString(2, isbn);
+            ps.setString(3, email);
+            ps.setString(4, automaticCheckout);
+            status = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+            status = -1;
+        }
+        finally {
+            ConnectionUtil.closeStatement(ps);
+        }
+        
+        return status;
+    }
+    
+    
+    
+    @Override
+    public List<Book> getRatedItems(User user) {
+        bookService = ServiceFactory.getBookService();
+        List<Book> ratedItems = new ArrayList<Book>();
         Connection conToUse = null;
         java.sql.PreparedStatement ps = null;
         ResultSet res = null;
@@ -578,5 +560,35 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
         }
         
         return ratedItems;
-   }
+    }
+    
+    @Override
+    public int updateItemSettings(String username, int eBookLendPeriod, int audiobookLendPeriod,
+            int videoLendPeriod, String maturityStart, String maturityEnd) {
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        String sql = "update USERS set eBookLendPeriod = ?, audiobookLendPeriod = ?,"
+                + "videoLendPeriod = ?, maturityStart = ?, maturityEnd = ? "
+                + "where username = ?";
+        int status = 0;
+        try {
+            conToUse = getConnection();
+            ps = (PreparedStatement) conToUse.prepareStatement(sql);
+            ps.setInt(1, eBookLendPeriod);
+            ps.setInt(2, audiobookLendPeriod);
+            ps.setInt(3, videoLendPeriod);
+            ps.setString(4, maturityStart);
+            ps.setString(5, maturityEnd);
+            ps.setString(6, username);
+            status = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+            status = -1;
+        }
+        finally {
+            ConnectionUtil.closeStatement(ps);
+        }
+        
+        return status;
+    }
 }

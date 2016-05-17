@@ -2,7 +2,7 @@
     Document   : customerIndex
     Author     : Kevin Young
 --%>
-    
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>   
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
@@ -25,6 +25,7 @@
                     <li><a href="#on-hold" data-toggle="tab">On hold</a></li>
                     <li><a href="#rated" data-toggle="tab">Items you've rated</a></li>
                     <li><a href="#wishlist" data-toggle="tab">Your wishlist</a></li>
+                    <li><a href="#settings" data-toggle="tab">Settings</a></li>
                 </ul>
                 <div id="tabContent" class="tab-content">
                     <div class="tab-pane fade in active" id="acct-sum">
@@ -42,7 +43,7 @@
                                 <td>${fn:length(onHoldItems)}</td>
                             </tr>
                         </table>
-                            
+                        
                     </div>
                     <div class="tab-pane fade" id="checked-out">
                         <c:choose>
@@ -95,6 +96,9 @@
                                 </div>
                             </c:otherwise>
                         </c:choose>
+                    </div>
+                    <div class="tab-pane fade" id="settings">
+                        <jsp:include page="/itemSettings.jsp" />
                     </div>
                 </div>
             </div>

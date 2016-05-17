@@ -7,8 +7,8 @@
 <button type="button" name = "button1" onclick="sampleItem('${itemClicked.sampleUrl}')" class="btn btn-primary">Sample</button>
 <br><br>
 <c:choose>
-   <c:when test="${itemAccess == 'Reserve'}">
-      <button type="button" name = "button1" onclick="reserveItem()" class="btn btn-primary">Reserve</button> <br>
+   <c:when test="${itemAccess == 'Recommend'}"> 
+      <button type="button" name = "button1" onclick="recommendItem()" class="btn btn-primary">Recommend</button> <br>
    </c:when>
    <c:when test="${itemAccess == 'Borrow'}">
       <button type="button" name = "button2" onclick="borrowItem()" class="btn btn-primary">Borrow</button> <br>
@@ -29,11 +29,6 @@
 <form id="borrowItemForm" action="ItemAccessServlet" method="doBorrow">
    <input type="hidden" name="isbn" value="${itemClicked.isbn}">
    <input type="hidden" name="method" value="doBorrow">
-</form>
-   
-<form id="reserveItemForm" action="ItemAccessServlet" method="doReserve">
-   <input type="hidden" name="isbn" value="${itemClicked.isbn}">
-   <input type="hidden" name="method" value="doReserve">
 </form>
 
 <form id="holdItemForm" action="ItemAccessServlet" method="requestHold">

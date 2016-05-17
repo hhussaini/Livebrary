@@ -49,8 +49,8 @@ public class ItemAccessServlet extends HttpServlet {
             requestHold(request, response);
         } else if (method.equals("doHold")) {
             doHold(request, response);
-        } else if (method.equals("doReserve")) {
-            doReserve(request, response);
+        } else if (method.equals("doRenew")) {
+            doRenew(request, response);
         } else {
             super.service(request, response);
         } 
@@ -124,8 +124,7 @@ public class ItemAccessServlet extends HttpServlet {
       }
    }
    
-   // TODO. Implement me
-   protected void doReserve(HttpServletRequest request, HttpServletResponse response)
+   protected void doRenew(HttpServletRequest request, HttpServletResponse response)
            throws ServletException, IOException {
       HttpSession session = request.getSession();
       User user = (User)session.getAttribute("user");
@@ -133,6 +132,14 @@ public class ItemAccessServlet extends HttpServlet {
       if (user == null) {
           goToSignIn(request, response);
           return;
+      }
+      int status = bookService.renewItem(user.getUsername(), isbn);
+      if (status == 1) {
+        outputToHtml(response, "Item renewed successfully. " + createReturnTag("Return", "CustomerServlet"));
+      } else if (status == -1) {
+         outputToHtml(response, "Item not renewed. It is on another user's waiting list. " + createReturnTag("Return", "CustomerServlet"));
+      } else if (status == -2) {
+         outputToHtml(response, "\"Item not renewed. You can not renew this item until 3 days before its expiration. " + createReturnTag("Return", "CustomerServlet"));
       }
    }
 

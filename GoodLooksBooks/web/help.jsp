@@ -36,23 +36,35 @@
               <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i>Help</h3>
             </div>
             <div class="panel-body">
-                <div class="list-group">
-                  <a href="#" onclick="showContactModal()">
-                      <img alt="brand" width = "100" height = "100" src="assets/support-icon.jpg">
-                  </a>
-                  Contact Support
+               <div class="list-group">
+                    <a href="http://help.overdrive.com/">
+                        <img alt="overdrive" width = "100" height = "100" src="assets/overdrive-help.png">
+                    </a>
+                    Overdrive Help
                 </div>
-                <div class="list-group">
+               <div class="list-group">
+                    <a href="applicationsHelp.jsp">
+                        <img alt="applications" width = "100" height = "100" src="assets/applications-logo.jpg">
+                    </a>
+                    Applications
+                </div>
+               <div class="list-group">
                     <a href="lendingPolicies.jsp">
-                        <img alt="brand" width = "100" height = "100" src="assets/book.png">
+                        <img alt="book" width = "100" height = "100" src="assets/book.png">
                     </a>
                     Lending Policies
                 </div>
                 <div class="list-group">
-                    <a href="navigationHelp.jsp">
-                        <img alt="brand" width = "100" height = "100" src="assets/question-icon.jpg">
+                    <a href="recommendationsHelp.jsp">
+                        <img alt="recommendations" width = "100" height = "100" src="assets/question-icon.jpg">
                     </a>
-                    Navigation Help
+                    Recommendations Help
+                </div>
+                <div class="list-group">
+                  <a href="#" onclick="showContactModal()">
+                      <img alt="support" width = "100" height = "100" src="assets/support-icon.jpg">
+                  </a>
+                  Contact Support
                 </div>
               </div>
             </div>
