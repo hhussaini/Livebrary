@@ -49,9 +49,25 @@ public class SearchResult {
         if (request.getParameter("page") != null)
             currentPage = Integer.parseInt(request.getParameter("page"));
         int offset = (currentPage-1) * recordsPerPage;
-        
+         
         this.bookService = bookService;
         books = bookService.searchBooks(searchTermMap, this.getSelectedCategories(), offset, recordsPerPage);
+        int removedBooksCounter =  removeBannedBooks(session);
+//        User user = (User)session.getAttribute("user");
+//        int removedBooksCounter = 0;
+//        if(user==null || user.getType().equalsIgnoreCase(UserTypes.GUEST.toString()) || user.getType().equalsIgnoreCase(UserTypes.CUSTOMER.toString())){
+//            for(int i = 0; i<books.size(); i++){
+//                if(books.get(i).getIsBanned()){
+//                    books.remove(i);
+//                    removedBooksCounter++;
+//                }
+//            }
+//        }
+        setPages(bookService.getNumberOfResults() - removedBooksCounter);
+        
+    }
+    
+    public int removeBannedBooks(HttpSession session){
         User user = (User)session.getAttribute("user");
         int removedBooksCounter = 0;
         if(user==null || user.getType().equalsIgnoreCase(UserTypes.GUEST.toString()) || user.getType().equalsIgnoreCase(UserTypes.CUSTOMER.toString())){
@@ -62,8 +78,7 @@ public class SearchResult {
                 }
             }
         }
-        setPages(bookService.getNumberOfResults() - removedBooksCounter);
-        
+        return removedBooksCounter;
     }
     
     public void setPages(int numResults){
@@ -231,6 +246,7 @@ public class SearchResult {
         int offset = (currentPage-1) * recordsPerPage;
         this.bookService = bookService;
         books = bookService.searchBooks(this.getTerms(request), this.getSelectedCategories(), offset, recordsPerPage);
-        setPages(bookService.getNumberOfResults());
+        int numOfRemovedBooks = removeBannedBooks(request.getSession());
+        setPages(bookService.getNumberOfResults() - numOfRemovedBooks);
     }
 }
