@@ -549,4 +549,34 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
 
       return status;
    }
+   
+   @Override
+   public List<Book> getRatedItems(User user) {
+       bookService = ServiceFactory.getBookService();
+        List<Book> ratedItems = new ArrayList<Book>();        
+        Connection conToUse = null;
+        java.sql.PreparedStatement ps = null;
+        ResultSet res = null;
+        ResultSet res2 = null;
+        try {
+            String username = user.getUsername();
+            conToUse = getConnection();
+            String sql = "select * from reviews where USERNAME = ?";
+            ps = (PreparedStatement) conToUse.prepareStatement(sql);
+            ps.setString(1, username);
+            res = ps.executeQuery();
+            sql = "select copiesLeft from books where isbn = ?";
+            ps = (PreparedStatement) conToUse.prepareStatement(sql);
+            while (res.next()) {
+                Book book = bookService.getBookByIsbn(res.getString("isbn"));
+                ratedItems.add(book);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConnectionUtil.closeStatement(ps);
+        }
+        
+        return ratedItems;
+   }
 }

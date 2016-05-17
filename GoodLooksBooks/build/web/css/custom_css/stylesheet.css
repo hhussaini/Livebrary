@@ -43,6 +43,8 @@ table.padded td {
     margin-left:175px;*/
 }
 .results-table {
+    border-spacing: 10px;
+    border-collapse: separate;
 /*    margin-left:150px;
     margin-right:175px;*/
 }

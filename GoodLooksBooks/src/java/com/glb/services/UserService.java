@@ -18,4 +18,8 @@ public interface UserService {
     public int putOnHold(String username, String isbn, String email, String autoCheckout);
     public int update(User user);
     public int deleteUser(String username);
+    public List<Book> getRatedItems(User user);
+
+    public List<Book> getInstockWishlist(List<Book> fullWishlist);
+    public List<Book> getInstockWishlist(User user);
 }

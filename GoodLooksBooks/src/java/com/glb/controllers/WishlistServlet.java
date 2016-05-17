@@ -135,7 +135,7 @@ public class WishlistServlet extends HttpServlet {
             return;
         }
         userService.removeFromWishlist(user, isbn);
-        doGet(request, response);
+       request.getRequestDispatcher("/CustomerServlet").forward(request, response);
     }
     
     /**

@@ -66,18 +66,27 @@ public class CustomerServlet extends HttpServlet {
            goToSignIn(request, response);
            return;
         }
-        
-        
         // Check for any expired checkouts
         bookService.checkExpiredCheckouts();
         bookService.checkHolds();
+        
         List<Book> checkedOut = userService.getCheckedOutItems(user);
         session.setAttribute("checkedOutItems", checkedOut);
+        
         List<Book> onHold = userService.getOnHoldItems(user);
         session.setAttribute("onHoldItems", onHold);
         println(onHold.size());
-        List<Book> wishlist = userService.getWishlist(user);
-        session.setAttribute("customerWishlist", wishlist);
+        
+        List<Book> fullWishlist = userService.getWishlist(user);
+        session.setAttribute("fullWishlist", fullWishlist);
+        
+        List<Book> inStockWishlist = userService.getInstockWishlist(fullWishlist);
+        session.setAttribute("inStockWishlist", inStockWishlist);
+        
+        List<Book> ratedItems = userService.getRatedItems(user);
+        session.setAttribute("ratedItems", ratedItems);
+        
+        
         RequestDispatcher dispatcher = request.getRequestDispatcher("/customerIndex.jsp");
         dispatcher.forward(request, response); 
     }

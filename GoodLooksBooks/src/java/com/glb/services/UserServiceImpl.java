@@ -242,7 +242,7 @@ public class UserServiceImpl implements UserService {
         System.out.println("Status from UserServiceImppl.update() = " + status);
         return status;
     }
-
+    
     @Override
     public List<Book> getOnHoldItems(User user) {
         List<Book> onHold = new ArrayList<Book>();
@@ -266,40 +266,40 @@ public class UserServiceImpl implements UserService {
         
         return onHold;
     }
-
-   @Override
-   public int deleteUser(String username) {
-      System.out.println("Inside UserServiceImpl.deleteUser");
-      Connection conToUse = null;
-      int status = 0;
-      // get the connection from util class
-      // set the transaction to con & pass con to dao
-      try {
-          conToUse = ConnectionUtil.getConnection();
-          conToUse.setAutoCommit(false);
-          UserDao userDao = DaoFactory.getUserDao();
-          userDao.setConnection(conToUse);
-          status = userDao.deleteUser(username);
-          conToUse.commit();
-      } catch (ResourceHelperException e) {
-          // TODO Auto-generated catch block
-          System.out.println("ResourceHelperException");
-          DbUtils.rollbackAndCloseQuietly(conToUse);
-          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, e);
-      } catch (SQLException ex) {
-          System.out.println("SQLException");
-          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
-      } finally {
-          DbUtils.closeQuietly(conToUse);
-      }
-
-      System.out.println("Status from UserServiceImpl.deleteUser() = " + status);
-      return status;
-   }
-
-   @Override
-   public List<User> getAllUsers() {
-      System.out.println(this.getClass().getName() + " : getAllUsers");
+    
+    @Override
+    public int deleteUser(String username) {
+        System.out.println("Inside UserServiceImpl.deleteUser");
+        Connection conToUse = null;
+        int status = 0;
+        // get the connection from util class
+        // set the transaction to con & pass con to dao
+        try {
+            conToUse = ConnectionUtil.getConnection();
+            conToUse.setAutoCommit(false);
+            UserDao userDao = DaoFactory.getUserDao();
+            userDao.setConnection(conToUse);
+            status = userDao.deleteUser(username);
+            conToUse.commit();
+        } catch (ResourceHelperException e) {
+            // TODO Auto-generated catch block
+            System.out.println("ResourceHelperException");
+            DbUtils.rollbackAndCloseQuietly(conToUse);
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, e);
+        } catch (SQLException ex) {
+            System.out.println("SQLException");
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(conToUse);
+        }
+        
+        System.out.println("Status from UserServiceImpl.deleteUser() = " + status);
+        return status;
+    }
+    
+    @Override
+    public List<User> getAllUsers() {
+        System.out.println(this.getClass().getName() + " : getAllUsers");
         Connection conToUse = null;
         List<User> users = null;
         // get the connection from util class
@@ -319,51 +319,94 @@ public class UserServiceImpl implements UserService {
         }
         
         return users;
-   }
-
-   @Override
-   public User getUser(String username) {
-      Connection conToUse = null;
-      User user = null;
-      // get the connection from util class
-      // set the transaction to con & pass con to dao
-      try {
-          conToUse = ConnectionUtil.getConnection();
-          UserDao userDao = DaoFactory.getUserDao();
-          userDao.setConnection(conToUse);
-          user = userDao.getUser(username);
-      } catch (ResourceHelperException e) {
-          // TODO Auto-generated catch block
-          System.out.println("ResourceHelperException");
-          DbUtils.rollbackAndCloseQuietly(conToUse);
-          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, e);
-      } finally {
-          DbUtils.closeQuietly(conToUse);
-      }
-
-      return user;
-   }
-
-   @Override
-   public int putOnHold(String username, String isbn, String email, String autoCheckout) {
-      Connection conToUse = null;
-      int status = 0;
-      // get the connection from util class
-      // set the transaction to con & pass con to dao
-      try {
-          conToUse = ConnectionUtil.getConnection();
-          UserDao userDao = DaoFactory.getUserDao();
-          userDao.setConnection(conToUse);
-          status = userDao.putOnHold(username, isbn, email, autoCheckout);
-      } catch (ResourceHelperException e) {
-          // TODO Auto-generated catch block
-          System.out.println("ResourceHelperException");
-          DbUtils.rollbackAndCloseQuietly(conToUse);
-          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, e);
-      } finally {
-          DbUtils.closeQuietly(conToUse);
-      }
-
-      return status;
-   }
+    }
+    
+    @Override
+    public User getUser(String username) {
+        Connection conToUse = null;
+        User user = null;
+        // get the connection from util class
+        // set the transaction to con & pass con to dao
+        try {
+            conToUse = ConnectionUtil.getConnection();
+            UserDao userDao = DaoFactory.getUserDao();
+            userDao.setConnection(conToUse);
+            user = userDao.getUser(username);
+        } catch (ResourceHelperException e) {
+            // TODO Auto-generated catch block
+            System.out.println("ResourceHelperException");
+            DbUtils.rollbackAndCloseQuietly(conToUse);
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            DbUtils.closeQuietly(conToUse);
+        }
+        
+        return user;
+    }
+    
+    @Override
+    public int putOnHold(String username, String isbn, String email, String autoCheckout) {
+        Connection conToUse = null;
+        int status = 0;
+        // get the connection from util class
+        // set the transaction to con & pass con to dao
+        try {
+            conToUse = ConnectionUtil.getConnection();
+            UserDao userDao = DaoFactory.getUserDao();
+            userDao.setConnection(conToUse);
+            status = userDao.putOnHold(username, isbn, email, autoCheckout);
+        } catch (ResourceHelperException e) {
+            // TODO Auto-generated catch block
+            System.out.println("ResourceHelperException");
+            DbUtils.rollbackAndCloseQuietly(conToUse);
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            DbUtils.closeQuietly(conToUse);
+        }
+        
+        return status;
+    }
+    
+    @Override
+    public List<Book> getRatedItems(User user) {
+        Connection conToUse = null;
+        List<Book> ratedItems = null;
+        // get the connection from util class
+        // set the transaction to con & pass con to dao
+        try {
+            conToUse = ConnectionUtil.getConnection();
+            conToUse.setAutoCommit(false);
+            UserDao userDao = DaoFactory.getUserDao();
+            userDao.setConnection(conToUse);
+            ratedItems = userDao.getRatedItems(user);
+        } catch (ResourceHelperException e) {
+            System.out.println("ResourceHelperException");
+            DbUtils.rollbackAndCloseQuietly(conToUse);
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, e);
+        } catch (SQLException ex) {
+            System.out.println("SQLException");
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(conToUse);
+        }
+        
+        return ratedItems;
+    }
+    
+    @Override
+    public List<Book> getInstockWishlist(List<Book> fullWishlist) {
+        List<Book> inStock = new ArrayList<Book>();
+        inStock = new ArrayList<Book>();
+        for (Book book : fullWishlist) {
+            if (book.getCopiesLeft() > 0)
+                inStock.add(book);
+        }
+        
+        return inStock;
+    }
+    
+    @Override
+    public List<Book> getInstockWishlist(User user) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
