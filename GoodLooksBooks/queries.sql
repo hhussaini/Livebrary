@@ -3,6 +3,7 @@
  * Created: May 15, 2016
  */
 
+select * from books where isbn10 = '1234567890'
 -- Make a book expired
 -- This example sets A Game of Thrones expired for user demo
 update CHECKED_OUT set endDate = DATE_SUB(NOW(), INTERVAL 1 DAY), expired = 'y' where isbn = '9780553381689' and username = 'demo'
@@ -16,8 +17,6 @@ update books set copiesLeft = 1 where isbn = '9780553381689'
 
 -- Make the hold for A Game of Thrones be expired after it was available to user for 3 days
 update holds set holdUntil = NOW() where isbn = '9780553381689'
-
-select B.*, C.category from books B, categories C where B.isbn = '9780553381689' and B.isbn = C.isbn
 
 -- Makes the end date of a check out of A Game of Thrones for demo to be 2 days after the start date
 -- Use for renewing

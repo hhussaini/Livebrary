@@ -659,7 +659,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 binding, imageUrl, pages, language, listPrice, currency, publisher, category);
         int status = 0;
         if (!categoryMap.containsKey(category)) {
-            return 0;
+            return -1;
         }
         try {
             conToUse = getConnection();
