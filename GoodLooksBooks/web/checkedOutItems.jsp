@@ -6,6 +6,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>   
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <table class="results-table" id="checked-out">
+    
    <tr>
      <c:forEach var="item" items="${checkedOutItems}" varStatus="status">
         <c:if test="${status.index != 0 && status.index % 3 == 0}">

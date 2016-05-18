@@ -225,6 +225,14 @@ public class SearchResult {
         return selectedCategories;
     }
     
+    public boolean getOnlyInStock() {
+        return onlyInStock;
+    }
+    
+      public void setOnlyInStock(boolean onlyInStock) {
+        this.onlyInStock = onlyInStock;
+    }
+    
     public void setSelectedCategories(String[] selectedCategories) {
         this.selectedCategories = new ArrayList<String>();
         for (String category : selectedCategories) {

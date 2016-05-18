@@ -12,6 +12,14 @@
         <jsp:include page="/header.jsp" />
         <script src="js/bootstrap-tabcollapse.js"></script>
         <script src="js/customerScript.js"></script>
+        <script src="js/jquery-latest.js"></script>
+        <script src="js/jquery.tablesorter.js"></script>
+        <script type="text/javascript" id="js">
+            $(document).ready(function() { 
+                $("#cutomerList").tablesorter(); 
+            } 
+            ); 
+        </script>
     </head>
     <body>
         <jsp:include page="/customerNavbar.jsp" />

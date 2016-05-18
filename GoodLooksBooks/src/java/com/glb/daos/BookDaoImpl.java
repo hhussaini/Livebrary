@@ -113,13 +113,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             rs = stmt.executeQuery("select * from resultsView " + limit);
             
             while (rs.next()) {
-                Book book = new Book();
-                book.setIsbn(rs.getString("isbn"));
-                book.setTitle(rs.getString("title"));
-                book.setImageUrl(rs.getString("imageUrl"));
-                book.setAuthor(rs.getString("author"));
-                book.setDate(rs.getString("published"));
-                book.setCopiesLeft(rs.getInt("copiesLeft"));
+                Book book = this.getBookByIsbn((rs.getString("isbn")));
                 book.setIsBanned(rs.getInt("isBanned")==1);
                 results.add(book);
             }
