@@ -213,7 +213,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         Connection conn = getConnection();
         ResultSet rs = null;
         Statement stmt = null;
-        String query = "SELECT B.* from books B where B.isbn not in (select isbn from CHECKED_OUT) limit " + limit;
+        String query = "SELECT B.* from books B where B.isbn not in (select isbn from CHECKED_OUT) and B.copiesLeft > 0 limit " + limit;
         try {
             stmt = conn.createStatement();
             rs = stmt.executeQuery(query);
