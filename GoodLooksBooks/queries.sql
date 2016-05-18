@@ -17,6 +17,8 @@ update books set copiesLeft = 1 where isbn = '9780553381689'
 -- Make the hold for A Game of Thrones be expired after it was available to user for 3 days
 update holds set holdUntil = NOW() where isbn = '9780553381689'
 
+select B.*, C.category from books B, categories C where B.isbn = '9780553381689' and B.isbn = C.isbn
+
 -- Makes the end date of a check out of A Game of Thrones for demo to be 2 days after the start date
 -- Use for renewing
 update checked_out set endDate = DATE_SUB(endDate, INTERVAL (DATEDIFF(endDate, startDate) - 2) DAY) where isbn = '9780553381689' and username = 'demo' and expired = 'n'

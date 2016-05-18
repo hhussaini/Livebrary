@@ -52,10 +52,14 @@
                     <br> 
                     <h5 id="copiesAvailableID">Copies Available: ${itemClicked.copiesLeft}</h5>
                     <br> 
-                    <h5 id="availableFormatsID">Available Formats: Kindle</h5>
+                    <h5 id="availableFormatsID">Available Formats: ${itemClicked.type}</h5>
                     <br> 
+                    <h5 id="genresID">Genre: ${itemClicked.genres}</h5>
+                    <br>
                     <h5 id="languageID" value = "${itemClicked.language}">Language: ${itemClicked.language}</h5>
-                    <br> <input type="hidden" name = "isbn" id = "isbn" value="${itemClicked.isbn}" </h5>
+                    <br>
+                    <h5 id="rightsID">Rights Information: This item was gathered from scraping the Openisbn.com website</h5>
+                    <br> 
                 </div>
                 <div class="col-xs-6 col-sm-5 bookDescriptionPictures">
                     <img src = ${itemClicked.imageUrl} class="img-rounded" alt="Andersonville: A Story of Rebel Military Prisons" height="250">
@@ -233,4 +237,5 @@
 <form id= "licenseForm" name="licenseForm" value="-1" action="BuyLicenseServlet" method = "post">
     <input id="numOfCopies" name="numOfCopies" value="-1" type="hidden">
 </form>
+<input type="hidden" name = "isbn" id = "isbn" value="${itemClicked.isbn}" </h5>
                        

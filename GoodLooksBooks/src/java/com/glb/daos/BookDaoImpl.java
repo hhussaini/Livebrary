@@ -188,7 +188,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         Connection conn = getConnection();
         ResultSet rs = null;
         Statement stmt = null;
-        String query = "select * from books where isbn = '" + isbn + "'";
+        String query = "select B.*, C.category from books B, categories C where B.isbn = '" + isbn + "' and B.isbn = C.isbn";
         try {
             stmt = conn.createStatement();
             rs = stmt.executeQuery(query);
@@ -208,6 +208,9 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 book.setDownloadUrl(rs.getString("downloadUrl"));
                 book.setType(rs.getString("type"));
                 book.setIsBanned(rs.getInt("isBanned")==1);
+                List<String> genres = new ArrayList<String>();
+                genres.add(rs.getString("category"));
+                book.setGenres(genres);
             }
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
