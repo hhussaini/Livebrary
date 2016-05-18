@@ -43,17 +43,26 @@ public class ItemAccessServlet extends HttpServlet {
         println(request.getMethod().toString());
         String method = request.getParameter("method");
         method = (method == null) ? "" : method;
-        if (method.equals("doBorrow")){
-            doBorrow(request, response);
-        } else if (method.equals("requestHold")) {
-            requestHold(request, response);
-        } else if (method.equals("doHold")) {
-            doHold(request, response);
-        } else if (method.equals("doRenew")) {
-            doRenew(request, response);
-        } else {
-            super.service(request, response);
-        } 
+        switch (method) {
+            case "doBorrow":
+                doBorrow(request, response);
+                break;
+            case "requestHold":
+                requestHold(request, response);
+                break;
+            case "doHold":
+                doHold(request, response);
+                break;
+            case "doRenew":
+                doRenew(request, response);
+                break; 
+            case "doRecommend":
+                doRecommend(request, response);
+                break;
+            default:
+                super.service(request, response);
+                break;
+        }
     }
     
    /**
@@ -142,6 +151,33 @@ public class ItemAccessServlet extends HttpServlet {
          outputToHtml(response, "\"Item not renewed. You can not renew this item until 3 days before its expiration. " + createReturnTag("Return", "CustomerServlet"));
       }
    }
+   
+    protected void doRecommend(HttpServletRequest request, HttpServletResponse response)
+           throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User user = (User)session.getAttribute("user");
+        String isbn = request.getParameter("isbn");
+        String email = request.getParameter("email");
+        String checkOut_or_email = request.getParameter("checkOut");
+        if (user == null) {
+            goToSignIn(request, response);
+            return;
+        }
+        int status = bookService.recommendItem(user.getUsername(), isbn, email, checkOut_or_email);
+        switch (status) {
+            case 1:
+                outputToHtml(response, "Item renewed successfully. " + createReturnTag("Return", "CustomerServlet"));
+                break;
+            case -1:
+                outputToHtml(response, "Item not renewed. It is on another user's waiting list. " + createReturnTag("Return", "CustomerServlet"));
+                break;
+            case -2:
+                outputToHtml(response, "\"Item not renewed. You can not renew this item until 3 days before its expiration. " + createReturnTag("Return", "CustomerServlet"));
+                break;
+            default:
+                break;
+        }
+    }
 
    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
    /**

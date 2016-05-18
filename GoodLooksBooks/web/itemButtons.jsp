@@ -8,14 +8,17 @@
 <br><br>
 <c:choose>
    <c:when test="${itemAccess == 'Recommend'}"> 
-      <button type="button" name = "button1" onclick="recommendItem()" class="btn btn-primary">Recommend</button> <br>
+<!--      <button type="button" name = "button1" onclick="recommendItem()" class="btn btn-primary">Recommend</button> <br>-->
    </c:when>
    <c:when test="${itemAccess == 'Borrow'}">
       <button type="button" name = "button2" onclick="borrowItem()" class="btn btn-primary">Borrow</button> <br>
    </c:when>
    <c:when test="${itemAccess == 'Hold'}">
       <button type="button" name = "button3" onclick="holdItem()" class="btn btn-primary">Hold</button> <br>
-   </c:when>
+      <button type="button" name = "button1" onclick="recommendItemPage()" class="btn btn-primary">Recommend</button> <br>
+       
+      
+   </c:when> 
    <c:when test="${itemAccess == 'isCheckedOut'}">
       <form action="http://localhost:8080/GoodLooksBooks/CustomerServlet">
          <input type="submit" class="btn btn-primary" value="Go to Checkouts">
@@ -35,3 +38,4 @@
    <input type="hidden" name="isbn" value="${itemClicked.isbn}">
    <input type="hidden" name="method" value="requestHold">
 </form>
+   

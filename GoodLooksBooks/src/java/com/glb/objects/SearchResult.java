@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * @author PaulMan
- */
+*/
 
 public class SearchResult {
     

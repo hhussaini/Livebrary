@@ -50,7 +50,7 @@ public class Item implements Serializable, Comparable{
         this.imageUrl = imageUrl;
         this.genres = new ArrayList<>();
         this.numOfDownloads = numOfDownloads;
-        this.isBanned = isBanned;
+       // this.isBanned = isBanned;
     }
 
     public String getIsbn() {

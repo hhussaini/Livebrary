@@ -32,6 +32,14 @@
                <a href="AdminAccountManagementServlet"><img alt="brand" width = "100" height = "100" src="assets/account-management-icon.gif"></a>
                Account Management        
              </div>
+             <div class="list-group">
+               <a href="RecommendedBooksServlet"><img alt="brand" width = "100" height = "100" src="assets/recommendedBooks.png"></a>
+               Recommended Books     
+             </div>
+             <div class="list-group">
+               <a href="BestSellersListServlet"><img alt="brand" width = "100" height = "100" src="assets/bestseller.png"></a>
+               Best Sellers List     
+             </div>
            </div>
          </div>
        </div>
