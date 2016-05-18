@@ -21,10 +21,6 @@
            </div>
            <div class="panel-body">
              <div class="list-group">
-               <a href="SiteStatisticsServlet"><img alt="brand" width = "100" height = "100" src="assets/statistics-icon.jpg"></a>
-               Site Statistics          
-             </div>
-             <div class="list-group">
                <a href="AdminRespondToTicketsServlet"><img alt="brand" width = "100" height = "100" src="assets/service-request-icon.jpeg"></a>
                Respond to Tickets         
              </div>
