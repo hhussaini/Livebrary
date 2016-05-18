@@ -22,33 +22,31 @@
         <div class="container">
     <br>
     <ul id="tabs" class="nav nav-tabs">
-        <li class="active"><a href="#all-wish" data-toggle="tab">BestSellers</a></li>
+        <li class="active"><a href="#all-wish" data-toggle="tab">Best Sellers</a></li>
     </ul>
     <div id="tabContent" class="tab-content">
-        <div class="tab-pane fade in active" id="all-wish">
+        <div class="tab-pane fade in active">
             <c:choose>
                 <c:when test="${fn:length(bestSellerlist) > 0}">
                     <table class="results-table">
                         <tr>
                             <c:forEach var="item" items="${bestSellerlist}" varStatus="status">
-                                <c:if test="${status.index != 0 && status.index % 2 == 0}">
-                                </tr>
+                                <c:if test="${status.index != 0 && status.index % 4 == 0}">
                                 <tr>
+                                </tr>
                                 </c:if>
                                 <td>
                                     <div class="col-xs-6 col-md-3"> 
                                         <td> 
-                                            <a href = "BookDescriptionServlet?isbn=${item.isbn}" id="${item.isbn}" class="thumbnail">
+                                            <a href = "BookDescriptionServlet?isbn=${item.isbn}" id="${item.isbn}" class="thumbnail" style="width: 200px;">
                                                 <img onload="validateImgUrl(this.id)" name="bookImage" id="item.isbn" class="bookImage" src="${item.imageUrl}" alt="${item.title}" style="width: 200px;">
                                                 <p>${item.title}</p>
                                                 <h6>by</h6>
                                                 <h5>${item.author}</h5>
                                             </a>
                                         </td>
-    
                                     </div>
                                 </td>
-                            </tr>
                         </c:forEach>
                         </tr>
                     </table>
