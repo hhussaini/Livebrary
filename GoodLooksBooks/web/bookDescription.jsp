@@ -95,13 +95,17 @@
                     <jsp:include page="/itemButtons.jsp" />
                     <c:if test="${user.type == 'admin'}">
                         <button type="button" id="banButtonID" action="BanItemServlet" name = "button5" onclick="banFunction(${itemClicked.isBanned ? 1 : 0})" class="btn btn-primary" value="">${itemClicked.isBanned ? 'Ban Book' : 'Unban Book'}</button>
-                         <select id="licenseNumbers">
+                         <br>   
+                        <select id="licenseNumbers">
+                          
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
                             <option value="4">4</option>
                             <option value="5">5</option>
+                           
                         </select>
+                            
                           <button type="button" id="buylicense" name = "button6" class="btn btn-primary" value="" onclick="numOfLicense()">Buy License</button>   
                     </c:if>
                     <br>
