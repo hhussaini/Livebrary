@@ -148,7 +148,7 @@ public class ItemAccessServlet extends HttpServlet {
       } else if (status == -1) {
          outputToHtml(response, "Item not renewed. It is on another user's waiting list. " + createReturnTag("Return", "CustomerServlet"));
       } else if (status == -2) {
-         outputToHtml(response, "\"Item not renewed. You can not renew this item until 3 days before its expiration. " + createReturnTag("Return", "CustomerServlet"));
+         outputToHtml(response, "Item not renewed. You can not renew this item until 3 days before its expiration. " + createReturnTag("Return", "CustomerServlet"));
       }
    }
    
