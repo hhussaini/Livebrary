@@ -101,6 +101,18 @@
                             <jsp:include page="/sortForm.jsp" /> 
                         </div>  
                         <!--</form>-->
+                        <div>
+                            <jsp:include page="/formatForm.jsp" /> 
+                        </div>  
+                        
+                        <div>
+                            <jsp:include page="/languageForm.jsp" /> 
+                        </div> 
+                        
+                        <div>
+                            <jsp:include page="/readingLevelForm.jsp" /> 
+                        </div> 
+                        
                     </div>
                 </form>
                 <div class="col-md-9">

@@ -11,11 +11,19 @@
 <!--      <button type="button" name = "button1" onclick="recommendItem()" class="btn btn-primary">Recommend</button> <br>-->
    </c:when>
    <c:when test="${itemAccess == 'Borrow'}">
-      <button type="button" name = "button2" onclick="borrowItem()" class="btn btn-primary">Borrow</button> <br>
+      <c:if test="${user.type != 'admin'}">
+         <c:if test="${user.type != 'publisher'}">
+            <button type="button" name = "button2" onclick="borrowItem()" class="btn btn-primary">Borrow</button> <br>
+         </c:if>
+      </c:if>
    </c:when>
    <c:when test="${itemAccess == 'Hold'}">
-      <button type="button" name = "button3" onclick="holdItem()" class="btn btn-primary">Hold</button> <br><br>
-      <button type="button" name = "button1" onclick="recommendItemPage()" class="btn btn-primary">Recommend</button> <br>
+      <c:if test="${user.type != 'admin'}">
+         <c:if test="${user.type != 'publisher'}">
+            <button type="button" name = "button3" onclick="holdItem()" class="btn btn-primary">Hold</button> <br><br>
+            <button type="button" name = "button1" onclick="recommendItemPage()" class="btn btn-primary">Recommend</button> <br>
+         </c:if>
+      </c:if>
    </c:when> 
    <c:when test="${itemAccess == 'isCheckedOut'}">
       <form action="http://localhost:8080/GoodLooksBooks/CustomerServlet">
@@ -23,7 +31,11 @@
       </form>
    </c:when>
    <c:otherwise>
-      <button type="button" name = "button4" onclick="borrowItem()" class="btn btn-primary">Borrow</button> <br>
+      <c:if test="${user.type != 'admin'}">
+         <c:if test="${user.type != 'publisher'}">
+            <button type="button" name = "button4" onclick="borrowItem()" class="btn btn-primary">Borrow</button> <br>
+         </c:if>
+      </c:if>
    </c:otherwise>
 </c:choose>
       

@@ -61,7 +61,7 @@ table.padded td {
     /*text-align: center;*/
 }
 
-#list.results-table {
+.results-list .results-table {
 /*    margin-top:25px;
     margin-left:175px;*/
 }
