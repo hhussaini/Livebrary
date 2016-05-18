@@ -96,8 +96,7 @@
                     <c:if test="${user.type == 'admin'}">
                         <button type="button" id="banButtonID" action="BanItemServlet" name = "button5" onclick="banFunction(${itemClicked.isBanned ? 1 : 0})" class="btn btn-primary" value="">${itemClicked.isBanned ? 'Ban Book' : 'Unban Book'}</button>
                          <br>   
-                        <select id="licenseNumbers">
-                          
+                        <select id="licenseNumbers">  
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
