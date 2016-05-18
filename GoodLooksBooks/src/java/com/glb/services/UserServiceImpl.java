@@ -9,6 +9,7 @@ import com.glb.objects.User;
 import com.glb.daos.ConnectionUtil;
 import static com.glb.helpers.Helpers.*;
 import com.glb.objects.Book;
+import com.glb.objects.Wishlist;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
@@ -72,9 +73,9 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public List<Book> getWishlist(User user) {
+    public Wishlist getWishlist(User user) {
         Connection conToUse = null;
-        List<Book> booksOnWishlist = null;
+        Wishlist booksOnWishlist = null;
         // get the connection from util class
         // set the transaction to con & pass con to dao
         try {
