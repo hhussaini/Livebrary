@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public interface BookService {
-    public List<Book> searchBooks(HashMap<String,String> searchTermMap, ArrayList<String> categories, int offset, int recordsPerPage, boolean onlyInStock);
+    public List<Book> searchBooks(HashMap<String,String> searchTermMap, ArrayList<String> categories, int offset, int recordsPerPage, boolean onlyInStock, ArrayList<String> formats, ArrayList<String> languages);
     public int getNumberOfResults();
     public List<Book> getAllBooks();
     public List<Ticket> getTickets(String resolved);

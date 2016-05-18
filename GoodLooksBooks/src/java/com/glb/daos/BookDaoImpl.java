@@ -42,7 +42,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     private Connection conToUse = getConnection();
     
     @Override
-    public List<Book> searchBooks(HashMap<String,String> searchTermMap, ArrayList<String> categories, int offset, int recordsPerPage, boolean onlyInStock) {
+    public List<Book> searchBooks(HashMap<String,String> searchTermMap, ArrayList<String> categories, int offset, int recordsPerPage, boolean onlyInStock, ArrayList<String> formats, ArrayList<String> languages) {
         Connection conn = getConnection();
         boolean catSelected = !categories.get(0).equals("");
         ResultSet rs = null;
@@ -67,8 +67,34 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                     + "AND title like ? "
                     + "AND isbn like ?) ";
             
+            if (formats.size() > 0) {
+                if (formats.get(0) != null) {
+                    query += " and type = '" + formats.get(0) + "' ";
+                    System.out.println(formats.get(0));
+                }
+            }
+            if (formats.size() > 1) {
+                if (formats.get(1) != null) {
+                    query += " or type = '" + formats.get(1) + "' ";
+                    System.out.println(formats.get(1));
+                }
+            }
+            
+            if (languages.size() > 0) {
+                if (languages.get(0) != null) {
+                    query += " and language = '" + languages.get(0) + "' ";
+                    System.out.println(languages.get(0));
+                }
+            }
+            if (languages.size() > 1) {
+                if (languages.get(1) != null) {
+                    query += " or language = '" + languages.get(1) + "' ";
+                    System.out.println(languages.get(1));
+                }
+            }
+            
             if (onlyInStock) {
-                query += "and copiesLeft > 0 ";
+                query += " and copiesLeft > 0 ";
             }
             
             // CategoryMap Query
@@ -87,6 +113,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 query += "))";
             }
             
+            
+            System.out.println(query);
             pstmt = (PreparedStatement) conn.prepareStatement(query);// + limit);
             
             pstmt.setString(pRows++, "%"+publisher+"%");

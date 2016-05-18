@@ -34,6 +34,8 @@ public class SearchResult {
     private String title;
     private BookService bookService;
     private boolean onlyInStock;
+    private ArrayList<String> selectedFormats;
+    private ArrayList<String> selectedLanguages;
     
     public SearchResult(HttpServletRequest request, HttpSession session, BookService bookService) {
         System.out.println("IN " + this.getClass() + " : GETTING result set");
@@ -49,13 +51,29 @@ public class SearchResult {
         if (categories.length > 0)
             setSelectedCategories(categories);
         
+        selectedFormats = new ArrayList<String>();
+        String paperback = request.getParameter("paperback");
+        if (paperback != null)
+            selectedFormats.add("paperback");
+        String ebook = request.getParameter("ebook");
+        if (ebook != null)
+            selectedFormats.add("ebook");
+        
+        selectedLanguages = new ArrayList<String>();
+        String english = request.getParameter("English");
+        if (english != null)
+            selectedLanguages.add("English");
+        String international = request.getParameter("International");
+        if (international != null)
+            selectedLanguages.add("International");
+        
         currentPage = 1;
         if (request.getParameter("page") != null)
             currentPage = Integer.parseInt(request.getParameter("page"));
         int offset = (currentPage-1) * recordsPerPage;
-         
+        
         this.bookService = bookService;
-        books = bookService.searchBooks(searchTermMap, this.getSelectedCategories(), offset, recordsPerPage, onlyInStock);
+        books = bookService.searchBooks(searchTermMap, this.getSelectedCategories(), offset, recordsPerPage, onlyInStock, selectedFormats, selectedLanguages);
         
         int removedBooksCounter =  removeBannedBooks(session);
 //        User user = (User)session.getAttribute("user");
@@ -232,6 +250,22 @@ public class SearchResult {
       public void setOnlyInStock(boolean onlyInStock) {
         this.onlyInStock = onlyInStock;
     }
+      
+      public ArrayList<String> getSelectedFormats() {
+          return selectedFormats;
+      }
+      
+      public void setSelectedFormats(ArrayList<String> formats) {
+          this.selectedFormats = formats;
+      }
+      
+       public ArrayList<String> getSelectedLanguages() {
+          return selectedLanguages;
+      }
+      
+      public void setSelectedLanguages(ArrayList<String> languages) {
+          this.selectedLanguages = languages;
+      }
     
     public void setSelectedCategories(String[] selectedCategories) {
         this.selectedCategories = new ArrayList<String>();
@@ -260,7 +294,7 @@ public class SearchResult {
         int offset = (currentPage-1) * recordsPerPage;
         this.bookService = bookService;
         
-        books = bookService.searchBooks(this.getTerms(request), this.getSelectedCategories(), offset, recordsPerPage, onlyInStock);
+        books = bookService.searchBooks(this.getTerms(request), this.getSelectedCategories(), offset, recordsPerPage, onlyInStock, selectedFormats, selectedLanguages);
         int numOfRemovedBooks = removeBannedBooks(request.getSession());
         setPages(bookService.getNumberOfResults() - numOfRemovedBooks);
     }
