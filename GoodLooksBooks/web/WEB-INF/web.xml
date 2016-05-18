@@ -155,6 +155,10 @@
         <servlet-name>BuyLicenseServlet</servlet-name>
         <servlet-class>com.glb.controllers.BuyLicenseServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditRecommendedItemServlet</servlet-name>
+        <servlet-class>com.glb.controllers.EditRecommendedItemServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -286,6 +290,10 @@
     <servlet-mapping>
         <servlet-name>BuyLicenseServlet</servlet-name>
         <url-pattern>/BuyLicenseServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditRecommendedItemServlet</servlet-name>
+        <url-pattern>/EditRecommendedItemServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

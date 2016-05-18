@@ -71,3 +71,9 @@
         </div>
     <br>
 </div>
+        
+<form id="editRecommendedBook" action="EditRecommendedItemServlet">
+   <input id="editRecommendedBookID" type="hidden" name="isbn" value="">
+   <input id="editRecommendedBookID_UserName" type="hidden" name="username" value="${item.value.recommendation}">
+   <input id="editRecommendedBookMethod" type="hidden" name="editRecommendedBookMethod" value="dismissItem"> 
+</form>     
