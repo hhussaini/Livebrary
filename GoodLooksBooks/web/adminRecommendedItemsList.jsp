@@ -45,7 +45,12 @@
                                                 <h5>${item.value.author}</h5>
                                             </a>
                                         </td> 
-    
+                                       
+                                          <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;		    
+                                          <button id="dismissBook_${item.key}" name="dismissBook" value="${item.value.isbn}" onClick="editRecommendedBook(0, this.value)" class="btn btn-danger">Dismiss Book</button>		
+                                         &nbsp;		
+                                         <button id="purchaseNewLicense" name="purchaseNewLicense" value="${item.value.isbn}" onClick="editRecommendedBook(1, this.value)" class="btn btn-danger">Purchase New License</button>
+                                        
                                     </div>
                                 </td>
                             </tr>

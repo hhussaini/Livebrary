@@ -128,6 +128,15 @@ function isEmpty(str) {
     return (!str || 0 === str.length);
 }
 
+function editRecommendedBook(method, isbn){ 		
+    document.getElementById("editRecommendedBookID").value = isbn;		
+    switch(method){		
+        case 0 : document.getElementById("editRecommendedBookMethod").value = "dismiss"; break;		
+        case 1 : document.getElementById("editRecommendedBookMethod").value = "purchase";		
+    }		
+    document.getElementById("editRecommendedBook").submit();		
+}
+
 function numOfLicense(){
     console.log("recommendItem");
     var e = document.getElementById("licenseNumbers");
