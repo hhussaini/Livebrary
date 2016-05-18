@@ -14,6 +14,7 @@ import com.glb.services.UserService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -86,6 +87,8 @@ public class CustomerServlet extends HttpServlet {
         List<Book> ratedItems = userService.getRatedItems(user);
         session.setAttribute("ratedItems", ratedItems);
         
+        Map<String, Book> recommended = bookService.getAllRecommendedBooks();
+        session.setAttribute("recommendedMap", recommended);
         
         RequestDispatcher dispatcher = request.getRequestDispatcher("/customerIndex.jsp");
         dispatcher.forward(request, response); 

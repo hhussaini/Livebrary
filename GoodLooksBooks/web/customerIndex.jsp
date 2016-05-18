@@ -26,6 +26,7 @@
                     <li><a href="#rated" data-toggle="tab">Items You've Rated</a></li>
                     <li><a href="#wishlist" data-toggle="tab">Your Wishlist</a></li>
                     <li><a href="#settings" data-toggle="tab">Item Settings</a></li>
+                    <li><a href="#recommended" data-toggle="tab">Your recommended Items</a></li>
                 </ul>
                 <div id="tabContent" class="tab-content">
                     <div class="tab-pane fade in active" id="acct-sum">
@@ -99,6 +100,19 @@
                     </div>
                     <div class="tab-pane fade" id="settings">
                         <jsp:include page="/itemSettings.jsp" />
+                    </div>
+                    <div class="tab-pane fade" id="recommended">
+                        <c:choose>
+                            <c:when test="${fn:length(recommendedMap) > 0}">
+                                <jsp:include page="/userRecommended.jsp" />
+                            </c:when>
+                            <c:otherwise>
+                                <div class="heading-box">
+                                    <h2>You did not recommend any books</h2>
+                                    <a href="SearchServlet"><h3>Browse some books!</h3></a>                                
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </div>

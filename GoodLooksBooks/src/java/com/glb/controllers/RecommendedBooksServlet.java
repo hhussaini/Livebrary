@@ -70,10 +70,8 @@ public class RecommendedBooksServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-     //   processRequest(request, response);
+
           Map<String, Book> recommendedMap = bookService.getAllRecommendedBooks();
-    //     print(request, response, recommendedMap.size() + "");
-         // print(request, response, recommendedMap);
           HttpSession session = request.getSession();
           session.setAttribute("recommendedMap", recommendedMap);
           String url = "/adminRecommendedItemsList.jsp";
