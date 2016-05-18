@@ -27,7 +27,7 @@
     <div id="tabContent" class="tab-content">
         <div class="tab-pane fade in active" id="all-wish">
             <c:choose>
-                <c:when test="${fn:length(bestSellerlist) > 0}">
+                <c:when test="${fn:length(recommendedMap) > 0}">
                     <table class="results-table">
                         <tr>
                             <c:forEach var="item" items="${recommendedMap}" varStatus="status">
@@ -38,13 +38,13 @@
                                 <td>
                                     <div class="col-xs-6 col-md-3"> 
                                         <td> 
-                                            <a href = "BookDescriptionServlet?isbn=${item.isbn}" id="${item.isbn}" class="thumbnail">
-                                                <img onload="validateImgUrl(this.id)" name="bookImage" id="item.isbn" class="bookImage" src="${item.imageUrl}" alt="${item.title}" style="width: 200px;">
-                                                <p>${item.title}</p>
+                                            <a href = "BookDescriptionServlet?isbn=${item.key}" id="${item.key}" class="thumbnail">
+                                                <img onload="validateImgUrl(this.id)" name="bookImage" id="item.key" class="bookImage" src="${item.value.imageUrl}" alt="${item.value.title}" style="width: 200px;">
+                                                <p>${item.value.title}</p>
                                                 <h6>by</h6>
-                                                <h5>${item.author}</h5>
+                                                <h5>${item.value.author}</h5>
                                             </a>
-                                        </td>
+                                        </td> 
     
                                     </div>
                                 </td>
