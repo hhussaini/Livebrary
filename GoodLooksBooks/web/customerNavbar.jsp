@@ -23,7 +23,7 @@
                 <ul class="dropdown-menu">
                     <!--<li><a href="UserMyItemsServlet">My Items</a></li>-->
 <!--                    <li><a href="WishlistServlet">My Wishlist</a></li>-->
-                    <li role="separator" class="divider"></li>
+                    <!--<li role="separator" class="divider"></li>-->
                     <li><a href="SignOutServlet">Sign Out</a></li>
                 </ul>
             </li>

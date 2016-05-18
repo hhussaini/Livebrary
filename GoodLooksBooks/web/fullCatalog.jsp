@@ -56,10 +56,8 @@
                     <!--</form>-->
                     <div class="col-md-2">
                         <ul class="nav nav-pills">
-                            
                             <li class="active"><a href="#grid-view" data-toggle="tab"><img id="grid-tab" src="assets/glyphicons-157-show-thumbnails.png"></a></li>
                             <li><a href="#list-view" data-toggle="tab"><img id="list-tab" src="assets/glyphicons-530-list-alt.png"></a></li>
-                            
                         </ul>
                     </div>
                     <div class="col-md-12"></div>
@@ -67,13 +65,12 @@
                     <div class="col-md-3">
                         <br>
                         <ul>
-                            
-                            <li role="presentation" class="divider"></li>
+                            <li role="separator" class="divider"></li>
                             <li role="presentation">
                                 <button type="submit" class="btn btn-primary">Apply Filters</button>
                             </li>
                             <br>
-                            <li role="presentation" class="divider"></li>
+                            <li role="separator" class="divider"></li>
                             <li role="presentation">
                                 <c:choose>
                                     <c:when test="${results.onlyInStock eq true}">

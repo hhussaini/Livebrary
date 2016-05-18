@@ -1,7 +1,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>   
 <br>
-<table class="results-table">
+<table class="results-table tablesorter" id="cutomerList">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Title</th>
+            
+        </tr>
+    </thead>
     <tr>
         <c:forEach var="item" items="${ratedItems}" varStatus="status">
             <c:if test="${status.index != 0 && status.index % 3 == 0}">
