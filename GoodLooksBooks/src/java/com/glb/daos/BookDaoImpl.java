@@ -42,7 +42,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     private Connection conToUse = getConnection();
     
     @Override
-    public List<Book> searchBooks(HashMap<String,String> searchTermMap, ArrayList<String> categories, int offset, int recordsPerPage, boolean onlyInStock, ArrayList<String> formats, ArrayList<String> languages) {
+    public List<Book> searchBooks(HashMap<String,String> searchTermMap, ArrayList<String> categories, int offset, int recordsPerPage, 
+            boolean onlyInStock, ArrayList<String> formats, ArrayList<String> languages, ArrayList<String> readingLevels) {
         Connection conn = getConnection();
         boolean catSelected = !categories.get(0).equals("");
         ResultSet rs = null;
@@ -67,35 +68,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                     + "AND title like ? "
                     + "AND isbn like ?) ";
             
-            if (formats.size() > 0) {
-                if (formats.get(0) != null) {
-                    query += " and type = '" + formats.get(0) + "' ";
-                    System.out.println(formats.get(0));
-                }
-            }
-            if (formats.size() > 1) {
-                if (formats.get(1) != null) {
-                    query += " or type = '" + formats.get(1) + "' ";
-                    System.out.println(formats.get(1));
-                }
-            }
-            
-            if (languages.size() > 0) {
-                if (languages.get(0) != null) {
-                    query += " and language = '" + languages.get(0) + "' ";
-                    System.out.println(languages.get(0));
-                }
-            }
-            if (languages.size() > 1) {
-                if (languages.get(1) != null) {
-                    query += " or language = '" + languages.get(1) + "' ";
-                    System.out.println(languages.get(1));
-                }
-            }
-            
-            if (onlyInStock) {
-                query += " and copiesLeft > 0 ";
-            }
+            query = setSidebar(query, onlyInStock, formats, languages, readingLevels);
             
             // CategoryMap Query
             if (catSelected) {
@@ -165,6 +138,88 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             }
         }
         return results;
+    }
+    
+    private String setSidebar(String query, boolean onlyInStock, ArrayList<String> formats, ArrayList<String> languages, ArrayList<String> readingLevels) {
+        // FORMATS
+        if (formats.size() > 0) {
+                if (formats.get(0) != null) {
+                    query += " and type = '" + formats.get(0) + "' ";
+                    System.out.println(formats.get(0));
+                }
+            }
+            if (formats.size() > 1) {
+                if (formats.get(1) != null) {
+                    query += " or type = '" + formats.get(1) + "' ";
+                    System.out.println(formats.get(1));
+                }
+            }
+            // LANGUAGES
+            if (languages.size() > 0) {
+                if (languages.get(0) != null) {
+                    query += " and language = '" + languages.get(0) + "' ";
+                    System.out.println(languages.get(0));
+                }
+            }
+            if (languages.size() > 1) {
+                if (languages.get(1) != null) {
+                    query += " or language = '" + languages.get(1) + "' ";
+                    System.out.println(languages.get(1));
+                }
+            }
+            
+            // READING LEVELS
+            int numRanges = readingLevels.size();
+            int count = 0;
+            if (readingLevels.size() > 0) {
+                query+= "and (";
+                for (String range : readingLevels) {
+                if (range !=null) {
+                    switch(range) {
+                        case "range1":
+                            query += " pages <= 100 ";
+                            System.out.println(range);
+                            break;
+                        case "range2":
+                            query += " (pages > 100 and pages <= 500) ";
+                            System.out.println(range);
+                            break;
+                        case "range3":
+                            query += " pages > 1000 ";
+                            System.out.println(range);
+                            break;
+                    }
+                }
+                if (count++ < numRanges - 1)
+                    query+= " or ";
+            }
+                query+= ")";                
+            }
+            
+//            if (readingLevels.size() > 0) {
+//                if (readingLevels.get(0) != null) {
+//                    switch(readingLevels.get(0))
+//                        query += " and pages <= 100 ";
+//                    System.out.println(readingLevels.get(0));
+//                }
+//            }
+//             if (readingLevels.size() > 1) {
+//                if (readingLevels.get(1) != null) {
+//                    query += " or (pages > 100 and pages <= 500) ";
+//                    System.out.println(readingLevels.get(1));
+//                }
+//            }
+//              if (readingLevels.size() > 2) {
+//                if (readingLevels.get(2) != null) {
+//                    query += " or pages > 1000 ";
+//                    System.out.println(readingLevels.get(2));
+//                }
+//            }
+            
+            if (onlyInStock) {
+                query += " and copiesLeft > 0 ";
+            }
+            return query;
     }
     
     @Override

@@ -36,8 +36,11 @@ public class SearchResult {
     private boolean onlyInStock;
     private ArrayList<String> selectedFormats;
     private ArrayList<String> selectedLanguages;
+    private HttpServletRequest request;
+    private ArrayList<String> readingLevels;
     
     public SearchResult(HttpServletRequest request, HttpSession session, BookService bookService) {
+        this.request = request;
         System.out.println("IN " + this.getClass() + " : GETTING result set");
         categoryMap = new CategoryMap();
         
@@ -51,21 +54,8 @@ public class SearchResult {
         if (categories.length > 0)
             setSelectedCategories(categories);
         
-        selectedFormats = new ArrayList<String>();
-        String paperback = request.getParameter("paperback");
-        if (paperback != null)
-            selectedFormats.add("paperback");
-        String ebook = request.getParameter("ebook");
-        if (ebook != null)
-            selectedFormats.add("ebook");
+        getSidebar();
         
-        selectedLanguages = new ArrayList<String>();
-        String english = request.getParameter("English");
-        if (english != null)
-            selectedLanguages.add("English");
-        String international = request.getParameter("International");
-        if (international != null)
-            selectedLanguages.add("International");
         
         currentPage = 1;
         if (request.getParameter("page") != null)
@@ -73,7 +63,7 @@ public class SearchResult {
         int offset = (currentPage-1) * recordsPerPage;
         
         this.bookService = bookService;
-        books = bookService.searchBooks(searchTermMap, this.getSelectedCategories(), offset, recordsPerPage, onlyInStock, selectedFormats, selectedLanguages);
+        books = bookService.searchBooks(searchTermMap, this.getSelectedCategories(), offset, recordsPerPage, onlyInStock, selectedFormats, selectedLanguages, readingLevels);
         
         int removedBooksCounter =  removeBannedBooks(session);
 //        User user = (User)session.getAttribute("user");
@@ -91,6 +81,37 @@ public class SearchResult {
                 this.sortBooks(columnToSort);
     }
     
+    public void getSidebar() {
+        // FORMATS
+        selectedFormats = new ArrayList<String>();
+        String paperback = request.getParameter("paperback");
+        if (paperback != null)
+            selectedFormats.add("paperback");
+        String ebook = request.getParameter("ebook");
+        if (ebook != null)
+            selectedFormats.add("ebook");
+        
+        // LANGUAGES
+        selectedLanguages = new ArrayList<String>();
+        String english = request.getParameter("English");
+        if (english != null)
+            selectedLanguages.add("English");
+        String international = request.getParameter("International");
+        if (international != null)
+            selectedLanguages.add("International");
+       
+        // READING LEVEL
+        readingLevels = new ArrayList<String>();
+         String range1 = request.getParameter("range1");
+        if (range1 != null)
+            readingLevels.add("range1");
+        String range2 = request.getParameter("range2");
+        if (range2 != null)
+            readingLevels.add("range2");
+        String range3 = request.getParameter("range3");
+        if (range3 != null)
+            readingLevels.add("range3");
+    }
     public int removeBannedBooks(HttpSession session){
         User user = (User)session.getAttribute("user");
         int removedBooksCounter = 0;
@@ -266,6 +287,14 @@ public class SearchResult {
       public void setSelectedLanguages(ArrayList<String> languages) {
           this.selectedLanguages = languages;
       }
+      
+             public ArrayList<String> getReadingLevels() {
+          return readingLevels;
+      }
+      
+      public void setReadingLevels(ArrayList<String> levels) {
+          this.readingLevels = levels;
+      }
     
     public void setSelectedCategories(String[] selectedCategories) {
         this.selectedCategories = new ArrayList<String>();
@@ -294,7 +323,7 @@ public class SearchResult {
         int offset = (currentPage-1) * recordsPerPage;
         this.bookService = bookService;
         
-        books = bookService.searchBooks(this.getTerms(request), this.getSelectedCategories(), offset, recordsPerPage, onlyInStock, selectedFormats, selectedLanguages);
+        books = bookService.searchBooks(this.getTerms(request), this.getSelectedCategories(), offset, recordsPerPage, onlyInStock, selectedFormats, selectedLanguages, readingLevels);
         int numOfRemovedBooks = removeBannedBooks(request.getSession());
         setPages(bookService.getNumberOfResults() - numOfRemovedBooks);
     }
