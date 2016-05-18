@@ -836,6 +836,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             access = "Hold";
             return access;
           }
+          
       } catch (SQLException ex) {
           Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
       }finally {
@@ -1146,4 +1147,26 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
       }
       return lendPeriod;
    }
+
+    @Override
+    public int recommendItem(String username, String isbn, String email, String checkOut_or_email){
+        String sql = "INSERT INTO recommended_books (isbn, username, email, checkOut) VALUES (?,?,?,?)";
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        int status = 0;
+        try {
+          conToUse = getConnection();
+          ps = conToUse.prepareStatement(sql);
+          ps.setString(1, username);
+          ps.setString(2, isbn);
+          ps.setString(3, email);
+          ps.setInt(4, checkOut_or_email.equalsIgnoreCase("y") ? 1 : 0);
+          status = ps.executeUpdate();
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          DbUtils.closeQuietly(ps);
+      }
+        return status;
+    }
 }

@@ -34,6 +34,25 @@ function holdItem(){
    document.getElementById("holdItemForm").submit();
 }
 
+function recommendItemPage(){
+    console.log("recommendItemPage");
+    window.location.href = "recommendItem.jsp";  
+}
+
+function recommendItem(){
+    console.log("recommendItem");
+    var e = document.getElementById("automaticCheckout");
+    var value = e.options[e.selectedIndex].value;
+    var email = document.getElementById("inputEmail").value;
+    document.getElementById("checkOutRecommend").value = value; 
+    document.getElementById("emailRecommend").value = email;
+    
+    console.log(document.getElementById("checkOutRecommend").value);
+    console.log(document.getElementById("emailRecommend").value);
+    
+    document.getElementById("recommendItemForm").submit();
+}
+
 function selectedBook(bookID){ // the id of the form is the isbn number of the selected book
     console.log("selectedBook");
     console.log('bookID = ' + bookID);

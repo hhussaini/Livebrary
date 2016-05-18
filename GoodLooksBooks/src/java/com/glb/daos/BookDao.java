@@ -45,4 +45,5 @@ public interface BookDao extends JdbcDaoSupport {
     public int removeHold(String username, String isbn);
     public void checkHolds();
     public int renewItem(String username, String isbn);
+    public int recommendItem(String username, String isbn, String email, String checkOut_or_email);
 }
