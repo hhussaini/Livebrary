@@ -5,6 +5,8 @@ import com.glb.factories.DaoFactory;
 import com.glb.exceptions.ResourceHelperException;
 import java.sql.Connection;
 import com.glb.daos.ConnectionUtil;
+import static com.glb.daos.ConnectionUtil.getConnection;
+import com.glb.daos.UserDao;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,6 +15,7 @@ import com.glb.objects.Item;
 import com.glb.objects.Review;
 import com.glb.objects.Ticket;
 import com.glb.objects.User;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -611,4 +614,22 @@ public class BookServiceImpl implements BookService {
 
       return map;  
     }
+    
+     @Override
+     public int removeRecommendedItem(String isbn){
+         Connection conn = null;  
+        int status = 0;
+        try { 
+            conn = ConnectionUtil.getConnection();
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conn);
+            status = bookDao.removeRecommendedItem(isbn);
+        } catch (ResourceHelperException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConnectionUtil.closeConnection(conn);
+        }
+
+      return status;   
+     }
 }

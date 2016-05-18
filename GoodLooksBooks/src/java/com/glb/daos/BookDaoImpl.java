@@ -2,6 +2,8 @@ package com.glb.daos;
 
 import com.glb.constants.CategoryMap;
 import com.glb.controllers.EmailUtility;
+import static com.glb.daos.ConnectionUtil.getConnection;
+import com.glb.exceptions.ResourceHelperException;
 import com.glb.factories.ServiceFactory;
 import static com.glb.helpers.Helpers.getTagFromXmlStr;
 import static com.glb.helpers.Helpers.*;
@@ -18,6 +20,7 @@ import com.glb.objects.Recommendation;
 import com.glb.objects.Review;
 import com.glb.objects.Ticket;
 import com.glb.objects.User;
+import com.glb.services.BookServiceImpl;
 import com.glb.services.UserService;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -1203,5 +1206,24 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             DbUtils.closeQuietly(rs);
         }
         return map;
+    }
+    
+    @Override
+    public int removeRecommendedItem(String isbn){
+        String sql = "DELETE FROM recommended_books WHERE isbn = ?"; 
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        int status = 0;
+        try {
+          conToUse = getConnection();
+          ps = conToUse.prepareStatement(sql);
+          ps.setString(1, isbn);  
+          status = ps.executeUpdate();
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      }  finally {
+          DbUtils.closeQuietly(ps);
+      }
+        return status;
     }
 }
