@@ -1,9 +1,9 @@
 $(document).ready(function(){
    console.log("isbn: " + document.getElementById("isbn").value);
-    $("#emailButton").click(function(){
-        console.log("email button clicked");
-        $('#emailModal').modal('show');
-    });
+//    $("#emailButton").click(function(){
+//        console.log("email button clicked");
+//        $('#emailModal').modal('show');
+//    });
 });
 
 $(document).on('ready', function(){ 
@@ -15,6 +15,9 @@ $(document).on('ready', function(){
     }      
 }); 
 
+function showEmailModal() {
+   $('#emailModal').modal('show');
+}
 function sampleItem(sampleUrl) {
    console.log("sampleItem");
    if (!isEmpty(sampleUrl)) {
