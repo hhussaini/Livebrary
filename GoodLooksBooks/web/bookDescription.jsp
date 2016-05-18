@@ -36,10 +36,26 @@
         <div class="bookDescription container">
             <div>
                 <div class="col-xs-6 col-sm-7" style="border-style: groove;">
-                    <button type="button" class="btn btn-primary" 
-                            onclick="fbShare('http://openisbn.com/isbn/${itemClicked.isbn}', 520, 350)">
-                        Share
-                    </button>
+                   <div class="btn-group">
+                       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         Share
+                       </button>
+                     <div class="dropdown-menu">
+                       <a class="dropdown-item" href="#" 
+                          onclick="fbShare('http://openisbn.com/isbn/${itemClicked.isbn}', 520, 350)">
+                            <img border="0" width ="50px" height = "50px" src="assets/facebook-icon.jpg" title="Facebook" />
+                       </a>
+                       <a class="dropdown-item" 
+                           href="https://twitter.com/intent/tweet?text=Check%20out%20${itemClicked.title}%20from%20Good%20Looks%20Books!%20http://openisbn.com/isbn/${itemClicked.isbn}"
+                           data-size="large">
+                           <img border="0" width ="50px" height = "50px" src="assets/twitter-icon.png" title="Twitter" />
+                       </a>
+                       <a 
+                           href="http://pinterest.com/pin/create/button/?url=http://openisbn.com/isbn/${itemClicked.isbn}&media=${itemClicked.imageUrl}&description=${itemClicked.title}" class="pin-it-button" count-layout="horizontal">
+                           <img border="0" src="//assets.pinterest.com/images/PinExt.png" title="Pin It" />
+                       </a>
+                    </div>
+                   </div>
                     <button id="emailButton" type="button" class="btn btn-primary"
                             onclick="showEmailModal()">Email</button>
                     <h5 id="bookTitleID">Book Title:  ${itemClicked.title}</h5>
