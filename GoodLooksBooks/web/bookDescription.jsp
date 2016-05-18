@@ -72,7 +72,7 @@
                     <h5 id="bookAuthorID">Author: ${itemClicked.author}</h5>
                     <br> 
                     <h5 id="bookDescriptionID">Description: ${itemClicked.description}</h5>
-                    <br> 
+                    <br>
                     <h5 id="dateCreatedID">Published: ${itemClicked.date}</h5>
                     <br> 
                     <h5 id="copiesAvailableID">Copies Available: ${itemClicked.copiesLeft}</h5>

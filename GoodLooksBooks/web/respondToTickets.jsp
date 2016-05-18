@@ -38,6 +38,7 @@
                                    <input type="hidden" name="ticketId" value="${ticket.id}">
                                    <input type="hidden" name="method" value="denyTicket">
                                </form>
+                                   <br>
                            </td>
                        </tr>
                        <hr class="fancy">

@@ -152,6 +152,10 @@ public class PublisherEditItemsServlet extends HttpServlet {
         int status = 0;
         status = bookService.submitAddRequest(isbn, isbn10, title, author, description, 
                 binding, imageUrl, pages, language, listPrice, currency, publisherName, category);
+        if (status == -1) {
+            outputToHtml(response, "Please enter a valid category. "
+                    + createReturnTag("Return", this.getServletName()));
+        }
         if (status != 1) {
             throw new ServletException("SQL Error");
         }
