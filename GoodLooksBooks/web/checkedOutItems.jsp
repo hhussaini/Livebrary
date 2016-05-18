@@ -2,55 +2,44 @@
     Document   : checkedOutItems
     Author     : Kevin Young
 --%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>   
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>   
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<table class="results-table" id="checked-out">
     
-<br>
-<table class="results-table results-list table table-striped" id="checked-out-table" style="top: 800px;">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Published</th>
-            <th>Copies</th>
+   <tr>
+     <c:forEach var="item" items="${checkedOutItems}" varStatus="status">
+        <c:if test="${status.index != 0 && status.index % 3 == 0}">
         </tr>
-    </thead>
-    <tbody>
-        <c:forEach var="item" items="${checkedOutItems}" varStatus="status">
-            <tr>
-                <td>
-                    <a href="BookDescriptionServlet?isbn=${item.isbn}" id="${item.isbn}" class="thumbnail">
-                        <img onload="validateImgUrl(this.id)" name="bookImage" id="book${count}" class="bookImage" src="${item.imageUrl}" alt="${item.title}" style="width: 100px;">
+        <tr>
+        </c:if>
+        <td>
+            <div class="col-xs-6 col-md-3"> 
+                <td> 
+                    <a href = "BookDescriptionServlet?isbn=${item.isbn}" id="${item.isbn}" class="thumbnail" style="width: 200px;">
+                        <img onload="validateImgUrl(this.id)" name="bookImage" class="bookImage" src="${item.imageUrl}" alt="${item.title}" style="width: 200px;">
+                        <p>${item.title}</p>
+                        <h6>by</h6>
+                        <h5>${item.author}</h5>
                     </a>
-                </td>
-                <td><a id="${item.isbn}" href="BookDescriptionServlet?isbn=${item.isbn}">${item.title}</a></td>
-                <td>${item.author}</td>
-                <td>${item.date}</td>
-                <td>${item.copiesLeft}</td>
-                <td>
                     <div class="btn-group">
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Options
-                        </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#" onclick="downloadBook(${item.isbn})">Download</a><br>
-                            <a class="dropdown-item" href="#" onclick="returnBook(${item.isbn})">Return</a><br>
-                            <a class="dropdown-item" href="#" onclick="readBook('${item.downloadUrl}')">Read (in your browser)</a>
-                            <form id="renewItemForm" action="ItemAccessServlet" method="doRenew">
-                                <input type="hidden" name="isbn" value="${item.isbn}">
-                                <input type="hidden" name="method" value="doRenew">
-                                <input type="submit" value="Renew">
-                            </form>
-                        </div>
+                       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         Options
+                       </button>
+                       <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#" onclick="downloadBook(${item.isbn})">Download</a><br>
+                          <a class="dropdown-item" href="#" onclick="returnBook(${item.isbn})">Return</a><br>
+                          <a class="dropdown-item" href="#" onclick="readBook('${item.downloadUrl}')">Read (in your browser)</a>
+                          <form id="renewItemForm" action="ItemAccessServlet" method="doRenew">
+                             <input type="hidden" name="isbn" value="${item.isbn}">
+                             <input type="hidden" name="method" value="doRenew">
+                             <input type="submit" value="Renew">
+                          </form>
+                       </div>
                     </div>
                 </td>
-            </tr>
-        </c:forEach>
-    </tbody>
+            </div>
+        </td>  
+     </c:forEach>
+   </tr>
 </table>
-    
-    
-<script>$(document).ready(function() {
-    $('#checked-out-table').dataTable();
-});</script>

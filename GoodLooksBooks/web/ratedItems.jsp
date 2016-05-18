@@ -2,6 +2,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>   
 <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
 <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<link href="https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="js/data-tables.js"></script>
+<script src="js/data-table-plugin.js"></script>
 <br>
 <table class="results-table results-list table table-striped" id="rated-list" style="top: 800px;">
     <thead>
@@ -30,10 +34,7 @@
     </tbody>
 </table>
     
-<link href="https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="js/data-tables.js"></script>
-<script src="js/data-table-plugin.js"></script>
+
 <script>$(document).ready(function() {
     $('#rated-list').dataTable();
 });</script>
