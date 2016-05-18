@@ -16,6 +16,8 @@ public interface BookDao extends JdbcDaoSupport {
             boolean onlyInStock, ArrayList<String> formats, ArrayList<String> languages, ArrayList<String> readingLevels);
     public int getNumberOfResults();
     public List<Book> getAllBooks();
+    public List<Book> getAllBooks(int limit);
+    public List<Book> getUnpopularBooks(int limit);
     public int submitAddRequest(String isbn, String isbn10, String title, String author, String description, String binding, 
             String imageUrl, int pages, String language, double listPrice, String currency, String publisher, String category);
     public int addBook(String isbn, String isbn10, String title, String author, String description, String binding, 
@@ -49,4 +51,6 @@ public interface BookDao extends JdbcDaoSupport {
     public int recommendItem(String username, String isbn, String email, String checkOut_or_email);
     public Map<String, Book> getAllRecommendedBooks();
     public int removeRecommendedItem(String isbn);
+    public List<Book> getMostBorrowed();
+    public List<Book> getRecentlyAdded();
 }

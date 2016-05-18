@@ -633,4 +633,76 @@ public class BookServiceImpl implements BookService {
 
       return status;   
      }
+
+   @Override
+   public List<Book> getMostBorrowed() {
+      Connection conn = null;  
+      List<Book> books = null;
+      try {
+          conn = ConnectionUtil.getConnection();
+          BookDao bookDao = DaoFactory.getBookDao();
+          bookDao.setConnection(conn);
+          books = bookDao.getMostBorrowed();
+      } catch (ResourceHelperException ex) {
+          Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          ConnectionUtil.closeConnection(conn);
+      }
+
+    return books;  
+   }
+   
+   @Override
+   public List<Book> getRecentlyAdded() {
+      Connection conn = null;  
+      List<Book> books = null;
+      try {
+          conn = ConnectionUtil.getConnection();
+          BookDao bookDao = DaoFactory.getBookDao();
+          bookDao.setConnection(conn);
+          books = bookDao.getRecentlyAdded();
+      } catch (ResourceHelperException ex) {
+          Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          ConnectionUtil.closeConnection(conn);
+      }
+
+    return books;  
+   }
+   
+   @Override
+   public List<Book> getAllBooks(int limit) {
+      Connection conn = null;  
+      List<Book> books = null;
+      try {
+          conn = ConnectionUtil.getConnection();
+          BookDao bookDao = DaoFactory.getBookDao();
+          bookDao.setConnection(conn);
+          books = bookDao.getAllBooks(limit);
+      } catch (ResourceHelperException ex) {
+          Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          ConnectionUtil.closeConnection(conn);
+      }
+
+    return books;  
+   }
+   
+   @Override
+   public List<Book> getUnpopularBooks(int limit) {
+      Connection conn = null;  
+      List<Book> books = null;
+      try {
+          conn = ConnectionUtil.getConnection();
+          BookDao bookDao = DaoFactory.getBookDao();
+          bookDao.setConnection(conn);
+          books = bookDao.getUnpopularBooks(limit);
+      } catch (ResourceHelperException ex) {
+          Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+          ConnectionUtil.closeConnection(conn);
+      }
+
+    return books;  
+   }
 }

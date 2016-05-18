@@ -58,13 +58,13 @@
                    </div>
                     <button id="emailButton" type="button" class="btn btn-primary"
                             onclick="showEmailModal()">Email</button>
-                    <h5 id="bookTitleID">Book Title:  ${itemClicked.title}</h5>
+                    <h5 id="bookTitleID">Title:  ${itemClicked.title}</h5>
                     <br> 
-                    <h5 id="bookAuthorID">Book Author: ${itemClicked.author}</h5>
+                    <h5 id="bookAuthorID">Author: ${itemClicked.author}</h5>
                     <br> 
-                    <h5 id="bookDescriptionID">Book Description: ${itemClicked.description}</h5>
+                    <h5 id="bookDescriptionID">Description: ${itemClicked.description}</h5>
                     <br> 
-                    <h5 id="dateCreatedID">Date Created: ${itemClicked.date}</h5>
+                    <h5 id="dateCreatedID">Published: ${itemClicked.date}</h5>
                     <br> 
                     <h5 id="copiesAvailableID">Copies Available: ${itemClicked.copiesLeft}</h5>
                     <br> 

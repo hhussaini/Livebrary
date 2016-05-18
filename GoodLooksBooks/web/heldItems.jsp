@@ -31,9 +31,9 @@
                              Options
                            </button>
                            <div class="dropdown-menu">
-                              <a class="dropdown-item" href="#" onclick="showEditEmailModal()">Edit email</a>
-                              <a class="dropdown-item" href="#" onclick="showSuspendModal()">Suspend Hold</a>
-                              <a class="dropdown-item" href="#" onclick="showAutoCheckoutModal()">Auto checkout</a>
+                              <a class="dropdown-item" href="#" onclick="showEditEmailModal()">Edit email</a> <br>
+                              <a class="dropdown-item" href="#" onclick="showSuspendModal()">Suspend Hold</a> <br>
+                              <a class="dropdown-item" href="#" onclick="showAutoCheckoutModal()">Auto checkout</a> <br>
                               <form id="holdsForm" name="holdsForm" action="HoldsServlet" method="removeHold">  
                                  <input type="hidden" name="isbn" value ="${item.isbn}" />
                                  <input type="hidden" name="method" value ="removeHold" />

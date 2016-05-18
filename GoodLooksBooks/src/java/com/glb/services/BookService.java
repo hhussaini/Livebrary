@@ -16,6 +16,8 @@ public interface BookService {
             ArrayList<String> formats, ArrayList<String> languages,  ArrayList<String> readingLevels);
     public int getNumberOfResults();
     public List<Book> getAllBooks();
+    public List<Book> getAllBooks(int limit);
+    public List<Book> getUnpopularBooks(int limit);
     public List<Ticket> getTickets(String resolved);
     public int acceptTicket(int ticketId);
     public int resolveTicket(int ticketId, String accepted);
@@ -45,5 +47,6 @@ public interface BookService {
     public int recommendItem(String username, String isbn, String email, String checkOut_or_email);
     public Map<String, Book> getAllRecommendedBooks();
     public int removeRecommendedItem(String isbn);
-    // public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description);
+    public List<Book> getMostBorrowed();
+    public List<Book> getRecentlyAdded();
 }  
