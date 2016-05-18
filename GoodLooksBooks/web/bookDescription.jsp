@@ -103,7 +103,7 @@
                     </div>
                     <jsp:include page="/itemButtons.jsp" />
                     <c:if test="${user.type == 'admin'}">
-                        <button type="button" id="banButtonID" action="BanItemServlet" name = "button5" onclick="banFunction(${itemClicked.isBanned ? 1 : 0})" class="btn btn-primary" value="">${itemClicked.isBanned ? 'Ban Book' : 'Unban Book'}</button>
+                        <button type="button" id="banButtonID" action="BanItemServlet" name = "button5" onclick="banFunction(${itemClicked.isBanned ? 1 : 0})" class="btn btn-primary" value="">${itemClicked.isBanned ? 'Unban Book' : 'Ban Book'}</button>
                          <br>   
                         <select id="licenseNumbers">
                           
