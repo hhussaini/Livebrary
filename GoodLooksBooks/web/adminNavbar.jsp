@@ -13,9 +13,10 @@
       <ul class="nav navbar-nav" style="font-weight: bold;">
         <li><a href="adminIndex.jsp">Admin Home</a></li>
         <li><a href="about.jsp">About</a></li>
-        <!--<li><a href="SearchServlet">Full Catalog</a></li>-->
+        <li><a href="SearchServlet">Full Catalog</a></li>
         <li><a href="account.jsp">Account</a></li>
         <li><a href="help.jsp">Help</a></li>
+        <li><a href="CollectionsServlet">Collections</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">

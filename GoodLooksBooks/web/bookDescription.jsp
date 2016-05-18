@@ -28,6 +28,15 @@
             <c:when test="${empty user}">
                 <jsp:include page="/guestNavbar.jsp" />
             </c:when>
+            <c:when test="${user.type == 'admin'}">
+                <jsp:include page="/adminNavbar.jsp" />
+            </c:when>
+            <c:when test="${user.type == 'librarian'}">
+                <jsp:include page="/librarianNavbar.jsp" />
+            </c:when>
+            <c:when test="${user.type == 'publisher'}">
+                <jsp:include page="/publisherNavbar.jsp" />
+            </c:when>
             <c:when test="${user.type == 'customer'}">
                 <jsp:include page="/customerNavbar.jsp" />
             </c:when>
