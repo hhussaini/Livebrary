@@ -16,6 +16,7 @@
         <li><a href="SearchServlet">Full Catalog</a></li>
         <li><a href="signIn.jsp">Account</a></li>
         <li><a href="help.jsp">Help</a></li>
+        <li><a href="CollectionsServlet">Collections</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" style="font-weight: bold;">
         <li><a href="signUp.jsp">Sign Up</a></li>
