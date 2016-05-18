@@ -11,6 +11,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.glb.objects.User;
+import com.glb.objects.Wishlist;
 import com.glb.services.BookService;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
@@ -131,8 +132,9 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
      * @throws ObjectException
      */
     @Override
-    public List<Book> getWishlist(User user) {
-        List<Book> booksOnWishlist = new ArrayList<Book>();
+    public Wishlist getWishlist(User user) {
+        bookService = ServiceFactory.getBookService();
+        Wishlist booksOnWishlist = new Wishlist();
         Connection conToUse = null;
         java.sql.PreparedStatement ps = null;
         ResultSet res = null;
@@ -147,11 +149,8 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             sql = "select copiesLeft from books where isbn = ?";
             ps = (PreparedStatement) conToUse.prepareStatement(sql);
             while (res.next()) {
-                Book book = new Book();
                 String isbn = res.getString("isbn");
-                book.setIsbn(isbn);
-                book.setTitle(res.getString("title"));
-                book.setImageUrl(res.getString("imageUrl"));
+                Book book = bookService.getBookByIsbn(isbn);
                 
                 ps.setString(1, isbn);
                 res2 = ps.executeQuery();

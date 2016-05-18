@@ -6,6 +6,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>   
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <table class="results-table" id="checked-out">
+    
    <tr>
      <c:forEach var="item" items="${checkedOutItems}" varStatus="status">
         <c:if test="${status.index != 0 && status.index % 3 == 0}">
@@ -27,7 +28,8 @@
                        </button>
                        <div class="dropdown-menu">
                           <a class="dropdown-item" href="#" onclick="downloadBook(${item.isbn})">Download</a><br>
-                          <a class="dropdown-item" href="#" onclick="returnBook(${item.isbn})">Return</a>
+                          <a class="dropdown-item" href="#" onclick="returnBook(${item.isbn})">Return</a><br>
+                          <a class="dropdown-item" href="#" onclick="readBook('${item.downloadUrl}')">Read (in your browser)</a>
                           <form id="renewItemForm" action="ItemAccessServlet" method="doRenew">
                              <input type="hidden" name="isbn" value="${item.isbn}">
                              <input type="hidden" name="method" value="doRenew">

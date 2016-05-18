@@ -42,7 +42,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     private Connection conToUse = getConnection();
     
     @Override
-    public List<Book> searchBooks(HashMap<String,String> searchTermMap, ArrayList<String> categories, int offset, int recordsPerPage) {
+    public List<Book> searchBooks(HashMap<String,String> searchTermMap, ArrayList<String> categories, int offset, int recordsPerPage, boolean onlyInStock) {
         Connection conn = getConnection();
         boolean catSelected = !categories.get(0).equals("");
         ResultSet rs = null;
@@ -66,6 +66,10 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                     + "AND author like ? "
                     + "AND title like ? "
                     + "AND isbn like ?) ";
+            
+            if (onlyInStock) {
+                query += "and copiesLeft > 0 ";
+            }
             
             // CategoryMap Query
             if (catSelected) {
@@ -110,13 +114,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             rs = stmt.executeQuery("select * from resultsView " + limit);
             
             while (rs.next()) {
-                Book book = new Book();
-                book.setIsbn(rs.getString("isbn"));
-                book.setTitle(rs.getString("title"));
-                book.setImageUrl(rs.getString("imageUrl"));
-                book.setAuthor(rs.getString("author"));
-                book.setDate(rs.getString("published"));
-                book.setCopiesLeft(rs.getInt("copiesLeft"));
+                Book book = this.getBookByIsbn((rs.getString("isbn")));
                 book.setIsBanned(rs.getInt("isBanned")==1);
                 results.add(book);
             }

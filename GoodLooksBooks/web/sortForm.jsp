@@ -13,23 +13,12 @@
         <div id="collapseTwo" class="panel-collapse collapse">
             <div class="panel-body">
                 <ul class="scrollable-menu" role="menu" aria-labelledby="menu1" style="max-height:500px; overflow:auto;">
-                    
                     <fieldset>
-                        <li>
-                            <button type="submit" class="link" name="rButton" id="rButton1" onclick="sortItems(1)" value="title"><span>Title</span></button>
-                        </li>
-                        <li>
-                            <button type="submit" class="link" name="rButton" id="rButton1" onclick="sortItems(1)" value="author"><span>Author</span></button>
-                        </li>
-                        <li>
-                            <button type="submit" class="link" name="rButton" id="rButton1" onclick="sortItems(1)" value="releaseDate"><span>Release Date</span></button>
-                        </li>
-                        <li>
-                            <button type="submit" class="link" name="rButton" id="rButton1" onclick="sortItems(1)" value="addedToSite"><span>Added to Site</span></button>
-                        </li>
-                        <li>
-                            <button type="submit" class="link" name="rButton" id="rButton1" onclick="sortItems(1)" value="mostPopular"><span>Most popular</span></button>
-                        </li>                        
+                        <input type="radio" name="sort" id="rButton1" value="title"> Title<br>
+                        <input type="radio" name="sort" id="rButton2" value="author"> Author<br>
+                        <input type="radio" name="sort" id="rButton3" value="releaseDate"> Release Date<br>
+                        <input type="radio" name="sort" id="rButton4" value="addedToSite"> Added to Site<br>
+                        <input type="radio" name="sort" id="rButton5" value="mostPopular"> Most popular<br>
                     </fieldset>
                 </ul>
             </div>
