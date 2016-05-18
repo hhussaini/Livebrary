@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.glb.objects.Book;
 import com.glb.objects.Item;
+import com.glb.objects.Recommendation;
 import com.glb.objects.Review;
 import com.glb.objects.Ticket;
 import com.glb.objects.User;
@@ -166,6 +167,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 book.setImageUrl(rs.getString("imageUrl"));
                 book.setAuthor(rs.getString("author"));
                 book.setIsBanned(rs.getInt("isBanned")==1);
+                book.setCopiesLeft(rs.getInt("copiesLeft"));
                 results.add(book);
                 totalBooks++;
             }
@@ -1142,7 +1144,9 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
       return lendPeriod;
    }
 
-    @Override
+    
+    
+      @Override
     public int recommendItem(String username, String isbn, String email, String checkOut_or_email){
         String sql = "INSERT INTO recommended_books (isbn, username, email, checkOut) VALUES (?,?,?,?)";
         Connection conToUse = null;
@@ -1151,8 +1155,8 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         try {
           conToUse = getConnection();
           ps = conToUse.prepareStatement(sql);
-          ps.setString(1, username);
-          ps.setString(2, isbn);
+          ps.setString(1, isbn);
+          ps.setString(2, username);
           ps.setString(3, email);
           ps.setInt(4, checkOut_or_email.equalsIgnoreCase("y") ? 1 : 0);
           status = ps.executeUpdate();
@@ -1162,5 +1166,37 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
           DbUtils.closeQuietly(ps);
       }
         return status;
+    }
+    
+    @Override
+    public Map<String, Book> getAllRecommendedBooks(){
+        Map<String, Book>map = new HashMap<>();
+        Connection conn = getConnection();
+        ResultSet rs = null;
+        Statement stmt = null;
+        String query = "SELECT * FROM recommended_books";
+        try {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                Book book = getBookByIsbn(rs.getString("isbn"));
+                if(map.get(book.getIsbn())==null){
+                    map.put(book.getIsbn(), book);
+                }
+                else{
+                  Recommendation rec = new Recommendation(rs.getString("email"), rs.getInt("checkOut")==1);
+                  book = map.get(book.getIsbn());
+                  book.addRecomendation(rs.getString("username"), rec);
+                  map.put(book.getIsbn(), book);
+                }
+              
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            DbUtils.closeQuietly(rs);
+        }
+        return map;
     }
 }

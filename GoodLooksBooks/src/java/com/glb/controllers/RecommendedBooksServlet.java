@@ -6,14 +6,12 @@
 package com.glb.controllers;
 
 import com.glb.factories.ServiceFactory;
-import static com.glb.helpers.Helpers.*;
+import static com.glb.helpers.Helpers.println;
 import com.glb.objects.Book;
-import com.glb.objects.User;
-import com.glb.objects.Wishlist;
+import com.glb.objects.SearchResult;
 import com.glb.services.BookService;
-import com.glb.services.UserService;
 import java.io.IOException;
-import java.util.List;
+import java.io.PrintWriter;
 import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -23,19 +21,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * @author PaulMan
+ *
+ * @author Kevin_Setayesh
  */
-public class CustomerServlet extends HttpServlet {
-    
-    UserService userService;
+public class RecommendedBooksServlet extends HttpServlet {
+   
     BookService bookService;
-    
+     
     public void init() {
-        System.out.println(getServletName() + ": initialised" );
-        userService = ServiceFactory.getUserService();
+        println(getServletName() + ": initialised" );
         bookService = ServiceFactory.getBookService();
     }
-    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -47,8 +43,22 @@ public class CustomerServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet RecommendedBooksServlet</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet RecommendedBooksServlet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
-    
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -60,40 +70,16 @@ public class CustomerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        println(this.getServletName() + " : doGet");
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-           goToSignIn(request, response);
-           return;
-        }
-        // Check for any expired checkouts
-        bookService.checkExpiredCheckouts();
-        bookService.checkHolds();
-        
-        List<Book> checkedOut = userService.getCheckedOutItems(user);
-        session.setAttribute("checkedOutItems", checkedOut);
-        
-        List<Book> onHold = userService.getOnHoldItems(user);
-        session.setAttribute("onHoldItems", onHold);
-        println(onHold.size());
-        
-        Wishlist fullWishlist = userService.getWishlist(user);
-        session.setAttribute("fullWishlist", fullWishlist);
-        
-        List<Book> inStockWishlist = userService.getInstockWishlist(fullWishlist);
-        session.setAttribute("inStockWishlist", inStockWishlist);
-        
-        List<Book> ratedItems = userService.getRatedItems(user);
-        session.setAttribute("ratedItems", ratedItems);
-        
-        Map<String, Book> recommended = bookService.getAllRecommendedBooks();
-        session.setAttribute("recommendedMap", recommended);
-        
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/customerIndex.jsp");
-        dispatcher.forward(request, response); 
-    }
 
+          Map<String, Book> recommendedMap = bookService.getAllRecommendedBooks();
+          HttpSession session = request.getSession();
+          session.setAttribute("recommendedMap", recommendedMap);
+          String url = "/adminRecommendedItemsList.jsp";
+          RequestDispatcher dispatcher = request.getRequestDispatcher(url);
+          dispatcher.forward(request, response); 
+          
+    }
+ 
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -105,7 +91,6 @@ public class CustomerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        println(this.getServletName() + " : doGet");
         processRequest(request, response);
     }
 
@@ -113,10 +98,33 @@ public class CustomerServlet extends HttpServlet {
      * Returns a short description of the servlet.
      *
      * @return a String containing servlet description
-     */
+     */ 
     @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
+    private void print(HttpServletRequest request, HttpServletResponse response, Map<String,Book>map) throws IOException{
+//        String str = "";
+//        for (String key : map.keySet()) {
+//            str = str + map.get(key).toString() + "\n\n";
+//        }
+        
+          try (PrintWriter out = response.getWriter()) {
+             if(map == null){
+                 out.println("Is null");
+             }
+             else{
+                  out.println("Is not null");
+             }
+          }
+    }
+    
+     private void print(HttpServletRequest request, HttpServletResponse response, String str) throws IOException{
+        
+          try (PrintWriter out = response.getWriter()) {
+              out.println(str);
+          }
+    }
 
 }
