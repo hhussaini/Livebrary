@@ -46,6 +46,12 @@
                         </table>
                         
                     </div>
+                    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+                    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+                    <link href="https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet" />
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+                    <script src="js/data-tables.js"></script>
+                    <script src="js/data-table-plugin.js"></script>
                     <div class="tab-pane fade" id="checked-out">
                         <c:choose>
                             <c:when test="${fn:length(checkedOutItems) > 0}">
