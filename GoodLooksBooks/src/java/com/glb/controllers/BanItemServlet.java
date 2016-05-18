@@ -89,6 +89,8 @@ public class BanItemServlet extends HttpServlet {
         int status = 0;
         try {
             status = bookService.banBook(book.getIsbn());
+            book.setIsBanned(!book.getIsBanned()); 
+            session.setAttribute("itemClicked", book); 
             if (status == 1) {
                 dispatcher = request.getRequestDispatcher("/bookDescription.jsp");
                 dispatcher.forward(request, response);

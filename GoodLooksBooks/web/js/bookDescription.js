@@ -106,21 +106,7 @@ function fbShare(url,winWidth, winHeight) {
 }
 
 function banFunction(isBanned){
-    if(document.getElementById("banButtonID").value === "" && isBanned === 0){
-        document.getElementById("banButtonID").innerHTML = "Ban Book";
-        document.getElementById("banButtonID").value = "Ban Book";
-    }
-    else if(document.getElementById("banButtonID").value === ""){
-        document.getElementById("banButtonID").innerHTML = "Unban Book";
-        document.getElementById("banButtonID").value = "Unban Book";
-    }
-    else if(document.getElementById("banButtonID").innerHTML === "Unban Book"){
-        document.getElementById("banButtonID").innerHTML = "Ban Book";
-    }
-    else{
-        document.getElementById("banButtonID").innerHTML = "Unban Book";
-    }
-  
+    console.log(isBanned); 
     document.getElementById("banButtomForm").submit();
 }
 
