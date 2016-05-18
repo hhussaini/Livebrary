@@ -237,4 +237,5 @@
 <form id= "licenseForm" name="licenseForm" value="-1" action="BuyLicenseServlet" method = "post">
     <input id="numOfCopies" name="numOfCopies" value="-1" type="hidden">
 </form>
+<input type="hidden" name = "isbn" id = "isbn" value="${itemClicked.isbn}" </h5>
                        
