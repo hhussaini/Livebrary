@@ -39,8 +39,11 @@
             </div>
             <div class="panel-body form-horizontal">
                <h3><b>Recommending</b></h3>
-                  a book not licensed to the site will display a “Recommend” button in response to a search. When the user clicks on this button, the system will prompt user for e­mail address, along with an option to check out book when the license is purchased or send an e­mail when license is purchased.        
-            </div> 
+                  A book not licensed to the site will display a “Recommend” button in response to a search. 
+                  When the user clicks on this button, the system will prompt user for e­mail address, 
+                  along with an option to check out book when the license is purchased or send an e­mail
+                  when license is purchased.        
+            </div>
            </div>
          </div>
        </div>

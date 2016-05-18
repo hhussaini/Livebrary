@@ -31,7 +31,7 @@ public class SignOutServlet extends HttpServlet {
        } catch (IllegalStateException e) {
            throw new ServletException(e.getMessage());
        }
-       String url = "/index.jsp";
+       String url = "HomePageServlet";
        RequestDispatcher dispatcher = request.getRequestDispatcher(url);
        dispatcher.forward(request, response);
     }
