@@ -177,6 +177,8 @@ public class ItemAccessServlet extends HttpServlet {
             default:
                 break;
         }
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/bookDescription.jsp");
+        dispatcher.forward(request, response); 
     }
 
    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
