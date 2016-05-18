@@ -280,9 +280,9 @@ public class UserDaoImpl extends JdbcDaoSupportImpl implements UserDao {
             ps.setString(1, username);
             res = ps.executeQuery();
             while (res.next()) {
-                Book book = new Book();
-                book = bookService.getBookByIsbn(res.getString("isbn"));
+                Book book = bookService.getBookByIsbn(res.getString("isbn"));
                 checkedOut.add(book);
+                System.out.println(book.toString());
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);

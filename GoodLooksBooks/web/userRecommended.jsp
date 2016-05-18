@@ -9,12 +9,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <table class="results-table tablesorter" id="cutomerList">
-    <tr>
+    
         <c:forEach var="item" items="${recommendedMap}" varStatus="status">
-            <c:if test="${status.index != 0 && status.index % 4 == 0}">
-            <tr>
-            </tr>
-            </c:if>
+            
             <td>
                 <div class="col-xs-6 col-md-3"> 
                     <td> 
@@ -27,7 +24,7 @@
                     </td> 
                 </div>
             </td>
-        </tr>
+        
     </c:forEach>
     </tr>
 </table>
