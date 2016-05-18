@@ -147,6 +147,10 @@
         <servlet-name>BestSellersListServlet</servlet-name>
         <servlet-class>com.glb.controllers.BestSellersListServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RecommendedBooksServlet</servlet-name>
+        <servlet-class>com.glb.controllers.RecommendedBooksServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -270,6 +274,10 @@
     <servlet-mapping>
         <servlet-name>BestSellersListServlet</servlet-name>
         <url-pattern>/BestSellersListServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RecommendedBooksServlet</servlet-name>
+        <url-pattern>/RecommendedBooksServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

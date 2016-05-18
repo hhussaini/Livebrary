@@ -575,6 +575,7 @@ public class BookServiceImpl implements BookService {
    }
    
     
+    
     @Override
     public int recommendItem(String username, String isbn, String email, String checkOut_or_email){
         Connection conn = null;
@@ -592,4 +593,22 @@ public class BookServiceImpl implements BookService {
 
       return status;
    }
+      
+    @Override
+    public Map<String, Book> getAllRecommendedBooks(){
+        Connection conn = null;  
+        Map<String, Book>map = null;
+        try {
+            conn = ConnectionUtil.getConnection();
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conn);
+            map = bookDao.getAllRecommendedBooks();
+        } catch (ResourceHelperException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConnectionUtil.closeConnection(conn);
+        }
+
+      return map;  
+    }
 }

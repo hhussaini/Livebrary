@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import static com.glb.helpers.Helpers.round;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /**
@@ -29,16 +30,19 @@ public class Item implements Serializable, Comparable{
     private Map<String, Review> reviews;
     private boolean isBanned;
     private int copiesLeft;
+    private Map<String, Recommendation> recommendations; 
     
     public Item(){
         this.reviews = new LinkedHashMap<>();
-        this.genres = new ArrayList<>();    
+        this.genres = new ArrayList<>(); 
+        this.recommendations = new HashMap<>();
     }
 
     public Item(String isbn, String title, String description, double avgRating, String downloadUrl, 
             String author, String date, String language, String imageUrl, int numOfDownloads) {
         this.reviews = new LinkedHashMap<>();
         this.genres = new ArrayList<>(); 
+        this.recommendations = new HashMap<>();
         this.isbn = isbn;
         this.title = title;
         this.description = description;
@@ -251,11 +255,23 @@ public class Item implements Serializable, Comparable{
         return this.copiesLeft;
     }
     
-     public void setCopiesLeft(int left) {
+    public void setCopiesLeft(int left) {
         this.copiesLeft = left;
     }
+
+    public Map<String, Recommendation> getRecommendations() {
+        return recommendations;
+    }
+
+    public void setRecommendations(Map<String, Recommendation> recommendations) {
+        this.recommendations = recommendations;
+    }
+    
+    public void addRecomendation(String key, Recommendation rec){
+        this.recommendations.put(key, rec);
+    }
+    
      
-      
     @Override
     public int compareTo(Object o) {
        Book book = (Book)o;
