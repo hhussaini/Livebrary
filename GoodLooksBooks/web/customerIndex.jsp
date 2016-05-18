@@ -33,7 +33,7 @@
                     <li><a href="#rated" data-toggle="tab">Items You've Rated</a></li>
                     <li><a href="#wishlist" data-toggle="tab">Your Wishlist</a></li>
                     <li><a href="#settings" data-toggle="tab">Item Settings</a></li>
-                    <li><a href="#recommended" data-toggle="tab">Your recommended Items</a></li>
+                    <li><a href="#recommended" data-toggle="tab">Your Recommended Items</a></li>
                 </ul>
                 <div id="tabContent" class="tab-content">
                     <div class="tab-pane fade in active" id="acct-sum">

@@ -13,7 +13,7 @@
 <table>
    <tr>
        <c:forEach var="item" items="${onHoldItems}" varStatus="status">
-           <c:if test="${status.index != 0 && status.index % 3 == 0}">
+           <c:if test="${status.index != 0 && status.index % 4 == 0}">
            </tr>
            <tr>
            </c:if>
