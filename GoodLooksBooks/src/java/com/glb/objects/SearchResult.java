@@ -33,6 +33,7 @@ public class SearchResult {
     private String keyword;
     private String title;
     private BookService bookService;
+    private boolean onlyInStock;
     
     public SearchResult(HttpServletRequest request, HttpSession session, BookService bookService) {
         System.out.println("IN " + this.getClass() + " : GETTING result set");
@@ -40,6 +41,9 @@ public class SearchResult {
         
         HashMap<String, String> searchTermMap = getTerms(request);
         
+        this.onlyInStock = request.getParameter("only-instock") == null ? false : true;
+        System.out.println("instock = " + onlyInStock);
+        String columnToSort = request.getParameter("sort");
         String[] categories = request.getParameterValues("categories");
         categories = (categories == null) ? new String[]{""} : categories;
         if (categories.length > 0)
@@ -51,7 +55,8 @@ public class SearchResult {
         int offset = (currentPage-1) * recordsPerPage;
          
         this.bookService = bookService;
-        books = bookService.searchBooks(searchTermMap, this.getSelectedCategories(), offset, recordsPerPage);
+        books = bookService.searchBooks(searchTermMap, this.getSelectedCategories(), offset, recordsPerPage, onlyInStock);
+        
         int removedBooksCounter =  removeBannedBooks(session);
 //        User user = (User)session.getAttribute("user");
 //        int removedBooksCounter = 0;
@@ -64,7 +69,8 @@ public class SearchResult {
 //            }
 //        }
         setPages(bookService.getNumberOfResults() - removedBooksCounter);
-        
+         if (columnToSort != null)
+                this.sortBooks(columnToSort);
     }
     
     public int removeBannedBooks(HttpSession session){
@@ -245,7 +251,8 @@ public class SearchResult {
         currentPage = page;
         int offset = (currentPage-1) * recordsPerPage;
         this.bookService = bookService;
-        books = bookService.searchBooks(this.getTerms(request), this.getSelectedCategories(), offset, recordsPerPage);
+        
+        books = bookService.searchBooks(this.getTerms(request), this.getSelectedCategories(), offset, recordsPerPage, onlyInStock);
         int numOfRemovedBooks = removeBannedBooks(request.getSession());
         setPages(bookService.getNumberOfResults() - numOfRemovedBooks);
     }

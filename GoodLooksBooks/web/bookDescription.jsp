@@ -74,136 +74,147 @@
                         <button type="button" id="banButtonID" action="BanItemServlet" name = "button5" onclick="banFunction(${itemClicked.isBanned ? 1 : 0})" class="btn btn-primary" value="">${itemClicked.isBanned ? 'Ban Book' : 'Unban Book'}</button>
                     </c:if>
                     <br>
-                    <form action="WishlistServlet" method = "post">
-                        <button onclick="changeWishlist()" type="submit" class="btn btn-primary">Add to Wishlist</button>
-                        <input type="hidden" name="isbn" value="${itemClicked.isbn}">
-                    </form>
+                    <c:choose>
+                        <c:when test="${fullWishlist.contains(itemClicked.isbn)}">
+                            <form action="WishlistServlet" method = "delete">
+                                <button type="submit" class="btn btn-danger">Remove from Wishlist</button>
+                                <input type="hidden" name="isbn" value="${itemClicked.isbn}">
+                                <input type="hidden" name="method" value="delete">
+                            </form>
+                        </c:when>
+                        <c:otherwise>
+                            <form action="WishlistServlet" method = "post">
+                                <button type="submit" class="btn btn-primary">Add to Wishlist</button>
+                                <input type="hidden" name="isbn" value="${itemClicked.isbn}">
+                            </form>
+                        </c:otherwise>
+                    </c:choose> 
+                </div>
+        </div>
+        <!--Review an item-->
+        <!--        <div><font color="white" size="100">.</font>  Some random filler-->
+        <!--Review Item--> 
+        <!--            <div id="submittingReviewID" style = "width: 75%;">
+           <div id="submittingReviewInnerID"  style="display: ${user.type == 'customer' && itemClicked.reviews[user.username] == null ? 'block;' : 'none;'}">
+               <div id="userRatingID" style="display: none;"> <label>
+                   <label for="input-2" class="control-label">Your Rating</label><br>
+                       
+                       <img onclick="starRating(1)" value = "0" id="star1" src="assets/star.png" /> 
+                       <img onclick="starRating(2)" value = "0" id="star2" src="assets/star.png" /> 
+                       <img onclick="starRating(3)" value = "0" id="star3" src="assets/star.png" /> 
+                       <img onclick="starRating(4)" value = "0" id="star4" src="assets/star.png" /> 
+                       <img onclick="starRating(5)" value = "0" id="star5" src="assets/star.png" /> 
+                       &nbsp;&nbsp;&nbsp;
+                       <font size ="4" id="starDescriptionID" style="float:right;"></font>
+                   </label>
+               </div>
+               <textarea class="review collapse" id="reviewdetails" name="review" placeholder="Describe your review...">
+               </textarea>
+               <button class="btn btn-success" id="reviewBtn" onClick = "addReview()" style="display: none;">Submit</button>
+               <br>
+               <button type="button" onClick="showSubmit()" class="btn btn-info" data-toggle="collapse" data-target="#reviewdetails, #userRatingID">Review this item</button>
+           </div>
+           </div>
+        -->
+        <!--        </form>-->
+        <br><br><br><br><br> 
+        <!--        </div>-->
+        <!--        <hr class="fancy">-->
+        <!--All review-->
+        <div  class="col-xs-12 col-sm-12" >
+            <hr class="fancy">
+            <div id="submittingReviewID" style = "width: 75%;">
+                <div id="submittingReviewInnerID"  style="display: ${user.type == 'customer' && itemClicked.reviews[user.username] == null ? 'block;' : 'none;'}">
+                    <div id="userRatingID" style="display: none;"> <label>
+                            <label for="input-2" class="control-label">Your Rating</label><br>
+                            <img onclick="starRating(1)" value = "0" id="star1" src="assets/star.png" /> 
+                            <img onclick="starRating(2)" value = "0" id="star2" src="assets/star.png" /> 
+                            <img onclick="starRating(3)" value = "0" id="star3" src="assets/star.png" /> 
+                            <img onclick="starRating(4)" value = "0" id="star4" src="assets/star.png" /> 
+                            <img onclick="starRating(5)" value = "0" id="star5" src="assets/star.png" /> 
+                            &nbsp;&nbsp;&nbsp;
+                            <font size ="4" id="starDescriptionID" style="float:right;"></font>
+                        </label>
+                    </div>
+                    <textarea class="review collapse" id="reviewdetails" name="review" placeholder="Describe your review..."></textarea>
+                    <button class="btn btn-success" id="reviewBtn" onClick = "addReview()" style="display: none;">Submit</button>
+                    <br>
+                    <button type="button" onClick="showSubmit()" class="btn btn-info" data-toggle="collapse" data-target="#reviewdetails, #userRatingID">Review this item</button>
                 </div>
             </div>
-            <!--Review an item-->
-            <!--        <div><font color="white" size="100">.</font>  Some random filler-->
-            <!--Review Item--> 
-            <!--            <div id="submittingReviewID" style = "width: 75%;">
-               <div id="submittingReviewInnerID"  style="display: ${user.type == 'customer' && itemClicked.reviews[user.username] == null ? 'block;' : 'none;'}">
-                   <div id="userRatingID" style="display: none;"> <label>
-                       <label for="input-2" class="control-label">Your Rating</label><br>
-                           
-                           <img onclick="starRating(1)" value = "0" id="star1" src="assets/star.png" /> 
-                           <img onclick="starRating(2)" value = "0" id="star2" src="assets/star.png" /> 
-                           <img onclick="starRating(3)" value = "0" id="star3" src="assets/star.png" /> 
-                           <img onclick="starRating(4)" value = "0" id="star4" src="assets/star.png" /> 
-                           <img onclick="starRating(5)" value = "0" id="star5" src="assets/star.png" /> 
-                           &nbsp;&nbsp;&nbsp;
-                           <font size ="4" id="starDescriptionID" style="float:right;"></font>
-                       </label>
-                   </div>
-                   <textarea class="review collapse" id="reviewdetails" name="review" placeholder="Describe your review...">
-                   </textarea>
-                   <button class="btn btn-success" id="reviewBtn" onClick = "addReview()" style="display: none;">Submit</button>
-                   <br>
-                   <button type="button" onClick="showSubmit()" class="btn btn-info" data-toggle="collapse" data-target="#reviewdetails, #userRatingID">Review this item</button>
-               </div>
-               </div>
-            -->
-            <!--        </form>-->
-            <br><br><br><br><br> 
-            <!--        </div>-->
-            <!--        <hr class="fancy">-->
-            <!--All review-->
-            <div  class="col-xs-12 col-sm-12" >
-                <hr class="fancy">
-                <div id="submittingReviewID" style = "width: 75%;">
-                    <div id="submittingReviewInnerID"  style="display: ${user.type == 'customer' && itemClicked.reviews[user.username] == null ? 'block;' : 'none;'}">
-                        <div id="userRatingID" style="display: none;"> <label>
-                                <label for="input-2" class="control-label">Your Rating</label><br>
-                                <img onclick="starRating(1)" value = "0" id="star1" src="assets/star.png" /> 
-                                <img onclick="starRating(2)" value = "0" id="star2" src="assets/star.png" /> 
-                                <img onclick="starRating(3)" value = "0" id="star3" src="assets/star.png" /> 
-                                <img onclick="starRating(4)" value = "0" id="star4" src="assets/star.png" /> 
-                                <img onclick="starRating(5)" value = "0" id="star5" src="assets/star.png" /> 
-                                &nbsp;&nbsp;&nbsp;
-                                <font size ="4" id="starDescriptionID" style="float:right;"></font>
-                            </label>
+            <h2>Reviews</h2>
+            <div id="allReviews">
+                <!--current user logged in review-->
+                <div id= "reviewContainer_0" class="col-xs-12 col-sm-12" style="border-style: groove; display: none;">
+                    <button type="button" id="edit-review-btn" onClick="editReview()" class="btn btn-info">Resubmit/edit review</button>
+                    &nbsp;&nbsp;
+                    <button class="btn btn-danger" id="remove-review" onClick="removeReview(this.id)">Remove review</button>
+                    <br><br>                
+                    <div id="topReviewContainerID_0">
+                        <div id="loggedInRatingID_0" value = "">              
                         </div>
-                        <textarea class="review collapse" id="reviewdetails" name="review" placeholder="Describe your review..."></textarea>
-                        <button class="btn btn-success" id="reviewBtn" onClick = "addReview()" style="display: none;">Submit</button>
-                        <br>
-                        <button type="button" onClick="showSubmit()" class="btn btn-info" data-toggle="collapse" data-target="#reviewdetails, #userRatingID">Review this item</button>
+                        <br> 
                     </div>
+                    <br>
+                    <h4 id="userReviewName_0">By: </h4>
+                    <h5 id="reviewText_0"></h5>
+                    <br>
                 </div>
-                <h2>Reviews</h2>
-                <div id="allReviews">
-                    <!--current user logged in review-->
-                    <div id= "reviewContainer_0" class="col-xs-12 col-sm-12" style="border-style: groove; display: none;">
-                        <button type="button" id="edit-review-btn" onClick="editReview()" class="btn btn-info">Resubmit/edit review</button>
-                        &nbsp;&nbsp;
-                        <button class="btn btn-danger" id="remove-review" onClick="removeReview(this.id)">Remove review</button>
-                        <br><br>                
-                        <div id="topReviewContainerID_0">
-                            <div id="loggedInRatingID_0" value = "">              
-                            </div>
-                            <br> 
-                        </div>
-                        <br>
-                        <h4 id="userReviewName_0">By: </h4>
-                        <h5 id="reviewText_0"></h5>
-                        <br>
-                    </div>
-                    <!--All review besides current users review-->
-                    <c:set var="flag" scope="session" value="false"/>
-                    <c:forEach var="entry" items="${itemClicked.reviews}" varStatus="i">
-                        <c:choose>
-                            <c:when test="${entry.key == user.username}">
-                                <p id="hiddenElement1" value="${entry.key}"></p>
-                                <p id="hiddenElement2" value="${itemClicked.reviews[entry.key].rating}"></p>
-                                <p id="hiddenElement3" value="${entry.value.reviewText}"></p>
-                                <c:set var="flag" scope="session" value="true"/>
-                            </c:when>
-                            <c:otherwise>
-                                <div id= "reviewContainer_${flag? i.index : i.index + 1}" class="col-xs-12 col-sm-12" style="border-style: groove; display: initial;">
-                                    <div id="topReviewContainerID_${flag? i.index : i.index + 1}">
-                                        <div id="loggedInRatingID_${flag? i.index : i.index + 1}" value = "${itemClicked.reviews[entry.key].rating}">              
-                                        </div>
-                                        <br> 
+                <!--All review besides current users review-->
+                <c:set var="flag" scope="session" value="false"/>
+                <c:forEach var="entry" items="${itemClicked.reviews}" varStatus="i">
+                    <c:choose>
+                        <c:when test="${entry.key == user.username}">
+                            <p id="hiddenElement1" value="${entry.key}"></p>
+                            <p id="hiddenElement2" value="${itemClicked.reviews[entry.key].rating}"></p>
+                            <p id="hiddenElement3" value="${entry.value.reviewText}"></p>
+                            <c:set var="flag" scope="session" value="true"/>
+                        </c:when>
+                        <c:otherwise>
+                            <div id= "reviewContainer_${flag? i.index : i.index + 1}" class="col-xs-12 col-sm-12" style="border-style: groove; display: initial;">
+                                <div id="topReviewContainerID_${flag? i.index : i.index + 1}">
+                                    <div id="loggedInRatingID_${flag? i.index : i.index + 1}" value = "${itemClicked.reviews[entry.key].rating}">              
                                     </div>
-                                    <br>
-                                    <h4 id="userReviewName_${flag? i.index : i.index + 1}">By: ${entry.key}</h4>
-                                    <h5 id="reviewText_${flag? i.index : i.index + 1}">${entry.value.reviewText}</h5>
-                                    <br>
+                                    <br> 
                                 </div>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:forEach>
-                </div>
+                                <br>
+                                <h4 id="userReviewName_${flag? i.index : i.index + 1}">By: ${entry.key}</h4>
+                                <h5 id="reviewText_${flag? i.index : i.index + 1}">${entry.value.reviewText}</h5>
+                                <br>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
             </div>
         </div>
-        <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="emailModal">Email Item</h4>
+    </div>
+    <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="emailModal">Email Item</h4>
+                </div>
+                <form id="emailForm" name="emailForm" action="EmailItemServlet" method="post">
+                    <div class="modal-body">
+                        <input type="text" class="form-control" placeholder="To" name="recipient" required autofocus /><br>
+                        <input type="text" class="form-control" placeholder="From" name="from" required autofocus /><br>
+                        <p>Subject: Check out this downloadable title at GoodLooksBooks</p>
+                        <br>
+                        <input type="text" class="form-control" placeholder="Message" name="message" autofocus />
+                        <input type="hidden" name="subject" value="Check out this downloadable title at GoodLooksBooks">
                     </div>
-                    <form id="emailForm" name="emailForm" action="EmailItemServlet" method="post">
-                        <div class="modal-body">
-                            <input type="text" class="form-control" placeholder="To" name="recipient" required autofocus /><br>
-                            <input type="text" class="form-control" placeholder="From" name="from" required autofocus /><br>
-                            <p>Subject: Check out this downloadable title at GoodLooksBooks</p>
-                            <br>
-                            <input type="text" class="form-control" placeholder="Message" name="message" autofocus />
-                            <input type="hidden" name="subject" value="Check out this downloadable title at GoodLooksBooks">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Send</button>
-                        </div>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </form>
-                </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </form>
             </div>
         </div>
-    </body>
+    </div>
+</body>
 </html>
-    
+
 <!--Form for communicating with the second server -->
 <form id = "secondServerForm" name = "secondServerForm" action = "SecondServerServlet" method = "post"></form>
 <form id = "facebookShareForm" name = "facebookShareForm" action = "SecondServerServlet" method = "post"></form>

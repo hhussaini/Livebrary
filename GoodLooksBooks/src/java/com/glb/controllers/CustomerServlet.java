@@ -9,10 +9,10 @@ import com.glb.factories.ServiceFactory;
 import static com.glb.helpers.Helpers.*;
 import com.glb.objects.Book;
 import com.glb.objects.User;
+import com.glb.objects.Wishlist;
 import com.glb.services.BookService;
 import com.glb.services.UserService;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -77,7 +77,7 @@ public class CustomerServlet extends HttpServlet {
         session.setAttribute("onHoldItems", onHold);
         println(onHold.size());
         
-        List<Book> fullWishlist = userService.getWishlist(user);
+        Wishlist fullWishlist = userService.getWishlist(user);
         session.setAttribute("fullWishlist", fullWishlist);
         
         List<Book> inStockWishlist = userService.getInstockWishlist(fullWishlist);

@@ -53,30 +53,50 @@
                             </tr>
                         </table>
                     </div>
-                </form>
-                <div class="col-md-2">
-                    <ul class="nav nav-pills">
+                    <!--</form>-->
+                    <div class="col-md-2">
+                        <ul class="nav nav-pills">
+                            
+                            <li class="active"><a href="#grid-view" data-toggle="tab"><img id="grid-tab" src="assets/glyphicons-157-show-thumbnails.png"></a></li>
+                            <li><a href="#list-view" data-toggle="tab"><img id="list-tab" src="assets/glyphicons-530-list-alt.png"></a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="col-md-12"></div>
+                    <br>
+                    <div class="col-md-3">
+                        <br>
+                        <ul>
+                            
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation">
+                                <button type="submit" class="btn btn-primary">Apply Filters</button>
+                            </li>
+                            <br>
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation">
+                                <c:choose>
+                                    <c:when test="${results.onlyInStock eq true}">
+                                        <input type="checkbox" role="menuitem" tabindex="-1" id="only-instock" name="only-instock" value="true" checked="checked"> Only Available Titles<br>
+                                    </c:when>    
+                                    <c:otherwise>
+                                        <input type="checkbox" role="menuitem" tabindex="-1" id="only-instock" name="only-instock" value="true"> Only Available Titles<br>
+                                    </c:otherwise>
+                                </c:choose>
+                            </li>
+                        </ul>
+                        <!--<form id="category-form" name="category-form" action="SearchServlet" method="get">-->
                         
-                        <li class="active"><a href="#grid-view" data-toggle="tab"><img id="grid-tab" src="assets/glyphicons-157-show-thumbnails.png"></a></li>
-                        <li><a href="#list-view" data-toggle="tab"><img id="list-tab" src="assets/glyphicons-530-list-alt.png"></a></li>
+                        <jsp:include page="/categoryForm.jsp" />    
                         
-                    </ul>
-                </div>
-                <div class="col-md-12"></div>
-                <br>
-                <div class="col-md-3">
-                    <form id="category-form" name="category-form" action="SearchServlet" method="get">
-                  
-                            <jsp:include page="/categoryForm.jsp" />    
-                        
-                    </form>
-                    <form id="sortRadioButtons" name="sortRadioButtons" action="SortItemsServlet" method = "post">
+                        <!--</form>-->
+                        <!--<form id="sortRadioButtons" name="sortRadioButtons" action="SortItemsServlet" method = "post">-->
                         <div>
                             <jsp:include page="/sortForm.jsp" /> 
                         </div>  
-                    </form>
-                </div>
-                
+                        <!--</form>-->
+                    </div>
+                </form>
                 <div class="col-md-9">
                     
                     <br>

@@ -26,14 +26,14 @@ public class BookServiceImpl implements BookService {
     private int totalBooks;
     
     @Override
-    public List<Book> searchBooks(HashMap<String,String> searchTermMap, ArrayList<String> categories, int offset, int recordsPerPage) {
+    public List<Book> searchBooks(HashMap<String,String> searchTermMap, ArrayList<String> categories, int offset, int recordsPerPage, boolean onlyInStock) {
         List<Book> results = null;
         Connection conn = null;
         try {
             conn = ConnectionUtil.getConnection();
             BookDao bookDao = DaoFactory.getBookDao();
             bookDao.setConnection(conn);
-            results = bookDao.searchBooks(searchTermMap, categories, offset, recordsPerPage);
+            results = bookDao.searchBooks(searchTermMap, categories, offset, recordsPerPage, onlyInStock);
             this.numberOfResults = bookDao.getNumberOfResults();
         } catch (ResourceHelperException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -573,4 +573,6 @@ public class BookServiceImpl implements BookService {
 
       return status;
    }
+
+ 
 }

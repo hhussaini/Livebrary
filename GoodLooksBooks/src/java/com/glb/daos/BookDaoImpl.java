@@ -41,7 +41,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     private Connection conToUse = getConnection();
     
     @Override
-    public List<Book> searchBooks(HashMap<String,String> searchTermMap, ArrayList<String> categories, int offset, int recordsPerPage) {
+    public List<Book> searchBooks(HashMap<String,String> searchTermMap, ArrayList<String> categories, int offset, int recordsPerPage, boolean onlyInStock) {
         Connection conn = getConnection();
         boolean catSelected = !categories.get(0).equals("");
         ResultSet rs = null;
@@ -65,6 +65,10 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                     + "AND author like ? "
                     + "AND title like ? "
                     + "AND isbn like ?) ";
+            
+            if (onlyInStock) {
+                query += "and copiesLeft > 0 ";
+            }
             
             // CategoryMap Query
             if (catSelected) {

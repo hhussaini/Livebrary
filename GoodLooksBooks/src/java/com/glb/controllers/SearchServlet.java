@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
 public class SearchServlet extends HttpServlet {
     
     BookService bookService;
-    SearchResult searchRs;
+    SearchResult searchResults;
     
     public void init() {
         println(getServletName() + ": initialised" );
@@ -81,9 +81,9 @@ public class SearchServlet extends HttpServlet {
             println(this.getServletName() + " : doGet");
             HttpSession session = request.getSession();
             
-            searchRs = new SearchResult(request, session, bookService);
+            searchResults = new SearchResult(request, session, bookService);
             
-            session.setAttribute("resultSet", searchRs);
+            session.setAttribute("resultSet", searchResults);
             request.getRequestDispatcher("/fullCatalog.jsp").include(request, response);
         } catch (Exception ex) {
             println(ex.getClass().toString() + " : " + ex.getMessage());
@@ -118,11 +118,11 @@ public class SearchServlet extends HttpServlet {
         HttpSession session = request.getSession();
         String page = request.getParameter("page");
         if (page != null) {
-                searchRs = (SearchResult)session.getAttribute("resultSet");
-                searchRs.goToPage(Integer.parseInt(page), request);
+                searchResults = (SearchResult)session.getAttribute("resultSet");
+                searchResults.goToPage(Integer.parseInt(page), request);
         }
         
-        session.setAttribute("resultSet", searchRs);
+        session.setAttribute("resultSet", searchResults);
         try {
             request.getRequestDispatcher("/fullCatalog.jsp").include(request, response);
         } catch (ServletException ex) {
