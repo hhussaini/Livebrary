@@ -16,6 +16,7 @@
             <li><a href="SearchServlet">Full Catalog</a></li>
             <li><a href="account.jsp">Account</a></li>
             <li><a href="help.jsp">Help</a></li>
+            <li><a href="CollectionsServlet">Collections</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">

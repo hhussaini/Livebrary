@@ -183,6 +183,54 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
     }
     
     @Override
+    public List<Book> getAllBooks(int limit) {
+        List<Book> results = new ArrayList<Book>();
+        this.totalBooks = 0;
+        Connection conn = getConnection();
+        ResultSet rs = null;
+        Statement stmt = null;
+        String query = "select * from books where title is not null limit " + limit;
+        try {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                Book book = new Book();
+                book = getBookByIsbn(rs.getString("isbn"));
+                results.add(book);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(rs);
+        }
+        return results;
+    }
+    
+    @Override
+    public List<Book> getUnpopularBooks(int limit) {
+        List<Book> results = new ArrayList<Book>();
+        this.totalBooks = 0;
+        Connection conn = getConnection();
+        ResultSet rs = null;
+        Statement stmt = null;
+        String query = "SELECT B.* from books B where B.isbn not in (select isbn from CHECKED_OUT) limit " + limit;
+        try {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                Book book = new Book();
+                book = getBookByIsbn(rs.getString("isbn"));
+                results.add(book);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(rs);
+        }
+        return results;
+    }
+    
+    @Override
     public Book getBookByIsbn(String isbn) {
         Book book = null;
         Connection conn = getConnection();
@@ -1226,4 +1274,52 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
       }
         return status;
     }
+
+   @Override
+   public List<Book> getMostBorrowed() {
+      Connection conToUse = null;
+      ResultSet rs = null;
+      PreparedStatement ps = null;
+      List<Book> mostBorrowed = new ArrayList<Book>();
+      int limit = 10;
+      String sql = "select count(isbn), isbn from CHECKED_OUT group by isbn order by count(isbn) desc limit " + limit;
+      try {
+          conToUse = getConnection();
+          ps = conToUse.prepareStatement(sql);
+          rs = ps.executeQuery();
+          while (rs.next()) {
+            Book book = getBookByIsbn(rs.getString("isbn"));
+            mostBorrowed.add(book);
+          }
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      }finally {
+          DbUtils.closeQuietly(ps);
+      }
+      return mostBorrowed;
+   }
+   
+   @Override
+   public List<Book> getRecentlyAdded() {
+      Connection conToUse = null;
+      ResultSet rs = null;
+      PreparedStatement ps = null;
+      List<Book> recentlyAdded = new ArrayList<Book>();
+      int limit = 10;
+      String sql = "select isbn from BOOKS order by published desc limit " + limit;
+      try {
+          conToUse = getConnection();
+          ps = conToUse.prepareStatement(sql);
+          rs = ps.executeQuery();
+          while (rs.next()) {
+            Book book = getBookByIsbn(rs.getString("isbn"));
+            recentlyAdded.add(book);
+          }
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      }finally {
+          DbUtils.closeQuietly(ps);
+      }
+      return recentlyAdded;
+   }
 }
