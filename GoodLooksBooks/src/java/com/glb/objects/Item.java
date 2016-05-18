@@ -261,7 +261,14 @@ public class Item implements Serializable, Comparable{
        Book book = (Book)o;
        switch(ItemSorting.sort){
            case 1 : return this.getTitle().compareTo(book.getTitle());
-           case 2 : return this.getAuthor().compareTo(book.getAuthor());      
+           case 2 : return this.getAuthor().compareTo(book.getAuthor()); 
+           case 5 : if(this.getCopiesLeft() > book.getCopiesLeft()){
+                        return 1;
+                    }
+                    else if(this.getCopiesLeft() < book.getCopiesLeft()){
+                        return -1;
+                    }
+                    return 0;      
        }
        return -1;
     }

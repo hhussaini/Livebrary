@@ -168,6 +168,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 book.setImageUrl(rs.getString("imageUrl"));
                 book.setAuthor(rs.getString("author"));
                 book.setIsBanned(rs.getInt("isBanned")==1);
+                book.setCopiesLeft(rs.getInt("copiesLeft"));
                 results.add(book);
                 totalBooks++;
             }

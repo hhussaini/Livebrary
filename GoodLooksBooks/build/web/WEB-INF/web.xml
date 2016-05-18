@@ -143,6 +143,10 @@
         <servlet-name>ItemSettingsServlet</servlet-name>
         <servlet-class>com.glb.controllers.ItemSettingsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BestSellersListServlet</servlet-name>
+        <servlet-class>com.glb.controllers.BestSellersListServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -262,6 +266,10 @@
     <servlet-mapping>
         <servlet-name>ItemSettingsServlet</servlet-name>
         <url-pattern>/ItemSettingsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BestSellersListServlet</servlet-name>
+        <url-pattern>/BestSellersListServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
