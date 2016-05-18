@@ -28,6 +28,15 @@
             <c:when test="${empty user}">
                 <jsp:include page="/guestNavbar.jsp" />
             </c:when>
+            <c:when test="${user.type == 'admin'}">
+                <jsp:include page="/adminNavbar.jsp" />
+            </c:when>
+            <c:when test="${user.type == 'librarian'}">
+                <jsp:include page="/librarianNavbar.jsp" />
+            </c:when>
+            <c:when test="${user.type == 'publisher'}">
+                <jsp:include page="/publisherNavbar.jsp" />
+            </c:when>
             <c:when test="${user.type == 'customer'}">
                 <jsp:include page="/customerNavbar.jsp" />
             </c:when>
@@ -94,14 +103,17 @@
                     </div>
                     <jsp:include page="/itemButtons.jsp" />
                     <c:if test="${user.type == 'admin'}">
-                        <button type="button" id="banButtonID" action="BanItemServlet" name = "button5" onclick="banFunction(${itemClicked.isBanned ? 1 : 0})" class="btn btn-primary" value="">${itemClicked.isBanned ? 'Ban Book' : 'Unban Book'}</button>
-                         <select id="licenseNumbers">
+                        <button type="button" id="banButtonID" action="BanItemServlet" name = "button5" onclick="banFunction(${itemClicked.isBanned ? 1 : 0})" class="btn btn-primary" value="">${itemClicked.isBanned ? 'Unban Book' : 'Ban Book'}</button>
+                         <br>   
+                        <select id="licenseNumbers">  
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
                             <option value="4">4</option>
                             <option value="5">5</option>
+                           
                         </select>
+                            
                           <button type="button" id="buylicense" name = "button6" class="btn btn-primary" value="" onclick="numOfLicense()">Buy License</button>   
                     </c:if>
                     <br>

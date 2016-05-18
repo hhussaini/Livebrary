@@ -1322,4 +1322,51 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
       }
       return recentlyAdded;
    }
+   
+    @Override
+    public int addLicensesToBook(int licenses, String isbn){
+        int currentNumOfCopies = getNumberOfLicensesForBook(isbn);
+        String sql = "UPDATE books SET copiesLeft = ? WHERE isbn = ?"; 
+       
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        int status = 0;
+        try {
+          conToUse = getConnection();
+          ps = conToUse.prepareStatement(sql);
+          ps.setInt(1, currentNumOfCopies + licenses);  
+          ps.setString(2, isbn);  
+          status = ps.executeUpdate();
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      }  finally {
+          DbUtils.closeQuietly(ps);
+      }
+        return 0; //status;
+        
+        
+         
+    } 
+    
+    @Override 
+    public int getNumberOfLicensesForBook(String isbn){
+        String sql = "SELECT copiesLeft FROM books WHERE isbn = " + isbn; 
+        Connection conn = getConnection();
+        ResultSet rs = null;
+        Statement stmt = null; 
+        int copiesLeft = 0;
+        try { 
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                 copiesLeft = rs.getInt("copiesLeft");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            DbUtils.closeQuietly(rs);
+        } 
+        return copiesLeft; 
+    }
 }

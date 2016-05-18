@@ -15,7 +15,7 @@
         <div class="glb-page">
             <jsp:include page="/logo.jsp" />
             <div class="container">
-                 <h5>This is so yolo.</h5>
+                 <h5>Recommend this book!</h5>
             </div>
             <div class="container">
                <form name = "recommendItemForm" action = "ItemAccessServlet" method = "doRecommend" class="form-horizontal signUpBody">        

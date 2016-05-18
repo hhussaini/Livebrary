@@ -5,12 +5,19 @@
  */
 package com.glb.controllers;
 
+import com.glb.factories.ServiceFactory;
+import static com.glb.helpers.Helpers.println;
+import com.glb.objects.Book;
+import com.glb.objects.User;
+import com.glb.services.BookService;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -27,6 +34,14 @@ public class BuyLicenseServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    BookService bookService;
+    
+    public void init() {
+        println(getServletName() + ": initialised" );
+        bookService = ServiceFactory.getBookService();
+    }
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -77,12 +92,15 @@ public class BuyLicenseServlet extends HttpServlet {
             throws ServletException, IOException {
         
         int licenseNumber = Integer.parseInt(request.getParameter("numOfCopies"));
+        HttpSession session = request.getSession();
+        Book book = (Book)session.getAttribute("itemClicked");
+        bookService.addLicensesToBook(licenseNumber, book.getIsbn());
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/bookDescription.jsp");
+        dispatcher.forward(request, response); 
         
         
-        
-        
-        
-        processRequest(request, response);
+       // processRequest(request, response);
     }
 
     /**
@@ -95,4 +113,6 @@ public class BuyLicenseServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    
+    
 }

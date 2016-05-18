@@ -704,4 +704,38 @@ public class BookServiceImpl implements BookService {
 
     return books;  
    }
+   
+     @Override
+     public int addLicensesToBook(int licenses, String isbn){
+        Connection conn = null;  
+        int status = 0;
+        try { 
+            conn = ConnectionUtil.getConnection();
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conn);
+            status = bookDao.addLicensesToBook(licenses, isbn);
+        } catch (ResourceHelperException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConnectionUtil.closeConnection(conn);
+        }
+        return status;
+     }
+     
+     @Override
+     public int getNumberOfLicensesForBook(String isbn){
+          Connection conn = null;  
+        int status = 0;
+        try { 
+            conn = ConnectionUtil.getConnection();
+            BookDao bookDao = DaoFactory.getBookDao();
+            bookDao.setConnection(conn);
+            status = bookDao.getNumberOfLicensesForBook(isbn);
+        } catch (ResourceHelperException ex) {
+            Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConnectionUtil.closeConnection(conn);
+        }
+        return status;
+     }
 }

@@ -48,4 +48,6 @@ public interface BookService {
     public int removeRecommendedItem(String isbn);
     public List<Book> getMostBorrowed();
     public List<Book> getRecentlyAdded();
+    public int addLicensesToBook(int licenses, String isbn);
+    public int getNumberOfLicensesForBook(String isbn);
 }  
