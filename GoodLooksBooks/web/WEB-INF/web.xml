@@ -162,12 +162,10 @@
     <servlet>
         <servlet-name>CollectionsServlet</servlet-name>
         <servlet-class>com.glb.controllers.CollectionsServlet</servlet-class>
-        <servlet-name>HomePageServlet</servlet-name>
-        <servlet-class>com.glb.controllers.HomePageServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>EditRecommendedItemServlet</servlet-name>
-        <servlet-class>com.glb.controllers.EditRecommendedItemServlet</servlet-class>
+      <servlet-name>HomePageServlet</servlet-name>
+      <servlet-class>com.glb.controllers.HomePageServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
@@ -308,6 +306,8 @@
     <servlet-mapping>
         <servlet-name>HomePageServlet</servlet-name>
         <url-pattern>/HomePageServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>CollectionsServlet</servlet-name>
         <url-pattern>/CollectionsServlet</url-pattern>
     </servlet-mapping>
