@@ -28,7 +28,8 @@
                        </button>
                        <div class="dropdown-menu">
                           <a class="dropdown-item" href="#" onclick="downloadBook(${item.isbn})">Download</a><br>
-                          <a class="dropdown-item" href="#" onclick="returnBook(${item.isbn})">Return</a>
+                          <a class="dropdown-item" href="#" onclick="returnBook(${item.isbn})">Return</a><br>
+                          <a class="dropdown-item" href="#" onclick="readBook('${item.downloadUrl}')">Read (in your browser)</a>
                           <form id="renewItemForm" action="ItemAccessServlet" method="doRenew">
                              <input type="hidden" name="isbn" value="${item.isbn}">
                              <input type="hidden" name="method" value="doRenew">

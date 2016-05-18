@@ -37,7 +37,7 @@
             <div>
                 <div class="col-xs-6 col-sm-7" style="border-style: groove;">
                     <button type="button" class="btn btn-primary" 
-                            onclick="fbShare('http://openisbn.com/${itemClicked.isbn}', 520, 350)">
+                            onclick="fbShare('http://openisbn.com/isbn/${itemClicked.isbn}', 520, 350)">
                         Share
                     </button>
                     <button id="emailButton" type="button" class="btn btn-primary"
