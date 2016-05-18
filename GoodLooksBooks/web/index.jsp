@@ -3,6 +3,8 @@
     Author     : Kevin Young
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>   
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -33,7 +35,105 @@
              &nbsp;<br>
              &nbsp;<br>
            </div>
-         </div><div>
+         </div>
+           <ul id="tabs" class="nav nav-tabs">
+            <li class="active"><a href="#all-wish" data-toggle="tab">BestSellers</a></li>
+            </ul>
+           <div id="tabContent" class="tab-content">
+               <c:choose>
+          <c:when test="${fn:length(bestSellerlist) > 0}">
+                    <table class="results-table">
+                    
+                            <c:forEach var="item" items="${bestSellerlist}" varStatus="status">
+                                
+                                <td>
+                                    <div class="col-xs-6 col-md-3"> 
+                                        <td> 
+                                            <a href = "BookDescriptionServlet?isbn=${item.isbn}" id="${item.isbn}" class="thumbnail">
+                                                <img onload="validateImgUrl(this.id)" name="bookImage" id="item.isbn" class="bookImage" src="${item.imageUrl}" alt="${item.title}" style="width: 100px;">
+                                                <p>${item.title}</p>
+                                                <h6>by</h6>
+                                                <h5>${item.author}</h5>
+                                            </a>
+                                        </td>
+    
+                                    </div>
+                                </td>
+                           
+                        </c:forEach>
+                        </tr>
+                    </table>
+                </c:when>
+           </c:choose>
+           </div>
+           
+           
+           <ul id="tabs" class="nav nav-tabs">
+            <li class="active"><a href="#all-wish" data-toggle="tab">Most Recommended</a></li>
+            </ul>
+           <div id="tabContent" class="tab-content">
+               <c:choose>
+          <c:when test="${fn:length(recommendedMap) > 0}">
+                    <table class="results-table">
+                   
+                            <c:forEach var="item" items="${recommendedMap}" varStatus="status">
+                                
+                                <td>
+                                    <div class="col-xs-6 col-md-3"> 
+                                        <td> 
+                                            <a href = "BookDescriptionServlet?isbn=${item.isbn}" id="${item.isbn}" class="thumbnail">
+                                                <img onload="validateImgUrl(this.id)" name="bookImage" id="item.isbn" class="bookImage" src="${item.imageUrl}" alt="${item.title}" style="width: 100px;">
+                                                <p>${item.title}</p>
+                                                <h6>by</h6>
+                                                <h5>${item.author}</h5>
+                                            </a>
+                                        </td>
+    
+                                    </div>
+                                </td>
+                          
+                        </c:forEach>
+                        </tr>
+                    </table>
+                </c:when>
+           </c:choose>
+           </div>
+           
+           
+           <ul id="tabs" class="nav nav-tabs">
+            <li class="active"><a href="#all-wish" data-toggle="tab">Newest Books</a></li>
+            </ul>
+           <div id="tabContent" class="tab-content">
+               <c:choose>
+          <c:when test="${fn:length(newBooklist) > 0}">
+                    <table class="results-table">
+                   
+                            <c:forEach var="item" items="${newBooklist}" varStatus="status">
+                                
+                               
+                                <td>
+                                    <div class="col-xs-6 col-md-3"> 
+                                        <td> 
+                                            <a href = "BookDescriptionServlet?isbn=${item.isbn}" id="${item.isbn}" class="thumbnail">
+                                                <img onload="validateImgUrl(this.id)" name="bookImage" id="item.isbn" class="bookImage" src="${item.imageUrl}" alt="${item.title}" style="width: 100px;">
+                                                <p>${item.title}</p>
+                                                <h6>by</h6>
+                                                <h5>${item.author}</h5>
+                                            </a>
+                                        </td>
+    
+                                    </div>
+                                </td>
+                               
+                         
+                        </c:forEach>
+                        </tr>
+                    </table>
+                </c:when>
+           </c:choose>
+           </div>
+           
+           <div>
            <div class="col-sm-15">
              <div class="heading-box">
                Advertisement
