@@ -127,3 +127,13 @@ function banFunction(isBanned){
 function isEmpty(str) {
     return (!str || 0 === str.length);
 }
+
+function numOfLicense(){
+    console.log("recommendItem");
+    var e = document.getElementById("licenseNumbers");
+    var number = e.options[e.selectedIndex].value;
+    console.log(number);
+    document.getElementById("numOfCopies").value = number;
+    console.log(document.getElementById("numOfCopies").value);
+    document.getElementById("licenseForm").submit();
+}
