@@ -2,6 +2,8 @@ package com.glb.daos;
 
 import com.glb.constants.CategoryMap;
 import com.glb.controllers.EmailUtility;
+import static com.glb.daos.ConnectionUtil.getConnection;
+import com.glb.exceptions.ResourceHelperException;
 import com.glb.factories.ServiceFactory;
 import static com.glb.helpers.Helpers.getTagFromXmlStr;
 import static com.glb.helpers.Helpers.*;
@@ -18,6 +20,7 @@ import com.glb.objects.Recommendation;
 import com.glb.objects.Review;
 import com.glb.objects.Ticket;
 import com.glb.objects.User;
+import com.glb.services.BookServiceImpl;
 import com.glb.services.UserService;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -185,7 +188,7 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
         Connection conn = getConnection();
         ResultSet rs = null;
         Statement stmt = null;
-        String query = "select * from books where isbn = '" + isbn + "'";
+        String query = "select B.*, C.category from books B, categories C where B.isbn = '" + isbn + "' and B.isbn = C.isbn";
         try {
             stmt = conn.createStatement();
             rs = stmt.executeQuery(query);
@@ -205,6 +208,9 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
                 book.setDownloadUrl(rs.getString("downloadUrl"));
                 book.setType(rs.getString("type"));
                 book.setIsBanned(rs.getInt("isBanned")==1);
+                List<String> genres = new ArrayList<String>();
+                genres.add(rs.getString("category"));
+                book.setGenres(genres);
             }
         } catch (SQLException ex) {
             Logger.getLogger(BookDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -1200,5 +1206,24 @@ public class BookDaoImpl extends JdbcDaoSupportImpl implements BookDao {
             DbUtils.closeQuietly(rs);
         }
         return map;
+    }
+    
+    @Override
+    public int removeRecommendedItem(String isbn){
+        String sql = "DELETE FROM recommended_books WHERE isbn = ?"; 
+        Connection conToUse = null;
+        PreparedStatement ps = null;
+        int status = 0;
+        try {
+          conToUse = getConnection();
+          ps = conToUse.prepareStatement(sql);
+          ps.setString(1, isbn);  
+          status = ps.executeUpdate();
+      } catch (SQLException ex) {
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+      }  finally {
+          DbUtils.closeQuietly(ps);
+      }
+        return status;
     }
 }

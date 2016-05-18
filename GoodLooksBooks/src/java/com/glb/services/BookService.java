@@ -42,6 +42,7 @@ public interface BookService {
     public int removeHold(String username, String isbn);
     public int renewItem(String username, String isbn);
     public int recommendItem(String username, String isbn, String email, String checkOut_or_email);
-     public Map<String, Book> getAllRecommendedBooks();
+    public Map<String, Book> getAllRecommendedBooks();
+    public int removeRecommendedItem(String isbn);
     // public int updateBook(String oldIsbn, String newIsbn, String title, String author, String description);
 }  
