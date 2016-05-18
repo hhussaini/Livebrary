@@ -66,6 +66,12 @@
                   </a>
                   Contact Support
                 </div>
+               <div class="list-group">
+                  <a href="privacyPolicy.jsp">
+                      <img alt="privacyPolicy" width = "100" height = "100" src="assets/privacy-icon.jpg">
+                  </a>
+                  Privacy Policy
+                </div>
               </div>
             </div>
           </div>
