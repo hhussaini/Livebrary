@@ -20,8 +20,8 @@
         <!-- optionally if you need to use a theme, then include the theme file as mentioned below -->
         <link href="css/rating/theme-krajee-svg.css" media="all" rel="stylesheet" type="text/css" />
         <script src="js/rating/star-rating.js" type="text/javascript"></script>
-        <script src="jquery-1.12.2.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+        <!--<script src="jquery-1.12.2.min.js"></script>-->
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>-->
     </head>
     <body>
         <c:choose>
@@ -40,7 +40,8 @@
                             onclick="fbShare('http://openisbn.com/${itemClicked.isbn}', 520, 350)">
                         Share
                     </button>
-                    <button id="emailButton" type="button" class="btn btn-primary">Email</button>
+                    <button id="emailButton" type="button" class="btn btn-primary"
+                            onclick="showEmailModal()">Email</button>
                     <h5 id="bookTitleID">Book Title:  ${itemClicked.title}</h5>
                     <br> 
                     <h5 id="bookAuthorID">Book Author: ${itemClicked.author}</h5>
